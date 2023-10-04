@@ -1,4 +1,4 @@
-package com.prox.babyvaccinationtracker;
+package com.prox.babyvaccinationtracker.model;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
