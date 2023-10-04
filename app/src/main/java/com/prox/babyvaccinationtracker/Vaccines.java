@@ -69,13 +69,12 @@ public class Vaccines {
         mymap.put("unit",this.unit);
         mymap.put("date_of_entry",this.date_of_entry);
         mymap.put("price",this.price+"");
-
         return mymap;
     }
     public void pushDataFisebase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Vaccines");
-        myRef.setValue(this.map());
+        myRef.push().setValue(this.map());
     }
 
 }
