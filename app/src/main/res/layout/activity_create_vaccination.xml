@@ -22,7 +22,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/vector"
-            tools:layout_height="30" />
+            tools:layout_height="30dp" />
 
         <TextView
             android:id="@+id/textView"
@@ -46,9 +46,9 @@
         android:textStyle="bold" />
 
     <ImageButton
-        android:id="@+id/img"
+        android:id="@+id/img_button"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:src="@android:drawable/btn_star" />

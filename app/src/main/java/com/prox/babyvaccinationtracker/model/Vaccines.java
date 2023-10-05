@@ -18,6 +18,7 @@ public class Vaccines {
     String unit;
     String date_of_entry;
     double price;
+    String vaccine_image;
     public Vaccines(
              String vaccine_name,
              String vac_effectiveness,
@@ -42,7 +43,17 @@ public class Vaccines {
         this.unit = unit;
         this.date_of_entry = date_of_entry;
         this.price = price;
+
     }
+
+    public void setVaccine_image(String vaccine_image) {
+        this.vaccine_image = vaccine_image;
+    }
+
+    public String getVaccine_image() {
+        return vaccine_image;
+    }
+
     public Vaccines(){
         vaccine_name ="";
         vac_effectiveness ="";
@@ -69,6 +80,7 @@ public class Vaccines {
         mymap.put("unit",this.unit);
         mymap.put("date_of_entry",this.date_of_entry);
         mymap.put("price",this.price+"");
+        mymap.put("vaccine_image",this.vaccine_image);
         return mymap;
     }
     public void pushDataFisebase(){
