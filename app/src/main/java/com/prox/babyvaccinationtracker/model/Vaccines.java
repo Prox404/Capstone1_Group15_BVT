@@ -1,5 +1,7 @@
 package com.prox.babyvaccinationtracker.model;
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,7 +32,8 @@ public class Vaccines {
              int dosage,
              String unit,
              String date_of_entry,
-             double price
+             double price,
+             String vaccine_image
              ){
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
@@ -43,7 +46,7 @@ public class Vaccines {
         this.unit = unit;
         this.date_of_entry = date_of_entry;
         this.price = price;
-
+        this.vaccine_image = vaccine_image;
     }
 
     public void setVaccine_image(String vaccine_image) {
@@ -81,6 +84,7 @@ public class Vaccines {
         mymap.put("date_of_entry",this.date_of_entry);
         mymap.put("price",this.price+"");
         mymap.put("vaccine_image",this.vaccine_image);
+        Log.i("vaccine model", "map: " + mymap.toString());
         return mymap;
     }
     public void pushDataFisebase(){

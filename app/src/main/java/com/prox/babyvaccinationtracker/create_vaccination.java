@@ -42,6 +42,8 @@ public class create_vaccination extends AppCompatActivity {
     Button btn_tt;
     DatePickerDialog datePickerDialog;
     ImageButton img_button;
+
+    String image_url = "https://res.cloudinary.com/du42cexqi/image/upload/v1696504103/nt4cybkx1k25elc2jrng.jpg";
     boolean is_input(String a){
         if(a.length() == 0){
             Toast.makeText(this, "Phải nhập thông tin", Toast.LENGTH_SHORT).show();
@@ -286,18 +288,7 @@ public class create_vaccination extends AppCompatActivity {
                     Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Vaccines vaccines = new Vaccines(vaccine_name,
-                        vac_effectiveness,
-                        post_vaccination_reactions,
-                        origin,
-                        vaccination_target_group,
-                        contraindications,
-                        quantity,
-                        dosage,
-                        unit,
-                        date_of_entry,
-                        price
-                );
+                Vaccines vaccines ;
 
                 //uploadToCloudinary(filepath);
                 Log.d("A", "sign up uploadToCloudinary- ");
@@ -317,7 +308,7 @@ public class create_vaccination extends AppCompatActivity {
                     public void onSuccess(String requestId, Map resultData) {
                         String url = resultData.get("url").toString();
                         Log.i("upload image", "image URL: "+ url);
-                        vaccines.setVaccine_image(url);
+                        image_url = url;
                     }
 
                     @Override
@@ -330,6 +321,21 @@ public class create_vaccination extends AppCompatActivity {
                         Log.i("upload image", "Reshedule "+error.getDescription());
                     }
                 }).dispatch();
+
+                vaccines = new  Vaccines(
+                        vaccine_name,
+                        vac_effectiveness,
+                        post_vaccination_reactions,
+                        origin,
+                        vaccination_target_group,
+                        contraindications,
+                        quantity,
+                        dosage,
+                        unit,
+                        date_of_entry,
+                        price,
+                        image_url
+                );
 
                 vaccines.pushDataFisebase();
 
