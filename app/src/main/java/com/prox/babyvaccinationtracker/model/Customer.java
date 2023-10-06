@@ -14,11 +14,18 @@ public class Customer {
     private String cus_gender;
     private String cus_ethnicity;
     private String cus_password;
-    private Bitmap cus_avatar;
+    private String cus_avatar;
+    private ArrayList<Baby> babies;
 
-    ArrayList<Baby> babies;
+    public ArrayList<Baby> getBabies() {
+        return babies;
+    }
 
-    public Customer(String customer_id, String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, Bitmap cus_avatar, ArrayList<Baby> babies) {
+    public void setBabies(ArrayList<Baby> babies) {
+        this.babies = babies;
+    }
+
+    public Customer(String customer_id, String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar, ArrayList<Baby> babies) {
         this.customer_id = customer_id;
         this.cus_name = cus_name;
         this.cus_birthday = cus_birthday;
@@ -32,7 +39,7 @@ public class Customer {
         this.babies = babies;
     }
 
-    public Customer(String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, Bitmap cus_avatar) {
+    public Customer(String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar) {
         this.cus_name = cus_name;
         this.cus_birthday = cus_birthday;
         this.cus_address = cus_address;
@@ -119,11 +126,11 @@ public class Customer {
         this.cus_password = cus_password;
     }
 
-    public Bitmap getCus_avatar() {
+    public String getCus_avatar() {
         return cus_avatar;
     }
 
-    public void setCus_avatar(Bitmap cus_avatar) {
+    public void setCus_avatar(String cus_avatar) {
         this.cus_avatar = cus_avatar;
     }
 }

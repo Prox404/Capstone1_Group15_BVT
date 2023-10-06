@@ -9,8 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.os.Bundle;
-
-
+import android.util.Log;
 
 
 public class AuthActivity extends AppCompatActivity {
@@ -21,10 +20,10 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        loadFragment(new RegisterFragment());
+        loadFragment(new LoginFragment());
     }
 
-    private void loadFragment(@NonNull Fragment fragment) {
+    public void loadFragment(@NonNull Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
@@ -32,4 +31,21 @@ public class AuthActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    public void changeFragment(String fragmentName) {
+        Log.i("Auth activity", "changeFragment: " + fragmentName);
+        switch (fragmentName){
+            case "login":
+                loadFragment(new LoginFragment());
+                break;
+            case "register":
+                loadFragment(new RegisterFragment());
+                break;
+            case "forgotPassword":
+                loadFragment(new ResetPasswordFragment());
+                break;
+            default:
+                loadFragment(new LoginFragment());
+                break;
+        }
+    }
 }

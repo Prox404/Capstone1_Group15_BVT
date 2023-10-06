@@ -1,55 +1,32 @@
 package com.prox.babyvaccinationtracker;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
-import retrofit2.Retrofit;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.converter.gson.GsonConverterFactory;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.MultipartBody;
-import okhttp3.ResponseBody;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prox.babyvaccinationtracker.model.Customer;
-import com.prox.babyvaccinationtracker.response.UploadImageResponse;
-import com.prox.babyvaccinationtracker.service.api.ImageService;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Map;
 
 public class CustomerRegistration {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    private ImageService imageService;
 
     public CustomerRegistration() {
         // Khởi tạo Firebase Auth và Realtime Database
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers");
-
-        // Khởi tạo Retrofit để tải hình ảnh lên imgbb
-        Retrofit retrofit = RetrofitClient.getUploadImageClient();
-        imageService = retrofit.create(ImageService.class);
     }
 
-    public void registerCustomer(Customer customer, Bitmap avatar) {
+    public void registerCustomer(Context context, Customer customer, String filePath) {
         // Đăng ký người dùng vào Firebase Authentication
         Log.i("CustomerRegistration", customer.getCus_email() + " - " + customer.getCus_password());
 //        uploadAvatar(avatar, "uaduiygaisdu");
@@ -66,71 +43,53 @@ public class CustomerRegistration {
                         databaseReference.child(uid).setValue(customer);
 
                         // Tải hình ảnh avatar lên imgbb và lưu đường dẫn vào Realtime Database
-                        uploadAvatar(avatar, uid);
+                        uploadAvatar(filePath, uid);
+                        Toast.makeText(context, "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
                     } else {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // Đã tồn tại người dùng với cùng email, xử lý tùy ý
                             Log.i("CustomerRegistration", "Duplicated User");
+                            Toast.makeText(context, "Đã tồn tại người dùng với cùng email !", Toast.LENGTH_SHORT).show();
                             // ...
                         } else {
                             // Đăng ký thất bại, xử lý tùy ý
                             // ...
                             Log.i("CustomerRegistration", "Failed Register User");
-
+                            Toast.makeText(context, "Đăng ký thất bại !", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    private void uploadAvatar(Bitmap avatar, String uid) {
-        // Convert Bitmap thành định dạng RequestBody
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        avatar.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        RequestBody requestBody = RequestBody.create( byteArray, MediaType.parse("image/*"));
-
-//        String currentDate = new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault()).format(new Date());
-//        File f = new File(context.getCacheDir(), "temp_" + currentDate);
-//        try {
-//            f.createNewFile();
-//            FileOutputStream fos = new FileOutputStream(f);
-//            fos.write(byteArray);
-//            fos.flush();
-//            fos.close();
-//        } catch (IOException e) {
-//            // Xử lý ngoại lệ IOException ở đây, ví dụ: in ra thông báo lỗi
-//            e.printStackTrace();
-//        }
-
-        // Tạo MultipartBody.Part cho hình ảnh avatar
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", "avatar.png", requestBody);
-//        RequestBody requestFile =  RequestBody.create( f, MediaType.parse("multipart/form-data"));
-//        MultipartBody.Part body = MultipartBody.Part.createFormData("image", f.getName(), requestFile);
-        // Gọi API để tải hình ảnh lên imgbb
-        Call<UploadImageResponse> call = imageService.uploadImage(imagePart, "e88a4e866189b1d34716272538899d09");
-        call.enqueue(new Callback<UploadImageResponse>() {
+    private void uploadAvatar(String filePath, String uid) {
+        MediaManager.get().upload(filePath).callback(new UploadCallback() {
             @Override
-            public void onResponse(Call<UploadImageResponse> call, Response<UploadImageResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    UploadImageResponse uploadImageResponse = response.body();
-                    String avatarUrl = uploadImageResponse.getImageLink();
-
-                    Log.i("Siuuuu", avatarUrl);
-                    // Lưu đường dẫn hình ảnh avatar vào Realtime Database
-                    databaseReference.child(uid).child("cus_avatar").setValue(avatarUrl);
-                } else {
-                    // Xử lý lỗi khi tải hình ảnh lên imgbb
-                    // ...
-                    Log.i("CustomerRegistration", "Failed Upload User Image 0");
-                }
+            public void onStart(String requestId) {
+                Log.i("upload image", "onStart: ");
             }
 
             @Override
-            public void onFailure(Call<UploadImageResponse> call, Throwable t) {
-                // Xử lý lỗi khi tải hình ảnh lên imgbb
-                // ...
-                Log.i("CustomerRegistration", "Failed Upload User Image");
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+                Log.i("upload image", "Uploading... ");
             }
-        });
+
+            @Override
+            public void onSuccess(String requestId, Map resultData) {
+                Log.i("upload image", "image URL: "+resultData.get("url").toString());
+                // save image url to firebase
+                String avatarUrl = resultData.get("url").toString();
+                databaseReference.child(uid).child("cus_avatar").setValue(avatarUrl);
+            }
+
+            @Override
+            public void onError(String requestId, ErrorInfo error) {
+                Log.i("upload image", "error "+ error.getDescription());
+            }
+
+            @Override
+            public void onReschedule(String requestId, ErrorInfo error) {
+                Log.i("upload image", "Reshedule "+error.getDescription());
+            }
+        }).dispatch();
     }
 }

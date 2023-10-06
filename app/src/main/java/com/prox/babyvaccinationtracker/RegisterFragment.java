@@ -2,16 +2,22 @@ package com.prox.babyvaccinationtracker;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +33,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Customer;
 
 import org.json.JSONArray;
@@ -48,6 +55,7 @@ public class RegisterFragment extends Fragment {
 
     Context context;
 
+    private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageViewAvatar;
     private EditText editTextName, editTextEmail, editTextPassword, editTextRePassword, editTextPhone, editTextBirthday;
@@ -78,6 +86,8 @@ public class RegisterFragment extends Fragment {
     Spinner spinnerDistrict;
     Spinner spinnerWard;
     Spinner spinnerEthnicity;
+    
+    String filePath = "";
 
 
     public RegisterFragment() {
@@ -388,6 +398,18 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Toast.makeText(context, "permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void openImagePicker() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -397,7 +419,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        filePath = getRealPathFromUri(data.getData(), getActivity());
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
@@ -406,6 +428,17 @@ public class RegisterFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private String getRealPathFromUri(Uri imageUri, Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+        if (cursor == null) {
+            return imageUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
         }
     }
 
@@ -451,8 +484,10 @@ public class RegisterFragment extends Fragment {
         customer.setCus_address(address);
         customer.setCus_ethnicity(ethnicity);
         customer.setCus_gender(gender);
+        customer.setCus_avatar("https://res.cloudinary.com/daahr9bmg/image/upload/v1696458517/sh3mokiznenwv6eggiqb.png");
+        customer.setBabies(new ArrayList<Baby>());
 
         // Đăng ký người dùng và lưu thông tin
-        customerRegistration.registerCustomer( customer, selectedImage);
+        customerRegistration.registerCustomer(context, customer, filePath);
     }
 }
