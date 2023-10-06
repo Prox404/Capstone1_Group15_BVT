@@ -40,24 +40,30 @@
         android:layout_width="213dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="THÊM THÔNG TIN VACCINE MỚI"
         android:textSize="25sp"
         android:textStyle="bold" />
 
-    <ImageButton
-        android:id="@+id/img_button"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:src="@android:drawable/btn_star" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="" />
+    </ScrollView>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/img_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="5dp"
         android:background="#D7F4DA"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -178,8 +184,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="text"
-                android:textSize="12dp" />
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -192,9 +197,7 @@
                 android:id="@+id/dosage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="12dp" />
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -233,13 +236,26 @@
                 android:text="Giá"
                 tools:textColor="#007F20" />
 
-            <EditText
-                android:id="@+id/price"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="12dp" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    tools:layout_weight="7" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_tt"
