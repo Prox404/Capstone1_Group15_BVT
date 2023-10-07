@@ -46,6 +46,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kotlin.text.Regex;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RegisterFragment#newInstance} factory method to
@@ -467,6 +469,12 @@ public class RegisterFragment extends Fragment {
                 ethnicity.isEmpty() ||
                 selectedImage == null) {
             Toast.makeText(context, "Hãy nhập đầy đủ tất cả các trường", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Regex passwordRegex = new Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+        if (!passwordRegex.matches(password)){
+            Toast.makeText(context, "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.", Toast.LENGTH_LONG).show();
             return;
         }
 

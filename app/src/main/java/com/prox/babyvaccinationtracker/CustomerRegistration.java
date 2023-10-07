@@ -45,6 +45,7 @@ public class CustomerRegistration {
                         // Tải hình ảnh avatar lên imgbb và lưu đường dẫn vào Realtime Database
                         uploadAvatar(filePath, uid);
                         Toast.makeText(context, "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
+                        ((AuthActivity)context).changeFragment("login");
                     } else {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // Đã tồn tại người dùng với cùng email, xử lý tùy ý
