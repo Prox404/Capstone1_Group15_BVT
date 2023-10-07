@@ -367,6 +367,7 @@ public class create_vaccination extends AppCompatActivity {
         else{
             vaccines.setVaccine_image(Image_url);
         }
+        vaccines.setDeleted(false);
 
 //                for(int i = 0 ; i < Image_url.size(); i ++){
 //                    vaccines.getVaccine_image().add(""+Image_url.get(i));

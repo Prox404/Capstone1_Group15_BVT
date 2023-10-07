@@ -25,6 +25,7 @@ public class Vaccines {
     String date_of_entry;
     String price;
     ArrayList<String> vaccine_image;
+    boolean deleted;
     public Vaccines(
              String vaccine_name,
              String vac_effectiveness,
@@ -37,7 +38,8 @@ public class Vaccines {
              String unit,
              String date_of_entry,
              String price,
-             ArrayList<String> vaccine_image
+             ArrayList<String> vaccine_image,
+             boolean deleted
              ){
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
@@ -51,6 +53,7 @@ public class Vaccines {
         this.date_of_entry = date_of_entry;
         this.price = price;
         this.vaccine_image = vaccine_image;
+        this.deleted = deleted;
     }
 
 
@@ -66,6 +69,7 @@ public class Vaccines {
         unit = "";
         date_of_entry = "";
         price = "";
+        deleted = false;
     }
 
     public String getVaccine_name() {
@@ -110,6 +114,14 @@ public class Vaccines {
 
     public String getPrice() {
         return price;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public ArrayList<String> getVaccine_image() {
