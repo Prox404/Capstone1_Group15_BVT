@@ -9,12 +9,23 @@ public class Baby implements Serializable {
     private String baby_avatar;
     private String baby_gender;
 
-    public Baby(String baby_id, String baby_name, String baby_birthday, String baby_avatar, String baby_gender) {
+    public String getBaby_congenital_disease() {
+        return baby_congenital_disease;
+    }
+
+    public void setBaby_congenital_disease(String baby_congenital_disease) {
+        this.baby_congenital_disease = baby_congenital_disease;
+    }
+
+    private String baby_congenital_disease;
+
+    public Baby(String baby_id, String baby_name, String baby_birthday, String baby_avatar, String baby_gender, String baby_congenital_disease) {
         this.baby_id = baby_id;
         this.baby_name = baby_name;
         this.baby_birthday = baby_birthday;
         this.baby_avatar = baby_avatar;
         this.baby_gender = baby_gender;
+        this.baby_congenital_disease = baby_congenital_disease;
     }
 
     public Baby() {
