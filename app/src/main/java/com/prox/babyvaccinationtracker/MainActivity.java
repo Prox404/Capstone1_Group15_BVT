@@ -27,5 +27,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         configCloudinary();
+
+        Intent i = new Intent(MainActivity.this, AuthActivity.class);
+        startActivity(i);
     }
 }

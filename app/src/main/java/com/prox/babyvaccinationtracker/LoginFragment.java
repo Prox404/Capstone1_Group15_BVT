@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
     Context context;
-
     private FirebaseAuth mAuth;
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -142,12 +141,15 @@ public class LoginFragment extends Fragment {
                                     editor.apply();
                                     Log.i("sharedPreferences", "onComplete: " + sharedPreferences.getString("babiesList", "null"));
                                     // load fragment home
-//                                    ((AuthActivity) context).changeFragment("home");
+                                    Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    if (babiesList == null){
+                                        ((AuthActivity) context).changeFragment("getStarted");
+                                    }
                                 } else {
                                     Log.i("Login", "onComplete: " + task1.getException().getMessage());
                                 }
                             });
-                            Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
                         } else {
                             // Đăng nhập thất bại, xử lý tại đây
                             String errorCode = task.getException().getMessage();
