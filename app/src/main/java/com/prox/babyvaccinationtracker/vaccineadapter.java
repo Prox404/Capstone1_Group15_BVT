@@ -22,7 +22,8 @@ public class vaccineadapter extends RecyclerView.Adapter<vaccineadapter.listvaci
     @NonNull
     @Override
     public listvacine onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_vaccine, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_vaccine, parent, false);
         return new listvacine(view);
     }
 
@@ -31,6 +32,9 @@ public class vaccineadapter extends RecyclerView.Adapter<vaccineadapter.listvaci
         Vaccines vaccines = mlistvaccine.get(position);
         if (vaccines == null){
             return;
+        }else{
+            holder.txtten.setText(vaccines.getVaccine_name());
+            holder.txthienthi.setText(vaccines.getVaccination_target_group());
         }
     }
 

@@ -4,10 +4,9 @@ package com.prox.babyvaccinationtracker;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,11 +16,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 
@@ -30,7 +29,7 @@ import java.util.List;
 
 public class search_vaccination extends AppCompatActivity {
 
-    private AutoCompleteTextView autoCompleteTextView;
+    private AutoCompleteTextView autoCompleteTextViewTimKiem;
     private TextView vaccineInfoTextView;
     Button btntimkiem;
     RecyclerView recvaccine;
@@ -38,9 +37,9 @@ public class search_vaccination extends AppCompatActivity {
     private List<Vaccines> mlistvaccine;
 
     private void setrcv() {
-        autoCompleteTextView = findViewById(R.id.edttimkiem);
-        vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);
+        autoCompleteTextViewTimKiem = findViewById(R.id.edttimkiem);
         btntimkiem = findViewById(R.id.btntimkiem);
+
         // Khởi tạo danh sách vaccine
         mlistvaccine = new ArrayList<>();
         recvaccine = findViewById(R.id.rcvvaccine);
@@ -60,18 +59,21 @@ public class search_vaccination extends AppCompatActivity {
         btntimkiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String searchString = vaccineInfoTextView.getText().toString().trim().toLowerCase();
-                    if (searchString.toLowerCase().contains(searchString)) {
-                        getdatafromrealtimedatabase();
-                    }
+               getdatafromrealtimedatabase();
             }
         });
     }
     private void getdatafromrealtimedatabase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Vaccines");
+        String searchTerm = autoCompleteTextViewTimKiem.getText().toString().trim();
+        Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);
+        Query query = myRef.orderByChild("vaccine_name")
+                .startAt( searchTerm)
+                .endAt(searchTerm + "\uf8ff");;
+        mlistvaccine.clear();
         Log.d("vaccine", "getdatafromrealtimedatabase: call");
-        myRef.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
@@ -133,10 +135,10 @@ public class search_vaccination extends AppCompatActivity {
 //        });
 //        // Tạo ArrayAdapter cho AutoCompleteTextView
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, getVaccineNames());
-//        autoCompleteTextView.setAdapter(adapter);
+//        autoCompleteTextViewTimKiem.setAdapter(adapter);
 //
 //        // Xử lý sự kiện khi chọn đề xuất
-//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        autoCompleteTextViewTimKiem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                String selectedVaccineName = parent.getItemAtPosition(position).toString();
@@ -209,10 +211,10 @@ public class search_vaccination extends AppCompatActivity {
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_search_vaccination);
-//        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.edttimkiem);
+//        AutoCompleteTextView autoCompleteTextViewTimKiem = findViewById(R.id.edttimkiem);
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, Vaccines);
-//        autoCompleteTextView.setAdapter(adapter);
-//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        autoCompleteTextViewTimKiem.setAdapter(adapter);
+//        autoCompleteTextViewTimKiem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                String selectedVaccineName = (String) parent.getItemAtPosition(position);
