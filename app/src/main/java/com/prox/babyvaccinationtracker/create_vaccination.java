@@ -2,7 +2,6 @@ package com.prox.babyvaccinationtracker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -12,15 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.icu.util.Calendar;
-import android.media.Image;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -30,8 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,14 +32,14 @@ import android.widget.Toast;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -114,9 +107,7 @@ public class create_vaccination extends AppCompatActivity {
         btn_tt = findViewById(R.id.btn_tt);
 
         recyclerView = findViewById(R.id.Recycler_view);
-
-        recyclerAdapter = new RecyclerAdapter(uri);
-
+        recyclerAdapter = new RecyclerAdapter(uri,create_vaccination.this);
         recyclerView.setLayoutManager(new GridLayoutManager(create_vaccination.this, 4));
         recyclerView.setAdapter(recyclerAdapter);
         recyclerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
@@ -372,11 +363,19 @@ public class create_vaccination extends AppCompatActivity {
 //                for(int i = 0 ; i < Image_url.size(); i ++){
 //                    vaccines.getVaccine_image().add(""+Image_url.get(i));
 //                }
-        vaccineRef.push().setValue(vaccines);
+        vaccineRef.push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                    Toast.makeText(create_vaccination.this, "successfully", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(create_vaccination.this, "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     // thêm ảnh
     Map config = new HashMap();
-    String filepath;
+
     private void configCloudinary() {
         config.put("cloud_name", "du42cexqi");
         config.put("api_key", "346965553513552");
@@ -453,36 +452,36 @@ public class create_vaccination extends AppCompatActivity {
             return cursor.getString(idx);
         }
     }
-    private void uploadToCloudinary(String filePath) {
-        Log.d("A", "sign up uploadToCloudinary- ");
-
-        MediaManager.get().upload(filePath).callback(new UploadCallback() {
-            @Override
-            public void onStart(String requestId) {
-                Log.i("upload image", "onStart: ");
-            }
-
-            @Override
-            public void onProgress(String requestId, long bytes, long totalBytes) {
-                Log.i("upload image", "Uploading... ");
-            }
-
-            @Override
-            public void onSuccess(String requestId, Map resultData) {
-                String url = resultData.get("url").toString();
-                Log.i("upload image", "image URL: "+url);
-                Image_url.add(url);
-            }
-
-            @Override
-            public void onError(String requestId, ErrorInfo error) {
-                Log.i("upload image", "error "+ error.getDescription());
-            }
-
-            @Override
-            public void onReschedule(String requestId, ErrorInfo error) {
-                Log.i("upload image", "Reshedule "+error.getDescription());
-            }
-        }).dispatch();
-    }
+//    private void uploadToCloudinary(String filePath) {
+//        Log.d("A", "sign up uploadToCloudinary- ");
+//
+//        MediaManager.get().upload(filePath).callback(new UploadCallback() {
+//            @Override
+//            public void onStart(String requestId) {
+//                Log.i("upload image", "onStart: ");
+//            }
+//
+//            @Override
+//            public void onProgress(String requestId, long bytes, long totalBytes) {
+//                Log.i("upload image", "Uploading... ");
+//            }
+//
+//            @Override
+//            public void onSuccess(String requestId, Map resultData) {
+//                String url = resultData.get("url").toString();
+//                Log.i("upload image", "image URL: "+url);
+//                Image_url.add(url);
+//            }
+//
+//            @Override
+//            public void onError(String requestId, ErrorInfo error) {
+//                Log.i("upload image", "error "+ error.getDescription());
+//            }
+//
+//            @Override
+//            public void onReschedule(String requestId, ErrorInfo error) {
+//                Log.i("upload image", "Reshedule "+error.getDescription());
+//            }
+//        }).dispatch();
+//    }
 }
