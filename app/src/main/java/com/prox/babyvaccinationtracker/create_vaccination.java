@@ -59,6 +59,7 @@ public class create_vaccination extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     ArrayList<Uri> uri = new ArrayList<>();
+
     ArrayList<String> Image_url;
 
     boolean is_input(String a){
@@ -113,13 +114,9 @@ public class create_vaccination extends AppCompatActivity {
         recyclerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Uri imageUri) {
-                // Xác định vị trí của item được chọn
                 int position = uri.indexOf(imageUri);
-                // Kiểm tra nếu item tồn tại trong danh sách
                 if (position != -1) {
-                    // Xóa item khỏi danh sách
                     uri.remove(position);
-                    // Thông báo cho RecyclerView về sự thay đổi trong dữ liệu
                     recyclerAdapter.notifyDataSetChanged();
                 }
             }
@@ -128,24 +125,21 @@ public class create_vaccination extends AppCompatActivity {
         configCloudinary();
 
         Calendar currentDate = Calendar.getInstance();
-        // Khởi tạo DatePickerDialog
         datePickerDialog = new DatePickerDialog(
                 create_vaccination.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Xử lý khi người dùng chọn ngày
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         edt_date_of_entry.setText(selectedDate);
                     }
                 },
-                currentDate.get(Calendar.YEAR), // Năm mặc định
-                currentDate.get(Calendar.MONTH), // Tháng mặc định
-                currentDate.get(Calendar.DAY_OF_MONTH) // Ngày mặc định
+                currentDate.get(Calendar.YEAR),
+                currentDate.get(Calendar.MONTH),
+                currentDate.get(Calendar.DAY_OF_MONTH)
         );
         datePickerDialog.getDatePicker().setMaxDate(currentDate.getTimeInMillis());
 
-        // Ngăn việc nhập trực tiếp vào EditText
         edt_date_of_entry.setFocusable(false);
         edt_date_of_entry.setClickable(true);
 
@@ -168,24 +162,7 @@ public class create_vaccination extends AppCompatActivity {
             public void onClick(View view) {
                 if(uri.size() == 0){
                     Toast.makeText(create_vaccination.this, "Phải chọn ảnh", Toast.LENGTH_SHORT).show();
-//                    AlertDialog.Builder b = new AlertDialog.Builder(create_vaccination.this);
-//                    b.setTitle("Question ?");
-//                    b.setMessage("Bạn có muốn tiếp tục thêm vắc-xin mới mà không có ảnh không?");
-//                    b.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            saveDataToFirebase();
-//                        }
-//                    });
-//                    b.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            dialogInterface.cancel();
-//                        }
-//                    });
-//
-//
-//                    saveDataToFirebase();
+
                 }
                 else{
                     Image_url = new ArrayList<>();
@@ -221,24 +198,6 @@ public class create_vaccination extends AppCompatActivity {
                         }).dispatch();
                     }
                 }
-
-//              uploadToCloudinary(String.valueOf(uri.get(3)));
-
-//                vaccines = new  Vaccines(vaccine_name,
-//                        vac_effectiveness,
-//                        post_vaccination_reactions,
-//                        origin,
-//                        vaccination_target_group,
-//                        contraindications,
-//                        quantity,
-//                        dosage,
-//                        unit,
-//                        date_of_entry,
-//                        price,
-//                        new ArrayList<String>()
-//                );
-
-
 
             }
         });
@@ -338,7 +297,7 @@ public class create_vaccination extends AppCompatActivity {
 
         Vaccines vaccines;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference vaccineRef = database.getReference("Vaccines");
+        DatabaseReference vaccineRef = database.getReference("Vaccine_centers");
         vaccines = new Vaccines();
         vaccines.setVaccine_name(vaccine_name);
         vaccines.setVac_effectiveness(vac_effectiveness);
@@ -360,10 +319,11 @@ public class create_vaccination extends AppCompatActivity {
         }
         vaccines.setDeleted(false);
 
-//                for(int i = 0 ; i < Image_url.size(); i ++){
-//                    vaccines.getVaccine_image().add(""+Image_url.get(i));
-//                }
-        vaccineRef.push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        String id_vaccine_center = "-NgUmRaQPW3zg7Hj1VmH";
+
+
+        vaccineRef.child(id_vaccine_center).child("vaccines").push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
@@ -415,14 +375,6 @@ public class create_vaccination extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_PICK);
         i.setType("image/*");
         startActivityForResult(i, PICK_IMAGE);
-
-//        Intent i = new Intent();
-//        i.setType("image/*");
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2){
-//            i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-//        }
-//        i.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(i,"Select Picture"), PICK_IMAGE);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -452,36 +404,4 @@ public class create_vaccination extends AppCompatActivity {
             return cursor.getString(idx);
         }
     }
-//    private void uploadToCloudinary(String filePath) {
-//        Log.d("A", "sign up uploadToCloudinary- ");
-//
-//        MediaManager.get().upload(filePath).callback(new UploadCallback() {
-//            @Override
-//            public void onStart(String requestId) {
-//                Log.i("upload image", "onStart: ");
-//            }
-//
-//            @Override
-//            public void onProgress(String requestId, long bytes, long totalBytes) {
-//                Log.i("upload image", "Uploading... ");
-//            }
-//
-//            @Override
-//            public void onSuccess(String requestId, Map resultData) {
-//                String url = resultData.get("url").toString();
-//                Log.i("upload image", "image URL: "+url);
-//                Image_url.add(url);
-//            }
-//
-//            @Override
-//            public void onError(String requestId, ErrorInfo error) {
-//                Log.i("upload image", "error "+ error.getDescription());
-//            }
-//
-//            @Override
-//            public void onReschedule(String requestId, ErrorInfo error) {
-//                Log.i("upload image", "Reshedule "+error.getDescription());
-//            }
-//        }).dispatch();
-//    }
 }
