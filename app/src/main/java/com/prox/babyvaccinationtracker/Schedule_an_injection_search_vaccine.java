@@ -51,9 +51,6 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
         schedule_back_vaccine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent i = getIntent();
-//                String a = i.getStringExtra("cus_address");
-//                Log.i("cus_address",a);
                 finish();
             }
         });
@@ -110,6 +107,7 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
             }
         }
 
+
         adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, filteredVaccines);
         schedule_list_vaccine_search.setAdapter(adapter);
     }
@@ -119,20 +117,42 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot vaccineSnapshot : snapshot.getChildren()){
-                    vaccine_centers.add(vaccineSnapshot.getValue(Vaccine_center.class));
+                String customerAddress = getIntent().getStringExtra("cus_address");
+
+                ArrayList<Vaccine_center> matchingCenters = new ArrayList<>();
+
+                for (DataSnapshot vaccineSnapshot : snapshot.getChildren()) {
+                    Vaccine_center center = vaccineSnapshot.getValue(Vaccine_center.class);
+                    String centerAddress = center.getCenter_address();
+
+                    if (isAddressNearCustomer(customerAddress, centerAddress)) {
+                        matchingCenters.add(center);
+                    }
                 }
 
-                adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, vaccine_centers);
+                adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, matchingCenters);
                 schedule_list_vaccine_search.setAdapter(adapter);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
+    }
+    private boolean isAddressNearCustomer(String customerAddress, String centerAddress) {
+        String[] customerAddressParts = customerAddress.split(", ");
+        String[] centerAddressParts = centerAddress.split(", ");
 
+        if (customerAddressParts.length < centerAddressParts.length) {
+            return false;
+        }
+
+        for (int i = 0; i < centerAddressParts.length; i++) {
+            if (!customerAddressParts[i].equals(centerAddressParts[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

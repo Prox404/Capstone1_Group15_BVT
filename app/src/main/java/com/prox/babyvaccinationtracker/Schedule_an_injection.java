@@ -102,7 +102,7 @@ public class Schedule_an_injection extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Schedule_an_injection.this, Schedule_an_injection_search_vaccine.class);
-                //i.putExtra("cus_address", customer.getCus_address());
+                i.putExtra("cus_address", customer.getCus_address());
                 startActivityForResult(i,1);
             }
         });
