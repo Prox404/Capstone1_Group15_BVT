@@ -1,21 +1,19 @@
 package com.prox.babyvaccinationtracker.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Vaccine_center {
+    String center_id;
     String center_name;
     String activity_certificate;
     String center_address;
     String hotline;
     String work_time;
+    HashMap<String,Vaccines> vaccines;
 
-    ArrayList<Vaccines> vaccines;
-
-    public void setVaccines(ArrayList<Vaccines> vaccines) {
-        this.vaccines = vaccines;
-    }
-
-    public Vaccine_center(String center_name, String activity_certificate, String center_address, String hotline, String work_time, ArrayList<Vaccines> vaccines) {
+    public Vaccine_center(String center_id, String center_name, String activity_certificate, String center_address, String hotline, String work_time, HashMap<String, Vaccines> vaccines) {
+        this.center_id = center_id;
         this.center_name = center_name;
         this.activity_certificate = activity_certificate;
         this.center_address = center_address;
@@ -23,12 +21,39 @@ public class Vaccine_center {
         this.work_time = work_time;
         this.vaccines = vaccines;
     }
+    public  Vaccine_center(){}
 
-    public ArrayList<Vaccines> getVaccines() {
+    public String getCenter_id() {
+        return center_id;
+    }
+
+    public String getCenter_name() {
+        return center_name;
+    }
+
+    public String getActivity_certificate() {
+        return activity_certificate;
+    }
+
+    public String getCenter_address() {
+        return center_address;
+    }
+
+    public String getHotline() {
+        return hotline;
+    }
+
+    public String getWork_time() {
+        return work_time;
+    }
+
+    public HashMap<String, Vaccines> getVaccines() {
         return vaccines;
     }
 
-
+    public void setCenter_id(String center_id) {
+        this.center_id = center_id;
+    }
 
     public void setCenter_name(String center_name) {
         this.center_name = center_name;
@@ -50,27 +75,7 @@ public class Vaccine_center {
         this.work_time = work_time;
     }
 
-    public Vaccine_center(){
-
-    }
-
-    public String getCenter_name() {
-        return center_name;
-    }
-
-    public String getActivity_certificate() {
-        return activity_certificate;
-    }
-
-    public String getCenter_address() {
-        return center_address;
-    }
-
-    public String getHotline() {
-        return hotline;
-    }
-
-    public String getWork_time() {
-        return work_time;
+    public void setVaccines(HashMap<String, Vaccines> vaccines) {
+        this.vaccines = vaccines;
     }
 }

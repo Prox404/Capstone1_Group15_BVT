@@ -126,8 +126,8 @@ public class Schedule_an_injection extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1){
             if (resultCode == RESULT_OK){
-                schedule_edt_vaccine_center.setText(data.getStringExtra("vaccine_center")+"");
-                ArrayList<String> a = data.getStringArrayListExtra("vaccine_name");
+                schedule_edt_vaccine_center.setText(data.getStringExtra("center_name")+"");
+                ArrayList<String> a = data.getStringArrayListExtra("center_vaccines");
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(Schedule_an_injection.this, android.R.layout.simple_list_item_1, a);
                 schedule_spinner_type_vaccine.setAdapter(adapter);
             }

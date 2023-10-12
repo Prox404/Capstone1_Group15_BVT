@@ -33,14 +33,10 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
 
     EditText schedule_edt_vaccine_search,schedule_edt_xa,schedule_edt_huyen,schedule_edt_tinh;
 
+    ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>();
 
-    ArrayList<String> vaccine_centers = new ArrayList<>();
-    ArrayList<String> vaccine_address = new ArrayList<>();
-    ArrayList<String> vaccine_centers_key = new ArrayList<>();
-    ArrayList<Vaccines> vaccine_name = new ArrayList<>();
+    VaccineCenterAdapter adapter;
 
-    ArrayAdapter<String> adapter;
-//    ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,39 +81,37 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
         schedule_list_vaccine_search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedVaccine = (String) adapterView.getItemAtPosition(i);
-                Intent vaccine_choose= new Intent();
+                Vaccine_center selectedVaccine = (Vaccine_center) adapterView.getItemAtPosition(i);
 
-                DatabaseReference reference = database.getReference("Vaccine_centers").child(vaccine_centers_key.get(i));
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<String> name = new ArrayList<>();
-                        int i = 0;
-                        for(DataSnapshot vaccineSnapshot : snapshot.child("vaccines").getChildren()){
-                            vaccine_name.add(vaccineSnapshot.getValue(Vaccines.class));
-                            name.add(vaccine_name.get(i).getVaccine_name());
-                            i++;
-                        }
-                        vaccine_choose.putStringArrayListExtra("vaccine_name",name);
-                        vaccine_choose.putExtra("vaccine_center", selectedVaccine);
-                        setResult(RESULT_OK, vaccine_choose);
-                        finish();
-                    }
+                ArrayList<String> center_vaccine = new ArrayList<>();
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                for (Vaccines vaccine : selectedVaccine.getVaccines().values()) {
+                    String vaccineName = vaccine.getVaccine_name();
+                    center_vaccine.add(vaccineName);
+                }
 
-                    }
-                });
+
+                Intent vaccine_choose = new Intent();
+                vaccine_choose.putExtra("center_name", selectedVaccine.getCenter_name());
+                vaccine_choose.putStringArrayListExtra("center_vaccines", center_vaccine);
+                setResult(RESULT_OK, vaccine_choose);
+                finish();
 
             }
         });
 
     }
     private void search_vaccines(String searchText){
-        adapter.getFilter().filter(searchText);
+        ArrayList<Vaccine_center> filteredVaccines = new ArrayList<>();
 
+        for (Vaccine_center vaccine : vaccine_centers) {
+            if (vaccine.getCenter_name().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredVaccines.add(vaccine);
+            }
+        }
+
+        adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, filteredVaccines);
+        schedule_list_vaccine_search.setAdapter(adapter);
     }
 
     private void GetDataOnFireBase_vaccine(){
@@ -126,12 +120,10 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot vaccineSnapshot : snapshot.getChildren()){
-                    vaccine_centers.add(vaccineSnapshot.child("center_name").getValue(String.class));
-                    vaccine_address.add(vaccineSnapshot.child( "center_address").getValue(String.class));
-                    vaccine_centers_key.add(vaccineSnapshot.getKey());
-
+                    vaccine_centers.add(vaccineSnapshot.getValue(Vaccine_center.class));
                 }
-                adapter = new ArrayAdapter(Schedule_an_injection_search_vaccine.this, android.R.layout.simple_list_item_1, vaccine_centers);
+
+                adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, vaccine_centers);
                 schedule_list_vaccine_search.setAdapter(adapter);
 
             }
