@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Tìm kiếm vaccine"
+            android:text="Tìm kiếm trung tâm vắc-xin"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
 
@@ -40,10 +40,40 @@
         android:hint="Search"
         android:inputType="text" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/schedule_edt_xa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Xã"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/schedule_edt_huyen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Huyện"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/schedule_edt_tinh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Tỉnh"
+            android:inputType="text" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/schedule_list_vaccine_search"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="500dp">
 
     </ListView>
 

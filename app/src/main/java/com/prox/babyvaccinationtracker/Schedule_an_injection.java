@@ -38,7 +38,8 @@ public class Schedule_an_injection extends AppCompatActivity {
     TextView schedule_baby_congenital_disease,schedule_bady_birthday,schedule_baby_gender,schedule_bady_name,schedule_tv_cus_name,schedule_tv_cus_email,schedule_tv_cus_phone;
     Button schedule_btn_add;
     LinearLayout schedule_list_btn_babies;
-    EditText schedule_edt_date_vaccine,schedule_edt_type_vaccine,schedule_edt_vaccine_center;
+    EditText schedule_edt_date_vaccine,schedule_edt_vaccine_center;
+    Spinner schedule_spinner_type_vaccine;
 
 
     String id = "IMdLT6gpalXk3aJTDWlndkye2tN2";
@@ -64,8 +65,9 @@ public class Schedule_an_injection extends AppCompatActivity {
         schedule_btn_add = findViewById(R.id.schedule_btn_add);
         schedule_list_btn_babies = findViewById(R.id.schedule_list_btn_babies);
         schedule_edt_date_vaccine = findViewById(R.id.schedule_edt_date_vaccine);
-        schedule_edt_type_vaccine = findViewById(R.id.schedule_edt_type_vaccine);
         schedule_edt_vaccine_center = findViewById(R.id.schedule_edt_vaccine_center);
+
+        schedule_spinner_type_vaccine = findViewById(R.id.schedule_spinner_type_vaccine);
 
         // chọn ngày
         Calendar currentDate = Calendar.getInstance();
@@ -94,12 +96,13 @@ public class Schedule_an_injection extends AppCompatActivity {
         });
 
 
-        schedule_edt_type_vaccine.setFocusable(false);
-        schedule_edt_type_vaccine.setClickable(true);
-        schedule_edt_type_vaccine.setOnClickListener(new View.OnClickListener() {
+        schedule_edt_vaccine_center.setFocusable(false);
+        schedule_edt_vaccine_center.setClickable(true);
+        schedule_edt_vaccine_center.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Schedule_an_injection.this, Schedule_an_injection_search_vaccine.class);
+                //i.putExtra("cus_address", customer.getCus_address());
                 startActivityForResult(i,1);
             }
         });
@@ -123,7 +126,10 @@ public class Schedule_an_injection extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1){
             if (resultCode == RESULT_OK){
-                schedule_edt_type_vaccine.setText(data.getIntExtra("vaccine_name",0));
+                schedule_edt_vaccine_center.setText(data.getStringExtra("vaccine_center")+"");
+                ArrayList<String> a = data.getStringArrayListExtra("vaccine_name");
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(Schedule_an_injection.this, android.R.layout.simple_list_item_1, a);
+                schedule_spinner_type_vaccine.setAdapter(adapter);
             }
         }
     }
