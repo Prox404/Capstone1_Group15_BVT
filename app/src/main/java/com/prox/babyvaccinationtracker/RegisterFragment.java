@@ -15,6 +15,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -32,6 +34,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.Manifest;
 
 import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Customer;
@@ -73,6 +76,8 @@ public class RegisterFragment extends Fragment {
     ArrayList<String> provinceList = new ArrayList<>();
     ArrayList<String> districtList = new ArrayList<>();
     ArrayList<String> wardList = new ArrayList<>();
+
+    private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     ArrayList<String> ethnicityList = new ArrayList<>();
 
@@ -128,6 +133,14 @@ public class RegisterFragment extends Fragment {
 
         customerRegistration = new CustomerRegistration();
         editTextBirthday = view.findViewById(R.id.editTextBirthday);
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Nếu quyền chưa được cấp, yêu cầu người dùng cấp quyền
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_READ_EXTERNAL_STORAGE);
+        }
 
         Calendar currentDate = Calendar.getInstance();
         // Khởi tạo DatePickerDialog

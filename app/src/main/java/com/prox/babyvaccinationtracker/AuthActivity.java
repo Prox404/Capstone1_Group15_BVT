@@ -29,10 +29,12 @@ public class AuthActivity extends AppCompatActivity {
         String babies = sharedPreferences.getString("babiesList", "");
         Log.i("AuthActivity", "Babies onCreate: " + babies);
         if(!customer_id.equals("null") && !customer_id.equals("")){
-            if (!babies.equals("null") && !babies.equals("")){
+            if (!babies.equals("null") && !babies.equals("") && !babies.equals("[]")) {
                 // Intent intent = new Intent(AuthActivity.this, MainActivity.class);
 //                    startActivity(intent);
                 //todo: load home activity
+                Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+                startActivity(intent);
                 Log.i("AuthActivity", "changeFragment: home");
             }else{
                 Log.i("AuthActivity", "onCreate: " + "get started");
@@ -72,9 +74,8 @@ public class AuthActivity extends AppCompatActivity {
                 if(customer_id != null){
 //
                     if (babies != null) {
-                       // Intent intent = new Intent(AuthActivity.this, MainActivity.class);
-//                    startActivity(intent);
-                        //todo: load home activity
+                        Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+                        startActivity(intent);
                         Log.i("", "changeFragment: home");
                     }else{
                          Intent intent = new Intent(AuthActivity.this, GetStartedActivity.class);
