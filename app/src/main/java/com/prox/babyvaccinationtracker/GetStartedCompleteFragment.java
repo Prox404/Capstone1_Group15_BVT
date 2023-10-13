@@ -95,7 +95,9 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        notifications.setValue(messages);
+                        for (NotificationMessage message : messages) {
+                            notifications.push().setValue(message);
+                        }
 
                         Customer customer = new Customer();
                         customer.uploadUserData(getActivity(), userID);
