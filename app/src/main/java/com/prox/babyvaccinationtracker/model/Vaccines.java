@@ -6,13 +6,14 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Vaccines {
+public class Vaccines implements Serializable {
     String vaccine_name;
     String vac_effectiveness;
     String post_vaccination_reactions;

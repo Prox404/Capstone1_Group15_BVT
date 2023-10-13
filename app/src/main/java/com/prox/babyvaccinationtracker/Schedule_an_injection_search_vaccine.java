@@ -5,37 +5,44 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prox.babyvaccinationtracker.adapter.VaccineCenterAdapter;
 import com.prox.babyvaccinationtracker.model.Vaccine_center;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 
+import java.io.Serializable;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
     ImageView schedule_back_vaccine;
     ListView schedule_list_vaccine_search;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    EditText schedule_edt_vaccine_search,schedule_edt_xa,schedule_edt_huyen,schedule_edt_tinh;
-
-    ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>();
+    EditText schedule_edt_vaccine_search;
+    TextView schedule_tv_cus_address,schedule_tv_display_all_vaccine;
 
     VaccineCenterAdapter adapter;
+
+
+    ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>(); // tất cả trung tâm tiêm chủng
+    ArrayList<Vaccine_center> filterAddressCenter = new ArrayList<>(); // trung tâm lọc theo địa chỉ khách hàng
+    ArrayList<Vaccine_center> matchingCenters = new ArrayList<>(vaccine_centers); // tìm trung tâm vắc-xin
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +52,10 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
         schedule_back_vaccine = findViewById(R.id.schedule_back_vaccine);
         schedule_list_vaccine_search = findViewById(R.id.schedule_list_vaccine_search);
         schedule_edt_vaccine_search = findViewById(R.id.schedule_edt_vaccine_search);
-        schedule_edt_xa = findViewById(R.id.schedule_edt_xa);
-        schedule_edt_huyen = findViewById(R.id.schedule_edt_huyen);
-        schedule_edt_tinh = findViewById(R.id.schedule_edt_tinh);
+        schedule_tv_cus_address = findViewById(R.id.schedule_tv_cus_address);
+        schedule_tv_display_all_vaccine = findViewById(R.id.schedule_tv_display_all_vaccine);
+
+        // quay lại
         schedule_back_vaccine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,8 +63,21 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
             }
         });
 
+        // hiển thị những vaccine center gần khách hàng
         GetDataOnFireBase_vaccine();
 
+        // hiển thị tất cả vaccine center
+        schedule_tv_display_all_vaccine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, vaccine_centers);
+                schedule_list_vaccine_search.setAdapter(adapter);
+            }
+
+        });
+
+
+        // tìm kiếm
         schedule_edt_vaccine_search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -70,7 +91,7 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String searchText = editable.toString().toLowerCase();
+                String searchText = editable.toString();
                 search_vaccines(searchText);
 
             }
@@ -79,58 +100,60 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Vaccine_center selectedVaccine = (Vaccine_center) adapterView.getItemAtPosition(i);
-
-                ArrayList<String> center_vaccine = new ArrayList<>();
-
-                for (Vaccines vaccine : selectedVaccine.getVaccines().values()) {
-                    String vaccineName = vaccine.getVaccine_name();
-                    center_vaccine.add(vaccineName);
-                }
-
-
                 Intent vaccine_choose = new Intent();
-                vaccine_choose.putExtra("center_name", selectedVaccine.getCenter_name());
-                vaccine_choose.putStringArrayListExtra("center_vaccines", center_vaccine);
-                setResult(RESULT_OK, vaccine_choose);
-                finish();
-
+                // Gửi selectedVaccine
+                if(selectedVaccine != null){
+                    vaccine_choose.putExtra("selected_vaccine", selectedVaccine);
+                    setResult(RESULT_OK, vaccine_choose);
+                    finish();
+                }
             }
         });
 
     }
+
+    public static String removeDiacritics(String input) {
+        String nfdNormalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
+    }
     private void search_vaccines(String searchText){
-        ArrayList<Vaccine_center> filteredVaccines = new ArrayList<>();
-
-        for (Vaccine_center vaccine : vaccine_centers) {
-            if (vaccine.getCenter_name().toLowerCase().contains(searchText.toLowerCase())) {
-                filteredVaccines.add(vaccine);
+        if(!searchText.isEmpty()){
+            matchingCenters.clear();
+            for(Vaccine_center center : vaccine_centers){
+                if(removeDiacritics(center.getCenter_name().toLowerCase()).contains(removeDiacritics(searchText.toLowerCase()))){
+                    matchingCenters.add(center);
+                }
             }
+            adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, matchingCenters);
+            schedule_list_vaccine_search.setAdapter(adapter);
         }
-
-
-        adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, filteredVaccines);
-        schedule_list_vaccine_search.setAdapter(adapter);
+        else{
+            matchingCenters = new ArrayList<>(filterAddressCenter);
+            adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, matchingCenters);
+            schedule_list_vaccine_search.setAdapter(adapter);
+        }
     }
 
     private void GetDataOnFireBase_vaccine(){
         DatabaseReference reference = database.getReference("Vaccine_centers");
+        String address = getIntent().getStringExtra("cus_address");
+        schedule_tv_cus_address.setText(address);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String customerAddress = getIntent().getStringExtra("cus_address");
-
-                ArrayList<Vaccine_center> matchingCenters = new ArrayList<>();
-
+                String customerAddress = address;
+                vaccine_centers = new ArrayList<>();
                 for (DataSnapshot vaccineSnapshot : snapshot.getChildren()) {
                     Vaccine_center center = vaccineSnapshot.getValue(Vaccine_center.class);
                     String centerAddress = center.getCenter_address();
-
+                    vaccine_centers.add(center);
                     if (isAddressNearCustomer(customerAddress, centerAddress)) {
-                        matchingCenters.add(center);
+                        filterAddressCenter.add(center);
                     }
                 }
 
-                adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, matchingCenters);
+                adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, filterAddressCenter);
                 schedule_list_vaccine_search.setAdapter(adapter);
             }
 
@@ -140,19 +163,32 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
         });
     }
     private boolean isAddressNearCustomer(String customerAddress, String centerAddress) {
-        String[] customerAddressParts = customerAddress.split(", ");
-        String[] centerAddressParts = centerAddress.split(", ");
+        String[] customerAddressParts = customerAddress.split(", "); // 0 1
+        String[] centerAddressParts = centerAddress.split(", "); // 0 1 2
 
-        if (customerAddressParts.length < centerAddressParts.length) {
-            return false;
-        }
+        int customerSizeAddress = customerAddressParts.length;
 
-        for (int i = 0; i < centerAddressParts.length; i++) {
-            if (!customerAddressParts[i].equals(centerAddressParts[i])) {
+        if(customerSizeAddress == 1){
+            if(!customerAddressParts[0].equals(centerAddressParts[2])){
                 return false;
             }
         }
-
+        else if(customerSizeAddress == 2){
+            if(customerAddressParts[1].equals(centerAddressParts[2]))
+                if(!customerAddressParts[0].equals(centerAddressParts[1])){
+                    return false;
+                }
+                else
+                    return true;
+            else
+                return false;
+        } else if (customerSizeAddress == 3){
+            for (int i = 0; i < customerSizeAddress; i++) {
+                if (!customerAddressParts[i].equals(centerAddressParts[i])) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 }

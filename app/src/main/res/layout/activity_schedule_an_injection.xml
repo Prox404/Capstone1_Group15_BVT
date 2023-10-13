@@ -167,6 +167,47 @@
                     tools:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tỉnh/ Thành phố"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/schedule_edt_tinh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quận/ Huyện"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/schedule_edt_quan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Phường/ Xã"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/schedule_edt_phuong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text" />
+
+                <TextView
                     android:id="@+id/textView23"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -188,10 +229,12 @@
                     android:text="Loại vaccine"
                     android:textSize="20sp" />
 
-                <Spinner
-                    android:id="@+id/schedule_spinner_type_vaccine"
+                <EditText
+                    android:id="@+id/schedule_edt_type_vaccine"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text" />
 
                 <TextView
                     android:id="@+id/textView24"

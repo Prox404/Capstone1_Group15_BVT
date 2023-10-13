@@ -1,8 +1,9 @@
-package com.prox.babyvaccinationtracker;
+package com.prox.babyvaccinationtracker.adapter;
 
 import static java.security.AccessController.getContext;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ public class VaccineCenterAdapter extends ArrayAdapter<Vaccine_center> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         Vaccine_center vaccineCenter = getItem(position);
-
+        Log.i("vaccine_center", vaccineCenter.toString());
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
         }
