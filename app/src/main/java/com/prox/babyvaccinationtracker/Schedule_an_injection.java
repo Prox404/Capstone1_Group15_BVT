@@ -45,7 +45,7 @@ public class Schedule_an_injection extends AppCompatActivity {
     EditText schedule_edt_type_vaccine;
 
 
-    String id = "vKpo17QHYSYCaoGpbyDDuUkrTff1";
+    String id = "IMdLT6gpalXk3aJTDWlndkye2tN2";
     Customer customer = new Customer();
     Baby babyhavebeenchoose = new Baby();
 
@@ -58,6 +58,8 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatePickerDialog datePickerDialog;
+
+    String address = "";
 
     final int VACCINE_CENTER_NAME = 1;
     final int VACCINE_CHOOSE = 5;
@@ -137,7 +139,8 @@ public class Schedule_an_injection extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Schedule_an_injection.this, Schedule_an_injection_search_vaccine.class);
-                i.putExtra("cus_address", customer.getCus_address());
+
+                i.putExtra("cus_address", address);
                 startActivityForResult(i,VACCINE_CENTER_NAME);
             }
         });
@@ -232,7 +235,7 @@ public class Schedule_an_injection extends AppCompatActivity {
                 // đặt dữ liệu
                 String p = data.getStringExtra("provinceNAME");
                 schedule_edt_tinh.setText(p);
-                customer.setCus_address(schedule_edt_tinh.getText().toString());
+                address = schedule_edt_tinh.getText().toString();
 
                 // chọn quận
                 schedule_edt_quan.setClickable(true);
@@ -254,8 +257,8 @@ public class Schedule_an_injection extends AppCompatActivity {
                 // đặt dữ liệu
                 String d = data.getStringExtra("districtNAME");
                 schedule_edt_quan.setText(d);
-                String address = schedule_edt_quan.getText()+", "+schedule_edt_tinh.getText();
-                customer.setCus_address(address);
+                String ar = schedule_edt_quan.getText()+", "+schedule_edt_tinh.getText();
+                address = ar;
 
                 schedule_edt_phuong.setClickable(true);
                 schedule_edt_phuong.setOnClickListener(new View.OnClickListener() {
@@ -275,8 +278,8 @@ public class Schedule_an_injection extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 String w = data.getStringExtra("wardNAME");
                 schedule_edt_phuong.setText(w);
-                String address = schedule_edt_phuong.getText()+", "+schedule_edt_quan.getText()+", "+schedule_edt_tinh.getText();
-                customer.setCus_address(address);
+                String ar = schedule_edt_phuong.getText()+", "+schedule_edt_quan.getText()+", "+schedule_edt_tinh.getText();
+                address = ar;
             }
         }
     }
@@ -305,11 +308,15 @@ public class Schedule_an_injection extends AppCompatActivity {
                         }
                         check = true;
                     }
-                    babyhavebeenchoose = babies.get(0);
-                    String []address = cus_address.split(", ");
-                    schedule_edt_phuong.setText(address[0]);
-                    schedule_edt_quan.setText(address[1]);
-                    schedule_edt_tinh.setText(address[2]);
+
+
+                    babyhavebeenchoose = babies.get(0); // để mặc đinh là bé đầu tiên được hiển thị và được chọn
+
+
+                    String []ar = cus_address.split(", "); // cắt chuỗi đưa ra
+                    schedule_edt_phuong.setText(ar[0]);
+                    schedule_edt_quan.setText(ar[1]);
+                    schedule_edt_tinh.setText(ar[2]);
 
 
                     customer.setCus_name(cus_name);
@@ -320,6 +327,8 @@ public class Schedule_an_injection extends AppCompatActivity {
                     customer.setCus_gender(cus_gender);
                     customer.setCus_ethnicity(cus_ethnicity);
                     customer.setCus_avatar(cus_avatar);
+
+                    address = customer.getCus_address().toString(); // lấy địa chỉ
 
                 } catch (Exception e) {
                     Log.i("GENSHINNNNNNNNN", "" + e);
