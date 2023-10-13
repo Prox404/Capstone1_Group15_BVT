@@ -224,7 +224,6 @@ public class Schedule_an_injection extends AppCompatActivity {
             }
         }
         else if (requestCode == VACCINE_PROVINCES){
-
             if (resultCode == RESULT_OK){
                 // đặt lại quận phường
                 schedule_edt_quan.setText("");
@@ -262,10 +261,12 @@ public class Schedule_an_injection extends AppCompatActivity {
                 schedule_edt_phuong.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int code = data.getIntExtra("districtCODE",0);
-                        Intent i = new Intent(Schedule_an_injection.this, schedule_an_injection_wards.class);
-                        i.putExtra("districtCODE",code);
-                        startActivityForResult(i,VACCINE_WARD);
+                        if(!schedule_edt_quan.getText().toString().isEmpty()){
+                            int code = data.getIntExtra("districtCODE",0);
+                            Intent i = new Intent(Schedule_an_injection.this, schedule_an_injection_wards.class);
+                            i.putExtra("districtCODE",code);
+                            startActivityForResult(i,VACCINE_WARD);
+                        }
                     }
                 });
             }
