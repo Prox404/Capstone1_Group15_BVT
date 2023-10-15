@@ -47,19 +47,12 @@ public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAd
         holder.congenitalDiseaseTextView.setText(registration.getBaby().getBaby_congenital_disease());
         holder.vaccineNameTextView.setText(registration.getVaccine().getVaccine_name());
         holder.vaccineCenterNameTextView.setText(registration.getCenter().getCenter_name());
-        Picasso.get().load(registration.getBaby().getBaby_avatar())
+        String imageUrl = registration.getBaby().getBaby_avatar();
+        //replace space with http to https
+        imageUrl = imageUrl.replace("https", "http");
+        Picasso.get().load(imageUrl)
                 .error(R.drawable.ic_launcher_background)
-                .into(holder.babyAvatarImageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.i("Aloo", "onSuccess: ");
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Log.i("Aloo", "onError: " + e.getMessage());
-                    }
-                });
+                .into(holder.babyAvatarImageView);
     }
 
     @Override

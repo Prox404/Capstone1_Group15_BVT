@@ -44,7 +44,12 @@ public class CompletedRequestAdapter extends RecyclerView.Adapter<CompletedReque
         holder.congenitalDiseaseTextView.setText(registration.getBaby().getBaby_congenital_disease());
         holder.vaccineNameTextView.setText(registration.getVaccine().getVaccine_name());
         holder.vaccineCenterNameTextView.setText(registration.getCenter().getCenter_name());
-        Picasso.get().load(registration.getBaby().getBaby_avatar()).into(holder.babyAvatarImageView);
+        String imageUrl = registration.getBaby().getBaby_avatar();
+        //replace space with http to https
+        imageUrl = imageUrl.replace("https", "http");
+        Picasso.get().load(imageUrl)
+                .error(R.drawable.ic_launcher_background)
+                .into(holder.babyAvatarImageView);
     }
 
     @Override
