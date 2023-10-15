@@ -1,8 +1,9 @@
 package com.prox.babyvaccinationtracker.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Vaccines {
+public class Vaccines implements Serializable {
     String vaccine_name;
     String vac_effectiveness;
     String post_vaccination_reactions;
