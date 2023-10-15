@@ -314,7 +314,7 @@ public class Schedule_an_injection extends AppCompatActivity {
         List<Baby> babiesList = gson.fromJson(babiesJson, type);
 
 
-        int number_of_babies = babiesList.size();
+//        int number_of_babies = babiesList.size();
         for (Baby baby : babiesList) {
             addButtonForBaby(baby);
         }
