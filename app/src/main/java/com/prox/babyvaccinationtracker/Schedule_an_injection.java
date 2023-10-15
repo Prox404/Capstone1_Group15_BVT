@@ -318,23 +318,23 @@ public class Schedule_an_injection extends AppCompatActivity {
         for (Baby baby : babiesList) {
             addButtonForBaby(baby);
         }
-        for (int i = 0; i < number_of_babies; i++) {
-            Baby baby = babiesList.get(i);
-            Button button = new Button(Schedule_an_injection.this);
-            button.setText(baby.getBaby_name());
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    babyhavebeenchoose = baby;
-                    schedule_bady_name.setText(baby.getBaby_name());
-                    schedule_baby_gender.setText(baby.getBaby_gender());
-                    schedule_bady_birthday.setText(baby.getBaby_birthday());
-                    schedule_baby_congenital_disease.setText(baby.getBaby_congenital_disease());
-                }
-            });
-
-            schedule_list_btn_babies.addView(button);
-        }
+//        for (int i = 0; i < number_of_babies; i++) {
+//            Baby baby = babiesList.get(i);
+//            Button button = new Button(Schedule_an_injection.this);
+//            button.setText(baby.getBaby_name());
+//            button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    babyhavebeenchoose = baby;
+//                    schedule_bady_name.setText(baby.getBaby_name());
+//                    schedule_baby_gender.setText(baby.getBaby_gender());
+//                    schedule_bady_birthday.setText(baby.getBaby_birthday());
+//                    schedule_baby_congenital_disease.setText(baby.getBaby_congenital_disease());
+//                }
+//            });
+//
+//            schedule_list_btn_babies.addView(button);
+//        }
 
 
 
