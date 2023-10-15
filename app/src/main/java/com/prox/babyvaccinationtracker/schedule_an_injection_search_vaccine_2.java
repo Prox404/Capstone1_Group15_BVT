@@ -18,6 +18,7 @@ import com.prox.babyvaccinationtracker.model.Vaccines;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
@@ -43,10 +44,17 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         });
         Intent intent = getIntent();
         HashMap<String, Vaccines> vaccinesHashMap = (HashMap<String, Vaccines>) intent.getSerializableExtra("Vaccines"); // hashmap
-        vaccines = new ArrayList<>(vaccinesHashMap.values());
+        vaccines = new ArrayList<>();
+        for(Map.Entry<String, Vaccines> entry : vaccinesHashMap.entrySet()){
+            Vaccines vaccine = entry.getValue();
+            vaccine.setVaccine_id(entry.getKey());
+            vaccines.add(vaccine);
+        }
         filterVaccine = new ArrayList<>(vaccines);
         adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, vaccines);
         schedule_list_vaccine.setAdapter(adapter);
+
+
         schedule_list_vaccine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

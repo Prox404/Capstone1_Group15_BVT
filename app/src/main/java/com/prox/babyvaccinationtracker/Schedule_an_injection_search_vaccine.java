@@ -146,6 +146,7 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
                 vaccine_centers = new ArrayList<>();
                 for (DataSnapshot vaccineSnapshot : snapshot.getChildren()) {
                     Vaccine_center center = vaccineSnapshot.getValue(Vaccine_center.class);
+                    center.setCenter_id(vaccineSnapshot.getKey());
                     String centerAddress = center.getCenter_address();
                     vaccine_centers.add(center);
                     if (isAddressNearCustomer(customerAddress, centerAddress)) {
