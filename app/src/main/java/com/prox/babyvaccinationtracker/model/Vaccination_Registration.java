@@ -10,38 +10,26 @@ public class Vaccination_Registration {
     String regist_created_at;
     int status;
 
+    public Vaccination_Registration(String regist_id, Baby baby, Customer cus, String cus_phone, Vaccines vaccine, Vaccine_center center, String regist_created_at, int status) {
+        this.regist_id = regist_id;
+        this.baby = baby;
+        this.cus = cus;
+        this.cus_phone = cus_phone;
+        this.vaccine = vaccine;
+        this.center = center;
+        this.regist_created_at = regist_created_at;
+        this.status = status;
+    }
+
+    public Vaccination_Registration() {
+    }
+
     public String getRegist_id() {
         return regist_id;
     }
 
     public void setRegist_id(String regist_id) {
         this.regist_id = regist_id;
-    }
-
-    public Vaccination_Registration(String regist_id, Baby baby, Customer cus, String cus_phone, Vaccines vaccine, Vaccine_center center, String regist_created_at, int status, String post_vaccination) {
-        this.regist_id = regist_id;
-        this.baby = baby;
-        this.cus = cus;
-        this.cus_phone = cus_phone;
-        this.vaccine = vaccine;
-        this.center = center;
-        this.regist_created_at = regist_created_at;
-        this.status = status;
-        this.post_vaccination = post_vaccination;
-    }
-
-    String post_vaccination;
-    public  Vaccination_Registration(){}
-
-    public Vaccination_Registration(Baby baby, Customer cus, String cus_phone, Vaccines vaccine, Vaccine_center center, String regist_created_at, int status, String post_vaccination) {
-        this.baby = baby;
-        this.cus = cus;
-        this.cus_phone = cus_phone;
-        this.vaccine = vaccine;
-        this.center = center;
-        this.regist_created_at = regist_created_at;
-        this.status = status;
-        this.post_vaccination = post_vaccination;
     }
 
     public Baby getBaby() {
@@ -98,13 +86,5 @@ public class Vaccination_Registration {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getPost_vaccination() {
-        return post_vaccination;
-    }
-
-    public void setPost_vaccination(String post_vaccination) {
-        this.post_vaccination = post_vaccination;
     }
 }
