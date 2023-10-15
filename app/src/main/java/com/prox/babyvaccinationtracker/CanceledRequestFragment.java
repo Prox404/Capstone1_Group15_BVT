@@ -53,7 +53,7 @@ public class CanceledRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_canceled_request, container, false);
         recyclerView = view.findViewById(R.id.recycleViewCanceledRequest);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
         Query query = databaseReference.orderByChild("status").equalTo(-1);
         query.addValueEventListener(new ValueEventListener() {
             @Override

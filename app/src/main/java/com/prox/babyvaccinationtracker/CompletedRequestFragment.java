@@ -55,7 +55,7 @@ public class CompletedRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_completed_request, container, false);
         recycleViewCompletedRequest = view.findViewById(R.id.recycleViewCompletedRequest);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
         Query query = databaseReference.orderByChild("status").equalTo(3);
         query.addValueEventListener(new ValueEventListener() {
             @Override

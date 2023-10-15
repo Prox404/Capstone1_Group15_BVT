@@ -54,7 +54,7 @@ public class AcceptRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_accept_request, container, false);
         recycleViewAcceptRequest = view.findViewById(R.id.recycleViewAcceptRequest);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
         Query query = databaseReference.orderByChild("status").equalTo(2);
         query.addValueEventListener(new ValueEventListener() {
             @Override

@@ -54,7 +54,7 @@ public class PendingRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pending_request, container, false);
         recycleViewPendingRequest = view.findViewById(R.id.recycleViewPendingRequest);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
         Query query = databaseReference.orderByChild("status").equalTo(0);
         query.addValueEventListener(new ValueEventListener() {
             @Override
