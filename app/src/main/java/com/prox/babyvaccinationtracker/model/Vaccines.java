@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Vaccines implements Serializable {
+    String vaccine_id;
     String vaccine_name;
     String vac_effectiveness;
     String post_vaccination_reactions;
@@ -27,21 +28,9 @@ public class Vaccines implements Serializable {
     String price;
     ArrayList<String> vaccine_image;
     boolean deleted;
-    public Vaccines(
-            String vaccine_name,
-            String vac_effectiveness,
-            String post_vaccination_reactions,
-            String origin,
-            String vaccination_target_group,
-            String contraindications,
-            String quantity,
-            String dosage,
-            String unit,
-            String date_of_entry,
-            String price,
-            ArrayList<String> vaccine_image,
-            boolean deleted
-    ){
+
+    public Vaccines(String vaccine_id, String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, boolean deleted) {
+        this.vaccine_id = vaccine_id;
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
         this.post_vaccination_reactions = post_vaccination_reactions;
@@ -56,6 +45,15 @@ public class Vaccines implements Serializable {
         this.vaccine_image = vaccine_image;
         this.deleted = deleted;
     }
+
+    public String getVaccine_id() {
+        return vaccine_id;
+    }
+
+    public void setVaccine_id(String vaccine_id) {
+        this.vaccine_id = vaccine_id;
+    }
+
 
 
     public Vaccines(){

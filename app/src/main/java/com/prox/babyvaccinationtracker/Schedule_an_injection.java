@@ -165,7 +165,7 @@ public class Schedule_an_injection extends AppCompatActivity {
                     Toast.makeText(Schedule_an_injection.this,"Phải ngày mong muốn tiêm", Toast.LENGTH_LONG).show();
                     return;
                 }
-                DatabaseReference reference = database.getReference("Vaccination_Registion");
+                DatabaseReference reference = database.getReference("Vaccination_Registration");
 
                 Vaccination_Registration vaccinationRegistration = new Vaccination_Registration();
                 vaccinationRegistration.setBaby(babyhavebeenchoose);
