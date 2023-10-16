@@ -1,6 +1,7 @@
 package com.prox.babyvaccinationtracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -21,17 +22,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Customer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginFragment extends Fragment {
     Context context;
-
     private FirebaseAuth mAuth;
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -113,41 +117,73 @@ public class LoginFragment extends Fragment {
 //                            ((AuthActivity) context).changeFragment("home");
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers").child(user.getUid());
                             // get user and set to global variable SharedPreferences
-                            databaseReference.get().addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    Customer customer = task1.getResult().getValue(Customer.class);
-                                    ArrayList<Baby> babiesList;
-                                    try {
-                                        babiesList = customer.getBabies();
-                                    } catch (Exception e) {
-                                        babiesList = new ArrayList<>();
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        // Dữ liệu tồn tại, giải phân tích dữ liệu và tạo đối tượng Customer
+                                        Customer customer = new Customer();
+                                        customer.setCustomer_id(user.getUid());
+                                        customer.setCus_avatar(dataSnapshot.child("cus_avatar").getValue().toString());
+                                        customer.setCus_name(dataSnapshot.child("cus_name").getValue().toString());
+                                        customer.setCus_birthday(dataSnapshot.child("cus_birthday").getValue().toString());
+                                        customer.setCus_address(dataSnapshot.child("cus_address").getValue().toString());
+                                        customer.setCus_phone(dataSnapshot.child("cus_phone").getValue().toString());
+                                        customer.setCus_email(dataSnapshot.child("cus_email").getValue().toString());
+                                        customer.setCus_gender(dataSnapshot.child("cus_gender").getValue().toString());
+                                        customer.setCus_ethnicity(dataSnapshot.child("cus_ethnicity").getValue().toString());
+                                        List<Baby> babyList = new ArrayList<>();
+                                        DataSnapshot babiesSnapshot = dataSnapshot.child("babies");
+                                        for (DataSnapshot babySnapshot : babiesSnapshot.getChildren()) {
+                                            Baby baby = babySnapshot.getValue(Baby.class);
+                                            if (baby != null) {
+                                                babyList.add(baby);
+                                            }
+                                        }
+                                        customer.setBabies(babyList);
+                                        if (customer != null) {
+
+                                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putString("customer_id", customer.getCustomer_id());
+                                            editor.putString("cus_name", customer.getCus_name());
+                                            editor.putString("cus_birthday", customer.getCus_birthday());
+                                            editor.putString("cus_address", customer.getCus_address());
+                                            editor.putString("cus_phone", customer.getCus_phone());
+                                            editor.putString("cus_email", customer.getCus_email());
+                                            editor.putString("cus_gender", customer.getCus_gender());
+                                            editor.putString("cus_gender", customer.getCus_gender());
+
+                                            Gson gson = new Gson();
+                                            String babiesJson = gson.toJson(customer.getBabies());
+                                            Log.i("babiesJson", "onDataChange: " + babiesJson);
+                                            editor.putString("babiesList", babiesJson);
+                                            editor.apply();
+//                                            Log.i("sharedPreferences", "onComplete: " + sharedPreferences.getString("babiesList", "null"));
+//                                            // load fragment home
+                                            Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                            if (babyList == null || babyList.isEmpty()){
+                                                ((AuthActivity) context).changeFragment("getStarted");
+                                            }else {
+                                                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        } else {
+                                            Toast.makeText(context, "Không tìm thấy dữ liệu khách hàng", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        // Dữ liệu không tồn tại
+                                        Toast.makeText(context, "Không tìm thấy dữ liệu khách hàng", Toast.LENGTH_SHORT).show();
                                     }
-                                    customer.setCustomer_id(user.getUid());
-                                    Log.i("Login", "onComplete: " + customer.getCus_email() + " - " + customer.getCus_password());
-                                    // save user to device
-                                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("customer_id", customer.getCustomer_id());
-                                    editor.putString("cus_name", customer.getCus_name());
-                                    editor.putString("cus_birthday", customer.getCus_birthday());
-                                    editor.putString("cus_address", customer.getCus_address());
-                                    editor.putString("cus_phone", customer.getCus_phone());
-                                    editor.putString("cus_email", customer.getCus_email());
-                                    editor.putString("cus_gender", customer.getCus_gender());
-                                    editor.putString("cus_gender", customer.getCus_gender());
-                                    //get babies
-                                    Gson gson = new Gson();
-                                    String babiesJson = gson.toJson(babiesList);
-                                    editor.putString("babiesList", babiesJson);
-                                    editor.apply();
-                                    Log.i("sharedPreferences", "onComplete: " + sharedPreferences.getString("babiesList", "null"));
-                                    // load fragment home
-//                                    ((AuthActivity) context).changeFragment("home");
-                                } else {
-                                    Log.i("Login", "onComplete: " + task1.getException().getMessage());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Đã xảy ra lỗi, không thể lấy dữ liệu
+                                    Toast.makeText(context, "Đã xảy ra lỗi, không thể lấy dữ liệu", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
                         } else {
                             // Đăng nhập thất bại, xử lý tại đây
                             String errorCode = task.getException().getMessage();
