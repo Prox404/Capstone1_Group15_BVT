@@ -3,8 +3,11 @@ package com.prox.babyvaccinationtracker.model;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,9 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.prox.babyvaccinationtracker.AuthActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Customer {
     private String customer_id;
@@ -53,26 +59,7 @@ public class Customer {
 //        this.babies = babies;
 //    }
 
-
-
-
-
-
-//    public Customer(String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar) {
-//        this.cus_name = cus_name;
-//        this.cus_birthday = cus_birthday;
-//        this.cus_address = cus_address;
-//        this.cus_phone = cus_phone;
-//        this.cus_email = cus_email;
-//        this.cus_gender = cus_gender;
-//        this.cus_ethnicity = cus_ethnicity;
-//        this.cus_password = cus_password;
-//        this.cus_avatar = cus_avatar;
-//    }
-
-
-    public Customer(String customer_id, String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_avatar) {
-        this.customer_id = customer_id;
+    public Customer(String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar) {
         this.cus_name = cus_name;
         this.cus_birthday = cus_birthday;
         this.cus_address = cus_address;
@@ -80,6 +67,7 @@ public class Customer {
         this.cus_email = cus_email;
         this.cus_gender = cus_gender;
         this.cus_ethnicity = cus_ethnicity;
+        this.cus_password = cus_password;
         this.cus_avatar = cus_avatar;
     }
 
