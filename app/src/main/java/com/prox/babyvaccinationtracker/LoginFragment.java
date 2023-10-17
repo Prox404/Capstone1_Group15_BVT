@@ -136,6 +136,7 @@ public class LoginFragment extends Fragment {
                                         DataSnapshot babiesSnapshot = dataSnapshot.child("babies");
                                         for (DataSnapshot babySnapshot : babiesSnapshot.getChildren()) {
                                             Baby baby = babySnapshot.getValue(Baby.class);
+                                            baby.setBaby_id(babySnapshot.getKey());
                                             if (baby != null) {
                                                 babyList.add(baby);
                                             }

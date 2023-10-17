@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED}, MY_FOREGROUND_SERVICE_PERMISSION_REQUEST_CODE);
         }
 
-        Intent notificationService = new Intent(MainActivity.this, NotificationService.class);
-        startService(notificationService);
-
         Intent i = new Intent(MainActivity.this, AuthActivity.class);
         startActivity(i);
     }
