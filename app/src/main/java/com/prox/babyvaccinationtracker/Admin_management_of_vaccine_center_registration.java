@@ -36,6 +36,9 @@ public class Admin_management_of_vaccine_center_registration extends AppCompatAc
         vaccineRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                registrations.clear();
+                adapter = new CenterRegistrationAdapter(Admin_management_of_vaccine_center_registration.this,registrations);
+                adapter.notifyDataSetChanged();
                 for(DataSnapshot snap : snapshot.getChildren()){
                     int status = snap.child("status").getValue(int.class);
                     if(status==0){
@@ -43,12 +46,10 @@ public class Admin_management_of_vaccine_center_registration extends AppCompatAc
                         regi.setCenter_registration_id(snap.getKey());
                         registrations.add(regi);
                     }
-                    adapter = new CenterRegistrationAdapter(Admin_management_of_vaccine_center_registration.this,registrations);
-                    confirm_vaccine_center_registration.setLayoutManager(new GridLayoutManager(Admin_management_of_vaccine_center_registration.this,1));
-                    confirm_vaccine_center_registration.setAdapter(adapter);
                 }
+                confirm_vaccine_center_registration.setLayoutManager(new GridLayoutManager(Admin_management_of_vaccine_center_registration.this,1));
+                confirm_vaccine_center_registration.setAdapter(adapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.i("Firebasseeeee", ""+error);
