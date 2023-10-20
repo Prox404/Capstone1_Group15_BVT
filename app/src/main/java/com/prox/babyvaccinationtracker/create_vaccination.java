@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.prox.babyvaccinationtracker.adapter.RecyclerAdapter;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class create_vaccination extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     TextView img_button;
 
-    Spinner spinner;
+    Spinner spinner, spinner_vaccine_type;
 
     String select_price_unti = "";
 
@@ -69,10 +70,12 @@ public class create_vaccination extends AppCompatActivity {
         }
         return true;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_vaccination);
+        Log.i("CREATE","funtion onCreate");
 
         edt_vaccine_name = findViewById(R.id.vaccine_name);
         edt_vac_effectiveness = findViewById(R.id.vac_effectiveness);
@@ -86,17 +89,23 @@ public class create_vaccination extends AppCompatActivity {
         edt_date_of_entry = findViewById(R.id.date_of_entry);
         edt_price = findViewById(R.id.price);
 
+        // chọn loại vắc-xin
+        spinner_vaccine_type = findViewById(R.id.vaccine_type);
+        ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(create_vaccination.this, R.array.array_vaccine_type, android.R.layout.simple_spinner_item);
+        adapter_vaccine_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_vaccine_type.setAdapter(adapter_vaccine_type);
 
-        String[] items = {"VND", "EUR", "JPY", "USD", "GBP"};
+
+        // Chọn tiền tệ
         spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        ArrayAdapter<CharSequence> adapter_currency = ArrayAdapter.createFromResource(create_vaccination.this, R.array.array_currency, android.R.layout.simple_spinner_item);
+        adapter_currency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter_currency);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                select_price_unti = items[i];
+                select_price_unti = (String) adapterView.getItemAtPosition(i);
             }
 
             @Override
@@ -165,6 +174,91 @@ public class create_vaccination extends AppCompatActivity {
 
                 }
                 else{
+                    String vaccine_name = edt_vaccine_name.getText().toString();
+                    if(is_input(vaccine_name) == false){
+                        edt_vaccine_name.requestFocus();
+                        return;
+                    }
+
+                    String vac_effectiveness = edt_vac_effectiveness.getText().toString();
+                    if(is_input(vac_effectiveness) == false){
+                        edt_vac_effectiveness.requestFocus();
+                        return;
+                    }
+                    String post_vaccination_reactions = edt_post_vaccination_reactions.getText().toString();
+                    if(is_input(post_vaccination_reactions) == false){
+                        edt_post_vaccination_reactions.requestFocus();
+                        return;
+                    }
+                    String origin = edt_origin.getText().toString();
+                    if(is_input(origin) == false){
+                        edt_origin.requestFocus();
+                        return;
+                    }
+                    String vaccination_target_group = edt_vaccination_target_group.getText().toString();
+                    if(is_input(vaccination_target_group) == false){
+                        edt_vaccination_target_group.requestFocus();
+                        return;
+                    }
+                    String contraindications = edt_contraindications.getText().toString();
+                    if(is_input(contraindications)==false){
+                        edt_contraindications.requestFocus();
+                        return;
+                    }
+                    int quantity_int = 0;
+                    try {
+                        quantity_int= Integer.parseInt(edt_quantity.getText().toString());
+                        if(quantity_int < 0){
+                            edt_quantity.requestFocus();
+                            Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }catch (Exception e){
+                        edt_quantity.requestFocus();
+                        Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String quantity = edt_quantity.getText().toString();
+                    int dosage_int = 0;
+                    try{
+                        dosage_int = Integer.parseInt(edt_dosage.getText().toString());
+                        if(dosage_int < 0){
+                            edt_dosage.requestFocus();
+                            Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }catch (Exception e){
+                        edt_dosage.requestFocus();
+                        Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String dosage = edt_dosage.getText().toString();
+                    String unit = edt_unit.getText().toString();
+                    if(is_input(unit) == false){
+                        edt_unit.requestFocus();
+                        return;
+                    }
+                    String date_of_entry = edt_date_of_entry.getText().toString();
+                    if(date_of_entry.length() == 0){
+                        edt_date_of_entry.requestFocus();
+                        Toast.makeText(create_vaccination.this, "Phải chọn ngày nhập cảnh ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int price = 0;
+                    try{
+                        price = Integer.parseInt(edt_price.getText().toString());
+                        if(price < 0){
+                            Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }catch (Exception e){
+                        edt_price.requestFocus();
+                        Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String price_vaccine = "" + edt_price.getText().toString() +" "+ select_price_unti;
+
                     Image_url = new ArrayList<>();
                     for (int i = 0; i < uri.size() ; i ++){
                         Log.d("A", "sign up uploadToCloudinary- ");
@@ -184,7 +278,18 @@ public class create_vaccination extends AppCompatActivity {
                                 Image_url.add(url);
                                 if (Image_url.size() == uri.size()) {
                                     // All images are uploaded, proceed with saving data to Firebase.
-                                    saveDataToFirebase();
+                                    saveDataToFirebase(vaccine_name,
+                                            vac_effectiveness,
+                                            post_vaccination_reactions,
+                                            origin,
+                                            vaccination_target_group,
+                                            contraindications,
+                                            quantity,
+                                            dosage,
+                                            unit,
+                                            date_of_entry,
+                                            price_vaccine
+                                            );
                                 }
                             }
                             @Override
@@ -203,98 +308,18 @@ public class create_vaccination extends AppCompatActivity {
         });
 
     }
-    public void saveDataToFirebase(){
-        String vaccine_name = edt_vaccine_name.getText().toString();
-        if(is_input(vaccine_name) == false){
-            edt_vaccine_name.requestFocus();
-            return;
-        }
-        String vac_effectiveness = edt_vac_effectiveness.getText().toString();
-        if(is_input(vac_effectiveness) == false){
-            edt_vac_effectiveness.requestFocus();
-            return;
-        }
-        String post_vaccination_reactions = edt_post_vaccination_reactions.getText().toString();
-        if(is_input(post_vaccination_reactions) == false){
-            edt_post_vaccination_reactions.requestFocus();
-            return;
-        }
-        String origin = edt_origin.getText().toString();
-        if(is_input(origin) == false){
-            edt_origin.requestFocus();
-            return;
-        }
-        String vaccination_target_group = edt_vaccination_target_group.getText().toString();
-        if(is_input(vaccination_target_group) == false){
-            edt_vaccination_target_group.requestFocus();
-            return;
-        }
-
-        String contraindications = edt_contraindications.getText().toString();
-        if(is_input(contraindications)==false){
-            edt_contraindications.requestFocus();
-            return;
-        }
-
-        int quantity_int = 0;
-        try {
-            quantity_int= Integer.parseInt(edt_quantity.getText().toString());
-            if(quantity_int < 0){
-                edt_quantity.requestFocus();
-                Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }catch (Exception e){
-            edt_quantity.requestFocus();
-            Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String quantity = edt_quantity.getText().toString();
-
-        int dosage_int = 0;
-        try{
-            dosage_int = Integer.parseInt(edt_dosage.getText().toString());
-            if(dosage_int < 0){
-                edt_dosage.requestFocus();
-                Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }catch (Exception e){
-            edt_dosage.requestFocus();
-            Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String dosage = edt_dosage.getText().toString();
-
-        String unit = edt_unit.getText().toString();
-        if(is_input(unit) == false){
-            edt_unit.requestFocus();
-            return;
-        }
-
-        String date_of_entry = edt_date_of_entry.getText().toString();
-        if(date_of_entry.length() == 0){
-            edt_date_of_entry.requestFocus();
-            Toast.makeText(create_vaccination.this, "Phải chọn ngày nhập cảnh ", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
-        int price = 0;
-        try{
-            price = Integer.parseInt(edt_price.getText().toString());
-            if(price < 0){
-                Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }catch (Exception e){
-            edt_price.requestFocus();
-            Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        select_price_unti = "" + edt_price.getText().toString() +" "+ select_price_unti;
-
-
+    public void saveDataToFirebase(String vaccine_name,
+                                   String vac_effectiveness,
+                                   String post_vaccination_reactions,
+                                   String origin,
+                                   String vaccination_target_group,
+                                   String contraindications,
+                                   String quantity,
+                                   String dosage,
+                                   String unit,
+                                   String date_of_entry,
+                                   String select_price_unti
+                                   ){
         Vaccines vaccines;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference vaccineRef = database.getReference("Vaccine_centers");
@@ -310,6 +335,7 @@ public class create_vaccination extends AppCompatActivity {
         vaccines.setUnit(unit);
         vaccines.setDate_of_entry(date_of_entry);
         vaccines.setPrice(select_price_unti);
+        vaccines.setVaccine_type(spinner_vaccine_type.getSelectedItem().toString());
         if(Image_url.size() == 0){
             Image_url.add(image_url);
             vaccines.setVaccine_image(Image_url);
@@ -319,8 +345,8 @@ public class create_vaccination extends AppCompatActivity {
         }
         vaccines.setDeleted(false);
 
-
-        String id_vaccine_center = "-NgUmRaQPW3zg7Hj1VmH";
+        // todo ID của trung tâm Vắc-xin
+        String id_vaccine_center = "-NgZ4l8BmpfL5nCAmFiv";
 
 
         vaccineRef.child(id_vaccine_center).child("vaccines").push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
