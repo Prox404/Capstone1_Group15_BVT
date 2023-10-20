@@ -1,6 +1,9 @@
 package com.prox.babyvaccinationtracker.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +13,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.prox.babyvaccinationtracker.R;
+import com.prox.babyvaccinationtracker.model.VaccinationCertificate;
 import com.prox.babyvaccinationtracker.model.Vaccination_Registration;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Map;
 
 public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdapter.ViewHolder> {
     private Context context;
@@ -66,6 +80,8 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
         Button buttonAccept;
         Button buttonCancel;
 
+        String QR_url = "";
+
         public ViewHolder(View itemView) {
             super(itemView);
             babyNameTextView = itemView.findViewById(R.id.babyNameTextView);
@@ -86,14 +102,93 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
                 public void onClick(View view) {
                     Log.i("Aloo", "onClick: " + getAdapterPosition());
                     // Update status & remove item from list
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
-                    databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegister_id()).child("status").setValue(3);
+                    Vaccination_Registration vaccination_registration = vaccinationRegistions.get(getAdapterPosition());
+
+                    DatabaseReference vaccinationCertificateReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
+                    String id = vaccinationCertificateReference.push().getKey();
+                    Bitmap b = generateQRCode(id);
+                    uploadAvatar(b, id);
+                    Log.i("Accept Request Image", "onClick: " + QR_url);
+                    assert id != null;
+                    VaccinationCertificate vaccinationCertificate = new VaccinationCertificate();
+                    vaccinationCertificate.setBaby(vaccination_registration.getBaby());
+                    vaccinationCertificate.setQr(QR_url);
+                    vaccinationCertificate.setVaccine(vaccination_registration.getVaccine());
+                    vaccinationCertificate.setCenter(vaccination_registration.getCenter());
+                    vaccinationCertificateReference.child(id).setValue(vaccinationCertificate);
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
+                    databaseReference.child(vaccination_registration.getRegister_id()).child("status").setValue(3);
                     Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
                     vaccinationRegistions.remove(getAdapterPosition());
                     notifyDataSetChanged();
                 }
             });
             // Initialize other views in your item layout here.
+        }
+
+        private void uploadAvatar(Bitmap bitmap, String id) {
+
+            Uri uri = getImageUri(context, bitmap);
+            MediaManager.get().upload(uri).callback(new UploadCallback() {
+                @Override
+                public void onStart(String requestId) {
+                    Log.i("upload image", "onStart: ");
+                }
+
+                @Override
+                public void onProgress(String requestId, long bytes, long totalBytes) {
+                    Log.i("upload image", "Uploading... ");
+                }
+
+                @Override
+                public void onSuccess(String requestId, Map resultData) {
+                    Log.i("upload image", "image URL: " + resultData.get("url").toString());
+                    // save image url to firebase
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
+                    databaseReference.child(id).child("qr").setValue(resultData.get("url").toString());
+
+                }
+
+                @Override
+                public void onError(String requestId, ErrorInfo error) {
+                    Log.i("upload image", "error " + error.getDescription());
+                }
+
+                @Override
+                public void onReschedule(String requestId, ErrorInfo error) {
+                    Log.i("upload image", "Reshedule " + error.getDescription());
+                }
+            }).dispatch();
+        }
+
+        public Uri getImageUri(Context inContext, Bitmap inImage) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+            Log.i("SomeImage", "getImageUri: " + path);
+            return Uri.parse(path);
+        }
+
+        private Bitmap generateQRCode(String textToEncode) {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            try {
+                BitMatrix bitMatrix = qrCodeWriter.encode(textToEncode, BarcodeFormat.QR_CODE, 300, 300);
+                int width = bitMatrix.getWidth();
+                int height = bitMatrix.getHeight();
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        bitmap.setPixel(x, y, bitMatrix.get(x, y) ? ContextCompat.getColor(context, R.color.black) : ContextCompat.getColor(context, R.color.white));
+                    }
+                }
+
+                return bitmap;
+
+            } catch (WriterException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 }

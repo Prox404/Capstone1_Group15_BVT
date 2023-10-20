@@ -2,13 +2,16 @@ package com.prox.babyvaccinationtracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.Manifest;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +24,9 @@ public class HomeActivity extends AppCompatActivity {
 
     LinearLayout registionContainer;
     TextView textViewNumberOfRegistration;
+
+    private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,21 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // checkPermission();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted
+        }else {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted
+        }else {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
     }
 
     private void getNumberOfRegistration() {
