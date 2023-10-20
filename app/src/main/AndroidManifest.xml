@@ -21,6 +21,12 @@
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
+            android:name=".update_inforamtion_vaccine"
+            android:exported="false" />
+        <activity
+            android:name=".create_vaccination"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -30,5 +36,3 @@
             </intent-filter>
         </activity>
     </application>
-
-</manifest>

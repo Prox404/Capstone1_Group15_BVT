@@ -1,6 +1,18 @@
 package com.prox.babyvaccinationtracker.model;
 
+
 import java.util.ArrayList;
+import android.net.Uri;
+import android.util.Log;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Vaccines {
     String vaccine_name;
@@ -17,20 +29,20 @@ public class Vaccines {
     ArrayList<String> vaccine_image;
     boolean deleted;
     public Vaccines(
-            String vaccine_name,
-            String vac_effectiveness,
-            String post_vaccination_reactions,
-            String origin,
-            String vaccination_target_group,
-            String contraindications,
-            String quantity,
-            String dosage,
-            String unit,
-            String date_of_entry,
-            String price,
-            ArrayList<String> vaccine_image,
-            boolean deleted
-    ){
+             String vaccine_name,
+             String vac_effectiveness,
+             String post_vaccination_reactions,
+             String origin,
+             String vaccination_target_group,
+             String contraindications,
+             String quantity,
+             String dosage,
+             String unit,
+             String date_of_entry,
+             String price,
+             ArrayList<String> vaccine_image,
+             boolean deleted
+             ){
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
         this.post_vaccination_reactions = post_vaccination_reactions;
