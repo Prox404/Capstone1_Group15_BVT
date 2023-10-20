@@ -175,6 +175,7 @@ public class Customer {
                 DataSnapshot babiesSnapshot = dataSnapshot.child("babies");
                 for (DataSnapshot babySnapshot : babiesSnapshot.getChildren()) {
                     Baby baby = babySnapshot.getValue(Baby.class);
+                    baby.setBaby_id(babySnapshot.getKey());
                     if (baby != null) {
                         babyList.add(baby);
                     }
@@ -193,7 +194,7 @@ public class Customer {
 
                     Gson gson = new Gson();
                     String babiesJson = gson.toJson(customer.getBabies());
-                    Log.i("babiesJson", "onDataChange: " + babiesJson);
+                    Log.i("Update Customer babiesJson", "onDataChange: " + babiesJson);
                     editor.putString("babiesList", babiesJson);
                     editor.apply();
                 } else {
