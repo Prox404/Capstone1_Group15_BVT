@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit = null;
 
-    public static Retrofit getUploadImageClient() {
+    public static Retrofit getClient() {
         // Tạo interceptor để ghi log yêu cầu và phản hồi
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -20,7 +20,7 @@ public class RetrofitClient {
 
         // Khởi tạo Retrofit
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.imgbb.com")
+                .baseUrl("http://172.26.208.1:3000/")  // Thay đổi URL tương ứng với API của bạn
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

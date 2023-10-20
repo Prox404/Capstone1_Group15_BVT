@@ -17,10 +17,30 @@ public class Baby implements Serializable {
         this.baby_congenital_disease = baby_congenital_disease;
     }
 
+    @Override
+    public String toString() {
+        return "Baby{" +
+                "baby_id='" + baby_id + '\'' +
+                ", baby_name='" + baby_name + '\'' +
+                ", baby_birthday='" + baby_birthday + '\'' +
+                ", baby_avatar='" + baby_avatar + '\'' +
+                ", baby_gender='" + baby_gender + '\'' +
+                ", baby_congenital_disease='" + baby_congenital_disease + '\'' +
+                '}';
+    }
+
     private String baby_congenital_disease;
 
     public Baby(String baby_id, String baby_name, String baby_birthday, String baby_avatar, String baby_gender, String baby_congenital_disease) {
         this.baby_id = baby_id;
+        this.baby_name = baby_name;
+        this.baby_birthday = baby_birthday;
+        this.baby_avatar = baby_avatar;
+        this.baby_gender = baby_gender;
+        this.baby_congenital_disease = baby_congenital_disease;
+    }
+
+    public Baby(String baby_name, String baby_birthday, String baby_avatar, String baby_gender, String baby_congenital_disease) {
         this.baby_name = baby_name;
         this.baby_birthday = baby_birthday;
         this.baby_avatar = baby_avatar;

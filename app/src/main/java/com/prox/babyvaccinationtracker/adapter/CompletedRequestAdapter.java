@@ -1,6 +1,7 @@
 package com.prox.babyvaccinationtracker.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prox.babyvaccinationtracker.R;
+import com.prox.babyvaccinationtracker.VaccinationCertificateActivity;
 import com.prox.babyvaccinationtracker.model.Vaccination_Registration;
 import com.squareup.picasso.Picasso;
 
@@ -50,6 +52,15 @@ public class CompletedRequestAdapter extends RecyclerView.Adapter<CompletedReque
         Picasso.get().load(imageUrl)
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.babyAvatarImageView);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VaccinationCertificateActivity.class);
+                intent.putExtra("certificate_id", registration.getRegist_id());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -74,7 +85,6 @@ public class CompletedRequestAdapter extends RecyclerView.Adapter<CompletedReque
             congenitalDiseaseTextView = itemView.findViewById(R.id.congenitalDiseaseTextView);
             vaccineNameTextView = itemView.findViewById(R.id.vaccineNameTextView);
             vaccineCenterNameTextView = itemView.findViewById(R.id.vaccineCenterNameTextView);
-
             buttonAccept.setVisibility(View.GONE);
 
             // Initialize other views in your item layout here.
