@@ -307,6 +307,8 @@ public class Schedule_an_injection extends AppCompatActivity {
         String cusEthnicity = sharedPreferences.getString("cus_ethnicity","");
         String cus_avatar = sharedPreferences.getString("cus_avatar","");
         customer = new Customer(customerID,cusName,cusBirthday,cusAddress,cusPhone,cusEmail,cusGender,cusEthnicity,cus_avatar);
+        Log.i("TAG", "GetData_customer: " + customer.toString());
+
 
         String babiesJson = sharedPreferences.getString("babiesList", "");
         Gson gson = new Gson();
@@ -389,9 +391,9 @@ public class Schedule_an_injection extends AppCompatActivity {
 //                    Log.i("GENSHINNNNNNNNN", "" + e);
 //                    return;
 //                }
-//                schedule_tv_cus_name.setText(customer.getCus_name());
-//                schedule_tv_cus_email.setText(customer.getCus_email());
-//                schedule_tv_cus_phone.setText(customer.getCus_phone());
+                schedule_tv_cus_name.setText(customer.getCus_name());
+                schedule_tv_cus_email.setText(customer.getCus_email());
+                schedule_tv_cus_phone.setText(customer.getCus_phone());
 //                if (check) {
 //                    schedule_bady_name.setText(babies.get(0).getBaby_name());
 //                    schedule_baby_gender.setText(babies.get(0).getBaby_gender());
