@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView recyclerViewTimeline;
     TimeLineAdapter timeLineAdapter;
     List<Regimen> regimenList = new ArrayList<>();
+
+    LinearLayout injectionHistory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
         recyclerViewTimeline = findViewById(R.id.recyclerViewTimeline);
+        injectionHistory = findViewById(R.id.injectionHistory);
         setSupportActionBar(toolbar);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -80,6 +87,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        injectionHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomeActivity.this, InjectionHistoryActivity.class);
+                startActivity(i);
             }
         });
 
