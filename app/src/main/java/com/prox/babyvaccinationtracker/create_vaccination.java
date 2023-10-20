@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class create_vaccination extends AppCompatActivity {
 
-    EditText edt_price,edt_date_of_entry,edt_unit,edt_dosage,edt_vaccine_name, edt_vac_effectiveness, edt_post_vaccination_reactions,edt_origin,edt_vaccination_target_group,edt_contraindications,edt_quantity;
+    EditText edt_price,edt_date_of_entry,edt_unit,edt_dosage,edt_vaccine_name, edt_post_vaccination_reactions,edt_origin,edt_vaccination_target_group,edt_contraindications,edt_quantity;
     Button btn_tt;
     DatePickerDialog datePickerDialog;
     TextView img_button;
@@ -71,14 +71,18 @@ public class create_vaccination extends AppCompatActivity {
         return true;
     }
 
+    String[] arrayVaccineTypeEN = new String[18];
+
+    String vaccine_type = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_vaccination);
         Log.i("CREATE","funtion onCreate");
+        arrayVaccineTypeEN = getResources().getStringArray(R.array.array_vaccine_type_EN);
 
         edt_vaccine_name = findViewById(R.id.vaccine_name);
-        edt_vac_effectiveness = findViewById(R.id.vac_effectiveness);
         edt_post_vaccination_reactions = findViewById(R.id.post_vaccination_reactions);
         edt_origin = findViewById(R.id.origin);
         edt_vaccination_target_group = findViewById(R.id.vaccination_target_group);
@@ -91,9 +95,21 @@ public class create_vaccination extends AppCompatActivity {
 
         // chọn loại vắc-xin
         spinner_vaccine_type = findViewById(R.id.vaccine_type);
-        ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(create_vaccination.this, R.array.array_vaccine_type, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(create_vaccination.this, R.array.array_vaccine_type_VN, android.R.layout.simple_spinner_item);
         adapter_vaccine_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_vaccine_type.setAdapter(adapter_vaccine_type);
+        vaccine_type = arrayVaccineTypeEN[0];
+        spinner_vaccine_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                vaccine_type = arrayVaccineTypeEN[i];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
         // Chọn tiền tệ
@@ -180,11 +196,6 @@ public class create_vaccination extends AppCompatActivity {
                         return;
                     }
 
-                    String vac_effectiveness = edt_vac_effectiveness.getText().toString();
-                    if(is_input(vac_effectiveness) == false){
-                        edt_vac_effectiveness.requestFocus();
-                        return;
-                    }
                     String post_vaccination_reactions = edt_post_vaccination_reactions.getText().toString();
                     if(is_input(post_vaccination_reactions) == false){
                         edt_post_vaccination_reactions.requestFocus();
@@ -279,7 +290,6 @@ public class create_vaccination extends AppCompatActivity {
                                 if (Image_url.size() == uri.size()) {
                                     // All images are uploaded, proceed with saving data to Firebase.
                                     saveDataToFirebase(vaccine_name,
-                                            vac_effectiveness,
                                             post_vaccination_reactions,
                                             origin,
                                             vaccination_target_group,
@@ -309,7 +319,6 @@ public class create_vaccination extends AppCompatActivity {
 
     }
     public void saveDataToFirebase(String vaccine_name,
-                                   String vac_effectiveness,
                                    String post_vaccination_reactions,
                                    String origin,
                                    String vaccination_target_group,
@@ -325,7 +334,7 @@ public class create_vaccination extends AppCompatActivity {
         DatabaseReference vaccineRef = database.getReference("Vaccine_centers");
         vaccines = new Vaccines();
         vaccines.setVaccine_name(vaccine_name);
-        vaccines.setVac_effectiveness(vac_effectiveness);
+        vaccines.setVac_effectiveness(vaccine_type);
         vaccines.setPost_vaccination_reactions(post_vaccination_reactions);
         vaccines.setOrigin(origin);
         vaccines.setVaccination_target_group(vaccination_target_group);
@@ -335,7 +344,6 @@ public class create_vaccination extends AppCompatActivity {
         vaccines.setUnit(unit);
         vaccines.setDate_of_entry(date_of_entry);
         vaccines.setPrice(select_price_unti);
-        vaccines.setVaccine_type(spinner_vaccine_type.getSelectedItem().toString());
         if(Image_url.size() == 0){
             Image_url.add(image_url);
             vaccines.setVaccine_image(Image_url);

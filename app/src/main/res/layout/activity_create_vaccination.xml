@@ -98,31 +98,16 @@
                 android:textSize="12dp" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Loại vắc-xin"
-                android:textColor="#007F20" />
-
-            <Spinner
-                android:id="@+id/vaccine_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Hiệu quả"
                 android:textColor="#007F20" />
 
-            <EditText
-                android:id="@+id/vac_effectiveness"
+            <Spinner
+                android:id="@+id/vaccine_type"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="12dp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textView6"

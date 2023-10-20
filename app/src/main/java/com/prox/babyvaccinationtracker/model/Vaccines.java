@@ -25,13 +25,12 @@ public class Vaccines {
     String date_of_entry;
     String price;
     ArrayList<String> vaccine_image;
-    String vaccine_type;
     boolean deleted;
 
     public Vaccines() {
     }
 
-    public Vaccines(String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, String vaccine_type, boolean deleted) {
+    public Vaccines(String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, boolean deleted) {
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
         this.post_vaccination_reactions = post_vaccination_reactions;
@@ -44,7 +43,6 @@ public class Vaccines {
         this.date_of_entry = date_of_entry;
         this.price = price;
         this.vaccine_image = vaccine_image;
-        this.vaccine_type = vaccine_type;
         this.deleted = deleted;
     }
 
@@ -142,14 +140,6 @@ public class Vaccines {
 
     public void setVaccine_image(ArrayList<String> vaccine_image) {
         this.vaccine_image = vaccine_image;
-    }
-
-    public String getVaccine_type() {
-        return vaccine_type;
-    }
-
-    public void setVaccine_type(String vaccine_type) {
-        this.vaccine_type = vaccine_type;
     }
 
     public boolean isDeleted() {
