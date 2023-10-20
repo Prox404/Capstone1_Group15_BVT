@@ -105,7 +105,7 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
                     Vaccination_Registration vaccination_registration = vaccinationRegistions.get(getAdapterPosition());
 
                     DatabaseReference vaccinationCertificateReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
-                    String id = vaccinationCertificateReference.push().getKey();
+                    String id = vaccination_registration.getRegister_id();
                     Bitmap b = generateQRCode(id);
                     uploadAvatar(b, id);
                     Log.i("Accept Request Image", "onClick: " + QR_url);
