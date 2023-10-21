@@ -8,13 +8,16 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Vaccines {
+
+public class Vaccines implements Serializable {
+    String vaccine_id;
     String vaccine_name;
     String vac_effectiveness;
     String post_vaccination_reactions;
@@ -28,10 +31,7 @@ public class Vaccines {
     String price;
     ArrayList<String> vaccine_image;
     boolean deleted;
-
-    public Vaccines() {
-    }
-
+  
     public Vaccines(String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, boolean deleted) {
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
@@ -46,6 +46,31 @@ public class Vaccines {
         this.price = price;
         this.vaccine_image = vaccine_image;
         this.deleted = deleted;
+    }
+
+
+    public String getVaccine_id() {
+        return vaccine_id;
+    }
+
+    public void setVaccine_id(String vaccine_id) {
+        this.vaccine_id = vaccine_id;
+    }
+
+
+    public Vaccines(){
+        vaccine_name ="";
+        vac_effectiveness ="";
+        post_vaccination_reactions = "";
+        origin = "";
+        vaccination_target_group = "";
+        contraindications = "";
+        quantity = "";
+        dosage = "";
+        unit = "";
+        date_of_entry = "";
+        price = "";
+        deleted = false;
     }
 
     public String getVaccine_name() {
@@ -75,7 +100,6 @@ public class Vaccines {
     public String getOrigin() {
         return origin;
     }
-
     public void setOrigin(String origin) {
         this.origin = origin;
     }
@@ -124,32 +148,28 @@ public class Vaccines {
         return date_of_entry;
     }
 
-    public void setDate_of_entry(String date_of_entry) {
-        this.date_of_entry = date_of_entry;
-    }
-
     public String getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+  
+    public void setDate_of_entry(String date_of_entry) {
+        this.date_of_entry = date_of_entry;
     }
 
     public ArrayList<String> getVaccine_image() {
         return vaccine_image;
     }
 
-    public void setVaccine_image(ArrayList<String> vaccine_image) {
-        this.vaccine_image = vaccine_image;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
 }
