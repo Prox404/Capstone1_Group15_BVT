@@ -23,13 +23,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".VaccinationCertificateActivity"
+            android:exported="false" />
+        <activity
             android:name=".InjectionHistoryActivity"
             android:exported="false" />
 
         <service
             android:name=".service.NotificationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".NotificationActivity"

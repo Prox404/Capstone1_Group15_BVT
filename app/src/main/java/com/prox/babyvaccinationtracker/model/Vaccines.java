@@ -17,6 +17,27 @@ public class Vaccines implements Serializable {
     String vaccine_id;
     String vaccine_name;
     String vac_effectiveness;
+
+    @Override
+    public String toString() {
+        return "Vaccines{" +
+                "vaccine_id='" + vaccine_id + '\'' +
+                ", vaccine_name='" + vaccine_name + '\'' +
+                ", vac_effectiveness='" + vac_effectiveness + '\'' +
+                ", post_vaccination_reactions='" + post_vaccination_reactions + '\'' +
+                ", origin='" + origin + '\'' +
+                ", vaccination_target_group='" + vaccination_target_group + '\'' +
+                ", contraindications='" + contraindications + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", dosage='" + dosage + '\'' +
+                ", unit='" + unit + '\'' +
+                ", date_of_entry='" + date_of_entry + '\'' +
+                ", price='" + price + '\'' +
+                ", vaccine_image=" + vaccine_image +
+                ", deleted=" + deleted +
+                '}';
+    }
+
     String post_vaccination_reactions;
     String origin;
     String vaccination_target_group;
