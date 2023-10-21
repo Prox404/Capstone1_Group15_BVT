@@ -319,11 +319,14 @@ public class create_vaccination extends AppCompatActivity {
         }
         vaccines.setDeleted(false);
 
+        vaccineRef.push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
+
 
         String id_vaccine_center = "-NgUmRaQPW3zg7Hj1VmH";
 
 
         vaccineRef.child(id_vaccine_center).child("vaccines").push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
+
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
