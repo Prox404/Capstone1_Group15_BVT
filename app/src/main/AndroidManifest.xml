@@ -23,6 +23,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".information_vaccine"
+            android:exported="false" />
+
+        <meta-data
+            android:name="resource_name"
+            android:resource="@layout/activity_information_vaccine" />
+
+        <activity
+            android:name=".search_vaccination"
+            android:exported="true" />
             android:name=".VaccinationCertificateActivity"
             android:exported="false" />
         <activity

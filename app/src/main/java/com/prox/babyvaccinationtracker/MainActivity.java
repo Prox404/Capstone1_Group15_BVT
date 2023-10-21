@@ -17,6 +17,7 @@ import com.prox.babyvaccinationtracker.service.NotificationService;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class MainActivity extends AppCompatActivity {
     Map config = new HashMap();
     final int MY_FOREGROUND_SERVICE_PERMISSION_REQUEST_CODE = 1;
