@@ -1,5 +1,7 @@
 package com.prox.babyvaccinationtracker.model;
 
+
+import java.util.ArrayList;
 import android.net.Uri;
 import android.util.Log;
 
@@ -149,41 +151,5 @@ public class Vaccines {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-    //    private Map map(){
-//        Map<String, String> mymap = new HashMap<String, String>();
-//        mymap.put("vaccine_name", this.vaccine_name);
-//        mymap.put("vac_effectiveness",this.vac_effectiveness);
-//        mymap.put("post_vaccination_reactions", this.post_vaccination_reactions);
-//        mymap.put("origin", this.origin);
-//        mymap.put("vaccination_target_group",this.vaccination_target_group+"");
-//        mymap.put("contraindications",this.contraindications);
-//        mymap.put("quantity",this.quantity+"");
-//        mymap.put("dosage",this.dosage+"");
-//        mymap.put("unit",this.unit);
-//        mymap.put("date_of_entry",this.date_of_entry);
-//        mymap.put("price",this.price+"");
-//        //mymap.put("vaccine_image",this.vaccine_image);
-//        Log.i("vaccine model", "map: " + mymap.toString());
-//        return mymap;
-//    }
-//    public void pushDataFisebase(){
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("Vaccines");
-//        myRef.push().setValue(this.map());
-//        String uniqueID = UUID.randomUUID().toString();
-//        myRef.child(uniqueID).child("vaccine_name").setValue(this.vaccine_image);
-//        myRef.child(uniqueID).child("vac_effectiveness").setValue(this.vac_effectiveness);
-//        myRef.child(uniqueID).child("post_vaccination_reactions").setValue(this.post_vaccination_reactions);
-//        myRef.child(uniqueID).child("origin").setValue(this.origin);
-//        myRef.child(uniqueID).child("vaccination_target_group").setValue(this.vaccination_target_group);
-//        myRef.child(uniqueID).child("contraindications").setValue(this.contraindications);
-//        myRef.child(uniqueID).child("quantity").setValue(this.quantity);
-//        myRef.child(uniqueID).child("dosage").setValue(this.dosage);
-//        myRef.child(uniqueID).child("unit").setValue(this.unit);
-//        myRef.child(uniqueID).child("date_of_entry").setValue(this.date_of_entry);
-//        myRef.child(uniqueID).child("price").setValue(this.price);
-//        myRef.child(uniqueID).child("vaccine_image").setValue(this.vaccine_image);
-//
-//    }
 
 }

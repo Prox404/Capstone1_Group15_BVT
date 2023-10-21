@@ -4,25 +4,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Vaccine_center {
+    String center_id;
     String center_name;
     String activity_certificate;
     String center_address;
     String hotline;
     String work_time;
     String center_image;
-
     HashMap<String,Vaccines> vaccines;
+
+    public Vaccine_center(String center_id, String center_name, String activity_certificate, String center_address, String hotline, String work_time, HashMap<String, Vaccines> vaccines) {
+        this.center_id = center_id;
+        this.center_name = center_name;
+        this.activity_certificate = activity_certificate;
+        this.center_address = center_address;
+        this.hotline = hotline;
+        this.work_time = work_time;
+        this.vaccines = vaccines;
+    }
 
     public Vaccine_center(){}
 
-    public Vaccine_center(String center_name, String activity_certificate, String center_address, String hotline, String work_time, String center_image, HashMap<String, Vaccines> vaccines) {
+    public Vaccine_center(String center_name, String activity_certificate, String center_address, String hotline, String work_time, String center_image) {
         this.center_name = center_name;
         this.activity_certificate = activity_certificate;
         this.center_address = center_address;
         this.hotline = hotline;
         this.work_time = work_time;
         this.center_image = center_image;
-        this.vaccines = vaccines;
+    }
+
+    public String getCenter_id() {
+        return center_id;
     }
 
     public String getCenter_name() {
@@ -45,6 +58,10 @@ public class Vaccine_center {
         return work_time;
     }
 
+
+    public void setCenter_id(String center_id) {
+        this.center_id = center_id;
+    }
     public String getCenter_image() {
         return center_image;
     }
