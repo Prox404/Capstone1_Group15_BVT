@@ -6,15 +6,39 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Vaccines {
+public class Vaccines implements Serializable {
+    String vaccine_id;
     String vaccine_name;
     String vac_effectiveness;
+
+    @Override
+    public String toString() {
+        return "Vaccines{" +
+                "vaccine_id='" + vaccine_id + '\'' +
+                ", vaccine_name='" + vaccine_name + '\'' +
+                ", vac_effectiveness='" + vac_effectiveness + '\'' +
+                ", post_vaccination_reactions='" + post_vaccination_reactions + '\'' +
+                ", origin='" + origin + '\'' +
+                ", vaccination_target_group='" + vaccination_target_group + '\'' +
+                ", contraindications='" + contraindications + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", dosage='" + dosage + '\'' +
+                ", unit='" + unit + '\'' +
+                ", date_of_entry='" + date_of_entry + '\'' +
+                ", price='" + price + '\'' +
+                ", vaccine_image=" + vaccine_image +
+                ", deleted=" + deleted +
+                '}';
+    }
+
     String post_vaccination_reactions;
     String origin;
     String vaccination_target_group;
@@ -26,21 +50,10 @@ public class Vaccines {
     String price;
     ArrayList<String> vaccine_image;
     boolean deleted;
-    public Vaccines(
-             String vaccine_name,
-             String vac_effectiveness,
-             String post_vaccination_reactions,
-             String origin,
-             String vaccination_target_group,
-             String contraindications,
-             String quantity,
-             String dosage,
-             String unit,
-             String date_of_entry,
-             String price,
-             ArrayList<String> vaccine_image,
-             boolean deleted
-             ){
+
+    public Vaccines(String vaccine_id, String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, boolean deleted) {
+        this.vaccine_id = vaccine_id;
+
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
         this.post_vaccination_reactions = post_vaccination_reactions;
@@ -56,6 +69,13 @@ public class Vaccines {
         this.deleted = deleted;
     }
 
+    public String getVaccine_id() {
+        return vaccine_id;
+    }
+
+    public void setVaccine_id(String vaccine_id) {
+        this.vaccine_id = vaccine_id;
+    }
 
     public Vaccines(){
         vaccine_name ="";
@@ -176,42 +196,4 @@ public class Vaccines {
     public void setVaccine_image(ArrayList<String> vaccine_image) {
         this.vaccine_image = vaccine_image;
     }
-
-//    private Map map(){
-//        Map<String, String> mymap = new HashMap<String, String>();
-//        mymap.put("vaccine_name", this.vaccine_name);
-//        mymap.put("vac_effectiveness",this.vac_effectiveness);
-//        mymap.put("post_vaccination_reactions", this.post_vaccination_reactions);
-//        mymap.put("origin", this.origin);
-//        mymap.put("vaccination_target_group",this.vaccination_target_group+"");
-//        mymap.put("contraindications",this.contraindications);
-//        mymap.put("quantity",this.quantity+"");
-//        mymap.put("dosage",this.dosage+"");
-//        mymap.put("unit",this.unit);
-//        mymap.put("date_of_entry",this.date_of_entry);
-//        mymap.put("price",this.price+"");
-//        //mymap.put("vaccine_image",this.vaccine_image);
-//        Log.i("vaccine model", "map: " + mymap.toString());
-//        return mymap;
-//    }
-//    public void pushDataFisebase(){
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("Vaccines");
-//        myRef.push().setValue(this.map());
-//        String uniqueID = UUID.randomUUID().toString();
-//        myRef.child(uniqueID).child("vaccine_name").setValue(this.vaccine_image);
-//        myRef.child(uniqueID).child("vac_effectiveness").setValue(this.vac_effectiveness);
-//        myRef.child(uniqueID).child("post_vaccination_reactions").setValue(this.post_vaccination_reactions);
-//        myRef.child(uniqueID).child("origin").setValue(this.origin);
-//        myRef.child(uniqueID).child("vaccination_target_group").setValue(this.vaccination_target_group);
-//        myRef.child(uniqueID).child("contraindications").setValue(this.contraindications);
-//        myRef.child(uniqueID).child("quantity").setValue(this.quantity);
-//        myRef.child(uniqueID).child("dosage").setValue(this.dosage);
-//        myRef.child(uniqueID).child("unit").setValue(this.unit);
-//        myRef.child(uniqueID).child("date_of_entry").setValue(this.date_of_entry);
-//        myRef.child(uniqueID).child("price").setValue(this.price);
-//        myRef.child(uniqueID).child("vaccine_image").setValue(this.vaccine_image);
-//
-//    }
-
 }
