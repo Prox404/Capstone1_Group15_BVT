@@ -6,8 +6,8 @@ public class Baby implements Serializable {
     private String baby_id;
     private String baby_name;
     private String baby_birthday;
-    private String baby_avatar;
-    private String baby_gender;
+    private String baby_avatar = "https://res.cloudinary.com/daahr9bmg/image/upload/v1696458517/sh3mokiznenwv6eggiqb.png";
+    private String baby_gender = "Nam";
 
     public String getBaby_congenital_disease() {
         return baby_congenital_disease;
