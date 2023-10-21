@@ -29,6 +29,10 @@
         <meta-data
             android:name="resource_name"
             android:resource="@layout/activity_information_vaccine" />
+      
+        <activity
+            android:name=".See_detailed_vaccine_information"
+            android:exported="false" />
 
         <activity
             android:name=".search_vaccination"
@@ -84,5 +88,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
