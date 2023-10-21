@@ -1,5 +1,50 @@
 <resources>
     <string name="app_name">Baby Vaccination Tracker</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="array_currency">
+        <item>VND</item>
+        <item>EUR</item>
+        <item>JPY</item>
+        <item>USD</item>
+        <item>GBP</item>
+    </string-array>
+    <string-array name="array_vaccine_type_VN">
+        <item>Lao</item>
+        <item>Viêm gan B</item>
+        <item>Bạch hầu, ho gà, uốn ván</item>
+        <item>Bại liệt</item>
+        <item>Viêm phổi, viêm màng não mủ do Hib</item>
+        <item>Tiêu chảy do Rota Virus</item>
+        <item>Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn</item>
+        <item>Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C</item>
+        <item>Cúm</item>
+        <item>Sởi</item>
+        <item>Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y</item>
+        <item>Viêm não Nhật Bản</item>
+        <item>Sởi, Quai bị, Rubella</item>
+        <item>Thủy đậu</item>
+        <item>Viêm gan A</item>
+        <item>Viêm gan A + B</item>
+        <item>Thương hàn</item>
+        <item>Bệnh tả</item>
+    </string-array>
+    <string-array name="array_vaccine_type_EN">
+        <item>tuberculosis</item>
+        <item>hepatitis_b</item>
+        <item>diphtheria_whooping_cough_poliomyelitis</item>
+        <item>paralysis</item>
+        <item>pneumonia_hib_meningitis</item>
+        <item>rotavirus_diarrhea</item>
+        <item>pneumonia_meningitis_otitis_media_caused_by_streptococcus</item>
+        <item>meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_b_c</item>
+        <item>influenza</item>
+        <item>measles</item>
+        <item>meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_a_c_w_y</item>
+        <item>japanese_encephalitis</item>
+        <item>measles_mumps_rubella</item>
+        <item>chickenpox</item>
+        <item>hepatitis_a</item>
+        <item>hepatitis_a_b</item>
+        <item>tetanus</item>
+        <item>anthrax</item>
+    </string-array>
 </resources>

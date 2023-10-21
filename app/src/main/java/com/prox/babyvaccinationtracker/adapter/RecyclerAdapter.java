@@ -1,4 +1,4 @@
-package com.prox.babyvaccinationtracker;
+package com.prox.babyvaccinationtracker.adapter;
 
 
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prox.babyvaccinationtracker.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
