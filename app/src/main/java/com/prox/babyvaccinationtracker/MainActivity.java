@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         btntim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, search_vaccination.class);
+                Intent intent = new Intent(MainActivity.this, search_vaccine_center.class);
                 startActivity(intent);
             }
         });

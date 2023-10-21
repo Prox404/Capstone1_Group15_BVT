@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prox.babyvaccinationtracker.model.Vaccine_item;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -28,6 +29,7 @@ public class vaccineadapter extends RecyclerView.Adapter<vaccineadapter.listvaci
         this.mlistvaccine = mlistvaccine;
         this.mcontext = context;
     }
+
 
     @NonNull
     @Override

@@ -14,6 +14,12 @@
         android:theme="@style/Theme.BabyVaccinationTracker"
         tools:targetApi="31">
         <activity
+            android:name=".information_center"
+            android:exported="true" />
+        <activity
+            android:name=".search_vaccine_center"
+            android:exported="true" />
+        <activity
             android:name=".information_vaccine"
             android:exported="false" />
 
@@ -23,7 +29,7 @@
 
         <activity
             android:name=".search_vaccination"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
