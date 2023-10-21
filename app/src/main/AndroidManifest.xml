@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BabyVaccinationTracker"
         tools:targetApi="31">
+      
+      <activity
+            android:name=".AuthActivity"
+            android:exported="false" />
+      
         <activity
             android:name=".SendNotificationActivity"
             android:exported="false" />
@@ -25,5 +34,6 @@
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>
