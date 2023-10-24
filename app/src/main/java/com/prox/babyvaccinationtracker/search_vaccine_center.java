@@ -67,7 +67,7 @@ public class search_vaccine_center extends AppCompatActivity {
     }
     private void getdatafromrealtimedatabase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Vaccine_centers");
+        DatabaseReference myRef = database.getReference("users").child("Vaccine_center");
 
         String searchTerm = autoCompleteTextViewTimKiem.getText().toString().trim();
         Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);

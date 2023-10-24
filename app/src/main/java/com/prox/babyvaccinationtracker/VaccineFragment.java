@@ -49,8 +49,8 @@ public class VaccineFragment extends Fragment {
         searchVaccineCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), search_vaccination_center.class);
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), search_vaccine_center.class);
+                startActivity(intent);
             }
         });
         return  view;
