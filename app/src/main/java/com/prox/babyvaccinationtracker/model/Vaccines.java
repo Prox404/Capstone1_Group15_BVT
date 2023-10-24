@@ -1,11 +1,44 @@
 package com.prox.babyvaccinationtracker.model;
 
+import android.net.Uri;
+import android.util.Log;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Vaccines implements Serializable {
+    String vaccine_id;
     String vaccine_name;
     String vac_effectiveness;
+
+    @Override
+    public String toString() {
+        return "Vaccines{" +
+                "vaccine_id='" + vaccine_id + '\'' +
+                ", vaccine_name='" + vaccine_name + '\'' +
+                ", vac_effectiveness='" + vac_effectiveness + '\'' +
+                ", post_vaccination_reactions='" + post_vaccination_reactions + '\'' +
+                ", origin='" + origin + '\'' +
+                ", vaccination_target_group='" + vaccination_target_group + '\'' +
+                ", contraindications='" + contraindications + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", dosage='" + dosage + '\'' +
+                ", unit='" + unit + '\'' +
+                ", date_of_entry='" + date_of_entry + '\'' +
+                ", price='" + price + '\'' +
+                ", vaccine_image=" + vaccine_image +
+                ", deleted=" + deleted +
+                '}';
+    }
+
     String post_vaccination_reactions;
     String origin;
     String vaccination_target_group;
@@ -17,21 +50,20 @@ public class Vaccines implements Serializable {
     String price;
     ArrayList<String> vaccine_image;
     boolean deleted;
-    public Vaccines(
-            String vaccine_name,
-            String vac_effectiveness,
-            String post_vaccination_reactions,
-            String origin,
-            String vaccination_target_group,
-            String contraindications,
-            String quantity,
-            String dosage,
-            String unit,
-            String date_of_entry,
-            String price,
-            ArrayList<String> vaccine_image,
-            boolean deleted
-    ){
+
+    public HashMap<String, String> getAdditionInformation() {
+        return additionInformation;
+    }
+
+    public void setAdditionInformation(HashMap<String, String> additionInformation) {
+        this.additionInformation = additionInformation;
+    }
+
+    HashMap<String, String> additionInformation = new HashMap<>();
+
+    public Vaccines(String vaccine_id, String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, boolean deleted) {
+        this.vaccine_id = vaccine_id;
+
         this.vaccine_name = vaccine_name;
         this.vac_effectiveness = vac_effectiveness;
         this.post_vaccination_reactions = post_vaccination_reactions;
@@ -47,6 +79,13 @@ public class Vaccines implements Serializable {
         this.deleted = deleted;
     }
 
+    public String getVaccine_id() {
+        return vaccine_id;
+    }
+
+    public void setVaccine_id(String vaccine_id) {
+        this.vaccine_id = vaccine_id;
+    }
 
     public Vaccines(){
         vaccine_name ="";
@@ -167,5 +206,4 @@ public class Vaccines implements Serializable {
     public void setVaccine_image(ArrayList<String> vaccine_image) {
         this.vaccine_image = vaccine_image;
     }
-
 }

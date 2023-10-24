@@ -9,6 +9,19 @@ public class Vaccine_center implements Serializable {
     String center_name;
     String activity_certificate;
     String center_address;
+
+    @Override
+    public String toString() {
+        return "Vaccine_center{" +
+                "center_name='" + center_name + '\'' +
+                ", activity_certificate='" + activity_certificate + '\'' +
+                ", center_address='" + center_address + '\'' +
+                ", hotline='" + hotline + '\'' +
+                ", work_time='" + work_time + '\'' +
+                ", center_image='" + center_image + '\'' +
+                '}';
+    }
+
     String hotline;
     String work_time;
     String center_image;
@@ -23,20 +36,27 @@ public class Vaccine_center implements Serializable {
         this.work_time = work_time;
         this.vaccines = vaccines;
     }
-    public  Vaccine_center(){}
 
-    @Override
-    public String toString() {
-        return "Vaccine_center{" +
-                "center_id='" + center_id + '\'' +
-                ", center_name='" + center_name + '\'' +
-                ", activity_certificate='" + activity_certificate + '\'' +
-                ", center_address='" + center_address + '\'' +
-                ", hotline='" + hotline + '\'' +
-                ", work_time='" + work_time + '\'' +
-                ", center_image='" + center_image + '\'' +
-                '}';
+    public Vaccine_center(String center_id, String center_name, String activity_certificate, String center_address, String hotline, String work_time, String center_image) {
+        this.center_id = center_id;
+        this.center_name = center_name;
+        this.activity_certificate = activity_certificate;
+        this.center_address = center_address;
+        this.hotline = hotline;
+        this.work_time = work_time;
+        this.center_image = center_image;
     }
+
+    public Vaccine_center(String center_name, String activity_certificate, String center_address, String hotline, String work_time, String center_image) {
+        this.center_name = center_name;
+        this.activity_certificate = activity_certificate;
+        this.center_address = center_address;
+        this.hotline = hotline;
+        this.work_time = work_time;
+        this.center_image = center_image;
+    }
+
+    public  Vaccine_center(){}
 
     public String getCenter_id() {
         return center_id;

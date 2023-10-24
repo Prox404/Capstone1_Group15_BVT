@@ -1,0 +1,113 @@
+package com.prox.babyvaccinationtracker;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
+import com.prox.babyvaccinationtracker.service.NotificationService;
+
+import java.util.Objects;
+
+
+public class HomeActivity extends AppCompatActivity {
+
+    Toolbar toolbar;
+    BottomNavigationView navigation;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
+        toolbar = (Toolbar) findViewById(R.id.homeToolBar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
+        navigation = findViewById(R.id.navigation);
+        navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
+//        navigation.setItemIconTintList(null);
+        loadFragment(new DashboardFragment());
+
+        Intent notificationService = new Intent(HomeActivity.this, NotificationService.class);
+        startService(notificationService);
+    }
+
+    private final NavigationBarView.OnItemSelectedListener mOnNavigationItemSelectedListener
+            = new NavigationBarView.OnItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Log.i("navigation", "call");
+            Fragment fragment;
+            int itemId = item.getItemId();
+//            Log.i("navigation", toString(itemId));
+            if (itemId == R.id.navigation_dashboard) {
+                fragment = new DashboardFragment();
+                loadFragment(fragment);
+                return true;
+            } else if (itemId == R.id.navigation_calendar) {
+                Intent i = new Intent(HomeActivity.this, Schedule_an_injection.class);
+                startActivity(i);
+//                fragment = new ScheduleFragment();
+//                loadFragment(fragment);
+                return false;
+            }else if (itemId == R.id.navigation_vaccine) {
+                fragment = new VaccineFragment();
+                loadFragment(fragment);
+                return true;
+            }else if (itemId == R.id.navigation_health) {
+                fragment = new HealthFragment();
+                loadFragment(fragment);
+                return true;
+            }else if (itemId == R.id.navigation_chat) {
+                fragment = new ChatFragment();
+                loadFragment(fragment);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_notification) {
+            // Xử lý sự kiện khi người dùng nhấn vào biểu tượng thông báo ở đây
+            // Ví dụ: mở màn hình thông báo, hiển thị danh sách thông báo, vv.
+            Log.i("Home", "onOptionsItemSelected: notification" );
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+}

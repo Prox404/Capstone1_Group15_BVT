@@ -1,172 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" >
 
-    <ImageView
-        android:id="@+id/large_image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/smallImageRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/large_image"
-        android:orientation="horizontal"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tên vaccine:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+                <ImageView
+                    android:id="@+id/large_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/txt_ten"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/smallImageRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/large_image"
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hiệu quả:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            </androidx.recyclerview.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/txt_hieuqua"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+            <TextView
+                android:id="@+id/textView26"
+                style="@style/Widget.AppCompat.TextView.Heading2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="Thông tin Vaccine" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Phản ứng sau tiêm:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên vaccine:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txt_phanungsautiem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+            <TextView
+                android:id="@+id/txt_ten"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nguồn gốc:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hiệu quả:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txt_nguongoc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+            <TextView
+                android:id="@+id/txt_hieuqua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nhóm tuổi sử dụng:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phản ứng sau tiêm:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txt_nhomtuoisudung"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chống chỉ định:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/txt_phanungsautiem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
 
-    <TextView
-        android:id="@+id/txt_chongchidinh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Số lượng:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nguồn gốc:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txt_soluong"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Liều lượng:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/txt_nguongoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
 
-    <TextView
-        android:id="@+id/txt_lieuluong"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đơn vị:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nhóm tuổi sử dụng:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txt_donvi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hạn sử dụng:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/txt_nhomtuoisudung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
 
-    <TextView
-        android:id="@+id/txt_hansudung"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Giá:"
-        android:textStyle="bold"
-        android:textColor="#007F20"/>
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chống chỉ định:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txt_gia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+            <TextView
+                android:id="@+id/txt_chongchidinh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Số lượng:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_soluong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:singleLine="false"
+                android:text=""
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Liều lượng:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_lieuluong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đơn vị:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_donvi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hạn sử dụng:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_hansudung"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Giá:"
+                android:textColor="#007F20"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_gia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="false"
+                android:text="" />
+        </LinearLayout>
+    </ScrollView>
+
+
 </LinearLayout>
