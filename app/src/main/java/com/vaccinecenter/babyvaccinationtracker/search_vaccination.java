@@ -32,17 +32,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class search_vaccination extends AppCompatActivity {
-
     private EditText edt_search_timkiem;
     private TextView vaccineInfoTextView;
-
     ImageView imge_list_back;
     Button btntimkiem;
     RecyclerView recvaccine;
     VaccineAdapter mVaccineadapter;
-
     private List<Vaccines> mlistvaccine;
-
     private void setrcv() {
 
         edt_search_timkiem = findViewById(R.id.edt_search_timkiem);
@@ -61,13 +57,18 @@ public class search_vaccination extends AppCompatActivity {
         recvaccine.setAdapter(mVaccineadapter);
         vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);
     }
-
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        getdatafromrealtimedatabase();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_vaccination);
         setrcv();
         getdatafromrealtimedatabase();
+
         btntimkiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,5 +1,6 @@
 package com.vaccinecenter.babyvaccinationtracker;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +20,6 @@ import com.vaccinecenter.babyvaccinationtracker.Adapter.RecyclerAdapter;
 import java.util.ArrayList;
 
 public class See_detailed_vaccine_information extends AppCompatActivity {
-
     RecyclerView vaccine_image;
     RecyclerAdapter adapter;
     TextView tv_vaccine_name,tv_vac_effectiveness,tv_post_vaccination_reactions,tv_origin,tv_vaccination_target_group,tv_contraindications,tv_quantity,tv_dosage,tv_unit,tv_date_of_entry,tv_price,tv_detail_deleted;
@@ -33,6 +33,8 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
 
     String []arrayVaccineTypeEN = new String[18];
     String []arrayVaccineTypeVN = new String[18];
+
+    final int UPDATE_VACCINE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +89,8 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
                 else{
                     tv_detail_deleted.setText("Chưa xóa");
                 }
-                for(String a : vaccine.getVaccine_image()){
+                ArrayList<String> url_image = vaccine.getVaccine_image();
+                for(String a : url_image){
                     Uri b = Uri.parse(a);
                     vacimage.add(b);
                 }
@@ -120,7 +123,7 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("vaccine_name", vaccine);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,UPDATE_VACCINE);
             }
         });
         // back
@@ -131,63 +134,46 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == UPDATE_VACCINE && resultCode == RESULT_OK){
+            Bundle bundle = data.getExtras();
+            vaccine = (Vaccines) bundle.getSerializable("vaccine_name");
+            tv_vaccine_name.setText(vaccine.getVaccine_name());
+            int position = 0 ;
+            int size = arrayVaccineTypeEN.length;
+            for(int i = 0 ; i < size;i++){
+                if(arrayVaccineTypeEN[i].equals(vaccine.getVac_effectiveness()))
+                    position = i;
+            }
+            tv_vac_effectiveness.setText(arrayVaccineTypeVN[position]);
+            vaccine.setVac_effectiveness(arrayVaccineTypeVN[position]);
+            tv_post_vaccination_reactions.setText(vaccine.getPost_vaccination_reactions());
+            tv_origin.setText(vaccine.getOrigin());
+            tv_vaccination_target_group.setText(vaccine.getVaccination_target_group());
+            tv_contraindications.setText(vaccine.getContraindications());
+            tv_quantity.setText(vaccine.getQuantity());
+            tv_dosage.setText(vaccine.getDosage());
+            tv_unit.setText(vaccine.getUnit());
+            tv_date_of_entry.setText(vaccine.getDate_of_entry());
+            tv_price.setText(vaccine.getPrice());
+            if(vaccine.isDeleted()){
+                tv_detail_deleted.setText("Đã xóa");
+            }
+            else{
+                tv_detail_deleted.setText("Chưa xóa");
+            }
+            vacimage.clear();
+            for(String a : vaccine.getVaccine_image()){
+                vacimage.add(Uri.parse(a));
+            }
+            adapter.notifyDataSetChanged();
+            vaccine_image.setLayoutManager(new GridLayoutManager(See_detailed_vaccine_information.this,vacimage.size()));
+            Picasso.get().load(vaccine.getVaccine_image().get(0)).into(single_vaccine_image);
+            Toast.makeText(See_detailed_vaccine_information.this,"Đã cập nhập thành công", Toast.LENGTH_LONG).show();
+        }
 
-//        // lấy dữ liệu từ firebase
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference reference = database.getReference("Vaccines");
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                vaccine = new Vaccines();
-//                try{
-//                    vaccine = snapshot.child(id).getValue(Vaccines.class);
-//
-//                }catch (Exception e){
-//                    Toast.makeText(See_detailed_vaccine_information.this, "Có gì đó đang lỗi", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                tv_vaccine_name.setText(vaccine.getVaccine_name());
-//                tv_vac_effectiveness.setText(vaccine.getVac_effectiveness());
-//                tv_post_vaccination_reactions.setText(vaccine.getPost_vaccination_reactions());
-//                tv_origin.setText(vaccine.getOrigin());
-//                tv_vaccination_target_group.setText(vaccine.getVaccination_target_group());
-//                tv_contraindications.setText(vaccine.getContraindications());
-//                tv_quantity.setText(vaccine.getQuantity());
-//                tv_dosage.setText(vaccine.getDosage());
-//                tv_unit.setText(vaccine.getUnit());
-//                tv_date_of_entry.setText(vaccine.getDate_of_entry());
-//                tv_price.setText(vaccine.getPrice());
-//
-//                for(String a : vaccine.getVaccine_image()){
-//                    Uri b = Uri.parse(a);
-//                    vacimage.add(b);
-//                }
-//
-//                adapter = new RecyclerAdapter(vacimage, See_detailed_vaccine_information.this);
-//                vaccine_image.setLayoutManager(new GridLayoutManager(See_detailed_vaccine_information.this,vacimage.size()));
-//                vaccine_image.setAdapter(adapter);
-//
-//
-//
-//                adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(Uri imageUri) {
-//                        Log.i("Siuu", ""+imageUri.toString());
-//                        Picasso.get().load(imageUri.toString()).into(single_vaccine_image);
-//                    }
-//                });
-//
-//                Picasso.get().load(vaccine.getVaccine_image().get(0)).into(single_vaccine_image);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(See_detailed_vaccine_information.this, "LỖI!!!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
-//                Log.e("Firebase error",""+error);
-//            }
-//
-//        });
     }
 }

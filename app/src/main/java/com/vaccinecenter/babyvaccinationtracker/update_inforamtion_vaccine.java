@@ -111,7 +111,6 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         });
 
         // todo chọn loại vắc-xin
-
         arrayVaccineTypeEN = getResources().getStringArray(R.array.array_vaccine_type_EN);
         ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(update_inforamtion_vaccine.this, R.array.array_vaccine_type_VN, android.R.layout.simple_spinner_item);
         adapter_vaccine_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -180,7 +179,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
 
                 spinner_vac_effectiveness.setSelection(
                         ((ArrayAdapter<String>) spinner_vac_effectiveness.getAdapter()).getPosition(vaccine.getVac_effectiveness()));
-                effectiveness = spinner_vac_effectiveness.getSelectedItem().toString();
+
                 edt_post_vaccination_reactions.setText(vaccine.getPost_vaccination_reactions());
                 edt_origin.setText(vaccine.getOrigin());
                 edt_vaccination_target_group.setText(vaccine.getVaccination_target_group());
@@ -349,59 +348,76 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                 }
                 ArrayList<String> Url_image = new ArrayList<>();
                 int size = new_image.size();
-                for(int i = 0 ; i < size ; i ++){
-                    Uri image = new_image.get(i);
-                    MediaManager.get().upload(""+image).callback(new UploadCallback() {
-                        @Override
-                        public void onStart(String requestId) {
-                            Log.i("upload image", "onStart: ");
-                        }
-
-                        @Override
-                        public void onProgress(String requestId, long bytes, long totalBytes) {
-                            Log.i("uploading image", "Uploading... ");
-                        }
-
-                        @Override
-                        public void onSuccess(String requestId, Map resultData) {
-                            String url = resultData.get("url").toString();
-                            Log.i("upload image onSuccess", "image URL: "+ url);
-                            Url_image.add(url);
-                            if(Url_image.size() == size){
-                                ArrayList<String> vaccine_image;
-                                if(old_image.size() != 0){
-                                    vaccine_image = merge_two_array(old_image,Url_image);
-                                }
-                                else{
-                                    vaccine_image = Url_image;
-                                }
-                                UpdateInformationVaccine(name,
-                                        effectiveness,
-                                        reactions,
-                                        origin,
-                                        target_group,
-                                        contraindication,
-                                        quantity,
-                                        dosage,
-                                        unit,
-                                        date_of_entry,
-                                        price,
-                                        vaccine_image);
+                if(size != 0){
+                    for(int i = 0 ; i < size ; i ++){
+                        Uri image = new_image.get(i);
+                        MediaManager.get().upload(""+image).callback(new UploadCallback() {
+                            @Override
+                            public void onStart(String requestId) {
+                                Log.i("upload image", "onStart: ");
                             }
 
-                        }
+                            @Override
+                            public void onProgress(String requestId, long bytes, long totalBytes) {
+                                Log.i("uploading image", "Uploading... ");
+                            }
 
-                        @Override
-                        public void onError(String requestId, ErrorInfo error) {
-                            Log.i("upload image onError", "error "+ error.getDescription());
-                        }
+                            @Override
+                            public void onSuccess(String requestId, Map resultData) {
+                                String url = resultData.get("url").toString();
+                                Log.i("upload image onSuccess", "image URL: "+ url);
+                                Url_image.add(url);
+                                if(Url_image.size() == size){
+                                    ArrayList<String> vaccine_image;
+                                    if(old_image.size() != 0){
+                                        vaccine_image = merge_two_array(old_image,Url_image);
+                                    }
+                                    else{
+                                        vaccine_image = Url_image;
+                                    }
+                                    UpdateInformationVaccine(name,
+                                            effectiveness,
+                                            reactions,
+                                            origin,
+                                            target_group,
+                                            contraindication,
+                                            quantity,
+                                            dosage,
+                                            unit,
+                                            date_of_entry,
+                                            price,
+                                            vaccine_image);
+                                }
 
-                        @Override
-                        public void onReschedule(String requestId, ErrorInfo error) {
-                            Log.i("upload image onReschedule", "Reshedule "+error.getDescription());
-                        }
-                    }).dispatch();
+                            }
+
+                            @Override
+                            public void onError(String requestId, ErrorInfo error) {
+                                Log.i("upload image onError", "error "+ error.getDescription());
+                            }
+
+                            @Override
+                            public void onReschedule(String requestId, ErrorInfo error) {
+                                Log.i("upload image onReschedule", "Reshedule "+error.getDescription());
+                            }
+                        }).dispatch();
+                    }
+
+                }else{
+                    UpdateInformationVaccine(name,
+                            effectiveness,
+                            reactions,
+                            origin,
+                            target_group,
+                            contraindication,
+                            quantity,
+                            dosage,
+                            unit,
+                            date_of_entry,
+                            price,
+                            old_image);
                 }
+
 
             }
         });
@@ -442,25 +458,18 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         vaccine.setDosage(dosage);
         vaccine.setUnit(unit);
         vaccine.setDate_of_entry(date_of_entry);
-        selectedValue = price + " "+ selectedValue;
-        vaccine.setPrice(selectedValue);
+        String vaccine_price = price + " "+ selectedValue;
+        vaccine.setPrice(vaccine_price);
         vaccine.setVaccine_image(vaccine_image);
         reference = database.getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines").child(vaccine.getVaccine_id());
-        reference.setValue(vaccine).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    // Data was successfully pushed
-                    // You can perform any actions here, such as displaying a message
-                    Toast.makeText(update_inforamtion_vaccine.this, "Đã cập nhập thành công", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Data push failed
-                    // Handle the error here
-                    Toast.makeText(update_inforamtion_vaccine.this, "failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
+        reference.setValue(vaccine);
+        // todo gửi thông tin đã chỉnh sửa về lại trang vaccine
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("vaccine_name", vaccine);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
     }
     // Kiểm tra quyền truy cập kho ảnh
     private static final int PERMISSION_CODE = 1;
