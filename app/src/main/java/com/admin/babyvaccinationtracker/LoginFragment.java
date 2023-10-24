@@ -118,7 +118,7 @@ public class LoginFragment extends Fragment {
                                     Customer customer = task1.getResult().getValue(Customer.class);
                                     ArrayList<Baby> babiesList;
                                     try {
-                                        babiesList = customer.getBabies();
+                                        babiesList = (ArrayList<Baby>) customer.getBabies();
                                     } catch (Exception e) {
                                         babiesList = new ArrayList<>();
                                     }

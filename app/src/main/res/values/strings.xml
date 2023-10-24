@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Baby Vaccination Tracker</string>
+    <string name="app_name">Admin BVT</string>
     <string name="choose_province">Choose Province</string>
     <string name="choose_district">Choose District</string>
     <string name="choose_ward">Choose Ward</string>

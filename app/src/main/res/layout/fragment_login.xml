@@ -86,7 +86,7 @@
                             android:src="@drawable/email" />
 
                         <EditText
-                            android:id="@+id/edt_login_email"
+                            android:id="@+id/editTextEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -126,7 +126,7 @@
                             android:src="@drawable/password" />
 
                         <EditText
-                            android:id="@+id/edt_login_password"
+                            android:id="@+id/editTextPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -139,14 +139,14 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/login_textview_reset_password"
+                    android:id="@+id/textViewForgotPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Quên mật khẩu ?"
                     android:textColor="#00B141" />
 
                 <Button
-                    android:id="@+id/login_btn_login_for_vaccine_center"
+                    android:id="@+id/buttonLogin"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginTop="15dp"
@@ -211,7 +211,7 @@
                         android:text="Chưa có tài khoản ? " />
 
                     <TextView
-                        android:id="@+id/tv_registration"
+                        android:id="@+id/textViewRegister"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Đăng ký"
