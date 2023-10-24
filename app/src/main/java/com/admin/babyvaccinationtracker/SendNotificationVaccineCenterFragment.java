@@ -84,7 +84,7 @@ public class SendNotificationVaccineCenterFragment extends Fragment {
         recyclerViewVaccineCenter = view.findViewById(R.id.recyclerViewVaccineCenter);
         recyclerViewVaccineCenter.setLayoutManager(new LinearLayoutManager(context));
 
-        DatabaseReference vaccineCenterRef = FirebaseDatabase.getInstance().getReference().child("Vaccine_centers");
+        DatabaseReference vaccineCenterRef = FirebaseDatabase.getInstance().getReference().child("users").child("Vaccine_center");
         vaccineCenterRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
