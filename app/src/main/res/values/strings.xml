@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Baby Vaccination Tracker</string>
+    <string name="app_name">Vaccine Center BVT</string>
     <string-array name="array_currency">
         <item>VND</item>
         <item>EUR</item>
