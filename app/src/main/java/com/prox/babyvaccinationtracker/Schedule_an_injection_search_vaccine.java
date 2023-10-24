@@ -136,7 +136,7 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
     }
 
     private void GetDataOnFireBase_vaccine(){
-        DatabaseReference reference = database.getReference("Vaccine_centers");
+        DatabaseReference reference = database.getReference("users").child("Vaccine_center");;
         String address = getIntent().getStringExtra("cus_address");
         schedule_tv_cus_address.setText(address);
         reference.addValueEventListener(new ValueEventListener() {
