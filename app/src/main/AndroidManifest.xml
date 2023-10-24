@@ -36,7 +36,12 @@
         <activity
             android:name=".See_detailed_vaccine_information"
             android:exported="false" />
-
+        <activity
+            android:name=".information_center"
+            android:exported="true" />
+        <activity
+            android:name=".search_vaccine_center"
+            android:exported="true" />
         <activity
             android:name=".search_vaccination"
             android:exported="true" />

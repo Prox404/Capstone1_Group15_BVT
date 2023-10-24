@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.prox.babyvaccinationtracker.model.Vaccine_item;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +29,7 @@ public class vaccineadapter extends ArrayAdapter<Vaccines> {
         this.context = context;
         this.mlistvaccine = mlistvaccine;
     }
-
+  
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
