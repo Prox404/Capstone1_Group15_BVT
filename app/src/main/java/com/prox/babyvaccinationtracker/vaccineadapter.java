@@ -4,166 +4,78 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.prox.babyvaccinationtracker.model.Vaccines;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
-public class vaccineadapter extends RecyclerView.Adapter<vaccineadapter.listvacine>{
-    List<Vaccines> mlistvaccine;
-    private Context mcontext;
+public class vaccineadapter extends ArrayAdapter<Vaccines> {
+    private final Context context;
+    private final List<Vaccines> mlistvaccine;
 
     public vaccineadapter(Context context, List<Vaccines> mlistvaccine) {
+        super(context, R.layout.list_vaccine, mlistvaccine);
+        this.context = context;
         this.mlistvaccine = mlistvaccine;
-        this.mcontext = context;
     }
 
-    @NonNull
+    @SuppressLint("ViewHolder")
     @Override
-    public listvacine onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_vaccine, parent, false);
-        return new listvacine(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull listvacine holder, int position) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         final Vaccines vaccines = mlistvaccine.get(position);
-        if (vaccines == null){
-            return;
-        }else{
-            holder.txtten.setText(vaccines.getVaccine_name());
-            holder.txtgia.setText(vaccines.getPrice());
-        }
-        holder.vaccine_id.setOnClickListener(new View.OnClickListener() {
+        View view = View.inflate(context, R.layout.list_vaccine, null);
+
+        TextView txtten = view.findViewById(R.id.txtten);
+        TextView txtgia = view.findViewById(R.id.txtgia);
+        ImageView imgchinh = view.findViewById(R.id.imgchinh);
+        LinearLayout vaccine_id = view.findViewById(R.id.vaccine_id);
+        TextView textViewAddress = view.findViewById(R.id.textViewAddress);
+        TextView textViewVaccineCenterName = view.findViewById(R.id.textViewVaccineCenterName);
+
+        txtten.setText(vaccines.getVaccine_name());
+        txtgia.setText(vaccines.getPrice());
+        textViewAddress.setText(vaccines.getAdditionInformation().get("center_address"));
+        textViewVaccineCenterName.setText(vaccines.getAdditionInformation().get("center_name"));
+        String imageUrl = vaccines.getVaccine_image().get(0);
+        Log.i("image url", "getView: " + imageUrl);
+        imageUrl = imageUrl.replace("https", "http");
+        Picasso.get().load(imageUrl).into(imgchinh, new com.squareup.picasso.Callback() {
             @Override
-            public void onClick(View view) {
-                onClickgotoInfor(vaccines);
+            public void onSuccess() {
+                //do smth when picture is loaded successfully
+            }
+
+            @Override
+            public void onError(Exception e) {
+                //do smth when there is picture loading error
             }
         });
+
+        vaccine_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickGotoInfo(vaccines);
+            }
+        });
+
+        return view;
     }
-    private void onClickgotoInfor(Vaccines vaccines){
-        Intent intent = new Intent(mcontext, information_vaccine.class);
+
+    private void onClickGotoInfo(Vaccines vaccines) {
+        Intent intent = new Intent(context, information_vaccine.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("vaccine_name", vaccines);
+        bundle.putSerializable("vaccine", vaccines);
         intent.putExtras(bundle);
-        mcontext.startActivity(intent);
-    }
-
-    @Override
-    public int getItemCount() {
-        if (mlistvaccine != null){
-            return mlistvaccine.size();
-        }
-        return 0;
-    }
-
-    public class listvacine extends RecyclerView.ViewHolder{
-        private TextView txtten;
-        private TextView txtgia;
-        private LinearLayout vaccine_id;
-
-        public listvacine(@NonNull View itemView) {
-            super(itemView);
-            txtten = itemView.findViewById(R.id.txtten);
-            txtgia = itemView.findViewById(R.id.txtgia);
-            vaccine_id = itemView.findViewById(R.id.vaccine_id);
-        }
+        context.startActivity(intent);
     }
 }
-
-
-//class informationadapter extends RecyclerView.Adapter<informationadapter.informationviewholder> {
-//    List<Vaccines> mlistinformation;
-//
-//    public informationadapter(List<Vaccines> mlistinformation) {
-//        this.mlistinformation = mlistinformation;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public informationviewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.information_vaccine, parent, false);
-//        return new informationviewholder(view);
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull informationviewholder holder, @SuppressLint("RecyclerView") int position) {
-//        Vaccines vaccines = mlistinformation.get(position);
-//        String imageUrl = String.valueOf(vaccines.getVaccine_image());
-//        if (vaccines == null){
-//            return;
-//        }else{
-//            Picasso.get()
-//                    .load(imageUrl)
-//                    .into(holder.large_image);
-//            Picasso.get()
-//                    .load(imageUrl)
-//                    .into((Target) holder.small_image);
-//            holder.txt_ten.setText(vaccines.getVaccine_name());
-//            holder.txt_nhasx.setText(vaccines.getOrigin());
-//            holder.txt_chucnang.setText(vaccines.getVac_effectiveness());
-//            holder.txt_chongchidinh.setText(vaccines.getContraindications());
-//            holder.txt_tacdungphu.setText(vaccines.getPost_vaccination_reactions());
-//            holder.txt_doituongsudung.setText(vaccines.getVaccination_target_group());
-//            holder.txt_gia.setText(vaccines.getPrice());
-//        }
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        if (mlistinformation != null){
-//            return mlistinformation.size();
-//        }
-//        return 0;
-//    }
-//
-//    public class informationviewholder extends RecyclerView.ViewHolder{
-//        private ImageView large_image;
-//        private LinearLayout small_image;
-//        private TextView txt_ten;
-//        private TextView txt_nhasx;
-//        private TextView txt_thanhphan;
-//        private TextView txt_chucnang;
-//        private TextView txt_chongchidinh;
-//        private TextView txt_tacdungphu;
-//        private TextView txt_cachsudung;
-//        private TextView txt_baoquan;
-//        private TextView txt_doituongsudung;
-//        private TextView txt_gia;
-//        private TextView txt_hansudung;
-//        private TextView txt_ghichu;
-//
-//        public informationviewholder(@NonNull View itemView) {
-//            super(itemView);
-//            large_image = itemView.findViewById(R.id.large_image);
-//            small_image = itemView.findViewById(R.id.small_image);
-//            txt_ten = itemView.findViewById(R.id.txt_ten);
-//            txt_nhasx = itemView.findViewById(R.id.txt_nhasx);
-//            txt_thanhphan = itemView.findViewById(R.id.txt_thanhphan);
-//            txt_chucnang = itemView.findViewById(R.id.txt_chucnang);
-//            txt_chongchidinh = itemView.findViewById(R.id.txt_chongchidinh);
-//            txt_tacdungphu = itemView.findViewById(R.id.txt_tacdungphu);
-//            txt_cachsudung = itemView.findViewById(R.id.txt_cachsudung);
-//            txt_baoquan = itemView.findViewById(R.id.txt_baoquan);
-//            txt_doituongsudung = itemView.findViewById(R.id.txt_doituongsudung);
-//            txt_gia = itemView.findViewById(R.id.txt_gia);
-//            txt_hansudung = itemView.findViewById(R.id.txt_hansudung);
-//            txt_ghichu = itemView.findViewById(R.id.txt_ghichu);
-//        }
-//    }
-//}
-
-

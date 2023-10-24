@@ -3,45 +3,32 @@ package com.prox.babyvaccinationtracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
+
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.prox.babyvaccinationtracker.adapter.TimeLineAdapter;
-import com.prox.babyvaccinationtracker.model.Regimen;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
 import com.prox.babyvaccinationtracker.service.NotificationService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Objects;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    RecyclerView recyclerViewTimeline;
-    TimeLineAdapter timeLineAdapter;
-    List<Regimen> regimenList = new ArrayList<>();
+    BottomNavigationView navigation;
 
-    LinearLayout injectionHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,57 +36,58 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
-        recyclerViewTimeline = findViewById(R.id.recyclerViewTimeline);
-        injectionHistory = findViewById(R.id.injectionHistory);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String babiesList = sharedPreferences.getString("babiesList", "");
-        String babyID = "";
-        try {
-            JSONArray jsonArray = new JSONArray(babiesList);
-            if (jsonArray.length() > 0) {
-                JSONObject firstBaby = jsonArray.getJSONObject(0);
-                 babyID = firstBaby.getString("baby_id");
-                Log.i("Home", "onCreate: " + babyID);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        DatabaseReference vaccinationRegimenReference = FirebaseDatabase.getInstance().getReference("vaccination_regimen").child(babyID);
-        vaccinationRegimenReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                regimenList.clear();
-                for (DataSnapshot regimenSnapshot : snapshot.getChildren()) {
-                    Regimen regimen = regimenSnapshot.getValue(Regimen.class);
-                    regimenList.add(regimen);
-                }
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this);
-                timeLineAdapter = new TimeLineAdapter(HomeActivity.this, regimenList);
-                linearLayoutManager.scrollToPositionWithOffset(timeLineAdapter.highlightedPosition, 0);
-                recyclerViewTimeline.setAdapter(timeLineAdapter);
-                recyclerViewTimeline.setLayoutManager(linearLayoutManager);
-                Log.i("Home", "onDataChange: " + regimenList.size());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        injectionHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(HomeActivity.this, InjectionHistoryActivity.class);
-                startActivity(i);
-            }
-        });
+        navigation = findViewById(R.id.navigation);
+        navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
+//        navigation.setItemIconTintList(null);
+        loadFragment(new DashboardFragment());
 
         Intent notificationService = new Intent(HomeActivity.this, NotificationService.class);
         startService(notificationService);
+    }
+
+    private final NavigationBarView.OnItemSelectedListener mOnNavigationItemSelectedListener
+            = new NavigationBarView.OnItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Log.i("navigation", "call");
+            Fragment fragment;
+            int itemId = item.getItemId();
+//            Log.i("navigation", toString(itemId));
+            if (itemId == R.id.navigation_dashboard) {
+                fragment = new DashboardFragment();
+                loadFragment(fragment);
+                return true;
+            } else if (itemId == R.id.navigation_calendar) {
+                Intent i = new Intent(HomeActivity.this, Schedule_an_injection.class);
+                startActivity(i);
+//                fragment = new ScheduleFragment();
+//                loadFragment(fragment);
+                return false;
+            }else if (itemId == R.id.navigation_vaccine) {
+                fragment = new VaccineFragment();
+                loadFragment(fragment);
+                return true;
+            }else if (itemId == R.id.navigation_health) {
+                fragment = new HealthFragment();
+                loadFragment(fragment);
+                return true;
+            }else if (itemId == R.id.navigation_chat) {
+                fragment = new ChatFragment();
+                loadFragment(fragment);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.commit();
     }
 
     @Override

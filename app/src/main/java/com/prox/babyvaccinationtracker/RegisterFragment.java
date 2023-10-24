@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.Manifest;
+import androidx.appcompat.widget.Toolbar;
 
 import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Customer;
@@ -48,6 +50,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import kotlin.text.Regex;
 
@@ -58,6 +61,7 @@ import kotlin.text.Regex;
  */
 public class RegisterFragment extends Fragment {
 
+    Toolbar onBackToolbar;
     Context context;
 
     private static final int PERMISSION_CODE = 1;
@@ -130,9 +134,23 @@ public class RegisterFragment extends Fragment {
         radioGroupGender = view.findViewById(R.id.radioGroupGender);
         radioButtonMale = view.findViewById(R.id.radioButtonMale);
         radioButtonFemale = view.findViewById(R.id.radioButtonFemale);
+        onBackToolbar = (Toolbar) view.findViewById(R.id.onBackToolbar);
 
         customerRegistration = new CustomerRegistration();
         editTextBirthday = view.findViewById(R.id.editTextBirthday);
+
+        onBackToolbar.setTitle("");
+
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(onBackToolbar);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        onBackToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().onBackPressed();
+            }
+        });
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

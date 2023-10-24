@@ -69,7 +69,7 @@ public class VaccinationCertificateActivity extends AppCompatActivity {
             textViewBabyCongenitalDisease = findViewById(R.id.textViewBabyCongenitalDisease);
             textViewCenterName = findViewById(R.id.textViewCenterName);
             textViewCenterAddress = findViewById(R.id.textViewCenterAddress);
-            textViewVaccineName = findViewById(R.id.textViewVaccineName);
+            textViewVaccineName = findViewById(R.id.textViewVaccineCenterName);
             textViewVaccineEntryDate = findViewById(R.id.textViewVaccineEntryDate);
             textViewVaccineDosage = findViewById(R.id.textViewVaccineDosage);
             textViewSideEffects = findViewById(R.id.textViewSideEffects);

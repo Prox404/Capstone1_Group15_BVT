@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +25,7 @@ import java.util.List;
 public class InjectionHistoryActivity extends AppCompatActivity {
 
     RecyclerView recycleViewCompletedRequest;
+    View emptyLayout;
 
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
 
@@ -33,6 +35,7 @@ public class InjectionHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_injection_history);
 
         recycleViewCompletedRequest = findViewById(R.id.recycleViewCompletedRequest);
+        emptyLayout = findViewById(R.id.emptyLayout);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String cus_id = sharedPreferences.getString("customer_id", "");
@@ -56,6 +59,9 @@ public class InjectionHistoryActivity extends AppCompatActivity {
 
                 }
                 Log.i("Completed", "onDataChange: " + vaccination_registrations.size());
+                if (vaccination_registrations.size() == 0){
+                    emptyLayout.setVisibility(View.VISIBLE);
+                }
                 CompletedRequestAdapter pendingRequestAdapter = new CompletedRequestAdapter( InjectionHistoryActivity.this , vaccination_registrations);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InjectionHistoryActivity.this);
                 recycleViewCompletedRequest.setAdapter(pendingRequestAdapter);

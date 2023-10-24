@@ -10,4 +10,10 @@
     <color name="light_blue_600">#FF039BE5</color>
     <color name="gray_400">#FFBDBDBD</color>
     <color name="gray_600">#FF757575</color>
+    <color name="textColor">#3B3B3B</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="textColorHint">#BDBDBD</color>
+    <color name="textColorTitle">#007F20</color>
+    <color name="backgroundColor">#F5F6F7</color>
+    <color name="lineColor">#F5F6F7</color>
 </resources>

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +43,7 @@ public class information_vaccine extends AppCompatActivity {
         private image_adapter imageAdapter;
         ArrayList<Uri> vacimage = new ArrayList<>();
         Vaccines vaccine;
-        String id = "-NgF6FMuUzxw2hjRiwu6";
+//        String id = "-NgF6FMuUzxw2hjRiwu6";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,61 +63,95 @@ public class information_vaccine extends AppCompatActivity {
         txt_hansudung = findViewById(R.id.txt_hansudung);
         txt_gia = findViewById(R.id.txt_gia);
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle != null){
+            vaccine = (Vaccines) bundle.getSerializable("vaccine");
+            txt_ten.setText(vaccine.getVaccine_name());
+            txt_hieuqua.setText(vaccine.getVac_effectiveness());
+            txt_phanungsautiem.setText(vaccine.getPost_vaccination_reactions());
+            txt_nguongoc.setText(vaccine.getOrigin());
+            txt_nhomtuoisudung.setText(vaccine.getVaccination_target_group());
+            txt_chongchidinh.setText(vaccine.getContraindications());
+            txt_soluong.setText(vaccine.getQuantity());
+            txt_lieuluong.setText(vaccine.getDosage());
+            txt_donvi.setText(vaccine.getUnit());
+            txt_hansudung.setText(vaccine.getDate_of_entry());
+            txt_gia.setText(vaccine.getPrice());
 
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("Vaccines");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                vaccine = new Vaccines();
-                try{
-                    vaccine = snapshot.child(id).getValue(Vaccines.class);
-
-                }catch (Exception e){
-                    Toast.makeText(information_vaccine.this, "Có gì đó đang lỗi", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                txt_ten.setText(vaccine.getVaccine_name());
-                txt_hieuqua.setText(vaccine.getVac_effectiveness());
-                txt_phanungsautiem.setText(vaccine.getPost_vaccination_reactions());
-                txt_nguongoc.setText(vaccine.getOrigin());
-                txt_nhomtuoisudung.setText(vaccine.getVaccination_target_group());
-                txt_chongchidinh.setText(vaccine.getContraindications());
-                txt_soluong.setText(vaccine.getQuantity());
-                txt_lieuluong.setText(vaccine.getDosage());
-                txt_donvi.setText(vaccine.getUnit());
-                txt_hansudung.setText(vaccine.getDate_of_entry());
-                txt_gia.setText(vaccine.getPrice());
-
-                for(String a : vaccine.getVaccine_image()){
-                    Uri b = Uri.parse(a);
-                    vacimage.add(b);
-                }
-
-                imageAdapter = new image_adapter(vacimage, information_vaccine.this);
-                smallImageRecyclerView.setLayoutManager(new GridLayoutManager(information_vaccine.this,vacimage.size()));
-                smallImageRecyclerView.setAdapter(imageAdapter);
-
-                imageAdapter.setOnItemClickListener(new image_adapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Uri imageUri) {
-                        Log.i("Siuu", ""+imageUri.toString());
-                        Picasso.get().load(imageUri.toString()).into(large_image);
-                    }
-                });
-
-                Picasso.get().load(vaccine.getVaccine_image().get(0)).into(large_image);
-
+            for(String a : vaccine.getVaccine_image()){
+                Uri b = Uri.parse(a);
+                vacimage.add(b);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(information_vaccine.this, "LỖI!!!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
-                Log.e("Firebase error",""+error);
-            }
+            imageAdapter = new image_adapter(vacimage, information_vaccine.this);
+            smallImageRecyclerView.setLayoutManager(new GridLayoutManager(information_vaccine.this,vacimage.size()));
+            smallImageRecyclerView.setAdapter(imageAdapter);
 
-        });
+            imageAdapter.setOnItemClickListener(new image_adapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Uri imageUri) {
+                    Log.i("Siuu", ""+imageUri.toString());
+                    Picasso.get().load(imageUri.toString()).into(large_image);
+                }
+            });
+
+            Picasso.get().load(vaccine.getVaccine_image().get(0)).into(large_image);
+        }
+
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference reference = database.getReference("Vaccines");
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                vaccine = new Vaccines();
+//                try{
+//                    vaccine = snapshot.child(id).getValue(Vaccines.class);
+//
+//                }catch (Exception e){
+//                    Toast.makeText(information_vaccine.this, "Có gì đó đang lỗi", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                txt_ten.setText(vaccine.getVaccine_name());
+//                txt_hieuqua.setText(vaccine.getVac_effectiveness());
+//                txt_phanungsautiem.setText(vaccine.getPost_vaccination_reactions());
+//                txt_nguongoc.setText(vaccine.getOrigin());
+//                txt_nhomtuoisudung.setText(vaccine.getVaccination_target_group());
+//                txt_chongchidinh.setText(vaccine.getContraindications());
+//                txt_soluong.setText(vaccine.getQuantity());
+//                txt_lieuluong.setText(vaccine.getDosage());
+//                txt_donvi.setText(vaccine.getUnit());
+//                txt_hansudung.setText(vaccine.getDate_of_entry());
+//                txt_gia.setText(vaccine.getPrice());
+//
+//                for(String a : vaccine.getVaccine_image()){
+//                    Uri b = Uri.parse(a);
+//                    vacimage.add(b);
+//                }
+//
+//                imageAdapter = new image_adapter(vacimage, information_vaccine.this);
+//                smallImageRecyclerView.setLayoutManager(new GridLayoutManager(information_vaccine.this,vacimage.size()));
+//                smallImageRecyclerView.setAdapter(imageAdapter);
+//
+//                imageAdapter.setOnItemClickListener(new image_adapter.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(Uri imageUri) {
+//                        Log.i("Siuu", ""+imageUri.toString());
+//                        Picasso.get().load(imageUri.toString()).into(large_image);
+//                    }
+//                });
+//
+//                Picasso.get().load(vaccine.getVaccine_image().get(0)).into(large_image);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(information_vaccine.this, "LỖI!!!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
+//                Log.e("Firebase error",""+error);
+//            }
+//
+//        });
     }
 }
