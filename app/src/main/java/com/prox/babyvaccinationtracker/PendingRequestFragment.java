@@ -1,5 +1,7 @@
 package com.prox.babyvaccinationtracker;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ public class PendingRequestFragment extends Fragment {
     RecyclerView recycleViewPendingRequest;
 
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
+    Context context;
     public PendingRequestFragment() {
         // Required empty public constructor
     }
@@ -54,8 +57,12 @@ public class PendingRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pending_request, container, false);
         recycleViewPendingRequest = view.findViewById(R.id.recycleViewPendingRequest);
 
+        context = container != null ? container.getContext() : null;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String id_vaccine_center = sharedPreferences.getString("center_id","");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-        Query query = databaseReference.orderByChild("status").equalTo(0);
+        Query query = databaseReference.orderByChild("center/center_id").equalTo(id_vaccine_center);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -63,8 +70,10 @@ public class PendingRequestFragment extends Fragment {
                 Log.i("Pending", "onDataChange: " + snapshot.getChildrenCount());
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
-                    vaccination_registration.setRegister_id(dataSnapshot.getKey());
-                    vaccination_registrations.add(vaccination_registration);
+                    if(vaccination_registration.getStatus() == 0){
+                        vaccination_registration.setRegister_id(dataSnapshot.getKey());
+                        vaccination_registrations.add(vaccination_registration);
+                    }
                 }
                 Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
                 PendingRequestAdapter pendingRequestAdapter = new PendingRequestAdapter( getContext() , vaccination_registrations);

@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.util.Calendar;
@@ -25,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,11 +39,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.prox.babyvaccinationtracker.adapter.RecyclerAdapter;
+import com.prox.babyvaccinationtracker.Adapter.RecyclerAdapter;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -49,20 +53,18 @@ public class create_vaccination extends AppCompatActivity {
     EditText edt_price,edt_date_of_entry,edt_unit,edt_dosage,edt_vaccine_name, edt_post_vaccination_reactions,edt_origin,edt_vaccination_target_group,edt_contraindications,edt_quantity;
     Button btn_tt;
     DatePickerDialog datePickerDialog;
-    TextView img_button;
+    Button img_button;
+    ImageView image_back;
 
     Spinner spinner, spinner_vaccine_type;
 
-    String select_price_unti = "";
-
-
-    String image_url = "https://res.cloudinary.com/du42cexqi/image/upload/v1696504103/nt4cybkx1k25elc2jrng.jpg";
-    RecyclerView recyclerView;
-    RecyclerAdapter recyclerAdapter;
-    ArrayList<Uri> uri = new ArrayList<>();
-
+    String select_price_unti = ""; //
+    String image_url = "https://res.cloudinary.com/du42cexqi/image/upload/v1696504103/nt4cybkx1k25elc2jrng.jpg"; // ảnh mặc định
+    RecyclerView recyclerView; // nơi hiện ảnh đã chọn
+    RecyclerAdapter recyclerAdapter; // Hiển thị những ảnh đã chọn
+    ArrayList<Uri> uri = new ArrayList<>(); // những đường dẫn ảnh đã lưu
     ArrayList<String> Image_url;
-
+    // Kiểm tra người dùng đã nhập vắc-xin vào chưa
     boolean is_input(String a){
         if(a.length() == 0){
             Toast.makeText(this, "Phải nhập thông tin", Toast.LENGTH_SHORT).show();
@@ -71,17 +73,15 @@ public class create_vaccination extends AppCompatActivity {
         return true;
     }
 
-    String[] arrayVaccineTypeEN = new String[18];
-
-    String vaccine_type = "";
+    String[] arrayVaccineTypeEN = new String[18]; // loại vắc-xin - EN
+    String vaccine_type = ""; // Chọn loại vắc-xin
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_vaccination);
         Log.i("CREATE","funtion onCreate");
-        arrayVaccineTypeEN = getResources().getStringArray(R.array.array_vaccine_type_EN);
-
+        // ánh xạ
         edt_vaccine_name = findViewById(R.id.vaccine_name);
         edt_post_vaccination_reactions = findViewById(R.id.post_vaccination_reactions);
         edt_origin = findViewById(R.id.origin);
@@ -92,8 +92,19 @@ public class create_vaccination extends AppCompatActivity {
         edt_unit = findViewById(R.id.unit);
         edt_date_of_entry = findViewById(R.id.date_of_entry);
         edt_price = findViewById(R.id.price);
+        image_back = findViewById(R.id.image_back);
+        btn_tt = findViewById(R.id.btn_tt);
+
+        // nút quay lại
+        image_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // chọn loại vắc-xin
+        arrayVaccineTypeEN = getResources().getStringArray(R.array.array_vaccine_type_EN);
         spinner_vaccine_type = findViewById(R.id.vaccine_type);
         ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(create_vaccination.this, R.array.array_vaccine_type_VN, android.R.layout.simple_spinner_item);
         adapter_vaccine_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -130,11 +141,11 @@ public class create_vaccination extends AppCompatActivity {
             }
         });
 
-        btn_tt = findViewById(R.id.btn_tt);
+
 
         recyclerView = findViewById(R.id.Recycler_view);
         recyclerAdapter = new RecyclerAdapter(uri,create_vaccination.this);
-        recyclerView.setLayoutManager(new GridLayoutManager(create_vaccination.this, 4));
+        recyclerView.setLayoutManager(new GridLayoutManager(create_vaccination.this, 3));
         recyclerView.setAdapter(recyclerAdapter);
         recyclerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
@@ -146,9 +157,7 @@ public class create_vaccination extends AppCompatActivity {
                 }
             }
         });
-
-        configCloudinary();
-
+        // chọn ngày nhập cảnh
         Calendar currentDate = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(
                 create_vaccination.this,
@@ -164,24 +173,24 @@ public class create_vaccination extends AppCompatActivity {
                 currentDate.get(Calendar.DAY_OF_MONTH)
         );
         datePickerDialog.getDatePicker().setMaxDate(currentDate.getTimeInMillis());
-
         edt_date_of_entry.setFocusable(false);
         edt_date_of_entry.setClickable(true);
-
         edt_date_of_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 datePickerDialog.show();
             }
         });
-        img_button = findViewById(R.id.img_button);
 
+        // chọn ảnh
+        img_button = findViewById(R.id.img_button);
         img_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestPermission();
             }
         });
+        // thêm vắc-xin
         btn_tt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -271,9 +280,12 @@ public class create_vaccination extends AppCompatActivity {
                     String price_vaccine = "" + edt_price.getText().toString() +" "+ select_price_unti;
 
                     Image_url = new ArrayList<>();
-                    for (int i = 0; i < uri.size() ; i ++){
+                    int total_image = uri.size();
+                    for (int i = 0; i < total_image ; i ++){
                         Log.d("A", "sign up uploadToCloudinary- ");
-                        MediaManager.get().upload(""+(uri.get(i))).callback(new UploadCallback() {
+                        Uri image = uri.get(i);
+                        Log.i("IMAGEAAAA",total_image+" "+image);
+                        MediaManager.get().upload(""+(image)).callback(new UploadCallback() {
                             @Override
                             public void onStart(String requestId) {
                                 Log.i("upload image", "onStart: ");
@@ -287,7 +299,7 @@ public class create_vaccination extends AppCompatActivity {
                                 String url = resultData.get("url").toString();
                                 Log.i("upload image onSuccess", "image URL: "+ url);
                                 Image_url.add(url);
-                                if (Image_url.size() == uri.size()) {
+                                if (Image_url.size() == total_image) {
                                     // All images are uploaded, proceed with saving data to Firebase.
                                     saveDataToFirebase(vaccine_name,
                                             post_vaccination_reactions,
@@ -313,11 +325,28 @@ public class create_vaccination extends AppCompatActivity {
                         }).dispatch();
                     }
                 }
-
+                clear();
             }
+
         });
 
     }
+    // làm sạch tất cả các thông tin đã nhập
+    public void clear(){
+        edt_vaccine_name.setText("");
+        edt_post_vaccination_reactions.setText("");
+        edt_origin.setText("");
+        edt_vaccination_target_group.setText("");
+        edt_contraindications.setText("");
+        edt_dosage.setText("");
+        edt_quantity.setText("");
+        edt_unit.setText("");
+        edt_date_of_entry.setText("");
+        edt_price.setText("");
+        uri.clear();
+        recyclerAdapter.notifyDataSetChanged();
+    }
+    // push thông tin lên firebase
     public void saveDataToFirebase(String vaccine_name,
                                    String post_vaccination_reactions,
                                    String origin,
@@ -331,7 +360,7 @@ public class create_vaccination extends AppCompatActivity {
                                    ){
         Vaccines vaccines;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference vaccineRef = database.getReference("Vaccine_centers");
+        DatabaseReference vaccineRef = database.getReference("users");
         vaccines = new Vaccines();
         vaccines.setVaccine_name(vaccine_name);
         vaccines.setVac_effectiveness(vaccine_type);
@@ -353,13 +382,10 @@ public class create_vaccination extends AppCompatActivity {
         }
         vaccines.setDeleted(false);
 
-        vaccineRef.push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-
-        String id_vaccine_center = "-NgUmRaQPW3zg7Hj1VmH";
-
-
-        vaccineRef.child(id_vaccine_center).child("vaccines").push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
+        Context mcontext = create_vaccination.this;
+        SharedPreferences sharedPreferences = mcontext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String id_vaccine_center = sharedPreferences.getString("center_id","");
+        vaccineRef.child("Vaccine_center").child(id_vaccine_center).child("vaccines").push().setValue(vaccines).addOnCompleteListener(new OnCompleteListener<Void>() {
 
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -370,17 +396,9 @@ public class create_vaccination extends AppCompatActivity {
             }
         });
     }
-    // thêm ảnh
-    Map config = new HashMap();
-
-    private void configCloudinary() {
-        config.put("cloud_name", "du42cexqi");
-        config.put("api_key", "346965553513552");
-        config.put("api_secret", "SguEwSEbwQNgOgHRTkyxeuG-478");
-        MediaManager.init(this, config);
-    }
-
+    // Kiểm tra quyền truy cập kho ảnh
     private static final int PERMISSION_CODE = 1;
+    private static final int PICK_IMAGE = 1;
     private void requestPermission() {
         if (ContextCompat.checkSelfPermission
                 (this,
@@ -407,12 +425,13 @@ public class create_vaccination extends AppCompatActivity {
             }
         }
     }
-    private static final int PICK_IMAGE = 1;
+   // Kho ảnh người dùng
     public void accessTheGallery() {
         Intent i = new Intent(Intent.ACTION_PICK);
         i.setType("image/*");
         startActivityForResult(i, PICK_IMAGE);
     }
+    // xử lý sự kiện chọn ảnh
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -431,6 +450,7 @@ public class create_vaccination extends AppCompatActivity {
             }
         }
     }
+    // chuyển đường dẫn thành Uri
     private String getRealPathFromUri(Uri imageUri, Activity activity) {
         Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
         if (cursor == null) {

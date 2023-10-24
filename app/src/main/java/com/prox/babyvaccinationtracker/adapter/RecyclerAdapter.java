@@ -1,4 +1,4 @@
-package com.prox.babyvaccinationtracker.adapter;
+package com.prox.babyvaccinationtracker.Adapter;
 
 
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private ArrayList<Uri> uriArrayList;
     private Context context;
-
+    private LinearLayout lastClickedImageView = null;
 
     private OnItemClickListener onItemClickListener;
 
@@ -71,12 +72,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 }
             });
         }
+        if(lastClickedImageView!=null){
+            lastClickedImageView.setBackgroundResource(0);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 if (onItemClickListener != null) {
+                    if(lastClickedImageView!=null){
+                        lastClickedImageView.setBackgroundResource(0);
+                    }
+                    holder.custom_single_image_border.setBackgroundResource(R.drawable.image_boder);
+                    lastClickedImageView = holder.custom_single_image_border;
                     onItemClickListener.onItemClick(uri);
+
                 }
             }
         });
@@ -89,10 +100,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        LinearLayout custom_single_image_border;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.image);
+            custom_single_image_border = itemView.findViewById(R.id.custom_single_image_border);
         }
     }
 }

@@ -26,6 +26,7 @@
         <item>Viêm gan A + B</item>
         <item>Thương hàn</item>
         <item>Bệnh tả</item>
+        <item>Khác</item>
     </string-array>
     <string-array name="array_vaccine_type_EN">
         <item>tuberculosis</item>
@@ -46,5 +47,6 @@
         <item>hepatitis_a_b</item>
         <item>tetanus</item>
         <item>anthrax</item>
+        <item>other</item>
     </string-array>
 </resources>

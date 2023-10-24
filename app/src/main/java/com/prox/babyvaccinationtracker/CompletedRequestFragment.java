@@ -1,5 +1,7 @@
 package com.prox.babyvaccinationtracker;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,8 @@ public class CompletedRequestFragment extends Fragment {
 
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
 
+    Context context;
+
 
     public CompletedRequestFragment() {
         // Required empty public constructor
@@ -55,8 +59,13 @@ public class CompletedRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_completed_request, container, false);
         recycleViewCompletedRequest = view.findViewById(R.id.recycleViewCompletedRequest);
 
+        context = container != null ? container.getContext() : null;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String id_vaccine_center = sharedPreferences.getString("center_id","");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-        Query query = databaseReference.orderByChild("status").equalTo(3);
+        Query query = databaseReference.orderByChild("center/center_id").equalTo(id_vaccine_center);
+
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -64,8 +73,10 @@ public class CompletedRequestFragment extends Fragment {
                 Log.i("Pending", "onDataChange: " + snapshot.getChildrenCount());
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
-                    vaccination_registration.setRegister_id(dataSnapshot.getKey());
-                    vaccination_registrations.add(vaccination_registration);
+                    if(vaccination_registration.getStatus() == 3){
+                        vaccination_registration.setRegister_id(dataSnapshot.getKey());
+                        vaccination_registrations.add(vaccination_registration);
+                    }
                 }
                 Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
                 CompletedRequestAdapter pendingRequestAdapter = new CompletedRequestAdapter( getContext() , vaccination_registrations);

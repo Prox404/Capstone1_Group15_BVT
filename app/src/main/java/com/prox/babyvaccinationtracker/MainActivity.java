@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         configCloudinary();
 
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(MainActivity.this, login_for_vaccine_center.class);
         startActivity(intent);
+        finish();
     }
 }

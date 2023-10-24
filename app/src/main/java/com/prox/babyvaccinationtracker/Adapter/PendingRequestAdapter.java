@@ -88,7 +88,7 @@ public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAd
                 public void onClick(View view) {
                     Log.i("Aloo", "onClick: " + getAdapterPosition());
                     // Update status & remove item from list
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
                     databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegister_id()).child("status").setValue(1);
                     Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
                     vaccinationRegistions.remove(getAdapterPosition());
@@ -101,7 +101,7 @@ public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAd
                 public void onClick(View view) {
                     Log.i("Aloo", "onClick: " + getAdapterPosition());
                     // Update status & remove item from list
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registion");
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
                     databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegister_id()).child("status").setValue(-1);
                     Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
                     vaccinationRegistions.remove(getAdapterPosition());

@@ -24,10 +24,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -66,6 +68,10 @@ public class Register_for_vaccine_center extends AppCompatActivity {
 
     LinearLayout register_selected_hour_minute;
 
+    TextView tv_center_image,tv_center_chungchi;
+
+    ImageView image_back_register_account_center;
+
 
 
     TextInputEditText register_tv_time_begin,register_tv_time_end;
@@ -82,6 +88,17 @@ public class Register_for_vaccine_center extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_for_vaccine_center);
+        //imagview
+        image_back_register_account_center = findViewById(R.id.image_back_register_account_center);
+        image_back_register_account_center.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        // textview
+        tv_center_image = findViewById(R.id.tv_center_image);
+        tv_center_chungchi = findViewById(R.id.tv_center_chungchi);
         // TextInputEditText
         register_tv_time_begin = findViewById(R.id.register_tv_time_begin);
         register_tv_time_end = findViewById(R.id.register_tv_time_end);
@@ -105,7 +122,6 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         // Radio button
         register_radio_all_day = findViewById(R.id.register_radio_all_day);
         register_radio_time = findViewById(R.id.register_radio_time);
-        configCloudinary();// init cloudinary
         // Linner layout
         register_selected_hour_minute = findViewById(R.id.register_selected_hour_minute);
 
@@ -540,13 +556,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         datavaccineCenter.push().setValue(registration);
 
     }
-    Map config = new HashMap();
-    private void configCloudinary() {
-        config.put("cloud_name", "du42cexqi");
-        config.put("api_key", "346965553513552");
-        config.put("api_secret", "SguEwSEbwQNgOgHRTkyxeuG-478");
-        MediaManager.init(this, config);
-    }
+
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE_CENTER = 1;
     private static final int PICK_IMAGE_CERTIFICATE = 2;
@@ -591,6 +601,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         //get the image’s file location
         if(resultCode == RESULT_OK){
             if (requestCode == PICK_IMAGE_CENTER) {
+                tv_center_image.setVisibility(View.GONE);
                 filePath_center_image = getRealPathFromUri(data.getData(), Register_for_vaccine_center.this);
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(
@@ -602,6 +613,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                 }
             }
             else if (requestCode == PICK_IMAGE_CERTIFICATE){
+                tv_center_chungchi.setVisibility(View.GONE);
                 filePath_center_certificate = getRealPathFromUri(data.getData(), Register_for_vaccine_center.this);
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(

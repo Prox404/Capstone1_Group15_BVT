@@ -57,6 +57,9 @@ public class Vaccines implements Serializable {
         this.vaccine_id = vaccine_id;
     }
 
+    public void setVaccine_image(ArrayList<String> vaccine_image) {
+        this.vaccine_image = vaccine_image;
+    }
 
     public Vaccines(){
         vaccine_name ="";

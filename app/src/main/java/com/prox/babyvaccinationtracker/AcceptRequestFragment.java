@@ -1,5 +1,7 @@
 package com.prox.babyvaccinationtracker;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,7 @@ public class AcceptRequestFragment extends Fragment {
 
     RecyclerView recycleViewAcceptRequest;
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
+    Context context;
 
     public AcceptRequestFragment() {
         // Required empty public constructor
@@ -52,10 +55,16 @@ public class AcceptRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_accept_request, container, false);
+        context = container != null ? container.getContext() : null;
         recycleViewAcceptRequest = view.findViewById(R.id.recycleViewAcceptRequest);
 
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String id_vaccine_center = sharedPreferences.getString("center_id","");
+
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-        Query query = databaseReference.orderByChild("status").equalTo(2);
+        Query query = databaseReference.orderByChild("center/center_id").equalTo(id_vaccine_center);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -64,7 +73,8 @@ public class AcceptRequestFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
                     vaccination_registration.setRegister_id(dataSnapshot.getKey());
-                    vaccination_registrations.add(vaccination_registration);
+                    if(vaccination_registration.getStatus() == 2)
+                        vaccination_registrations.add(vaccination_registration);
                 }
                 Log.i("Canceled", "onDataChange: " + vaccination_registrations.size());
                 AcceptRequestAdapter pendingRequestAdapter = new AcceptRequestAdapter( getContext() , vaccination_registrations);
