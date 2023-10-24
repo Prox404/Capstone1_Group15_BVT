@@ -26,7 +26,8 @@
                 android:text="Quản lý người dùng"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginTop="40dp"/>
 
             <TextView
                 android:id="@+id/textView2"
