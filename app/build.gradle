@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.prox.babyvaccinationtracker'
+    namespace 'com.vaccinecenter.babyvaccinationtracker'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.prox.babyvaccinationtracker"
+        applicationId "com.vaccinecenter.babyvaccinationtracker"
         minSdk 28
         targetSdk 33
         versionCode 1
