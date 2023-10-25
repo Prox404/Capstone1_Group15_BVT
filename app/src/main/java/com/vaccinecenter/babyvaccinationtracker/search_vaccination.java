@@ -4,6 +4,8 @@ package com.vaccinecenter.babyvaccinationtracker;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -60,22 +62,41 @@ public class search_vaccination extends AppCompatActivity {
     @Override
     public void onRestart() {
         super.onRestart();
-        getdatafromrealtimedatabase();
+        String search_text = edt_search_timkiem.getText().toString().trim();
+        getdatafromrealtimedatabase(search_text);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_vaccination);
         setrcv();
-        getdatafromrealtimedatabase();
+        getdatafromrealtimedatabase("");
 
-        btntimkiem.setOnClickListener(new View.OnClickListener() {
+//        btntimkiem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getdatafromrealtimedatabase();
+//            }
+//        });
+
+        edt_search_timkiem.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                getdatafromrealtimedatabase();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text_search = editable.toString().trim();
+                getdatafromrealtimedatabase(text_search);
             }
         });
-
+        // nút quay lại
         imge_list_back = findViewById(R.id.imge_list_back);
         imge_list_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,20 +106,20 @@ public class search_vaccination extends AppCompatActivity {
         });
     }
 
-    private void getdatafromrealtimedatabase() {
+    private void getdatafromrealtimedatabase(String searchTerm) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Context mcontext = search_vaccination.this;
         SharedPreferences sharedPreferences = mcontext.getSharedPreferences("user", Context.MODE_PRIVATE);
         String id_vaccine_center = sharedPreferences.getString("center_id","");
         DatabaseReference myRef = database.getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines");
 
-        String searchTerm = edt_search_timkiem.getText().toString().trim();
         Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);
         mlistvaccine.clear();
         Log.d("vaccine", "getdatafromrealtimedatabase: call");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mlistvaccine.clear();
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccines vaccine = datasnapshot.getValue(Vaccines.class);
                     vaccine.setVaccine_id(datasnapshot.getKey().toString());

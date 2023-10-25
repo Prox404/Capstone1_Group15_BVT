@@ -20,10 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:gravity="center"
-        android:text="DANH SÁCH THÔNG TIN VACCINE"
+        android:text="DANH SÁCH THÔNG TIN VẮC-XIN"
         android:textAlignment="viewStart"
         android:textColor="#007F20"
-        android:textSize="34sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <EditText
@@ -52,6 +52,7 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="#36BD5E"
         android:text="Tìm kiếm"
+        android:visibility="gone"
         app:cornerRadius="5dp" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -3,6 +3,7 @@
     <style name="Base.Theme.BabyVaccinationTracker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/inter</item>
     </style>
 
     <style name="Theme.BabyVaccinationTracker" parent="Base.Theme.BabyVaccinationTracker" />
