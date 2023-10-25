@@ -322,7 +322,7 @@ public class create_vaccination extends AppCompatActivity {
                         }).dispatch();
                     }
                 }
-                clear();
+
             }
 
         });
@@ -392,6 +392,7 @@ public class create_vaccination extends AppCompatActivity {
                     Toast.makeText(create_vaccination.this, "failed", Toast.LENGTH_SHORT).show();
             }
         });
+        clear();
     }
     // Kiểm tra quyền truy cập kho ảnh
     private static final int PERMISSION_CODE = 1;

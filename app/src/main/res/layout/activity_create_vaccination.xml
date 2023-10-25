@@ -81,12 +81,15 @@
                 <EditText
                     android:id="@+id/vaccine_name"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp" />
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -111,12 +114,15 @@
                 <EditText
                     android:id="@+id/post_vaccination_reactions"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp" />
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp" />
 
                 <TextView
                     android:id="@+id/textView7"
@@ -128,12 +134,15 @@
                 <EditText
                     android:id="@+id/origin"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp" />
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp" />
 
                 <TextView
                     android:id="@+id/textView9"
@@ -145,12 +154,15 @@
                 <EditText
                     android:id="@+id/vaccination_target_group"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp" />
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp" />
 
                 <TextView
                     android:id="@+id/textView10"
@@ -162,12 +174,15 @@
                 <EditText
                     android:id="@+id/contraindications"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp" />
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp" />
 
                 <TextView
                     android:id="@+id/textView12"
@@ -212,12 +227,15 @@
                 <EditText
                     android:id="@+id/unit"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp" />
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp" />
 
                 <TextView
                     android:id="@+id/textView15"

@@ -53,25 +53,25 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
 
     Spinner spinner_update_money_unit,spinner_vac_effectiveness;
 
-    ImageView image_back;
+    ImageView image_back; // nút quay lại
 
-    Vaccines vaccine;
+    Vaccines vaccine; // thông tin vắc-xin
 
-    RecyclerView recyclerview_image;
-    RecyclerAdapter recyclerAdapter;
-    ArrayList<Uri> uri_image = new ArrayList<>(); //
-    DatePickerDialog datePickerDialog;
-
+    RecyclerView recyclerview_image; // hiển thị ảnh
+    RecyclerAdapter recyclerAdapter; // đổ ảnh
+    ArrayList<Uri> uri_image = new ArrayList<>(); // lưu trữ tất cả các ảnh từ mới đến cũ
+    DatePickerDialog datePickerDialog; // cập nhập ngày
     ArrayList<String> old_image = new ArrayList<>(); // lưu trữ những ảnh cũ của vaccine
-    ArrayList<Uri> new_image = new ArrayList<>();
+    ArrayList<Uri> new_image = new ArrayList<>(); // chứa ảnh mới
 
-    int bounary_image_old_new = 0;
+    int bounary_image_old_new = 0; // xác định ảnh cũ ảnh mới
 
     FirebaseDatabase database;
 
     DatabaseReference reference;
 
     String id_vaccine_center = "";
+    String vaccine_id = "";
 
     String effectiveness = "";
 
@@ -175,6 +175,8 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         if(bundle !=null){
             vaccine = (Vaccines) bundle.getSerializable("vaccine_name");
             if(vaccine != null){
+                vaccine_id = vaccine.getVaccine_id();
+                vaccine.setVaccine_id(null);
                 edt_vaccine_name.setText(vaccine.getVaccine_name());
 
                 spinner_vac_effectiveness.setSelection(
@@ -260,7 +262,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                 }
                 else if (check == false){
                     check = true;
-                    reference.child(vaccine.getVaccine_id()).child("deleted").setValue(check).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    reference.child(vaccine_id).child("deleted").setValue(check).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
@@ -461,11 +463,12 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         String vaccine_price = price + " "+ selectedValue;
         vaccine.setPrice(vaccine_price);
         vaccine.setVaccine_image(vaccine_image);
-        reference = database.getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines").child(vaccine.getVaccine_id());
+        reference = database.getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines").child(vaccine_id);
         reference.setValue(vaccine);
         // todo gửi thông tin đã chỉnh sửa về lại trang vaccine
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
+        vaccine.setVaccine_id(vaccine_id); // đặt lại trường vaccine ID
         bundle.putSerializable("vaccine_name", vaccine);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
