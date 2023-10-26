@@ -7,212 +7,226 @@
     android:orientation="vertical"
     tools:context=".RegisterFragment">
 
-    <ImageView
-        android:id="@+id/imageViewAvatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:contentDescription="cak"
-        android:focusable="true"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        app:tint="@color/colorPrimary" />
-
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đăng ký"
-        android:textStyle="bold"
-        android:textSize="34dp"
-        android:textColor="#007F20"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hãy nhập thông tin của bạn"
-        android:textSize="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Họ và tên"
-        android:textSize="15dp"
-        android:textColor="#686868"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginTop="8dp"
-        android:inputType="textPersonName"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded_edittext_background"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:textSize="15dp"
-        android:textColor="#686868"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"/>
-
-    <EditText
-        android:id="@+id/editTextEmail"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginTop="8dp"
-        android:inputType="textEmailAddress"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded_edittext_background" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:textSize="15dp"
-        android:textColor="#686868"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"/>
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginTop="8dp"
-        android:inputType="textPassword"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded_edittext_background"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Re-Password"
-        android:textSize="15dp"
-        android:textColor="#686868"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"/>
-
-    <EditText
-        android:id="@+id/editTextRePassword"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginTop="8dp"
-        android:inputType="textPassword"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded_edittext_background"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Phone"
-        android:textSize="15dp"
-        android:textColor="#686868"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"/>
-
-
-    <EditText
-        android:id="@+id/editTextPhone"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginTop="8dp"
-        android:inputType="phone"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded_edittext_background" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Giới tính"
-        android:textSize="15dp"
-        android:textColor="#686868"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"/>
-
-    <RadioGroup
-        android:id="@+id/radioGroupGender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioButtonMale"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Nam" /> <!-- Radio button mặc định chọn -->
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <RadioButton
-            android:id="@+id/radioButtonFemale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nữ" />
-    </RadioGroup>
+            <ImageView
+                android:id="@+id/imageViewBack"
+                android:layout_width="17dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#fff"
+                android:src="@drawable/ic_back" />
 
-    <EditText
-        android:id="@+id/editTextBirthday"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:focusable="false"
-        android:hint="Birthday"
-        android:inputType="text|date"
-        android:padding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng ký"
+                android:textColor="#007F20"
+                android:textSize="34dp"
+                android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/spinnerProvince"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:prompt="@string/choose_province" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hãy nhập thông tin của bạn"
+                android:textSize="15dp" />
 
-    <Spinner
-        android:id="@+id/spinnerDistrict"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:prompt="@string/choose_district" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Họ và tên"
+                android:textColor="#686868"
+                android:textSize="15dp" />
 
-    <Spinner
-        android:id="@+id/spinnerWard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:prompt="@string/choose_ward" />
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:inputType="textPersonName" />
 
-    <Spinner
-        android:id="@+id/spinnerEthnicity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:prompt="@string/choose_ethnicity" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Email"
+                android:textColor="#686868"
+                android:textSize="15dp" />
 
-    <Button
-        android:id="@+id/buttonRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Register"
-        android:textAllCaps="false" />
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Password"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Re-Password"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/editTextRePassword"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Phone"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:inputType="phone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Giới tính"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Nam" /> <!-- Radio button mặc định chọn -->
+
+                <RadioButton
+                    android:id="@+id/radioButtonFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nữ" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Ngày sinh"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/editTextBirthday"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:inputType="text|date" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Tỉnh / Thành phố"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinnerProvince"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:prompt="@string/choose_province"
+                android:background="@drawable/rounded_edittext_background"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Huyện / Quận"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinnerDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:prompt="@string/choose_district"
+                android:background="@drawable/rounded_edittext_background"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Xã / Phường"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinnerWard"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:prompt="@string/choose_ward"
+                android:background="@drawable/rounded_edittext_background"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Dân tộc"
+                android:textColor="#686868"
+                android:textSize="15dp" />
+
+            <Spinner
+                android:id="@+id/spinnerEthnicity"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:prompt="@string/choose_ethnicity"
+                android:background="@drawable/rounded_edittext_background"/>
+
+            <Button
+                android:id="@+id/buttonRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Đăng ký"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_button"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
