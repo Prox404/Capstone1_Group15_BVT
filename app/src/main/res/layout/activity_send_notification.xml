@@ -31,6 +31,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Gửi thông báo"
             android:textColor="#007F20"
             android:textSize="34sp"
@@ -39,14 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tên người dùng hoặc trung tâm tiêm chủng"
-                android:textSize="15dp"
-                android:textColor="#686868"
-                android:layout_marginTop="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,12 +51,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:backgroundTint="#F2F4F6"
-                    android:inputType="text"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rounded_edittext_background"/>
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_edittext_background"
+                    android:backgroundTint="#F2F4F6"
+                    android:ems="10"
+                    android:hint="Tìm kiếm"
+                    android:inputType="text"
+                    android:paddingLeft="10dp" />
 
                 <Button
                     android:id="@+id/buttonSearch"
@@ -82,89 +77,67 @@
             android:gravity="right"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tiêu đề"
-                android:textSize="15dp"
-                android:textColor="#686868"
-                android:layout_marginTop="20dp"/>
-
             <EditText
                 android:id="@+id/editTextTitle"
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_edittext_background"
                 android:ems="10"
+                android:hint="Tiêu đề"
                 android:inputType="text"
-                android:background="@drawable/rounded_edittext_background"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nội dung"
-                android:textSize="15dp"
-                android:textColor="#686868"
-                android:layout_marginTop="20dp"/>
+                android:paddingLeft="10dp" />
 
             <EditText
                 android:id="@+id/editTextMessage"
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_edittext_background"
                 android:ems="10"
+                android:hint="Nội dung"
                 android:inputType="text"
-                android:background="@drawable/rounded_edittext_background"/>
+                android:paddingLeft="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_weight="1"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ngày"
-                        android:textSize="15dp"
-                        android:textColor="#686868"
-                        android:layout_marginTop="20dp"/>
+                    android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/editTextDate"
                         android:layout_width="wrap_content"
                         android:layout_height="49dp"
+                        android:background="@drawable/rounded_edittext_background"
                         android:ems="10"
+                        android:hint="Ngày"
                         android:inputType="text"
-                        android:background="@drawable/rounded_edittext_background"/>
+                        android:paddingLeft="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Giờ"
-                        android:textSize="15dp"
-                        android:textColor="#686868"
-                        android:layout_marginTop="20dp"/>
+                    android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/editTextTime"
                         android:layout_width="wrap_content"
                         android:layout_height="49dp"
+                        android:background="@drawable/rounded_edittext_background"
                         android:ems="10"
+                        android:hint="Giờ"
                         android:inputType="text"
-                        android:background="@drawable/rounded_edittext_background"/>
+                        android:paddingLeft="10dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -172,8 +145,9 @@
                 android:id="@+id/buttonSendNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gửi thông báo"
-                android:background="@drawable/rounded_button"/>
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_button"
+                android:text="Gửi thông báo" />
         </LinearLayout>
 
 

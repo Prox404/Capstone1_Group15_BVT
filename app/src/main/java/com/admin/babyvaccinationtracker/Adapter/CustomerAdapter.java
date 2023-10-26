@@ -66,7 +66,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
             if (selectedCustomers.contains(customer.getCustomer_id())) {
                 // Thay đổi giao diện người dùng (ví dụ: thay đổi màu nền)
-                itemView.setBackgroundColor(itemView.getContext().getResources().getColor(android.R.color.darker_gray));
+                itemView.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.primarySelectedColor));
             } else {
                 // Reset giao diện người dùng (ví dụ: trả về màu nền mặc định)
                 itemView.setBackgroundColor(itemView.getContext().getResources().getColor(android.R.color.white));
