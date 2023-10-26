@@ -3,4 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:fontFamily">@font/inter</item>
     </style>
+    <style name="RadioButtonStyle" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/theme_app</item>
+    </style>
 </resources>

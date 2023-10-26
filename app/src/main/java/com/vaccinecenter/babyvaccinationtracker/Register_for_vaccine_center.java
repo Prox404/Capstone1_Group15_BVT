@@ -177,30 +177,34 @@ public class Register_for_vaccine_center extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String time_begin = register_tv_time_begin.getText().toString();
-                if(time_begin.length()!=0){
+                if (time_begin.length() != 0) {
                     String[] time = time_begin.split(": ");
                     int hour = Integer.parseInt(time[0]);
                     int minute = Integer.parseInt(time[1]);
                     TimePickerDialog timePickerDialog = new TimePickerDialog(Register_for_vaccine_center.this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                            // Get the selected hour and minute
                             int hourSelected = view.getHour();
                             int minuteSelected = view.getMinute();
-                            if (hourSelected==0&&minuteSelected==0){
-                                register_tv_time_end.setText(hourSelected+": "+minuteSelected);
+
+                            if (hourSelected == 0 && minuteSelected == 0) {
+                                register_tv_time_end.setText(hourSelected + ": " + minuteSelected);
                                 return;
                             }
-                            if(hourSelected < hour ){
-                                Toast.makeText(Register_for_vaccine_center.this,"Hãy nhập giờ chính xác", Toast.LENGTH_LONG).show();
+
+                            if (hourSelected < hour) {
+                                Toast.makeText(Register_for_vaccine_center.this, "Hãy nhập giờ chính xác", Toast.LENGTH_LONG).show();
                                 return;
-                            }
-                            else if(hourSelected == hour){
-                                if(minuteSelected < minute ){
-                                    Toast.makeText(Register_for_vaccine_center.this,"Hãy nhập phút chính xác", Toast.LENGTH_LONG).show();
+                            } else if (hourSelected == hour) {
+                                if (minuteSelected < minute) {
+                                    Toast.makeText(Register_for_vaccine_center.this, "Hãy nhập phút chính xác", Toast.LENGTH_LONG).show();
                                     return;
                                 }
                             }
-                            register_tv_time_end.setText(hourSelected+": "+minuteSelected);
+
+                            // Set the selected end time
+                            register_tv_time_end.setText(String.format("%02d: %02d", hourSelected, minuteSelected));
                         }
                     }, hour, minute, true);
                     timePickerDialog.show();
@@ -514,10 +518,6 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                         }
                     }).dispatch();
                 }
-
-
-
-
             }
         });
 
@@ -553,10 +553,9 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference datavaccineCenter = firebaseDatabase.getReference("Vaccine_center_registration");
         datavaccineCenter.push().setValue(registration);
-
+        setResult(RESULT_OK);
+        finish();
     }
-
-    private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE_CENTER = 1;
     private static final int PICK_IMAGE_CERTIFICATE = 2;
 
@@ -566,21 +565,41 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                         android.Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
         ) {
+            Log.i("requestPermission",""+requestCode);
             accessTheGallery(requestCode);
         } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERMISSION_CODE
-            );
+            if(requestCode == PICK_IMAGE_CENTER){
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        PICK_IMAGE_CENTER
+                );
+            }
+            else if (requestCode == PICK_IMAGE_CERTIFICATE){
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        PICK_IMAGE_CERTIFICATE
+                );
+            }
+
         }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_CODE) {
+        if (requestCode == PICK_IMAGE_CENTER) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                accessTheGallery(requestCode);
+                Log.i("onRequestPermissionsResult",""+requestCode);
+                accessTheGallery(PICK_IMAGE_CENTER);
+            } else {
+                Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (requestCode == PICK_IMAGE_CERTIFICATE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("onRequestPermissionsResult",""+requestCode);
+                accessTheGallery(PICK_IMAGE_CERTIFICATE);
             } else {
                 Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
             }
@@ -591,6 +610,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         );
+        Log.i("accessTheGallery",""+requestCode);
         i.setType("image/*");
         startActivityForResult(i, requestCode);
     }
@@ -598,6 +618,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //get the image’s file location
+        Log.i("requestPermission",""+requestCode);
         if(resultCode == RESULT_OK){
             if (requestCode == PICK_IMAGE_CENTER) {
                 tv_center_image.setVisibility(View.GONE);

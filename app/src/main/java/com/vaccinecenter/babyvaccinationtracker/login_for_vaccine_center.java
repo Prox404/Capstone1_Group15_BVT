@@ -1,6 +1,7 @@
 package com.vaccinecenter.babyvaccinationtracker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -64,7 +65,7 @@ public class login_for_vaccine_center extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(login_for_vaccine_center.this, Register_for_vaccine_center.class);
-                startActivity(i);
+                startActivityForResult(i,1);
             }
         });
 
@@ -143,5 +144,13 @@ public class login_for_vaccine_center extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            Toast.makeText(login_for_vaccine_center.this,"Đăng ký thành công, vui lòng chờ xác nhận!",Toast.LENGTH_LONG).show();
+        }
     }
 }

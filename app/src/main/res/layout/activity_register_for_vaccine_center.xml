@@ -70,7 +70,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/home"
                 android:ems="10"
-                android:inputType="text"
+                android:inputType="text|textPassword"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp" />
 
@@ -87,7 +87,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/home"
                 android:ems="10"
-                android:inputType="text"
+                android:inputType="text|textPassword"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp" />
 
@@ -119,22 +119,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/register_img_btn_activity_certificate"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center"
-                    android:background="#FFFFFF"
-                    android:src="@drawable/catch_image" />
-
-                <TextView
-                    android:id="@+id/tv_center_chungchi"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Chọn ảnh chứng chỉ "
-                    android:textColor="#4B4B4B"
-                    android:textStyle="bold" />
+                    app:cardCornerRadius="10dp">
+
+                    <ImageButton
+                        android:id="@+id/register_img_btn_activity_certificate"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:background="#FFFFFF"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/catch_image" />
+
+                    <TextView
+                        android:id="@+id/tv_center_chungchi"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Chọn ảnh chứng chỉ "
+                        android:textColor="#4B4B4B"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+
             </RelativeLayout>
 
             <TextView
@@ -225,19 +234,25 @@
                     android:id="@+id/radioButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="#4CAF50"
                     android:checked="true"
+                    android:theme="@style/RadioButtonStyle"
                     android:text="Thứ 2 đến thứ 6" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="#4CAF50"
+                    android:theme="@style/RadioButtonStyle"
                     android:text="Thứ 2 đến thứ 7" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="#4CAF50"
+                    android:theme="@style/RadioButtonStyle"
                     android:text="Cả tuần" />
             </RadioGroup>
 
@@ -256,6 +271,8 @@
                     android:id="@+id/register_radio_all_day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="#4CAF50"
+                    android:theme="@style/RadioButtonStyle"
                     android:checked="true"
                     android:text="Mở cửa cả ngày" />
 
@@ -263,6 +280,8 @@
                     android:id="@+id/register_radio_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="#4CAF50"
+                    android:theme="@style/RadioButtonStyle"
                     android:text="Thời gian hoạt động" />
             </RadioGroup>
 
@@ -312,22 +331,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/register_img_btn_center_image"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center"
-                    android:background="#FFFFFF"
-                    android:src="@drawable/catch_image" />
-
-                <TextView
-                    android:id="@+id/tv_center_image"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Thêm ảnh bệnh viện"
-                    android:textColor="#4B4B4B"
-                    android:textStyle="bold" />
+                    app:cardCornerRadius="10dp">
+
+                    <ImageButton
+                        android:id="@+id/register_img_btn_center_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:background="#FFFFFF"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/catch_image" />
+
+                    <TextView
+                        android:id="@+id/tv_center_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="Thêm ảnh bệnh viện"
+                        android:textColor="#4B4B4B"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+
+
             </RelativeLayout>
 
             <Button

@@ -3,4 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#36BD5E</color>
+    <color name="theme_app">#4CAF50</color>
+    <color name="colorPrimaryDark">#00B141</color>
 </resources>
