@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +61,7 @@ public class HealthFragment extends Fragment {
 
     Context context;
     LinearLayout health_baby;
-    ListView health_baby_list_view;
+    RecyclerView health_baby_list_view;
     TextView health_arlet_input;
     LineChart lineChart;
     Baby babychoose;
@@ -230,9 +232,8 @@ public class HealthFragment extends Fragment {
                             }
                             chartxyBMI(dataValues2(health));
                             ArrayList<Health> a = new ArrayList<>(health.values());
-                            adapter = new HealthBabyAdapter(context,a);
-                            Log.i("ADAAAPPTEERRR",adapter+"");
-                            Log.i("HEALTH",""+a.get(0).getWeight());
+                            adapter = new HealthBabyAdapter(reverse_arraylist(a));
+                            health_baby_list_view.setLayoutManager(new GridLayoutManager(context,1));
                             health_baby_list_view.setAdapter(adapter);
                         }else {
                             Toast.makeText(context,"Chưa có dữ liệu vui lòng nhập các thông tin cơ bản cho bé",Toast.LENGTH_LONG).show();
@@ -245,6 +246,16 @@ public class HealthFragment extends Fragment {
                     }
                 });
             }
+
         });
+    }
+
+    private ArrayList<Health> reverse_arraylist(ArrayList<Health> h){
+        int n = h.size();
+        ArrayList<Health> new_arraylist = new ArrayList<>();
+        for(int i = n - 1; i >= 0 ; i --){
+            new_arraylist.add(h.get(i));
+        }
+        return new_arraylist;
     }
 }
