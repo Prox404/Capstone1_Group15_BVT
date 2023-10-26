@@ -23,6 +23,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".InjectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".information_vaccine"
             android:exported="false" />
 
@@ -32,7 +38,7 @@
         <meta-data
             android:name="resource_name"
             android:resource="@layout/activity_information_vaccine" />
-      
+
         <activity
             android:name=".See_detailed_vaccine_information"
             android:exported="false" />
@@ -68,8 +74,8 @@
             android:exported="false" />
         <activity
             android:name=".AuthActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".schedule_an_injection_search_vaccine_2"
             android:exported="false" />
@@ -90,8 +96,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -99,4 +105,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

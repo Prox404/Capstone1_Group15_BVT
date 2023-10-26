@@ -81,11 +81,11 @@ public class HomeActivity extends AppCompatActivity {
                 loadFragment(fragment);
                 return true;
             } else if (itemId == R.id.navigation_calendar) {
-                Intent i = new Intent(HomeActivity.this, Schedule_an_injection.class);
-                startActivity(i);
-//                fragment = new ScheduleFragment();
-//                loadFragment(fragment);
-                return false;
+//                Intent i = new Intent(HomeActivity.this, Schedule_an_injection.class);
+//                startActivity(i);
+                fragment = new ScheduleFragment();
+                loadFragment(fragment);
+                return true;
             }else if (itemId == R.id.navigation_vaccine) {
                 fragment = new VaccineFragment();
                 loadFragment(fragment);
@@ -130,4 +130,11 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        // Xử lý sự kiện khi người dùng bấm nút Back
+        // Ví dụ: Hiển thị hộp thoại xác nhận thoát chương trình, vv.
+        Log.i("Home", "onBackPressed: ");
+        moveTaskToBack(true);
+    }
 }
