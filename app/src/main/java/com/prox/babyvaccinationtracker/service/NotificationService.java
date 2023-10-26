@@ -58,13 +58,7 @@ public class NotificationService extends Service {
             NotificationChannel channel = new NotificationChannel(notificationChannelId, "VaccineNotification", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
-    }
 
-
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        // Lắng nghe sự thay đổi trong cơ sở dữ liệu
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -95,8 +89,14 @@ public class NotificationService extends Service {
                 // Xử lý khi có lỗi xảy ra trong cơ sở dữ liệu (nếu cần)
             }
         });
+    }
 
-        return super.onStartCommand(intent, flags, startId);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // Lắng nghe sự thay đổi trong cơ sở dữ liệu
+
+
+        return START_STICKY;
     }
 
     @Override
