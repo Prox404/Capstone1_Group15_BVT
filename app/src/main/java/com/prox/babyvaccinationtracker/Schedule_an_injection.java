@@ -306,7 +306,8 @@ public class Schedule_an_injection extends AppCompatActivity {
         String cusGender = sharedPreferences.getString("cus_gender", "");
         String cusEthnicity = sharedPreferences.getString("cus_ethnicity","");
         String cus_avatar = sharedPreferences.getString("cus_avatar","");
-        customer = new Customer(customerID,cusName,cusBirthday,cusAddress,cusPhone,cusEmail,cusGender,cusEthnicity,cus_avatar);
+        customer = new Customer(cusName,cusBirthday,cusAddress,cusPhone,cusEmail,cusGender,cusEthnicity,cus_avatar);
+        customer.setCustomer_id(customerID);
         Log.i("TAG", "GetData_customer: " + customer.toString());
 
 

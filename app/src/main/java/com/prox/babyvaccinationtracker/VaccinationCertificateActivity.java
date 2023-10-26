@@ -40,7 +40,8 @@ public class VaccinationCertificateActivity extends AppCompatActivity {
             textViewVaccineEntryDate,
             textViewVaccineDosage,
             textViewSideEffects,
-            textViewSideEffectsResponse;
+            textViewSideEffectsResponse,
+            textViewTime;
 
     LinearLayout sideEffectContainer;
     Button buttonSend;
@@ -74,6 +75,7 @@ public class VaccinationCertificateActivity extends AppCompatActivity {
             textViewVaccineDosage = findViewById(R.id.textViewVaccineDosage);
             textViewSideEffects = findViewById(R.id.textViewSideEffects);
             textViewSideEffectsResponse = findViewById(R.id.textViewSideEffectsResponse);
+            textViewTime = findViewById(R.id.textViewTime);
             imageViewQR = findViewById(R.id.imageViewQR);
             editTextSideEffects = findViewById(R.id.editTextSideEffects);
             sideEffectContainer = findViewById(R.id.sideEffectContainer);
@@ -97,6 +99,7 @@ public class VaccinationCertificateActivity extends AppCompatActivity {
                     textViewVaccineEntryDate.setText(vaccinationCertificate.getVaccine().getDate_of_entry());
                     String dosage = vaccinationCertificate.getVaccine().getDosage() + " " + vaccinationCertificate.getVaccine().getUnit();
                     textViewVaccineDosage.setText(dosage);
+                    textViewTime.setText(vaccinationCertificate.getVaccineCertificate_Created_at());
 
                     String Qr_url = vaccinationCertificate.getQr().replace("https", "http");
                     Picasso.get().load(vaccinationCertificate.getQr()).into(imageViewQR);
@@ -104,6 +107,13 @@ public class VaccinationCertificateActivity extends AppCompatActivity {
                     if (vaccinationCertificate.getSide_effects() != null) {
                         textViewSideEffects.setText(vaccinationCertificate.getSide_effects());
                         textViewSideEffects.setVisibility(View.VISIBLE);
+                        if (vaccinationCertificate.getSide_effects_response() != null) {
+                            textViewSideEffectsResponse.setText(vaccinationCertificate.getSide_effects_response());
+                            textViewSideEffectsResponse.setVisibility(View.VISIBLE);
+                        } else {
+                            textViewSideEffectsResponse.setVisibility(View.GONE);
+                        }
+                        sideEffectContainer.setVisibility(View.GONE);
                     } else {
                         sideEffectContainer.setVisibility(View.VISIBLE);
                         buttonSend.setOnClickListener(new View.OnClickListener() {

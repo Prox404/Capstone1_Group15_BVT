@@ -36,7 +36,7 @@ public class NotificationService extends Service {
 
     private DatabaseReference databaseReference;
     private String user_id;
-    private String notificationChannelId;
+    private String notificationChannelId = "VaccineNotification";
     private NotificationManager notificationManager;
 
     @Override
@@ -55,7 +55,7 @@ public class NotificationService extends Service {
 
         // Tạo Notification Channel (chỉ cần thực hiện trên Android 8.0+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(user_id, "Appointment Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(notificationChannelId, "VaccineNotification", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -96,7 +96,7 @@ public class NotificationService extends Service {
             }
         });
 
-        return START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class NotificationService extends Service {
         Notification notification = new NotificationCompat.Builder(this, notificationChannelId)
                 .setContentTitle(message.getTitle())
                 .setContentText(message.getMessage())
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build();
