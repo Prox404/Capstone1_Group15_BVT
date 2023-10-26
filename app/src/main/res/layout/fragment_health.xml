@@ -3,12 +3,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".HealthFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Theo dõi sức khỏe của bé"
+                android:textColor="#007F20"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/Button_health_baby"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/health_arlet_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/login_input_bg"
+                android:backgroundTint="#36BD5E"
+                android:gravity="center|center_horizontal"
+                android:text="Hiện tại chưa nhập dữ liệu. Nhập ngay!"
+                android:textColor="#FFFFFF"
+                android:visibility="gone" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="350dp">
+
+            </com.github.mikephil.charting.charts.LineChart>
+
+            <ListView
+                android:id="@+id/health_baby_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>
