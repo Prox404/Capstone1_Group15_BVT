@@ -19,24 +19,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.vaccinecenter.babyvaccinationtracker.R;
+import com.vaccinecenter.babyvaccinationtracker.model.Regimen;
 import com.vaccinecenter.babyvaccinationtracker.model.VaccinationCertificate;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccination_Registration;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdapter.ViewHolder> {
-    private Context context;
-    private List<Vaccination_Registration> vaccinationRegistions;
+    private final Context context;
+    private final List<Vaccination_Registration> vaccinationRegistions;
 
     public AcceptRequestAdapter(Context context, List<Vaccination_Registration> vaccinationRegistions) {
         this.context = context;
@@ -81,6 +89,7 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
         Button buttonCancel;
 
         String QR_url = "";
+        Boolean first = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -103,7 +112,7 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
                     Log.i("Aloo", "onClick: " + getAdapterPosition());
                     // Update status & remove item from list
                     Vaccination_Registration vaccination_registration = vaccinationRegistions.get(getAdapterPosition());
-
+                    first = true;
                     DatabaseReference vaccinationCertificateReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
                     String id = vaccination_registration.getRegister_id();
                     Bitmap b = generateQRCode(id);
@@ -116,6 +125,41 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
                     vaccinationCertificate.setVaccine(vaccination_registration.getVaccine());
                     vaccinationCertificate.setCenter(vaccination_registration.getCenter());
                     vaccinationCertificateReference.child(id).setValue(vaccinationCertificate);
+                    if (!vaccination_registration.getVaccine().getVac_effectiveness().equals("other")){
+                        String baby_id = vaccination_registration.getBaby().getBaby_id();
+                        String vaccine_effectiveness = vaccination_registration.getVaccine().getVac_effectiveness();
+                        if (baby_id != null) {
+                            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("vaccination_regimen").child(baby_id);
+                            Query query = databaseRef.orderByChild("vaccination_type").equalTo(vaccine_effectiveness);
+                            query.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    ArrayList<Regimen> regimens = new ArrayList<>();
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                        // Duyệt qua các phần tử thỏa mãn truy vấn
+                                        // snapshot.getValue() sẽ chứa dữ liệu của các phần tử này
+                                        Log.i("Vaccination Regimen", "onDataChange: " + snapshot.getValue());
+                                        Regimen regimen = snapshot.getValue(Regimen.class);
+                                        if (!regimen.isVaccinated() && first){
+                                            regimen.setVaccinated(true);
+                                            Log.i("get content", "get key: " + snapshot.getKey());
+                                            // Update status
+                                            databaseRef.child(snapshot.getKey()).child("vaccinated").setValue(true);
+                                            first = false;
+                                            break;
+                                        }
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Xử lý lỗi (nếu có)
+                                }
+                            });
+                        }
+                    }
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
                     databaseReference.child(vaccination_registration.getRegister_id()).child("status").setValue(3);
                     Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
