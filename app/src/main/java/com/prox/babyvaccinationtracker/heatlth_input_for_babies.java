@@ -87,8 +87,6 @@ public class heatlth_input_for_babies extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                 Date now = new Date();
                 String formattedDate = dateFormat.format(now);
-
-
                 String[] sl = formattedDate.split(" ");
                 Log.i("Dateeeeeeeeeeeeeeee",""+formattedDate+" "+sl[1]);
                 Health health = new Health();
@@ -97,30 +95,12 @@ public class heatlth_input_for_babies extends AppCompatActivity {
                 health.setWeight(Double.parseDouble(weight));
                 health.setSleep(Double.parseDouble(sleep));
 
-                databaseReference.child(babychoose.getBaby_id()).setValue(health); // hiện tại
-
-                DatabaseReference reference = firebaseDatabase.getReference("health_history");
-
                 int monthIndex = getMonthIndex(sl[1]);
                 String referenceKey = sl[sl.length-1];
-                reference.child(babychoose.getBaby_id()) // lưu vào lịch sử
-                        .child(referenceKey)
+                databaseReference.child(babychoose.getBaby_id()) // lưu vào lịch sử
+                        .child(""+referenceKey)
                         .child(String.valueOf(monthIndex))
                         .setValue(health);
-
-
-                //                databaseReference.child(babychoose.getBaby_id()).child("Jan").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Feb").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Mar").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Apr").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("May").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Jun").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Jul").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Aug").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Sep").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Oct").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Nov").setValue(health);
-//                databaseReference.child(babychoose.getBaby_id()).child("Dec").setValue(health);
                 finish();
             }
         });

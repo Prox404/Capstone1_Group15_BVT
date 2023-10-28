@@ -3,10 +3,12 @@ package com.prox.babyvaccinationtracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,9 +63,10 @@ public class HealthFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     Context context;
-    LinearLayout health_baby;
+    LinearLayout health_baby,health_arlet;
     RecyclerView health_baby_list_view;
-    TextView health_arlet_input;
+    TextView health_arlet_input,health_arlet_month_now,health_arlet_header,health_arlet_content;
+    ImageView health_arlet_image;
     LineChart lineChart;
     Baby babychoose;
     HealthBabyAdapter adapter;
@@ -115,8 +119,17 @@ public class HealthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_health, container, false);
+        // button baby
         health_baby = view.findViewById(R.id.Button_health_baby);
+        // hiển thị nhập dữ liệu
         health_arlet_input = view.findViewById(R.id.health_arlet_input);
+        // arlet
+        health_arlet = view.findViewById(R.id.health_arlet);
+        health_arlet_month_now = view.findViewById(R.id.health_arlet_month_now);
+        health_arlet_header = view.findViewById(R.id.health_arlet_header);
+        health_arlet_content = view.findViewById(R.id.health_arlet_content);
+        health_arlet_image = view.findViewById(R.id.health_arlet_image);
+
         // todo listview
         health_baby_list_view = view.findViewById(R.id.health_baby_list_view);
 
@@ -135,7 +148,7 @@ public class HealthFragment extends Fragment {
         Type type = new TypeToken<List<Baby>>() {}.getType();
         List<Baby> babiesList = gson.fromJson(babiesJson, type);
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("health_history");
+        databaseReference = database.getReference("health");
         for (Baby baby : babiesList) {
             addButtonForBaby(baby);
         }
@@ -179,13 +192,14 @@ public class HealthFragment extends Fragment {
 
         //xét tháng trong năm
         XAxis xAxis_month = lineChart.getXAxis();
-//        String[] monthAbbreviations = {
-//                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-//                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-//        };
+        String[] monthAbbreviations = {
+                "T1", "T2", "T3", "T4", "T5", "T6",
+                "T7", "T8", "T9", "T10", "T11", "T12"
+        };
         xAxis_month.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis_month.setAxisMinimum(1);
-        xAxis_month.setAxisMaximum(12);
+        xAxis_month.setAxisMinimum(0);
+        xAxis_month.setAxisMaximum(11);
+        xAxis_month.setValueFormatter(new IndexAxisValueFormatter(monthAbbreviations));
 
         // Refresh the chart
         lineChart.invalidate();
@@ -195,10 +209,10 @@ public class HealthFragment extends Fragment {
         for(Map.Entry<Integer, Health> entry : he.entrySet()){
             float h = (float) entry.getValue().getHeight();
             float w = (float) entry.getValue().getWeight();
-            h = h / 10f;
+            h = h / 100f;
             float BMI = w / (h*h);
             int month = entry.getKey();
-            values.add(new Entry(month+1, BMI));
+            values.add(new Entry(month, BMI));
         }
         return values;
     }
@@ -218,6 +232,7 @@ public class HealthFragment extends Fragment {
                 String id = babychoose.getBaby_id();
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
                 databaseReference.child(id).child(""+year).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -235,6 +250,19 @@ public class HealthFragment extends Fragment {
                             adapter = new HealthBabyAdapter(reverse_arraylist(a));
                             health_baby_list_view.setLayoutManager(new GridLayoutManager(context,1));
                             health_baby_list_view.setAdapter(adapter);
+                            //todo arlet
+                            Log.i("MONTHHHH",""+month);
+                            if(health.containsKey(month)){
+                                health_arlet.setVisibility(View.VISIBLE);
+                                display_health_arlet_baby(health.get(month), month);
+                                health_arlet_input.setVisibility(View.GONE);
+                            }
+                            else{
+                                health_arlet.setVisibility(View.GONE);
+                                health_arlet_input.setVisibility(View.VISIBLE);
+                                Toast.makeText(context,"Bạn chưa nhập thông tin chỉ số của bé trong tháng này!!",Toast.LENGTH_LONG).show();
+                            }
+
                         }else {
                             Toast.makeText(context,"Chưa có dữ liệu vui lòng nhập các thông tin cơ bản cho bé",Toast.LENGTH_LONG).show();
                             health_arlet_input.setVisibility(View.VISIBLE);
@@ -249,7 +277,60 @@ public class HealthFragment extends Fragment {
 
         });
     }
-
+    private void display_health_arlet_baby(Health health, int month){
+        double heigh = health.getHeight();
+        double weight = health.getWeight();
+        heigh = heigh / 100f;
+        double BMI = weight / (heigh * heigh);
+        health_arlet_month_now.setText("Tháng "+(month + 1)+" này");
+        if(BMI <16){
+            health_arlet_header.setText("Gầy độ III");
+            health_arlet_content.setText("Tình trạng dưới trọng lượng có thể gây nguy cơ thiếu dinh dưỡng và yếu đuối.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        }
+        else if(16 <= BMI & BMI <17){
+            health_arlet_header.setText("Gầy độ II");
+            health_arlet_content.setText("Tình trạng dưới trọng lượng có thể gây nguy cơ thiếu dinh dưỡng và yếu đuối.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        }
+        else if(17 <= BMI & BMI <18.5){
+            health_arlet_header.setText("Gầy độ I");
+            health_arlet_content.setText("Tình trạng dưới trọng lượng có thể gây nguy cơ thiếu dinh dưỡng và yếu đuối.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        }
+        else if (18.5 <= BMI & BMI <25){
+            health_arlet_header.setText("Bình thường");
+            health_arlet_content.setText("Tình trạng cơ thể trong khoảng trọng lượng bình thường, bé rất khỏe mạnh sức khỏe.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_nomal);
+            health_arlet.setBackground(drawable);
+            health_arlet_image.setImageResource(R.drawable.normal);
+        }
+        else if(25 <= BMI & BMI <30){
+            health_arlet_header.setText("Thừa cân");
+            health_arlet_content.setText("Thừa cân có thể gây ra những ảnh hưởng tiêu cực của bé trong tương lại như tăng nguy cơ bị nhiều bệnh lý như tiểu đường, tăng huyết áp, và bệnh tim mạch.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        }
+        else if(30 <= BMI & BMI < 35){
+            health_arlet_header.setText("Béo phì độ I");
+            health_arlet_content.setText("Thừa cân có thể gây ra những ảnh hưởng tiêu cực của bé trong tương lại như tăng nguy cơ bị nhiều bệnh lý như tiểu đường, tăng huyết áp, và bệnh tim mạch.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        } else if (35 <= BMI & BMI < 40) {
+            health_arlet_header.setText("Béo phì độ II");
+            health_arlet_content.setText("Thừa cân có thể gây ra những ảnh hưởng tiêu cực của bé trong tương lại như tăng nguy cơ bị nhiều bệnh lý như tiểu đường, tăng huyết áp, và bệnh tim mạch.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        } else if (BMI >= 40) {
+            health_arlet_header.setText("Béo phì độ III");
+            health_arlet_content.setText("Thừa cân có thể gây ra những ảnh hưởng tiêu cực của bé trong tương lại như tăng nguy cơ bị nhiều bệnh lý như tiểu đường, tăng huyết áp, và bệnh tim mạch.");
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.arlet_warning);
+            health_arlet.setBackground(drawable);
+        }
+    }
     private ArrayList<Health> reverse_arraylist(ArrayList<Health> h){
         int n = h.size();
         ArrayList<Health> new_arraylist = new ArrayList<>();

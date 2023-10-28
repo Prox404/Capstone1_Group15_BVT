@@ -21,7 +21,10 @@ import com.prox.babyvaccinationtracker.model.Customer;
 import com.prox.babyvaccinationtracker.model.NotificationMessage;
 import com.prox.babyvaccinationtracker.model.Regimen;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class GetStartedCompleteFragment extends Fragment implements GetStartedActivity.OnBackPressedListener {
@@ -41,6 +44,16 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+    // thêm hàm
+    private int getMonthIndex(String monthAbbreviation) {
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        for (int i = 0; i < months.length; i++) {
+            if (months[i].equals(monthAbbreviation)) {
+                return i;
+            }
+        }
+        return -1; // Return -1 for an unknown month
     }
 
     @Override
@@ -72,8 +85,18 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         DatabaseReference checkList = FirebaseDatabase.getInstance().getReference("check_list");
                         checkList.child(babyID).setValue(GetStartedActivity.babyCheckList);
 
+                        // Chỉnh sửa một tại chỗ này, mong được review
                         DatabaseReference healthReference = FirebaseDatabase.getInstance().getReference("health");
-                        healthReference.child(babyID).setValue(GetStartedActivity.health);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                        Date now = new Date();
+                        String formattedDate = dateFormat.format(now);
+                        String[] sl = formattedDate.split(" ");
+                        int monthIndex = getMonthIndex(sl[1]);
+                        String referenceKey = sl[sl.length-1];
+                        healthReference.child(babyID)
+                                .child(referenceKey)
+                                .child(""+monthIndex)
+                                .setValue(GetStartedActivity.health);
 
                         DatabaseReference vaccinationRegimenReference = FirebaseDatabase.getInstance().getReference("vaccination_regimen").child(babyID);
                         List<Regimen> regimens = null;
