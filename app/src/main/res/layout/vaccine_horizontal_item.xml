@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/vaccine_id"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:background="@drawable/vaccine_horizontal_bg"
     android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="match_parent"
-        android:background="@drawable/vaccine_item_bg"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -29,20 +25,26 @@
                 android:minHeight="150dp"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|left"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/txtten"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên vaccine"
-            android:textAlignment="center" />
+            android:text="Tên vaccine" />
 
         <TextView
             android:id="@+id/txtXuatXu"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Xuất xứ"
-            android:textAlignment="center" />
+            android:text="Xuất xứ" />
 
         <TextView
             android:id="@+id/textViewVaccineCenterName"
@@ -64,8 +66,7 @@
             android:id="@+id/txtgia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Giá "
-            android:textAlignment="center" />
+            android:text="Giá " />
 
     </LinearLayout>
 

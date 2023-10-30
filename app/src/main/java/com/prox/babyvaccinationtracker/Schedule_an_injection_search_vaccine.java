@@ -33,13 +33,9 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
     ImageView schedule_back_vaccine;
     ListView schedule_list_vaccine_search;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-
     EditText schedule_edt_vaccine_search;
     TextView schedule_tv_cus_address,schedule_tv_display_all_vaccine;
-
     VaccineCenterAdapter adapter;
-
-
     ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>(); // tất cả trung tâm tiêm chủng
     ArrayList<Vaccine_center> filterAddressCenter = new ArrayList<>(); // trung tâm lọc theo địa chỉ khách hàng
     ArrayList<Vaccine_center> matchingCenters = new ArrayList<>(vaccine_centers); // tìm trung tâm vắc-xin

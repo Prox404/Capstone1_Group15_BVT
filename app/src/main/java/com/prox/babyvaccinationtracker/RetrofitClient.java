@@ -23,7 +23,7 @@ public class RetrofitClient {
 
         // Khởi tạo Retrofit
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.31.64.1:3000/")  // Thay đổi URL tương ứng với API của bạn
+                .baseUrl("http://172.20.10.4:3000/")  // Thay đổi URL tương ứng với API của bạn
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

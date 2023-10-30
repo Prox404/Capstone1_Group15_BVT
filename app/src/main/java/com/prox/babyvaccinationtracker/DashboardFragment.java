@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
@@ -125,6 +126,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 regimenList.clear();
+                Date closestDate = null;
                 for (DataSnapshot regimenSnapshot : snapshot.getChildren()) {
                     Regimen regimen = regimenSnapshot.getValue(Regimen.class);
                     regimenList.add(regimen);
