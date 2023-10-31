@@ -1,5 +1,7 @@
 package com.prox.babyvaccinationtracker;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -80,7 +82,7 @@ public class DashboardFragment extends Fragment {
         babyListContainer = view.findViewById(R.id.babyListContainer);
         familyContainer = view.findViewById(R.id.familyContainer);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         String babiesList = sharedPreferences.getString("babiesList", "");
         String babyID = "";
         try {
@@ -154,5 +156,30 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+     public void onResume() {
+        super.onResume();
+        Log.i("dashboard", "onResume: ");
+        //UPDATE BABY LIST
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
+        String babiesList = sharedPreferences.getString("babiesList", "");
+
+        String babyID = "";
+        try {
+            Gson gson = new Gson();
+            babies = gson.fromJson(babiesList, new TypeToken<List<Baby>>() {}.getType());
+            firstBabyId = babies.get(0).getBaby_id();
+            setTimeLine(firstBabyId);
+            Log.i("Aaaa", "onCreateView: " + babies.toString());
+            // clear all button
+            babyListContainer.removeAllViews();
+            for (Baby baby : babies) {
+                addButtonForBaby(baby);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
