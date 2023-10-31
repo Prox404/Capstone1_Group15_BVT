@@ -154,7 +154,8 @@ public class LoginFragment extends Fragment {
                                             editor.putString("cus_email", customer.getCus_email());
                                             editor.putString("cus_gender", customer.getCus_gender());
                                             editor.putString("cus_gender", customer.getCus_gender());
-
+                                            editor.putString("cus_ethnicity", customer.getCus_ethnicity());
+                                            editor.putString("cus_avatar", customer.getCus_avatar());
                                             Gson gson = new Gson();
                                             String babiesJson = gson.toJson(customer.getBabies());
                                             Log.i("babiesJson", "onDataChange: " + babiesJson);

@@ -1,5 +1,6 @@
 package com.prox.babyvaccinationtracker.service.api;
 
+import com.prox.babyvaccinationtracker.response.BotResponse;
 import com.prox.babyvaccinationtracker.response.SideEffectResponse;
 
 import retrofit2.Call;
@@ -14,4 +15,7 @@ public interface ApiService {
             @Field("message") String message,
             @Field("sideEffect") String sideEffect
     );
+    @FormUrlEncoded
+    @POST("/ask")
+    Call<BotResponse> ask(@Field("message") String message);
 }

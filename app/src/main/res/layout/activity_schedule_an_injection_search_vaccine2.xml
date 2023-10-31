@@ -41,6 +41,19 @@
         android:hint="Tìm kiếm"
         android:inputType="text" />
 
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Some text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/buttonClearFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Huỷ lọc" />
+
     <ListView
         android:id="@+id/schedule_list_vaccine"
         android:layout_width="match_parent"

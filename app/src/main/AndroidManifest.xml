@@ -26,6 +26,15 @@
             android:name=".heatlth_input_for_babies"
             android:exported="false" />
         <activity
+            android:name=".FamilyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InjectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".information_vaccine"
             android:exported="false" />
 

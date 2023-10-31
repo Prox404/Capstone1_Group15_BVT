@@ -41,10 +41,14 @@ public class vaccineadapter extends ArrayAdapter<Vaccines> {
         ImageView imgchinh = view.findViewById(R.id.imgchinh);
         LinearLayout vaccine_id = view.findViewById(R.id.vaccine_id);
         TextView textViewAddress = view.findViewById(R.id.textViewAddress);
+        TextView txtXuatXu = view.findViewById(R.id.txtXuatXu);
         TextView textViewVaccineCenterName = view.findViewById(R.id.textViewVaccineCenterName);
 
         txtten.setText(vaccines.getVaccine_name());
         txtgia.setText(vaccines.getPrice());
+        txtXuatXu.setText(vaccines.getOrigin());
+        textViewAddress.setVisibility(View.VISIBLE);
+        textViewVaccineCenterName.setVisibility(View.VISIBLE);
         textViewAddress.setText(vaccines.getAdditionInformation().get("center_address"));
         textViewVaccineCenterName.setText(vaccines.getAdditionInformation().get("center_name"));
         String imageUrl = vaccines.getVaccine_image().get(0);

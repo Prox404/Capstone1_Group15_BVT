@@ -25,6 +25,15 @@ public class Vaccine_center implements Serializable {
     String hotline;
     String work_time;
     String center_image;
+
+    public String getCenter_image() {
+        return center_image;
+    }
+
+    public void setCenter_image(String center_image) {
+        this.center_image = center_image;
+    }
+
     HashMap<String,Vaccines> vaccines;
 
     public Vaccine_center(String center_id, String center_name, String activity_certificate, String center_address, String hotline, String work_time, HashMap<String, Vaccines> vaccines) {
