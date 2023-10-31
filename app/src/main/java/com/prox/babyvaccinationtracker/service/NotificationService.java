@@ -22,11 +22,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.NotificationActivity;
 import com.prox.babyvaccinationtracker.R;
 import com.prox.babyvaccinationtracker.model.NotificationMessage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -39,12 +42,25 @@ public class NotificationService extends Service {
     private String notificationChannelId = "VaccineNotification";
     private NotificationManager notificationManager;
 
+    SharedPreferences notificationPreferences;
+
+    private ArrayList<String> notificationIds = new ArrayList<>();
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         user_id = sharedPreferences.getString("customer_id", "");
+
+        notificationPreferences = getSharedPreferences("Notifications", MODE_PRIVATE);
+
+        if (!notificationPreferences.getString("notification", "[]").equals("[]")){
+            Log.i("NotificationService", "onCreate:" + notificationPreferences.getString("notification", "[]"));
+                notificationIds = new Gson().fromJson(notificationPreferences.getString("notification", ""), new TypeToken<ArrayList<String>>() {
+            }.getType());
+        }
+//        notificationIds = new Gson().fromJson(notificationPreferences.getString("notificationIds", ""), new TypeToken<ArrayList<String>>(){}.getType());
         Log.i("Notification_service", "Run Service");
 
         // Khởi tạo Firebase Database Reference
@@ -64,8 +80,17 @@ public class NotificationService extends Service {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 // Xử lý khi có lịch hẹn mới được thêm vào
                 NotificationMessage notificationMessage = dataSnapshot.getValue(NotificationMessage.class);
-                if (notificationMessage != null) {
-                    scheduleNotification(notificationMessage); // Lên lịch hiển thị thông báo
+                String notificationId = dataSnapshot.getKey();
+                if (notificationMessage != null ) {
+                    if(!notificationIds.contains(notificationId)){
+                        notificationIds.add(notificationId);
+                        Log.i("Notification_service", "onChildAdded: " + notificationIds.toString());
+                        SharedPreferences.Editor editor = notificationPreferences.edit();
+                        editor.putString("notification", new Gson().toJson(notificationIds));
+                        scheduleNotification(notificationMessage); // Lên lịch hiển thị thông báo
+                    }else {
+                        Log.i("Notification_service", "notificationId: " + notificationId + " is already exist");
+                    }
                 }
             }
 

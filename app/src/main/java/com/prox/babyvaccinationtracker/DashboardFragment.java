@@ -42,7 +42,7 @@ public class DashboardFragment extends Fragment {
     Context context;
     RecyclerView recyclerViewTimeline;
     TimeLineAdapter timeLineAdapter;
-    LinearLayout injectionHistory;
+    LinearLayout injectionHistory, familyContainer;
     List<Regimen> regimenList = new ArrayList<>();
 
     LinearLayout babyListContainer;
@@ -78,6 +78,7 @@ public class DashboardFragment extends Fragment {
         recyclerViewTimeline = view.findViewById(R.id.recyclerViewTimeline);
         injectionHistory = view.findViewById(R.id.injectionHistory);
         babyListContainer = view.findViewById(R.id.babyListContainer);
+        familyContainer = view.findViewById(R.id.familyContainer);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String babiesList = sharedPreferences.getString("babiesList", "");
@@ -102,6 +103,15 @@ public class DashboardFragment extends Fragment {
                 startActivity(i);
             }
         });
+
+        familyContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, FamilyActivity.class);
+                startActivity(i);
+            }
+        });
+
         return view;
     }
 
