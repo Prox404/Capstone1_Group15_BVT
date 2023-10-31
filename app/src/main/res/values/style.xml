@@ -39,4 +39,16 @@
         <item name="android:fontFamily">@font/inter_medium</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="Widget.AppCompat.TextView.CardTitle" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Widget.AppCompat.TextView.CardTitleSecondary" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textColor">@color/textColorSecondary</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
