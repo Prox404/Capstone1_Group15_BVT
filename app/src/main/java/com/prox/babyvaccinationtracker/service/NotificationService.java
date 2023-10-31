@@ -54,9 +54,9 @@ public class NotificationService extends Service {
         user_id = sharedPreferences.getString("customer_id", "");
 
         notificationPreferences = getSharedPreferences("Notifications", MODE_PRIVATE);
-
+        Log.i("NotificationService", "onCreate: " + notificationPreferences.getString("notification", "[]"));
         if (!notificationPreferences.getString("notification", "[]").equals("[]")){
-            Log.i("NotificationService", "onCreate:" + notificationPreferences.getString("notification", "[]"));
+            Log.i("NotificationService", "onCreate not null:" + notificationPreferences.getString("notification", "[]"));
                 notificationIds = new Gson().fromJson(notificationPreferences.getString("notification", ""), new TypeToken<ArrayList<String>>() {
             }.getType());
         }
@@ -84,9 +84,10 @@ public class NotificationService extends Service {
                 if (notificationMessage != null ) {
                     if(!notificationIds.contains(notificationId)){
                         notificationIds.add(notificationId);
-                        Log.i("Notification_service", "onChildAdded: " + notificationIds.toString());
+//                        Log.i("Notification_service", "onChildAdded: " + notificationIds.toString());
                         SharedPreferences.Editor editor = notificationPreferences.edit();
                         editor.putString("notification", new Gson().toJson(notificationIds));
+                        editor.apply();
                         scheduleNotification(notificationMessage); // Lên lịch hiển thị thông báo
                     }else {
                         Log.i("Notification_service", "notificationId: " + notificationId + " is already exist");
