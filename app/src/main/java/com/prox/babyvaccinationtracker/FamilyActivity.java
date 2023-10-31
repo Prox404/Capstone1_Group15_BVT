@@ -1,5 +1,6 @@
 package com.prox.babyvaccinationtracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -11,10 +12,16 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.adapter.BabyGridViewAdapter;
 import com.prox.babyvaccinationtracker.model.Baby;
+import com.prox.babyvaccinationtracker.model.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,35 +48,40 @@ public class FamilyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FamilyActivity.this, GetStartedActivity.class);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
             }
         });
     }
+    public void showBabyList(){
+        Log.i("FamilyActivity", "showBabyList: " + "showBabyList called ");
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        String UserID = sharedPreferences.getString("customer_id", "");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers").child(UserID).child("babies");
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        showBabyList();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                babies.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Baby baby = dataSnapshot.getValue(Baby.class);
+                    baby.setBaby_id(dataSnapshot.getKey());
+                    babies.add(baby);
+                }
+
+                babyGridViewAdapter = new BabyGridViewAdapter(FamilyActivity.this, babies);
+                gridViewBaby.setAdapter(babyGridViewAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         showBabyList();
-    }
-
-    public void showBabyList(){
-        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String babiesList = sharedPreferences.getString("babiesList", "");
-        try {
-            Gson gson = new Gson();
-            babies = gson.fromJson(babiesList, new TypeToken<List<Baby>>() {}.getType());
-//            Log.i("Aaaa", "onCreateView: " + babies.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        babyGridViewAdapter = new BabyGridViewAdapter(this, babies);
-        gridViewBaby.setAdapter(babyGridViewAdapter);
     }
 }

@@ -100,7 +100,8 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
 
                         isCompletedButtonClicked = true;
 
-                        getActivity().setResult(getActivity().RESULT_OK);
+                        Intent intent = new Intent();
+                        getActivity().setResult(getActivity().RESULT_OK, intent);
                         getActivity().finish();
 
                         Log.i("Completed", "onClick: " + babyID);
