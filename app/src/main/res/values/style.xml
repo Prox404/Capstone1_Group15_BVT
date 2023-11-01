@@ -6,4 +6,22 @@
     <style name="RadioButtonStyle" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/theme_app</item>
     </style>
+    <style name="Widget.AppCompat.TextView.Title" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textColor">@color/textColorTitle</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="Widget.AppCompat.TextView.Heading2" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textColor">#4B4B4B</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Widget.AppCompat.TextView.Heading3" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textColor">#4B4B4B</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="Widget.AppCompat.TextView.Label" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textColor">#4B4B4B</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
