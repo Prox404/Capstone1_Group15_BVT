@@ -23,7 +23,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".AddChatConversition"
+            android:exported="false" />
+        <activity
             android:name=".InjectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity_user"
             android:exported="false" />
         <activity
             android:name=".ChatActivity"

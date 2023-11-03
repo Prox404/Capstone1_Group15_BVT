@@ -1,9 +1,5 @@
 package com.prox.babyvaccinationtracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,18 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.ChatAdapter;
 import com.prox.babyvaccinationtracker.model.Conversation;
 import com.prox.babyvaccinationtracker.model.Message;
-import com.prox.babyvaccinationtracker.response.BotResponse;
-import com.prox.babyvaccinationtracker.service.api.ApiService;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity_user extends AppCompatActivity {
 
     String conversation_id;
     RecyclerView recyclerViewChat;
@@ -41,14 +35,14 @@ public class ChatActivity extends AppCompatActivity {
 
     private ChatAdapter chatAdapter;
     String user_name = "";
+    String user_id = "";
+
+    String center_id = "";
 
     Conversation conversation = new Conversation();
     private HashMap<String, Message> messages = new HashMap<>();
-
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
@@ -58,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         conversation_id = intent.getStringExtra("conversation_id");
+        Log.i("CHATACTIVITY_USERRRRRRR", conversation_id+"");
 
         chatAdapter = new ChatAdapter(this);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -65,8 +60,10 @@ public class ChatActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         user_name = sharedPreferences.getString("cus_name", "");
+        user_id = sharedPreferences.getString("customer_id", "");
 
         if(conversation_id != null){
+            Log.i("CONIDDDDDDDDD", conversation_id);
             DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("chat").child(conversation_id);
             databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @SuppressLint("NotifyDataSetChanged")
@@ -109,51 +106,6 @@ public class ChatActivity extends AppCompatActivity {
                     databaseRef.child("messages").child(message_id).setValue(message);
                     chatAdapter.addMessage(message);
                     recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-                    Map<String, Boolean> users = conversation.getUsers();
-                    if (users != null && users.containsKey("bot")){
-                        Log.i("chat", "onClick: " + "bot is in conversation");
-                        String bot_message_id = databaseRef.push().getKey();
-                        Message bot_message = new Message();
-                        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-                        Call<BotResponse> call = apiService.ask(message_content);
-                        call.enqueue(new Callback<BotResponse>() {
-                            @Override
-                            public void onResponse(Call<BotResponse> call, Response<BotResponse> response) {
-                                if (response.isSuccessful()) {
-                                    Log.i("FirebaseManager", "onResponse: call");
-                                    BotResponse botResponse = response.body();
-                                    if (botResponse != null){
-                                        String result = botResponse.getMessage();
-                                        bot_message.setMess_content(result);
-                                        bot_message.setUser_name("Bot");
-                                        messages.put(bot_message_id, bot_message);
-                                        databaseRef.child("messages").child(bot_message_id).setValue(bot_message);
-                                        chatAdapter.addMessage(bot_message);
-                                        recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-                                    }
-                                } else {
-                                    Log.i("FireBaseManager", "Lỗi call API");
-                                    bot_message.setMess_content("Hệ thống đang quá tải, hãy thử lại sau nhé ❤️");
-                                    bot_message.setUser_name("Bot");
-                                    messages.put(bot_message_id, bot_message);
-                                    databaseRef.child("messages").child(bot_message_id).setValue(bot_message);
-                                    chatAdapter.addMessage(bot_message);
-                                    recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<BotResponse> call, Throwable t) {
-                                Log.i("FireBaseManager", "Call API thất bại");
-                                bot_message.setMess_content("Hệ thống đang quá tải, hãy thử lại sau nhé ❤️");
-                                bot_message.setUser_name("Bot");
-                                messages.put(bot_message_id, bot_message);
-                                databaseRef.child("messages").child(bot_message_id).setValue(bot_message);
-                                chatAdapter.addMessage(bot_message);
-                                recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-                            }
-                        });
-                    }
                     editTextMessage.setText("");
                 }
             }
