@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,8 @@ public class HomeActivity extends AppCompatActivity {
             imageView_article, imageView_user, imageView_setting, imageView_send_notification;
 
     EditText editText_Search;
+
+    LinearLayout viewHealthContainer;
 
 
 
@@ -41,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
         imageView_setting = findViewById(R.id.imageView_setting);
         editText_Search = findViewById(R.id.editText_Search);
         imageView_send_notification = findViewById(R.id.imageView_send_notification);
+        viewHealthContainer = findViewById(R.id.viewHealthContainer);
 
        imageView_send_notification.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -57,6 +61,14 @@ public class HomeActivity extends AppCompatActivity {
                startActivity(intent);
            }
        });
+
+        viewHealthContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, BabyManagement.class);
+                startActivity(intent);
+            }
+        });
        
     }
 }

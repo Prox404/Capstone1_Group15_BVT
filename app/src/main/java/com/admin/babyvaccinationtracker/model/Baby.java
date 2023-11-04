@@ -36,6 +36,18 @@ public class Baby implements Serializable {
         return baby_id;
     }
 
+    @Override
+    public String toString() {
+        return "Baby{" +
+                "baby_id='" + baby_id + '\'' +
+                ", baby_name='" + baby_name + '\'' +
+                ", baby_birthday='" + baby_birthday + '\'' +
+                ", baby_avatar='" + baby_avatar + '\'' +
+                ", baby_gender='" + baby_gender + '\'' +
+                ", baby_congenital_disease='" + baby_congenital_disease + '\'' +
+                '}';
+    }
+
     public void setBaby_id(String baby_id) {
         this.baby_id = baby_id;
     }
