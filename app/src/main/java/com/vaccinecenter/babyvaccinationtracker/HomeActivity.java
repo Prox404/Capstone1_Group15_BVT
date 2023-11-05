@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
 
-    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer;
+    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer, ChatContainer;
 
     TextView textViewNumberOfRegistration,textViewNumberOfVaccines;
 
@@ -55,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         textViewNumberOfVaccines = findViewById(R.id.textViewNumberOfVaccines);
         vaccinesContainer = findViewById(R.id.vaccinesContainer);
         QRScannerContainer = findViewById(R.id.QRScannerContainer);
+        ChatContainer = findViewById(R.id.ChatContainer);
 
         vaccinesContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +84,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, QrScannerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ChatContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
                 startActivity(intent);
             }
         });

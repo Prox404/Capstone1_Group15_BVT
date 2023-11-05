@@ -180,6 +180,34 @@
                         android:src="@drawable/display"
                         android:tint="#FFFFFF" />
                 </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/ChatContainer"
+                    android:layout_width="150dp"
+                    android:layout_height="220dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/home"
+                    android:backgroundTint="#63C97B"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView39"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:text="Tin nhắn"
+                        android:textAlignment="textEnd"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/display"
+                        android:tint="#FFFFFF" />
+                </RelativeLayout>
             </com.google.android.flexbox.FlexboxLayout>
         </ScrollView>
 

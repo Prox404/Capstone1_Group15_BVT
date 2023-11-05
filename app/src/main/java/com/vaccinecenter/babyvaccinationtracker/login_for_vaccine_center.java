@@ -114,6 +114,7 @@ public class login_for_vaccine_center extends AppCompatActivity {
                                             editor.putString("center_image", center.getCenter_image());
                                             editor.putString("hotline", center.getHotline());
                                             editor.putString("work_time", center.getWork_time());
+                                            editor.putString("center_name", center.getCenter_name());
 
                                             editor.apply();
 //
