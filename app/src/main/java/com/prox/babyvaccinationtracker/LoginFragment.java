@@ -110,7 +110,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             String id = mAuth.getCurrentUser().getUid();
                             Log.i("LOGINGGGGGGG", id);
-                            DatabaseReference checkblacklist = FirebaseDatabase.getInstance().getReference("BlackList").child(id);
+                            DatabaseReference checkblacklist = FirebaseDatabase.getInstance().getReference("BlackList").child("Customers").child(id);
                             checkblacklist.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
