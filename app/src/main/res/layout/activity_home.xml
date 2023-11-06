@@ -151,6 +151,41 @@
                         android:src="@drawable/display"
                         android:tint="#FFFFFF" />
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/childContainer"
+                    android:layout_width="150dp"
+                    android:layout_height="220dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/home"
+                    android:backgroundTint="#63C97B"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:text="Quản lý thông tin bé"
+                        android:textAlignment="textEnd"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewNumberOfChild"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0"
+                        android:textColor="#FFFFFF"
+                        android:textSize="60sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baby"
+                        android:tint="#FFFFFF" />
+                </RelativeLayout>
             </com.google.android.flexbox.FlexboxLayout>
         </ScrollView>
 
