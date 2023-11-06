@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,9 @@ public class BlackListFragment extends Fragment {
     List<BlackList> blackListLists = new ArrayList<>();
     List<BlackList> BlackList_origin = new ArrayList<>();
     TextView editTexte_Search_Block_user;
+    ImageView btn_blackListUser_Switch;
+
+    Boolean check = true;
 
     public BlackListFragment() {
         // Required empty public constructor
@@ -90,6 +94,67 @@ public class BlackListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    void Loaddata(){
+        if(check == true){
+
+            databaseReference.child("Customers").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.i("BLACKLISTSNAPSHOT", ""+snapshot);
+                    if(snapshot.exists()){
+                        Log.i("DataExists", "Data exists in the snapshot");
+                        blackListLists.clear();
+                        for(DataSnapshot a : snapshot.getChildren()){
+                            BlackList black = a.getValue(BlackList.class);
+                            blackListLists.add(black);
+                        }
+                        BlackList_origin = new ArrayList<>(blackListLists);
+                        blockUserAdapter.notifyDataSetChanged();
+
+                        check = false;
+                        editTexte_Search_Block_user.setHint("Tìm kiếm khách hàng bị chặn");
+                    }
+                    else {
+                        Log.i("DataNotExists", "Data does not exist in the snapshot");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(context,"Xảy ra lỗi", Toast.LENGTH_LONG).show();
+                }
+            });
+        }else {
+
+            databaseReference.child("Vaccine_centers").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.i("BLACKLISTSNAPSHOT", ""+snapshot);
+                    if(snapshot.exists()){
+                        Log.i("DataExists", "Data exists in the snapshot");
+                        blackListLists.clear();
+                        for(DataSnapshot a : snapshot.getChildren()){
+                            BlackList black = a.getValue(BlackList.class);
+                            blackListLists.add(black);
+                        }
+                        BlackList_origin = new ArrayList<>(blackListLists);
+                        blockUserAdapter.notifyDataSetChanged();
+
+                        check = true;
+                        editTexte_Search_Block_user.setHint("Tìm kiếm trung tâm bị chặn");
+                    }
+                    else {
+                        Log.i("DataNotExists", "Data does not exist in the snapshot");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(context,"Xảy ra lỗi", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,38 +164,22 @@ public class BlackListFragment extends Fragment {
         context = container != null ? container.getContext() : null;
         recyclerView = view.findViewById(R.id.RecylerViewListBlockUser);
         editTexte_Search_Block_user = view.findViewById(R.id.editTexte_Search_Block_user);
-
+        btn_blackListUser_Switch = view.findViewById(R.id.btn_blackListUser_Switch);
+        databaseReference = FirebaseDatabase.getInstance().getReference("BlackList");
         blockUserAdapter = new BlockUserAdapter(blackListLists,context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(blockUserAdapter);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("BlackList");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Loaddata();
+
+        btn_blackListUser_Switch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.i("BLACKLISTSNAPSHOT", ""+snapshot);
-               if(snapshot.exists()){
-                   Log.i("DataExists", "Data exists in the snapshot");
-                   blackListLists.clear();
-                   for(DataSnapshot a : snapshot.getChildren()){
-                       BlackList black = a.getValue(BlackList.class);
-                       blackListLists.add(black);
-                   }
-                   BlackList_origin = new ArrayList<>(blackListLists);
-                   blockUserAdapter.notifyDataSetChanged();
-               }
-               else {
-                   Log.i("DataNotExists", "Data does not exist in the snapshot");
-
-               }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context,"Xảy ra lỗi", Toast.LENGTH_LONG).show();
+            public void onClick(View view) {
+               Loaddata();
             }
         });
+
+
 
          editTexte_Search_Block_user.addTextChangedListener(new TextWatcher() {
              @Override

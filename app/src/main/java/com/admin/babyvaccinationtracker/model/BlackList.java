@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class BlackList {
     String blacklist_id;
-    String cus_name;
-    String cus_email;
+    String user_name;
+    String user_email;
     String duration;
     String reason;
 
@@ -18,8 +18,8 @@ public class BlackList {
 
     public BlackList(String blacklist_id, String cus_name, String cus_email, String duration, String reason) {
         this.blacklist_id = blacklist_id;
-        this.cus_name = cus_name;
-        this.cus_email = cus_email;
+        this.user_name = cus_name;
+        this.user_email = cus_email;
         this.duration = duration;
         this.reason = reason;
     }
@@ -33,19 +33,19 @@ public class BlackList {
     }
 
     public String getCus_name() {
-        return cus_name;
+        return user_name;
     }
 
     public void setCus_name(String cus_name) {
-        this.cus_name = cus_name;
+        this.user_name = cus_name;
     }
 
     public String getCus_email() {
-        return cus_email;
+        return user_email;
     }
 
     public void setCus_email(String cus_email) {
-        this.cus_email = cus_email;
+        this.user_email = cus_email;
     }
 
     public String getDuration() {

@@ -37,8 +37,8 @@ public class BlockUser extends AppCompatDialogFragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            String cus_name = args.getString("cus_name", "");
-            String cus_email = args.getString("cus_email", "");
+            String cus_name = args.getString("user_name", "");
+            String cus_email = args.getString("user_email", "");
             tv_name.setText(cus_name);
             tv_email.setText(cus_email);
         }
@@ -55,23 +55,32 @@ public class BlockUser extends AppCompatDialogFragment {
                 if (reason.isEmpty()) {
                     Toast.makeText(getActivity(), "Phải nhập lý do chặn người dùng", Toast.LENGTH_LONG).show();
                 } else {
-
-                    String cus_id = args.getString("cus_id", "");
-                    String cus_name = args.getString("cus_name", "");
-                    String cus_email = args.getString("cus_email", "");
-
-                    DatabaseReference blacklistData = FirebaseDatabase.getInstance().getReference("BlackList").child(cus_id);
+                    int check = args.getInt("isCus");
+                    String user_id = args.getString("user_id", "");
+                    String user_name = args.getString("user_name", "");
+                    String user_email = args.getString("user_email", "");
+                    DatabaseReference blacklistData = FirebaseDatabase.getInstance().getReference("BlackList");
                     BlackList blackList = new BlackList();
-                    blackList.setCus_email(cus_email);
-                    blackList.setCus_name(cus_name);
+                    blackList.setCus_email(user_name);
+                    blackList.setCus_name(user_email);
                     blackList.setReason(reason);
-                    blacklistData.setValue(blackList).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            database = FirebaseDatabase.getInstance().getReference("users").child("customers").child(cus_id);
-                            database.child("blocked").setValue(true);
-                        }
-                    });
+                    if(check == 1){
+                        blacklistData.child("Customers").child(user_id).setValue(blackList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                database = FirebaseDatabase.getInstance().getReference("users").child("customers").child(user_id);
+                                database.child("blocked").setValue(true);
+                            }
+                        });
+                    }else {
+                        blacklistData.child("Vaccine_centers").child(user_id).setValue(blackList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                database = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center").child(user_id);
+                                database.child("blocked").setValue(true);
+                            }
+                        });
+                    }
 
                     dismiss();
                     Toast.makeText(getActivity(), "Chặn thành công", Toast.LENGTH_LONG).show();

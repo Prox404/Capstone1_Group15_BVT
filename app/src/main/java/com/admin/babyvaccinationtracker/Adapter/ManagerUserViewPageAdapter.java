@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.admin.babyvaccinationtracker.BlackListFragment;
 import com.admin.babyvaccinationtracker.ManageUserFragment;
+import com.admin.babyvaccinationtracker.ManageVaccineCenterFragment;
 import com.admin.babyvaccinationtracker.ManageVaccineRegistrationFragment;
 
 public class ManagerUserViewPageAdapter extends FragmentPagerAdapter {
@@ -23,8 +24,10 @@ public class ManagerUserViewPageAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ManageUserFragment();
             case 1:
-                return new BlackListFragment();
+                return new ManageVaccineCenterFragment();
             case 2:
+                return new BlackListFragment();
+            case 3:
                 return new ManageVaccineRegistrationFragment();
             default:
                 return new ManageUserFragment();
@@ -33,7 +36,7 @@ public class ManagerUserViewPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Nullable
@@ -41,10 +44,12 @@ public class ManagerUserViewPageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
             case 0:
-                return "Quản lý người dùng";
+                return "Tài khoản khách hàng";
             case 1:
-                return "Danh sách người dùng bị chặn";
+                return "Tài khoản trung tâm tiêm chủng";
             case 2:
+                return "Danh sách đen";
+            case 3:
                 return "Quản lý đơn đăng ký trung tâm vắc-xin";
         }
         return super.getPageTitle(position);

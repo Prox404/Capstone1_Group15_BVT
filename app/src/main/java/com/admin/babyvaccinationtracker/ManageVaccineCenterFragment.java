@@ -1,27 +1,22 @@
 package com.admin.babyvaccinationtracker;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
-import android.widget.Toast;
-
-import com.admin.babyvaccinationtracker.Adapter.ManageUserListViewAdapter;
-import com.admin.babyvaccinationtracker.model.Customer;
+import com.admin.babyvaccinationtracker.Adapter.ManageCenterListAdapter;
+import com.admin.babyvaccinationtracker.model.Vaccine_center;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,13 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ManageUserFragment#newInstance} factory method to
+ * Use the {@link ManageVaccineCenterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ManageUserFragment extends Fragment {
+public class ManageVaccineCenterFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,24 +44,16 @@ public class ManageUserFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    EditText editTexte_Search_user;
-    RecyclerView RecylerViewListUser;
-
+    TextView  editTexte_Search_vaccine_center;
+    RecyclerView recyclerViewcenter;
     Context context;
     DatabaseReference databaseReference;
-    ManageUserListViewAdapter adapter;
-    List<Customer> customers = new ArrayList<>();
-    List<Customer> customers_origin = new ArrayList<>();
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == -1){
-            Toast.makeText(context,"Chặn thành công", Toast.LENGTH_LONG).show();
-        }
-    }
+    ManageCenterListAdapter adapter;
 
-    public ManageUserFragment() {
+    List<Vaccine_center> vaccineCenterList = new ArrayList<>();
+    List<Vaccine_center> vaccineCenterList_origin = new ArrayList<>();
+    public ManageVaccineCenterFragment() {
         // Required empty public constructor
     }
 
@@ -77,11 +63,11 @@ public class ManageUserFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ManageUserFragment.
+     * @return A new instance of fragment ManageVaccineCenterFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ManageUserFragment newInstance(String param1, String param2) {
-        ManageUserFragment fragment = new ManageUserFragment();
+    public static ManageVaccineCenterFragment newInstance(String param1, String param2) {
+        ManageVaccineCenterFragment fragment = new ManageVaccineCenterFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -101,65 +87,63 @@ public class ManageUserFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        editTexte_Search_user.setText("");
-
+        editTexte_Search_vaccine_center.setText("");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_manage_vaccine_center, container, false);
         context = container != null ? container.getContext() : null;
-        View view = inflater.inflate(R.layout.fragment_manage_user, container, false);
+        editTexte_Search_vaccine_center = view.findViewById(R.id.editTexte_Search_manager_vaccine_center);
+        recyclerViewcenter = view.findViewById(R.id.RecylerViewManageListVaccineCenter);
 
-        editTexte_Search_user = view.findViewById(R.id.editTexte_Search_user);
-        RecylerViewListUser = view.findViewById(R.id.RecylerViewListUser);
+        adapter = new ManageCenterListAdapter(vaccineCenterList,context);
+        recyclerViewcenter.setLayoutManager(new LinearLayoutManager(context));
+        recyclerViewcenter.setAdapter(adapter);
 
-        adapter = new ManageUserListViewAdapter(context,customers);
-        RecylerViewListUser.setLayoutManager(new LinearLayoutManager(context));
-        RecylerViewListUser.setAdapter(adapter);
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers");
+        databaseReference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center");
         Query query = databaseReference.orderByChild("blocked").equalTo(null);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    customers.clear();
+                if(snapshot.exists()){
+                    vaccineCenterList.clear();
+                    for(DataSnapshot a : snapshot.getChildren()){
+                        String center_id = a.getKey();
+                        String center_name = a.child("center_name").getValue(String.class);
+                        String center_email = a.child("center_email").getValue(String.class);
 
-                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        String cus_name = snapshot1.child("cus_name").getValue(String.class);
-                        String cus_email = snapshot1.child("cus_email").getValue(String.class);
-                        Customer customer = new Customer();
-                        customer.setCustomer_id(snapshot1.getKey());
-                        customer.setCus_name(cus_name);
-                        customer.setCus_email(cus_email);
-                        customers.add(customer);
+                        Vaccine_center v = new Vaccine_center();
+                        v.setCenter_id(center_id);
+                        v.setCenter_name(center_name);
+                        v.setCenter_email(center_email);
+
+                        vaccineCenterList.add(v);
                     }
-                    customers_origin = new ArrayList<>(customers);
+                    vaccineCenterList_origin = new ArrayList<>(vaccineCenterList);
                     adapter.notifyDataSetChanged();
 
-                    adapter.setOnItemClickListener(new ManageUserListViewAdapter.OnItemClickListener() {
+                    adapter.setOnItemClickListener(new ManageCenterListAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(Customer customer) {
-                            String cus_name = customer.getCus_name();
-                            String cus_email = customer.getCus_email();
-                            String cus_id = customer.getCustomer_id();
+                        public void onItemClick(Vaccine_center center) {
+                            String center_name = center.getCenter_name();
+                            String center_email = center.getCenter_email();
+                            String center_id = center.getCenter_id();
                             BlockUser blockUser = new BlockUser();
 
                             Bundle args = new Bundle();
-                            args.putInt("isCus",1);
-                            args.putString("user_name", cus_name);
-                            args.putString("user_email", cus_email);
-                            args.putString("user_id", cus_id );
+                            args.putInt("isCus",0);
+                            args.putString("user_name", center_name);
+                            args.putString("user_email", center_email);
+                            args.putString("user_id", center_id );
                             blockUser.setArguments(args);
 
                             blockUser.show(getActivity().getSupportFragmentManager(), "Chặn người dùng");
-
                         }
                     });
                 }
-
             }
 
             @Override
@@ -168,7 +152,7 @@ public class ManageUserFragment extends Fragment {
             }
         });
 
-        editTexte_Search_user.addTextChangedListener(new TextWatcher() {
+        editTexte_Search_vaccine_center.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -186,24 +170,25 @@ public class ManageUserFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
-
-    public void search(String name) {
-        List<Customer> customer_filter = new ArrayList<>();
-        if (!name.isEmpty()) {
-            customers.clear();
-            for (Customer a : customers_origin) {
-                if (removeDiacritics(a.getCus_name().toLowerCase()).contains(removeDiacritics(name.toLowerCase()))) {
-                    customer_filter.add(a);
+    private void search(String name) {
+        List<Vaccine_center> centers_filter = new ArrayList<>();
+        if(!name.isEmpty()){
+            vaccineCenterList.clear();
+            for(Vaccine_center a : vaccineCenterList_origin){
+                if(removeDiacritics(a.getCenter_name().toLowerCase()).contains(removeDiacritics(name.toLowerCase()))){
+                    centers_filter.add(a);
                 }
             }
-            customers = new ArrayList<>(customer_filter); // Cập nhật danh sách gốc
-        } else {
-            customers = new ArrayList<>(customers_origin); // Khôi phục danh sách gốc
+            vaccineCenterList = new ArrayList<>(centers_filter);
         }
-        adapter.setData(customers); // Cập nhật dữ liệu trên adapter
+        else {
+            vaccineCenterList = new ArrayList<>(vaccineCenterList_origin);
+        }
+        adapter.setData(vaccineCenterList);
     }
     public static String removeDiacritics(String input) {
         String nfdNormalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);

@@ -1,6 +1,7 @@
 package com.admin.babyvaccinationtracker.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.admin.babyvaccinationtracker.R;
 import com.admin.babyvaccinationtracker.model.Customer;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ManageUserListViewAdapter extends RecyclerView.Adapter<ManageUserListViewAdapter.viewholder> {
     private List<Customer> listCustomer;
@@ -38,6 +40,7 @@ public class ManageUserListViewAdapter extends RecyclerView.Adapter<ManageUserLi
 
     @Override
     public void onBindViewHolder(@NonNull ManageUserListViewAdapter.viewholder holder, int position) {
+        Log.i("LISTCUSTOMER",listCustomer+"");
         Customer customer = listCustomer.get(position);
         String cus_name = customer.getCus_name();
         String cus_email = customer.getCus_email();
@@ -47,7 +50,12 @@ public class ManageUserListViewAdapter extends RecyclerView.Adapter<ManageUserLi
         holder.imageView_manage_Block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               onItemClickListener.onItemClick(customer);
+                if(customer!=null){
+                    onItemClickListener.onItemClick(customer);
+                }
+                else {
+                    Log.i("CUSTOMER",customer+"");
+                }
             }
         });
     }
