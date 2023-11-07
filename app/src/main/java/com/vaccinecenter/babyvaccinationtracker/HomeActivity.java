@@ -46,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     startActivity(new Intent(HomeActivity.this, Display_block_user.class));
+                    finish();
                 }
             }
 
