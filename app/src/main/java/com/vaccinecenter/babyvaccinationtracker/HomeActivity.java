@@ -38,15 +38,21 @@ public class HomeActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 2;
 
     Context context;
+    Boolean check = false;
     void check(){
+
         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_centers").child(id);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    check = false;
                     startActivity(new Intent(HomeActivity.this, Display_block_user.class));
                     finish();
+                }
+                else {
+                    check = true;
                 }
             }
 
@@ -62,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        check();
+
 
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
 
@@ -75,34 +81,50 @@ public class HomeActivity extends AppCompatActivity {
         vaccinesContainer = findViewById(R.id.vaccinesContainer);
         QRScannerContainer = findViewById(R.id.QRScannerContainer);
 
+
+
+        check();
+
         vaccinesContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, search_vaccination.class);
-                startActivity(intent);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, search_vaccination.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
         registionContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, RegistrationRequestActivity.class);
-                startActivity(intent);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, RegistrationRequestActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         createvaccineContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, create_vaccination.class);
-                startActivity(intent);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, create_vaccination.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
         QRScannerContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, QrScannerActivity.class);
-                startActivity(intent);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, QrScannerActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
