@@ -27,6 +27,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Display_block_user"
+            android:exported="false" />
+        <activity
             android:name=".VaccinationCertificateActivity"
             android:exported="false" />
         <activity
