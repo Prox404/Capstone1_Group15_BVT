@@ -8,6 +8,7 @@
     </style>
     <style name="Widget.AppCompat.TextView.Title" parent="@android:style/Theme.Holo.Light">
         <item name="android:textColor">@color/textColorTitle</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">36sp</item>
     </style>
     <style name="Widget.AppCompat.TextView.Heading2" parent="@android:style/Theme.Holo.Light">
