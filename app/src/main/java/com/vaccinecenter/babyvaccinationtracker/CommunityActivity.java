@@ -31,15 +31,22 @@ import android.widget.Toast;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.vaccinecenter.babyvaccinationtracker.Adapter.PostAdapter;
 import com.vaccinecenter.babyvaccinationtracker.Adapter.RecyclerAdapter;
+import com.vaccinecenter.babyvaccinationtracker.model.Comment;
 import com.vaccinecenter.babyvaccinationtracker.model.Customer;
 import com.vaccinecenter.babyvaccinationtracker.model.Post;
 import com.vaccinecenter.babyvaccinationtracker.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CommunityActivity extends AppCompatActivity {
@@ -55,6 +62,7 @@ public class CommunityActivity extends AppCompatActivity {
     LinearLayout linearLayoutAddImage;
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE = 1;
+    RecyclerView recyclerViewPost;
 
     Button buttonAddNewPost;
 
@@ -71,6 +79,7 @@ public class CommunityActivity extends AppCompatActivity {
         editTextHashtag = findViewById(R.id.editTextHashtag);
         buttonAddNewPost = findViewById(R.id.buttonAddNewPost);
         editTextPopupContent = findViewById(R.id.editTextPopupContent);
+        recyclerViewPost = findViewById(R.id.recyclerViewPost);
 
         recyclerAdapter = new RecyclerAdapter(uri,CommunityActivity.this);
         recycleViewImage.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 3));
@@ -110,9 +119,6 @@ public class CommunityActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
         buttonAddNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +149,36 @@ public class CommunityActivity extends AppCompatActivity {
             }
         });
 
+        // Hiển thị bài viết
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Post> postArrayList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Post post = new Post();
+                    post.setUser(dataSnapshot.child("user").getValue(User.class));
+                    post.setContent(dataSnapshot.child("content").getValue(String.class));
+                    post.setCreated_at(dataSnapshot.child("created_at").getValue(String.class));
+                    ArrayList<String> hashtags = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("hashtags").getValue());
+                    post.setHashtags(hashtags);
+                    ArrayList<String> image_url = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("image_url").getValue());
+                    post.setImage_url(image_url);
+                    post.setPost_id(dataSnapshot.getKey());
+                    post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
+                    post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
+                    postArrayList.add(post);
+                }
+                PostAdapter postAdapter = new PostAdapter(postArrayList);
+                recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
+                recyclerViewPost.setAdapter(postAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void uploadImagesToCloudinaryAndFirebase(Post post) {

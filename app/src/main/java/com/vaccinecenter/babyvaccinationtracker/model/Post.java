@@ -122,6 +122,14 @@ public class Post {
     private int likes = 0;
     private HashMap<String, Comment> comments;
 
+    public ArrayList<String> getLiked_users() {
+        return liked_users;
+    }
 
+    public void setLiked_users(ArrayList<String> liked_users) {
+        this.likes = liked_users != null ? liked_users.size() : 0;
+        this.liked_users = liked_users;
+    }
+    private ArrayList<String> liked_users;
 
 }

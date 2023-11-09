@@ -13,6 +13,7 @@ public class Comment {
     }
 
     public Comment() {
+
     }
 
     public String getContent() {
