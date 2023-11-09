@@ -48,9 +48,9 @@ public class CustomerRegistration {
                         ((AuthActivity)context).changeFragment("login");
                     } else {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                            // Đã tồn tại người dùng với cùng email, xử lý tùy ý
+                            // Đã tồn tại người dùng với cùng ic_email.xml, xử lý tùy ý
                             Log.i("CustomerRegistration", "Duplicated User");
-                            Toast.makeText(context, "Đã tồn tại người dùng với cùng email !", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Đã tồn tại người dùng với cùng ic_email.xml !", Toast.LENGTH_SHORT).show();
                             // ...
                         } else {
                             // Đăng ký thất bại, xử lý tùy ý

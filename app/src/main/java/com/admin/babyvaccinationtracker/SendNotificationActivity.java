@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
 
     public static String searchQuery = "";
 
+    private ImageView imageView_back;
+
     private EditText editTextNotificationSearch, editTextDate, editTextTime, editTextTitle, editTextMessage;
     private Button buttonSearch, buttonSendNotification;
 
@@ -47,11 +51,12 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
     public static ArrayList<String> selectedCustomers = new ArrayList<>();
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_notification);
-
+        imageView_back = findViewById(R.id.imageView_back);
         editTextNotificationSearch = findViewById(R.id.editTextNotificationSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         editTextDate = findViewById(R.id.editTextDate);
@@ -74,6 +79,13 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        imageView_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,14 +206,24 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
                 Calendar selectedTime = Calendar.getInstance();
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedTime.set(Calendar.MINUTE, minute);
-
                 Calendar currentTime = Calendar.getInstance();
-                if (selectedTime.getTime().before(currentTime.getTime())) {
+                if(selectedDate.getTime().after(currentTime.getTime())){
+                    editTextTime.setText(timeFormat.format(selectedTime.getTime()));
+                } else {
+                    if (selectedTime.getTime().before(currentTime.getTime())) {
                     // Giờ đã chọn nhỏ hơn giờ hiện tại
                     // Thực hiện xử lý tại đây (hoặc hiển thị thông báo lỗi)
-                } else {
-                    editTextTime.setText(timeFormat.format(selectedTime.getTime()));
+                        Toast.makeText(SendNotificationActivity.this, "Giờ không được bé hơn giờ hiện tại", Toast.LENGTH_LONG).show();
+                    } else {
+                        editTextTime.setText(timeFormat.format(selectedTime.getTime()));
+                    }
                 }
+//                if (selectedTime.getTime().before(currentTime.getTime())) {
+//                    // Giờ đã chọn nhỏ hơn giờ hiện tại
+//                    // Thực hiện xử lý tại đây (hoặc hiển thị thông báo lỗi)
+//                } else {
+//                    editTextTime.setText(timeFormat.format(selectedTime.getTime()));
+//                }
             }
         }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true);
         timePickerDialog.show();

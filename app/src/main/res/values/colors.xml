@@ -5,4 +5,5 @@
     <color name="colorPrimary">#36BD5E</color>
     <color name="colorPrimaryDark">#00B141</color>
     <color name="selectedColor">#2F000000</color>
+    <color name="primarySelectedColor">#E4F6E8</color>
 </resources>

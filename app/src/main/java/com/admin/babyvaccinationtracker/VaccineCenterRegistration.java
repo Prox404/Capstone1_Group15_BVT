@@ -53,9 +53,9 @@ public class VaccineCenterRegistration {
                     }
                     else{
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                            // Đã tồn tại người dùng với cùng email, xử lý tùy ý
-                            Log.i("CenterRegistration", "Duplicated center email");
-                            Toast.makeText(context, "Đã tồn tại người dùng với cùng email !", Toast.LENGTH_SHORT).show();
+                            // Đã tồn tại người dùng với cùng ic_email.xml, xử lý tùy ý
+                            Log.i("CenterRegistration", "Duplicated center ic_email.xml");
+                            Toast.makeText(context, "Đã tồn tại người dùng với cùng ic_email.xml !", Toast.LENGTH_SHORT).show();
                             // ...
                         } else {
                             // Đăng ký thất bại, xử lý tùy ý

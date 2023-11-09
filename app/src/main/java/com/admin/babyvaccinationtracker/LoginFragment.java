@@ -1,6 +1,8 @@
 package com.admin.babyvaccinationtracker;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -59,6 +61,7 @@ public class LoginFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class LoginFragment extends Fragment {
         emailEditText = view.findViewById(R.id.editTextEmail);
         passwordEditText = view.findViewById(R.id.editTextPassword);
         loginButton = view.findViewById(R.id.buttonLogin);
-        registerTextView = view.findViewById(R.id.textViewRegister);
+        registerTextView = view.findViewById(R.id.textViewRegistration);
         forgotPasswordTextView = view.findViewById(R.id.textViewForgotPassword);
 
         registerTextView.setOnClickListener(new View.OnClickListener() {
@@ -141,13 +144,15 @@ public class LoginFragment extends Fragment {
                                     editor.putString("babiesList", babiesJson);
                                     editor.apply();
                                     Log.i("sharedPreferences", "onComplete: " + sharedPreferences.getString("babiesList", "null"));
-                                    // load fragment home
+//                                     load fragment home
 //                                    ((AuthActivity) context).changeFragment("home");
                                 } else {
                                     Log.i("Login", "onComplete: " + task1.getException().getMessage());
                                 }
                             });
                             Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, HomeActivity.class);
+                            startActivity(intent);
                         } else {
                             // Đăng nhập thất bại, xử lý tại đây
                             String errorCode = task.getException().getMessage();

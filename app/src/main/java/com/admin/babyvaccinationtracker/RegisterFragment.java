@@ -2,6 +2,7 @@ package com.admin.babyvaccinationtracker;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -59,7 +61,7 @@ public class RegisterFragment extends Fragment {
 
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView imageViewAvatar;
+    private ImageView imageViewBack;
     private EditText editTextName, editTextEmail, editTextPassword, editTextRePassword, editTextPhone, editTextBirthday;
     private Button buttonRegister;
     private DatePickerDialog datePickerDialog;
@@ -108,6 +110,7 @@ public class RegisterFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,7 +118,7 @@ public class RegisterFragment extends Fragment {
         this.context = container != null ? container.getContext() : null;
         View view =  inflater.inflate(R.layout.fragment_register, container, false);
 
-        imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
+        imageViewBack = view.findViewById(R.id.imageViewBack);
         editTextName = view.findViewById(R.id.editTextName);
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
@@ -383,7 +386,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        imageViewAvatar.setOnClickListener(new View.OnClickListener() {
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openImagePicker();
@@ -426,7 +429,7 @@ public class RegisterFragment extends Fragment {
             try {
                 InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
                 selectedImage = BitmapFactory.decodeStream(inputStream);
-                imageViewAvatar.setImageBitmap(selectedImage);
+                imageViewBack.setImageBitmap(selectedImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

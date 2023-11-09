@@ -65,7 +65,7 @@ public class ResetPasswordFragment extends Fragment {
         String email = editTextEmail.getText().toString().trim();
 
         if (email.isEmpty()) {
-            editTextEmail.setError("Vui lòng nhập email");
+            editTextEmail.setError("Vui lòng nhập ic_email.xml");
             editTextEmail.requestFocus();
             return;
         }

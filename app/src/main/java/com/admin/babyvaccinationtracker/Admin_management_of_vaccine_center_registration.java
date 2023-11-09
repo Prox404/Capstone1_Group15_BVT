@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,10 +26,21 @@ public class Admin_management_of_vaccine_center_registration extends AppCompatAc
 
     ArrayList<Vaccine_center_registration> registrations = new ArrayList<>();
     CenterRegistrationAdapter adapter;
+
+    ImageView imageView_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_management_of_vaccine_center_registration);
+
+        imageView_back = findViewById(R.id.imageView_back);
+
+        imageView_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         confirm_vaccine_center_registration = findViewById(R.id.confirm_vaccine_center_registration);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
