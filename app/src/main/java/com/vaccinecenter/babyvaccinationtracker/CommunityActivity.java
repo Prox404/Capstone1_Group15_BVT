@@ -81,6 +81,13 @@ public class CommunityActivity extends AppCompatActivity {
         editTextPopupContent = findViewById(R.id.editTextPopupContent);
         recyclerViewPost = findViewById(R.id.recyclerViewPost);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String user_id = sharedPreferences.getString("center_id", "");
+        String user_name = sharedPreferences.getString("center_name", "");
+        String user_avatar = sharedPreferences.getString("center_image", "");
+
+        User user = new User(user_id, user_name, user_avatar, "center");
+
         recyclerAdapter = new RecyclerAdapter(uri,CommunityActivity.this);
         recycleViewImage.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 3));
         recycleViewImage.setAdapter(recyclerAdapter);
@@ -132,13 +139,6 @@ public class CommunityActivity extends AppCompatActivity {
                         hashtags = getHashtag(hashtag);
                     }
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-                    String user_id = sharedPreferences.getString("center_id", "");
-                    String user_name = sharedPreferences.getString("center_name", "");
-                    String user_avatar = sharedPreferences.getString("center_image", "");
-
-                    User user = new User(user_id, user_name, user_avatar, "center");
-
                     Post post = new Post();
                     post.setContent(content);
                     post.setHashtags(hashtags);
@@ -169,7 +169,7 @@ public class CommunityActivity extends AppCompatActivity {
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
                     postArrayList.add(post);
                 }
-                PostAdapter postAdapter = new PostAdapter(postArrayList);
+                PostAdapter postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
             }

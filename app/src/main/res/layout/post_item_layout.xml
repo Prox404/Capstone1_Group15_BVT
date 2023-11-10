@@ -74,6 +74,8 @@
         android:paddingHorizontal="15dp"
         android:text="anhtrideptraivcl" />
 
+
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerImage"
         android:layout_width="match_parent"
@@ -117,5 +119,36 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp">
+
+        <EditText
+            android:id="@+id/editTextCommentContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_input_bg"
+            android:ems="10"
+            android:hint="Bình luận"
+            android:inputType="text"
+            android:padding="7dp" />
+
+        <Button
+            android:id="@+id/buttonSendComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:text="Gửi" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp" />
 
 </LinearLayout>

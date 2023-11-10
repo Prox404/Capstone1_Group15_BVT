@@ -10,6 +10,10 @@ public class Post {
     private ArrayList<String> image_url;
     private User user;
     private String created_at;
+    private String post_id;
+    private int likes = 0;
+    private HashMap<String, Comment> comments;
+    private ArrayList<String> hashtags;
 
     public Post(String content, User user, String created_at, int likes) {
         this.content = content;
@@ -26,7 +30,7 @@ public class Post {
         this.likes = likes;
     }
 
-    private ArrayList<String> hashtags;
+
 
     public Post() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -42,6 +46,21 @@ public class Post {
         this.created_at = created_at;
         this.hashtags = hashtags;
         this.likes = likes;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "content='" + content + '\'' +
+                ", image_url=" + image_url +
+                ", user=" + user +
+                ", created_at='" + created_at + '\'' +
+                ", post_id='" + post_id + '\'' +
+                ", likes=" + likes +
+                ", comments=" + comments +
+                ", hashtags=" + hashtags +
+                ", liked_users=" + liked_users +
+                '}';
     }
 
     public Post(String content, ArrayList<String> image_url, User user, String created_at, ArrayList<String> hashtags, int likes, HashMap<String, Comment> comments) {
@@ -117,10 +136,6 @@ public class Post {
     public void setComments(HashMap<String, Comment> comments) {
         this.comments = comments;
     }
-
-    private String post_id;
-    private int likes = 0;
-    private HashMap<String, Comment> comments;
 
     public ArrayList<String> getLiked_users() {
         return liked_users;

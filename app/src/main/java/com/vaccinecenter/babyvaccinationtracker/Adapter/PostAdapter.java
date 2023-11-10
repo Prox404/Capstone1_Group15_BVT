@@ -1,14 +1,18 @@
 package com.vaccinecenter.babyvaccinationtracker.Adapter;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -16,18 +20,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.vaccinecenter.babyvaccinationtracker.R;
+import com.vaccinecenter.babyvaccinationtracker.model.Comment;
 import com.vaccinecenter.babyvaccinationtracker.model.Post;
+import com.vaccinecenter.babyvaccinationtracker.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<Post> postItemList;
     DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");;
     String user_id;
+    User user;
 
-    public PostAdapter(List<Post> postItemList) {
+    List<Comment> commentList;
+    CommentAdapter commentAdapter;
+
+    public PostAdapter(List<Post> postItemList, User user) {
         this.postItemList = postItemList;
+        this.user = user;
     }
 
     @NonNull
@@ -41,6 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post postItem = postItemList.get(position);
 
+        Log.i("Post", "onBindViewHolder: " + postItem.toString());
         holder.userName.setText(postItem.getUser().getUser_name());
         holder.postTime.setText(postItem.getCreated_at());
         holder.postContent.setText(postItem.getContent());
@@ -59,6 +73,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }else {
                 holder.imageViewHeart.setImageResource(R.drawable.ic_heart);
             }
+        }
+        if (postItem.getComments() != null){
+            commentList = new ArrayList<>();
+
+            for (Map.Entry<String, Comment> entry : postItem.getComments().entrySet()) {
+                Object commentObject = entry.getValue();
+                Log.i("Comment", "onBindViewHolder: " + commentObject.getClass().getName());
+                if (commentObject instanceof HashMap) {
+                    // If it's a Map, try to convert it to a Comment
+                    Comment comment = convertMapToComment((HashMap<String, Object>) commentObject);
+                    comment.setComment_id(entry.getKey());
+                    if (comment != null) {
+                        commentList.add(comment);
+                    }
+                } else if (commentObject instanceof Comment) {
+                    // If it's already a Comment, just add it to the list
+                    commentList.add((Comment) commentObject);
+                }
+            }
+            DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
+            commentAdapter = new CommentAdapter(commentList , commentReference);
+            holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
+            holder.recylerViewComments.setAdapter(commentAdapter);
         }
 
         holder.likeContainer.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +116,53 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
         });
 
+        holder.buttonSendComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String commentContent = holder.editTextCommentContent.getText().toString();
+                if (!commentContent.isEmpty()){
+                    Comment comment = new Comment();
+                    comment.setContent(commentContent);
+                    comment.setUser(user);
+                    postReference.child(postItem.getPost_id()).child("comments").push().setValue(comment).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            commentList.add(comment);
+                            commentAdapter.notifyDataSetChanged();
+                        }else {
+                            Log.i("Comment", "onClick: Comment failed");
+                        }
+                    });
+                    holder.editTextCommentContent.setText("");
+                }
+            }
+        });
+
+    }
+
+    private Comment convertMapToComment(HashMap<String, Object> commentMap) {
+        try {
+            Comment comment = new Comment();
+            comment.setContent((String) commentMap.get("content"));
+            comment.setCreated_at((String) commentMap.get("created_at"));
+            comment.setReplies((HashMap<String, Comment>) commentMap.get("replies"));
+            if (commentMap.get("user") instanceof HashMap){
+                HashMap<String, Object> userMap = (HashMap<String, Object>) commentMap.get("user");
+                User user = new User();
+                user.setUser_name((String) userMap.get("user_name"));
+                user.setUser_avatar((String) userMap.get("user_avatar"));
+                user.setUser_id((String) userMap.get("user_id"));
+                user.setUser_role((String) userMap.get("user_role"));
+                comment.setUser(user);
+            }else if (commentMap.get("user") instanceof User){
+                comment.setUser((User) commentMap.get("user"));
+            }
+            Log.i("Alooo", "convertMapToComment: " + comment.toString());
+            // Set other fields accordingly
+            return comment;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -95,6 +179,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         ViewPager2 viewPagerImage;
         LinearLayout likeContainer, commentContainer;
         SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("user", itemView.getContext().MODE_PRIVATE);
+        EditText editTextCommentContent;
+        Button buttonSendComment;
+
+        RecyclerView recylerViewComments;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,6 +196,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             likeContainer = itemView.findViewById(R.id.likeContainer);
             commentContainer = itemView.findViewById(R.id.commentContainer);
             imageViewHeart = itemView.findViewById(R.id.imageViewHeart);
+            recylerViewComments = itemView.findViewById(R.id.recyclerViewComments);
+            buttonSendComment = itemView.findViewById(R.id.buttonSendComment);
+            editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
 
             user_id = sharedPreferences.getString("center_id", "");
         }
