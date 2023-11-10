@@ -63,7 +63,8 @@ public class CommunityActivity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE = 1;
     RecyclerView recyclerViewPost;
-
+    ArrayList<Post> postArrayList;
+    PostAdapter postAdapter;
     Button buttonAddNewPost;
 
     @Override
@@ -145,6 +146,9 @@ public class CommunityActivity extends AppCompatActivity {
                     post.setUser(user);
 
                     uploadImagesToCloudinaryAndFirebase(post);
+                    postArrayList.add(post);
+                    postAdapter.notifyDataSetChanged();
+
                 }
             }
         });
@@ -154,7 +158,7 @@ public class CommunityActivity extends AppCompatActivity {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Post> postArrayList = new ArrayList<>();
+                postArrayList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Post post = new Post();
                     post.setUser(dataSnapshot.child("user").getValue(User.class));
@@ -169,7 +173,7 @@ public class CommunityActivity extends AppCompatActivity {
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
                     postArrayList.add(post);
                 }
-                PostAdapter postAdapter = new PostAdapter(postArrayList, user);
+                postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
             }
