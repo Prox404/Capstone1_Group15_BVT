@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".search_vaccination">
+
+    <ImageView
+        android:id="@+id/imge_list_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_arrow" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:text="DANH SÁCH THÔNG TIN VẮC-XIN"
+        android:textAlignment="viewStart"
+        android:textColor="#007F20"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edt_search_timkiem"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/home"
+        android:ems="10"
+        android:hint="Tìm kiếm"
+        android:inputType="text"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" />
+
+    <TextView
+        android:id="@+id/vaccineInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btntimkiem"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#36BD5E"
+        android:text="Tìm kiếm"
+        android:visibility="gone"
+        app:cornerRadius="5dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvvaccine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

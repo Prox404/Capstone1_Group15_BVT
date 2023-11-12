@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#36BD5E</color>
+    <color name="theme_app">#4CAF50</color>
+    <color name="colorPrimaryDark">#00B141</color>
+    <color name="mask_scanner_color">#00FFFFFF</color>
+    <color name="popup_bg">#fff</color>
+    <color name="textColor">#3B3B3B</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="textColorHint">#BDBDBD</color>
+    <color name="textColorTitle">#007F20</color>
+    <color name="backgroundColor">#F5F6F7</color>
+    <color name="lineColor">#F5F6F7</color>
 </resources>

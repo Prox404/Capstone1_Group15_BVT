@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".update_inforamtion_vaccine">
+
+
+    <ImageView
+        android:id="@+id/image_back"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:tint="#000000"
+        app:srcCompat="@drawable/back_arrow" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingLeft="10dp"
+        android:text="Cập nhập vắc-xin"
+        android:textColor="#007F20"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_white"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/update_recyclerview_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical" />
+
+            <Button
+                android:id="@+id/btn_add_new_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#36BD5E"
+                android:text="Thêm ảnh mới"
+                app:cornerRadius="5dp" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên vắc-xin"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_vaccine_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hiệu quả"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/spinner_vac_effectiveness"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/home" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phản ứng sau tiêm"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_post_vaccination_reactions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nguồn gốc"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_orgin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhóm tuổi sử dụng"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_vaccination_target_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp" />
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chống chỉ định"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_contraindications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp" />
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số lượng"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Liều"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_dosage"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" />
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đơn vị"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp" />
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày nhập cảnh"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/update_date_of_entry"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" />
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giá"
+                android:textColor="#686868"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/update_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="7"
+                    android:background="@drawable/home"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_update_money_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_update_new_information"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#36BD5E"
+                    android:text="Cập nhập" />
+
+                <Button
+                    android:id="@+id/btn_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FF0000"
+                    android:text="Xóa" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

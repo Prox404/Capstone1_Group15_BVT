@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mask_scanner_color"
+    android:orientation="vertical"
+    tools:context=".QrScannerActivity">
+
+    <me.dm7.barcodescanner.zxing.ZXingScannerView
+        android:id="@+id/zxingScannerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:borderColor="@color/white"
+        app:borderLength="24dp"
+        app:borderWidth="4dp"
+        app:cornerRadius="10dp"
+        app:laserColor="#FFF"
+        app:maskColor="@color/mask_scanner_color"
+        app:roundedCorner="true">
+
+    </me.dm7.barcodescanner.zxing.ZXingScannerView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/popup_window"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đặt QR Code vào điểm đánh dấu"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Quá trình quét sẽ diễn ra một cách tự dộng"
+            android:textColor="#a8a8b2" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/circle"
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/btn_flash"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/flash" />
+    </FrameLayout>
+</LinearLayout>

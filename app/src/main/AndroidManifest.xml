@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +24,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BabyVaccinationTracker"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Display_block_user"
+            android:exported="false" />
+        <activity
+            android:name=".VaccinationCertificateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QrScannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".reset_password"
+            android:exported="false" />
+        <activity
+            android:name=".See_detailed_vaccine_information"
+            android:exported="false" />
+        <activity
+            android:name=".search_vaccination"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrationRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".update_inforamtion_vaccine"
+            android:exported="false" />
+        <activity
+            android:name=".login_for_vaccine_center"
+            android:exported="false" />
+        <activity
+            android:name=".Register_for_vaccine_center"
+            android:exported="false" />
         <activity
             android:name=".create_vaccination"
             android:exported="false" />
