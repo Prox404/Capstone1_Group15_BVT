@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".VaccinationCertificateActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageViewQR"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
+                android:text="CHỨNG NHẬN\nĐÃ TIÊM CHỦNG"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên bé"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewBabyName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Baby name" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Ngày sinh"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewBabyBirthDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Birthday" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Giới tính"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewBabyGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gender" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Bệnh bẩm sinh"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewBabyCongenitalDisease"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Congenital Disease" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Đã tiêm vaccine"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewVaccineCenterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vaccine name" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Ngày nhập"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewVaccineEntryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vaccine entry date" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Liều lượng"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewVaccineDosage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vaccine dosage" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Tại trung tâm"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewCenterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Center name" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Địa chỉ"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewCenterAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Center address" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Ngày tiêm"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time" />
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Phản hồi sau tiêm"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewSideEffects"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Side effects"
+                android:visibility="gone" />
+
+
+            <LinearLayout
+                android:id="@+id/sideEffectContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                tools:visibility="gone">
+
+                <EditText
+                    android:id="@+id/editTextSideEffects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Side effects"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/buttonSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewSideEffectsResponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/primary_light_bg"
+                android:padding="10dp"
+                android:text="Side effects response"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

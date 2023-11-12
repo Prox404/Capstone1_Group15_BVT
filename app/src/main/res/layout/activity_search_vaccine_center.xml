@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".search_vaccine_center">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="428dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="25dp"
+        android:background="#36BD5E"
+        android:gravity="center"
+        android:text="BABY VACCINEATION TRACKER"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:text="DANH SÁCH TRUNG TÂM TIÊM CHỦNG"
+        android:textSize="32dp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/edttimkiem"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#F0F0F0"
+        android:gravity="center"
+        android:hint="Tìm kiếm" />
+
+    <TextView
+        android:id="@+id/centerInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btntimkiem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tìm" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvcenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

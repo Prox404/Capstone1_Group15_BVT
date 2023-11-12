@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
     <application
@@ -12,16 +16,97 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BabyVaccinationTracker"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".DisplayBlockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".heatlth_input_for_babies"
+            android:exported="false" />
+        <activity
+            android:name=".FamilyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InjectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".information_vaccine"
+            android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="resource_name"
+            android:resource="@layout/activity_information_vaccine" />
+
+        <activity
+            android:name=".See_detailed_vaccine_information"
+            android:exported="false" />
+        <activity
+            android:name=".information_center"
+            android:exported="true" />
+        <activity
+            android:name=".search_vaccine_center"
+            android:exported="true" />
+        <activity
+            android:name=".search_vaccination"
+            android:exported="true" />
+        <activity
+            android:name=".VaccinationCertificateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InjectionHistoryActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".service.NotificationService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GetStartedActivity"
+            android:exported="false" />
+        <activity
             android:name=".AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".schedule_an_injection_search_vaccine_2"
+            android:exported="false" />
+        <activity
+            android:name=".schedule_an_injection_districts"
+            android:exported="false" />
+        <activity
+            android:name=".schedule_an_injection_wards"
+            android:exported="false" />
+        <activity
+            android:name=".schedule_an_injection_provinces"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule_an_injection_search_vaccine"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule_an_injection"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,6 +114,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

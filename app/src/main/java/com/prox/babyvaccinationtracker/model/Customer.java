@@ -1,8 +1,28 @@
 package com.prox.babyvaccinationtracker.model;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.prox.babyvaccinationtracker.AuthActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Customer {
     private String customer_id;
@@ -15,29 +35,29 @@ public class Customer {
     private String cus_ethnicity;
     private String cus_password;
     private String cus_avatar;
-    private ArrayList<Baby> babies;
+    private List<Baby> babies = new ArrayList<>();
 
-    public ArrayList<Baby> getBabies() {
+    public List<Baby> getBabies() {
         return babies;
     }
 
-    public void setBabies(ArrayList<Baby> babies) {
+    public void setBabies(List<Baby> babies) {
         this.babies = babies;
     }
 
-    public Customer(String customer_id, String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar, ArrayList<Baby> babies) {
-        this.customer_id = customer_id;
-        this.cus_name = cus_name;
-        this.cus_birthday = cus_birthday;
-        this.cus_address = cus_address;
-        this.cus_phone = cus_phone;
-        this.cus_email = cus_email;
-        this.cus_gender = cus_gender;
-        this.cus_ethnicity = cus_ethnicity;
-        this.cus_password = cus_password;
-        this.cus_avatar = cus_avatar;
-        this.babies = babies;
-    }
+//    public Customer(String customer_id, String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar, List<Baby> babies) {
+//        this.customer_id = customer_id;
+//        this.cus_name = cus_name;
+//        this.cus_birthday = cus_birthday;
+//        this.cus_address = cus_address;
+//        this.cus_phone = cus_phone;
+//        this.cus_email = cus_email;
+//        this.cus_gender = cus_gender;
+//        this.cus_ethnicity = cus_ethnicity;
+//        this.cus_password = cus_password;
+//        this.cus_avatar = cus_avatar;
+//        this.babies = babies;
+//    }
 
     public Customer(String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_password, String cus_avatar) {
         this.cus_name = cus_name;
@@ -48,6 +68,17 @@ public class Customer {
         this.cus_gender = cus_gender;
         this.cus_ethnicity = cus_ethnicity;
         this.cus_password = cus_password;
+        this.cus_avatar = cus_avatar;
+    }
+
+    public Customer(String cus_name, String cus_birthday, String cus_address, String cus_phone, String cus_email, String cus_gender, String cus_ethnicity, String cus_avatar) {
+        this.cus_name = cus_name;
+        this.cus_birthday = cus_birthday;
+        this.cus_address = cus_address;
+        this.cus_phone = cus_phone;
+        this.cus_email = cus_email;
+        this.cus_gender = cus_gender;
+        this.cus_ethnicity = cus_ethnicity;
         this.cus_avatar = cus_avatar;
     }
 
@@ -132,5 +163,60 @@ public class Customer {
 
     public void setCus_avatar(String cus_avatar) {
         this.cus_avatar = cus_avatar;
+    }
+
+    public void uploadUserData(Activity activity, String user_id){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("user", MODE_PRIVATE);
+        String customer_id = user_id;
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers").child(customer_id);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Customer customer = new Customer();
+                customer.setCustomer_id(customer_id);
+                customer.setCus_avatar(dataSnapshot.child("cus_avatar").getValue().toString());
+                customer.setCus_name(dataSnapshot.child("cus_name").getValue().toString());
+                customer.setCus_birthday(dataSnapshot.child("cus_birthday").getValue().toString());
+                customer.setCus_address(dataSnapshot.child("cus_address").getValue().toString());
+                customer.setCus_phone(dataSnapshot.child("cus_phone").getValue().toString());
+                customer.setCus_email(dataSnapshot.child("cus_email").getValue().toString());
+                customer.setCus_gender(dataSnapshot.child("cus_gender").getValue().toString());
+                customer.setCus_ethnicity(dataSnapshot.child("cus_ethnicity").getValue().toString());
+                List<Baby> babyList = new ArrayList<>();
+                DataSnapshot babiesSnapshot = dataSnapshot.child("babies");
+                for (DataSnapshot babySnapshot : babiesSnapshot.getChildren()) {
+                    Baby baby = babySnapshot.getValue(Baby.class);
+                    baby.setBaby_id(babySnapshot.getKey());
+                    if (baby != null) {
+                        babyList.add(baby);
+                    }
+                }
+                customer.setBabies(babyList);
+                if (customer != null) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("customer_id", customer.getCustomer_id());
+                    editor.putString("cus_name", customer.getCus_name());
+                    editor.putString("cus_birthday", customer.getCus_birthday());
+                    editor.putString("cus_address", customer.getCus_address());
+                    editor.putString("cus_phone", customer.getCus_phone());
+                    editor.putString("cus_email", customer.getCus_email());
+                    editor.putString("cus_gender", customer.getCus_gender());
+                    editor.putString("cus_gender", customer.getCus_gender());
+
+                    Gson gson = new Gson();
+                    String babiesJson = gson.toJson(customer.getBabies());
+                    Log.i("Update Customer babiesJson", "onDataChange: " + babiesJson);
+                    editor.putString("babiesList", babiesJson);
+                    editor.apply();
+                } else {
+                    Log.i("Update Customer", "onDataChange: null"  );
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
