@@ -16,10 +16,11 @@ import com.admin.babyvaccinationtracker.VaccineCenterRegistration;
 import com.admin.babyvaccinationtracker.model.Vaccine_center_registration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    ArrayList<Vaccine_center_registration> Vaccine_center_registration;
+    List<Vaccine_center_registration> Vaccine_center_registration;
     Context context;
     VaccineCenterRegistration vaccineCenterRegistration;
     public CenterRegistrationAdapter(Context context,ArrayList<Vaccine_center_registration> vaccineCenterRegistration){
@@ -54,13 +55,17 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
                         return;
                     }
                     vaccineCenterRegistration = new VaccineCenterRegistration();
-                    vaccineCenterRegistration.registerCenter(context,re.getCenter(),re.getCenter_registration_id());
-
-                    Vaccine_center_registration.remove(position);
-                    notifyDataSetChanged();
+                    if(vaccineCenterRegistration.registerCenter(context,re.getCenter(),re.getCenter_registration_id())){
+                        Vaccine_center_registration.remove(position);
+                        notifyDataSetChanged();
+                    }
                 }
             });
         }
+    }
+    public void setData(List<Vaccine_center_registration> list){
+        this.Vaccine_center_registration = list;
+        notifyDataSetChanged();
     }
 
     @Override

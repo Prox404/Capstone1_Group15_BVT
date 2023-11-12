@@ -20,8 +20,11 @@
         <activity
             android:name=".BabyHealthActivity"
             android:exported="false" />
-        <activity
+      <activity
             android:name=".BabyManagement"
+            android:exported="false" />
+        <activity
+            android:name=".activity_report"
             android:exported="false" />
         <activity
             android:name=".AuthActivity"

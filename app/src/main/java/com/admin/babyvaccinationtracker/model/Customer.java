@@ -32,6 +32,16 @@ public class Customer {
     private String cus_avatar;
     private List<Baby> babies = new ArrayList<>();
 
+    private Boolean blocked;
+
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
+    }
+
     public List<Baby> getBabies() {
         return babies;
     }

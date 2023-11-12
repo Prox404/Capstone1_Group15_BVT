@@ -61,12 +61,18 @@ public class HomeActivity extends AppCompatActivity {
                startActivity(intent);
            }
        });
-
+      
         viewHealthContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, BabyManagement.class);
                 startActivity(intent);
+            }
+        });     
+        imageView_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, activity_report.class));
             }
         });
        
