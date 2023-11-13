@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import com.admin.babyvaccinationtracker.model.Admin;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
@@ -15,32 +16,32 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.admin.babyvaccinationtracker.model.Customer;
 import java.util.Map;
 
-public class CustomerRegistration {
+public class AdminRegistration {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
-    public CustomerRegistration() {
+    public AdminRegistration() {
         // Khởi tạo Firebase Auth và Realtime Database
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers");
+        databaseReference = FirebaseDatabase.getInstance().getReference("users").child("admin");
     }
 
-    public void registerCustomer(Context context, Customer customer, String filePath) {
+    public void registerAdmin(Context context, Admin admin, String filePath) {
         // Đăng ký người dùng vào Firebase Authentication
-        Log.i("CustomerRegistration", customer.getCus_email() + " - " + customer.getCus_password());
+        Log.i("AdminRegistration", admin.getAdmin_email() + " - " + admin.getAdmin_password());
 //        uploadAvatar(avatar, "uaduiygaisdu");
-        firebaseAuth.createUserWithEmailAndPassword(customer.getCus_email(), customer.getCus_password())
+        firebaseAuth.createUserWithEmailAndPassword(admin.getAdmin_email(), admin.getAdmin_password())
                 .addOnCompleteListener(task -> {
-                    Log.i("CustomerRegistration", "addOnCompleteListener");
+                    Log.i("AdminRegistration", "addOnCompleteListener");
                     if (task.isSuccessful()) {
-                        Log.i("CustomerRegistration", "isSuccessful");
+                        Log.i("AdminRegistration", "isSuccessful");
                         // Lấy thông tin người dùng đã đăng ký
                         String uid = task.getResult().getUser().getUid();
-                        customer.setCus_password(null); // Xoá mật khẩu trước khi lưu vào Realtime Database
+                        admin.setAdmin_password(null); // Xoá mật khẩu trước khi lưu vào Realtime Database
 
                         // Lưu thông tin khách hàng vào Realtime Database
-                        databaseReference.child(uid).setValue(customer);
+                        databaseReference.child(uid).setValue(admin);
 
                         // Tải hình ảnh avatar lên imgbb và lưu đường dẫn vào Realtime Database
                         uploadAvatar(filePath, uid);
@@ -49,13 +50,13 @@ public class CustomerRegistration {
                     } else {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // Đã tồn tại người dùng với cùng ic_email.xml, xử lý tùy ý
-                            Log.i("CustomerRegistration", "Duplicated User");
+                            Log.i("AdminRegistration", "Duplicated User");
                             Toast.makeText(context, "Đã tồn tại người dùng với cùng ic_email.xml !", Toast.LENGTH_SHORT).show();
                             // ...
                         } else {
                             // Đăng ký thất bại, xử lý tùy ý
                             // ...
-                            Log.i("CustomerRegistration", "Failed Register User");
+                            Log.i("AdminRegistration", "Failed Register User");
                             Toast.makeText(context, "Đăng ký thất bại !", Toast.LENGTH_SHORT).show();
                         }
                     }

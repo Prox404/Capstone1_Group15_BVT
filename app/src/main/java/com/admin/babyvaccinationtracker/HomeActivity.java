@@ -3,6 +3,7 @@ package com.admin.babyvaccinationtracker;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -46,6 +49,12 @@ public class HomeActivity extends AppCompatActivity {
         imageView_send_notification = findViewById(R.id.imageView_send_notification);
         viewHealthContainer = findViewById(R.id.viewHealthContainer);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String admin_avatar = sharedPreferences.getString("admin_avatar", "");
+
+        String imgaeUrl = admin_avatar.contains("https") ? admin_avatar : admin_avatar.replace("http", "https");
+        Picasso.get().load(imgaeUrl).into(imageView_Account);
+
        imageView_send_notification.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
@@ -75,6 +84,12 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, activity_report.class));
             }
         });
-       
+
+        imageView_Account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, UserActivity.class));
+            }
+        });
     }
 }

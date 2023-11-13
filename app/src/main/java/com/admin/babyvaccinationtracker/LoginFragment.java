@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.admin.babyvaccinationtracker.model.Admin;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
     Context context;
-
     private FirebaseAuth mAuth;
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -114,38 +114,24 @@ public class LoginFragment extends Fragment {
                             //load fragment home
 //                            ((AuthActivity) context).loadFragment(HomeFragment.newInstance());
 //                            ((AuthActivity) context).changeFragment("home");
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers").child(user.getUid());
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("admin").child(user.getUid());
                             // get user and set to global variable SharedPreferences
                             databaseReference.get().addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
-                                    Customer customer = task1.getResult().getValue(Customer.class);
-                                    ArrayList<Baby> babiesList;
-                                    try {
-                                        babiesList = (ArrayList<Baby>) customer.getBabies();
-                                    } catch (Exception e) {
-                                        babiesList = new ArrayList<>();
-                                    }
-                                    customer.setCustomer_id(user.getUid());
-                                    Log.i("Login", "onComplete: " + customer.getCus_email() + " - " + customer.getCus_password());
+                                    Admin admin = task1.getResult().getValue(Admin.class);
+
+                                    admin.setAdmin_id(user.getUid());
+                                    Log.i("Login", "onComplete: " + admin.getAdmin_email() + " - " + admin.getAdmin_password());
                                     // save user to device
                                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("customer_id", customer.getCustomer_id());
-                                    editor.putString("cus_name", customer.getCus_name());
-                                    editor.putString("cus_birthday", customer.getCus_birthday());
-                                    editor.putString("cus_address", customer.getCus_address());
-                                    editor.putString("cus_phone", customer.getCus_phone());
-                                    editor.putString("cus_email", customer.getCus_email());
-                                    editor.putString("cus_gender", customer.getCus_gender());
-                                    editor.putString("cus_gender", customer.getCus_gender());
-                                    //get babies
-                                    Gson gson = new Gson();
-                                    String babiesJson = gson.toJson(babiesList);
-                                    editor.putString("babiesList", babiesJson);
+                                    editor.putString("admin_id", admin.getAdmin_id());
+                                    editor.putString("admin_name", admin.getAdmin_name());
+                                    editor.putString("admin_phone", admin.getAdmin_phone());
+                                    editor.putString("admin_email", admin.getAdmin_email());
+                                    editor.putString("admin_avatar", admin.getAdmin_avatar());
                                     editor.apply();
-                                    Log.i("sharedPreferences", "onComplete: " + sharedPreferences.getString("babiesList", "null"));
-//                                     load fragment home
-//                                    ((AuthActivity) context).changeFragment("home");
+                                    Log.i("sharedPreferences", "onComplete: " + sharedPreferences.getString("admin_id", "null"));
                                 } else {
                                     Log.i("Login", "onComplete: " + task1.getException().getMessage());
                                 }

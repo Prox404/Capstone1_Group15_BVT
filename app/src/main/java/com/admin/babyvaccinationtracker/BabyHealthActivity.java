@@ -75,7 +75,9 @@ public class BabyHealthActivity extends AppCompatActivity {
             tvBabyBirthday.setText(baby.getBaby_birthday());
             tvBabyGender.setText(baby.getBaby_gender());
             tvBabyCongenitalDisease.setText(baby.getBaby_congenital_disease());
-            Picasso.get().load(baby.getBaby_avatar()).into(ivBabyAvatar);
+
+            String imgaeUrl = baby.getBaby_avatar().contains("https") ? baby.getBaby_avatar() : baby.getBaby_avatar().replace("http", "https");
+            Picasso.get().load(imgaeUrl).into(ivBabyAvatar);
 
             id = baby.getBaby_id();
             databaseReference = FirebaseDatabase.getInstance().getReference("health");
