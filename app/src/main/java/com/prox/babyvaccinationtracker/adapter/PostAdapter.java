@@ -68,11 +68,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         if (postItem.getLiked_users() != null){
             ArrayList<String> liked_users = postItem.getLiked_users();
+
             if (liked_users.contains(user_id)){
                 holder.imageViewHeart.setImageResource(R.drawable.ic_heart_solid);
             }else {
                 holder.imageViewHeart.setImageResource(R.drawable.ic_heart);
             }
+            Log.i("LIKED_USERS", liked_users+" \n "+user_id);
         }
         if (postItem.getComments() != null){
             commentList = new ArrayList<>();
@@ -201,6 +203,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
 
             user_id = sharedPreferences.getString("customer_id", "");
+
         }
     }
 }

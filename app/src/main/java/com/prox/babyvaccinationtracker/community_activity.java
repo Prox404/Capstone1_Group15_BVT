@@ -48,7 +48,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class community_activity extends AppCompatActivity {
-
     private FrameLayout popupDialog;
     private EditText editTextContent,editTextPopupContent, editTextHashtag;
     ImageButton imageButtonClose;
@@ -61,12 +60,15 @@ public class community_activity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE = 1;
     RecyclerView recyclerViewPost;
-
+    ArrayList<Post> postArrayList;
+    PostAdapter postAdapter;
     Button buttonAddNewPost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
+
         popupDialog = findViewById(R.id.popupDialog);
         editTextContent = findViewById(R.id.editTextContent);
         imageButtonClose = findViewById(R.id.imageButtonClose);
@@ -79,7 +81,6 @@ public class community_activity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String user_id = sharedPreferences.getString("customer_id", "");
-
         String user_name = sharedPreferences.getString("cus_name", "");
         String user_avatar = sharedPreferences.getString("cus_avatar", "");
 
@@ -142,18 +143,19 @@ public class community_activity extends AppCompatActivity {
                     post.setUser(user);
 
                     uploadImagesToCloudinaryAndFirebase(post);
+                    postArrayList.add(post);
+                    postAdapter.notifyDataSetChanged();
+
                 }
             }
         });
 
         // Hiển thị bài viết
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
-
-
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Post> postArrayList = new ArrayList<>();
+                postArrayList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Post post = new Post();
                     post.setUser(dataSnapshot.child("user").getValue(User.class));
@@ -168,7 +170,7 @@ public class community_activity extends AppCompatActivity {
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
                     postArrayList.add(post);
                 }
-                PostAdapter postAdapter = new PostAdapter(postArrayList, user);
+                postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
             }
