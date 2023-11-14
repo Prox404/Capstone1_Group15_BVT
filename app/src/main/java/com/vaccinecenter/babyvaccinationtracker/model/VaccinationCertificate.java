@@ -1,9 +1,10 @@
 package com.vaccinecenter.babyvaccinationtracker.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class VaccinationCertificate {
+public class VaccinationCertificate implements Serializable {
     private String vaccineCertificate_id;
     private Baby baby;
     private String qr;

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.Manifest;
@@ -28,9 +30,10 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
 
-    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer, ChatContainer;
+    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer, ChatContainer, childContainer;
 
-    TextView textViewNumberOfRegistration,textViewNumberOfVaccines;
+
+    TextView textViewNumberOfRegistration,textViewNumberOfVaccines, textViewNumberOfChild;
 
     Toolbar toolbar;
 
@@ -63,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         createvaccineContainer = findViewById(R.id.createvaccineContainer);
         textViewNumberOfRegistration = findViewById(R.id.textViewNumberOfRegistration);
         textViewNumberOfVaccines = findViewById(R.id.textViewNumberOfVaccines);
+        textViewNumberOfChild = findViewById(R.id.textViewNumberOfChild);
         vaccinesContainer = findViewById(R.id.vaccinesContainer);
         QRScannerContainer = findViewById(R.id.QRScannerContainer);
         ChatContainer = findViewById(R.id.ChatContainer);
@@ -85,6 +90,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         check();
+
 
         vaccinesContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,8 +143,19 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        childContainer = findViewById(R.id.childContainer);
+        childContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, children_data_management.class);
+                startActivity(intent);
+            }
+        });
+
+
         getNumberOfRegistration();
         getNunberOfVaccines();
+        getNumberOfChild();
 
         // checkPermission();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -190,6 +207,26 @@ public class HomeActivity extends AppCompatActivity {
                 String numberOfRegistration = snapshot.getChildrenCount() + "";
                 Log.i("Home", "onDataChange: " + numberOfRegistration);
                 textViewNumberOfVaccines.setText(numberOfRegistration);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getNumberOfChild(){
+        context = HomeActivity.this != null ? HomeActivity.this : null;
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
+        Query query = databaseReference.orderByChild("baby/baby_id");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String numberOfChild = snapshot.getChildrenCount() + "";
+                Log.i("Home", "onDataChange: " + numberOfChild);
+                textViewNumberOfChild.setText(numberOfChild);
             }
 
             @Override
