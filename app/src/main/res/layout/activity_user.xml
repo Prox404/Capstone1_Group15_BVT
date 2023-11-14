@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".UserActivity">
 
     <androidx.cardview.widget.CardView
@@ -18,46 +19,79 @@
             android:id="@+id/imageViewUser"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tên" />
 
     <TextView
         android:id="@+id/textViewUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="some name" />
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="some name"
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Email" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/card_border_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/textViewUserEmail"
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_google" />
+
+        <TextView
+            android:id="@+id/textViewUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="abc@gmail.com" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="abc@gmail.com" />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/card_border_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-    <TextView
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_phone" />
+
+        <TextView
+            android:id="@+id/textViewUserPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="0000" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Phone" />
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewUserPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0000" />
-
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đăng xuất" />
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đăng xuất"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -52,8 +52,10 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String admin_avatar = sharedPreferences.getString("admin_avatar", "");
 
-        String imgaeUrl = admin_avatar.contains("https") ? admin_avatar : admin_avatar.replace("http", "https");
-        Picasso.get().load(imgaeUrl).into(imageView_Account);
+        String imageUrl = admin_avatar.contains("https") ? admin_avatar : admin_avatar.replace("http", "https");
+        if(imageUrl != null && !imageUrl.equals("")){
+            Picasso.get().load(imageUrl).into(imageView_Account);
+        }
 
        imageView_send_notification.setOnClickListener(new View.OnClickListener() {
            @Override

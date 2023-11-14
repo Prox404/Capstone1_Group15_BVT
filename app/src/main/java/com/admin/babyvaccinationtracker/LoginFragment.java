@@ -101,6 +101,16 @@ public class LoginFragment extends Fragment {
     private void loginUser() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
+        if (email.isEmpty()) {
+            emailEditText.setError("Email không được để trống");
+            emailEditText.requestFocus();
+            return;
+        }
+        if (password.isEmpty()) {
+            passwordEditText.setError("Mật khẩu không được để trống");
+            passwordEditText.requestFocus();
+            return;
+        }
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
