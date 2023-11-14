@@ -23,7 +23,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".DisplayBlockActivity"
+            android:exported="false" />
+      <activity
             android:name=".AddChatConversition"
+            android:exported="false" />
+        <activity
+            android:name=".heatlth_input_for_babies"
+            android:exported="false" />
+        <activity
+            android:name=".FamilyActivity"
             android:exported="false" />
         <activity
             android:name=".InjectionActivity"
