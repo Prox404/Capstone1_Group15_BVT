@@ -23,6 +23,7 @@ import com.prox.babyvaccinationtracker.adapter.ChatAdapter;
 import com.prox.babyvaccinationtracker.model.Conversation;
 import com.prox.babyvaccinationtracker.model.Message;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ public class ChatActivity_user extends AppCompatActivity {
 
     Conversation conversation = new Conversation();
     private HashMap<String, Message> messages = new HashMap<>();
+    private ArrayList<String> messages_id_list = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +67,8 @@ public class ChatActivity_user extends AppCompatActivity {
         if(conversation_id != null){
             Log.i("CONIDDDDDDDDD", conversation_id);
             DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("chat").child(conversation_id);
-            databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            databaseRef.addValueEventListener(new ValueEventListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,8 +80,11 @@ public class ChatActivity_user extends AppCompatActivity {
                         Log.i("chat mess", "onDataChange: " + messages);
                         //convert hashmap to arraylist
                         for (String key : messages.keySet()) {
-                            Message message = messages.get(key);
-                            chatAdapter.addMessage(message);
+                            if(!messages_id_list.contains(key)){
+                                Message message = messages.get(key);
+                                messages_id_list.add(key);
+                                chatAdapter.addMessage(message);
+                            }
                         }
                         chatAdapter.notifyDataSetChanged();
                         recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
@@ -102,9 +108,8 @@ public class ChatActivity_user extends AppCompatActivity {
                     Message message = new Message();
                     message.setMess_content(message_content);
                     message.setUser_name(user_name);
-                    messages.put(message_id, message);
+//                    messages.put(message_id, message);
                     databaseRef.child("messages").child(message_id).setValue(message);
-                    chatAdapter.addMessage(message);
                     recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
                     editTextMessage.setText("");
                 }
