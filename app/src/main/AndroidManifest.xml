@@ -33,6 +33,9 @@
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
+            android:name=".Display_block_user"
+            android:exported="false" />
+      <activity
             android:name=".ConversationActivity"
             android:exported="false" />
         <activity

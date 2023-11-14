@@ -84,49 +84,66 @@ public class login_for_vaccine_center extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Log.i("Login", "onComplete: " + user.getEmail() + " - " + user.getUid());
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center").child(user.getUid());
-                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            String id = user.getUid();
+                            DatabaseReference check = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_centers").child(id);
+                            check.addValueEventListener(new ValueEventListener() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    Context context = login_for_vaccine_center.this;
-                                    if (dataSnapshot.exists()) {
-                                        // Dữ liệu tồn tại, giải phân tích dữ liệu và tạo đối tượng Customer
-                                        Vaccine_center center = new Vaccine_center();
-                                        center.setCenter_id(user.getUid());
-                                        center.setCenter_name(dataSnapshot.child("center_name").getValue().toString());
-                                        center.setCenter_address(dataSnapshot.child("center_address").getValue().toString());
-                                        center.setActivity_certificate(dataSnapshot.child("activity_certificate").getValue().toString());
-                                        center.setCenter_email(dataSnapshot.child("center_email").getValue().toString());
-                                        center.setCenter_image(dataSnapshot.child("center_image").getValue().toString());
-                                        center.setHotline(dataSnapshot.child("hotline").getValue().toString());
-                                        center.setWork_time(dataSnapshot.child("work_time").getValue().toString());
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.exists()){
+                                        Toast.makeText(login_for_vaccine_center.this,"Tài khoản này đã bị chặn", Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        Log.i("Login", "onComplete: " + user.getEmail() + " - " + user.getUid());
+                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center").child(user.getUid());
+                                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                Context context = login_for_vaccine_center.this;
+                                                if (dataSnapshot.exists()) {
+                                                    // Dữ liệu tồn tại, giải phân tích dữ liệu và tạo đối tượng Customer
+                                                    Vaccine_center center = new Vaccine_center();
+                                                    center.setCenter_id(user.getUid());
+                                                    center.setCenter_name(dataSnapshot.child("center_name").getValue().toString());
+                                                    center.setCenter_address(dataSnapshot.child("center_address").getValue().toString());
+                                                    center.setActivity_certificate(dataSnapshot.child("activity_certificate").getValue().toString());
+                                                    center.setCenter_email(dataSnapshot.child("center_email").getValue().toString());
+                                                    center.setCenter_image(dataSnapshot.child("center_image").getValue().toString());
+                                                    center.setHotline(dataSnapshot.child("hotline").getValue().toString());
+                                                    center.setWork_time(dataSnapshot.child("work_time").getValue().toString());
 
-                                        if (center != null) {
+                                                    if (center != null) {
 
-                                            SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-                                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                                            editor.putString("center_id", center.getCenter_id());
-                                            editor.putString("center_address", center.getCenter_address());
-                                            editor.putString("activity_certificate", center.getActivity_certificate());
-                                            editor.putString("center_email", center.getCenter_email());
-                                            editor.putString("center_image", center.getCenter_image());
-                                            editor.putString("hotline", center.getHotline());
-                                            editor.putString("work_time", center.getWork_time());
-                                            editor.putString("center_name", center.getCenter_name());
+                                                        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                        editor.putString("center_id", center.getCenter_id());
+                                                        editor.putString("center_address", center.getCenter_address());
+                                                        editor.putString("activity_certificate", center.getActivity_certificate());
+                                                        editor.putString("center_email", center.getCenter_email());
+                                                        editor.putString("center_image", center.getCenter_image());
+                                                        editor.putString("hotline", center.getHotline());
+                                                        editor.putString("work_time", center.getWork_time());
 
-                                            editor.apply();
+                                                        editor.apply();
 //
-                                            Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(context, HomeActivity.class);
-                                            startActivity(intent);
+                                                        Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(context, HomeActivity.class);
+                                                        startActivity(intent);
 
-                                        } else {
-                                            Toast.makeText(context, "Không tìm thấy dữ liệu khách hàng", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(context, "Không tìm thấy dữ liệu khách hàng", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(context, "Không tìm thấy dữ liệu khách hàng", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(context, "Không tìm thấy dữ liệu khách hàng", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
                                     }
                                 }
 
@@ -135,6 +152,8 @@ public class login_for_vaccine_center extends AppCompatActivity {
 
                                 }
                             });
+
+
                         }else{
                             String errorCode = task.getException().getMessage();
                             Log.i("Login", "Fail: " + errorCode);
