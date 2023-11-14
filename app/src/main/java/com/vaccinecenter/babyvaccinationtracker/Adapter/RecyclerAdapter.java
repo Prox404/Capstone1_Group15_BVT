@@ -56,7 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         Uri uri =  uriArrayList.get(position);
         String url = String.valueOf(uri);
-        if(url.startsWith("/storage/emulated/0/")){
+        if(url.startsWith("/mnt/shared/Pictures/")){
             holder.imageView.setImageURI(uri);
         }
         else {
