@@ -125,7 +125,6 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView39"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -145,7 +144,7 @@
                         android:textSize="60sp" />
 
                     <ImageView
-                        android:id="@+id/imageView4"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/display"
@@ -162,7 +161,6 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView39"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -174,7 +172,7 @@
 
 
                     <ImageView
-                        android:id="@+id/imageView4"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/display"
@@ -191,12 +189,11 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView39"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentBottom="true"
-                        android:text="Danh sách các vắc-xin"
+                        android:text="Danh sách các bé"
                         android:textAlignment="textEnd"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold" />
@@ -211,11 +208,11 @@
                         android:textSize="60sp" />
 
                     <ImageView
-                        android:id="@+id/imageView4"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/display"
-                        android:tint="#FFFFFF" />
+                        app:tint="#FFFFFF" />
                 </RelativeLayout>
                   
                   <RelativeLayout
@@ -228,7 +225,6 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView39"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -240,11 +236,11 @@
 
 
                     <ImageView
-                        android:id="@+id/imageView4"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/display"
-                        android:tint="#FFFFFF" />
+                        app:tint="#FFFFFF" />
                 </RelativeLayout>
             </com.google.android.flexbox.FlexboxLayout>
         </ScrollView>
