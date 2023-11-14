@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -9,6 +13,7 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -26,6 +31,24 @@
             android:exported="false" />
         <activity
             android:name=".children_data_management"
+            android:exported="false" />
+      <activity
+            android:name=".AddChatConversation"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Display_block_user"
+            android:exported="false" />
+      <activity
+            android:name=".ConversationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VaccinationCertificateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QrScannerActivity"
             android:exported="false" />
         <activity
             android:name=".reset_password"

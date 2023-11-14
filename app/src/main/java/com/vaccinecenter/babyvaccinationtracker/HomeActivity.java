@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.Manifest;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
 
-    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, childContainer;
+    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer, ChatContainer, childContainer;
+
 
     TextView textViewNumberOfRegistration,textViewNumberOfVaccines, textViewNumberOfChild;
 
@@ -39,6 +41,30 @@ public class HomeActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 2;
 
     Context context;
+    Boolean check = false;
+    void check(){
+
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_centers").child(id);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    check = false;
+                    startActivity(new Intent(HomeActivity.this, Display_block_user.class));
+                    finish();
+                }
+                else {
+                    check = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -58,27 +84,61 @@ public class HomeActivity extends AppCompatActivity {
         textViewNumberOfVaccines = findViewById(R.id.textViewNumberOfVaccines);
         textViewNumberOfChild = findViewById(R.id.textViewNumberOfChild);
         vaccinesContainer = findViewById(R.id.vaccinesContainer);
+        QRScannerContainer = findViewById(R.id.QRScannerContainer);
+        ChatContainer = findViewById(R.id.ChatContainer);
+
+
+
+        check();
 
 
         vaccinesContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, search_vaccination.class);
-                startActivity(intent);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, search_vaccination.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
         registionContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, RegistrationRequestActivity.class);
-                startActivity(intent);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, RegistrationRequestActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         createvaccineContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, create_vaccination.class);
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, create_vaccination.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        QRScannerContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(check == true){
+                    Intent intent = new Intent(HomeActivity.this, QrScannerActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        ChatContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
                 startActivity(intent);
             }
         });
