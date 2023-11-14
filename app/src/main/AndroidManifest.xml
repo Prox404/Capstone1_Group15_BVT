@@ -29,6 +29,24 @@
         <activity
             android:name=".CommunityActivity"
             android:exported="false" />
+      <activity
+            android:name=".view_child_information"
+            android:exported="false" />
+        <activity
+            android:name=".children_data_management"
+            android:exported="false" />
+      <activity
+            android:name=".AddChatConversation"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Display_block_user"
+            android:exported="false" />
+      <activity
+            android:name=".ConversationActivity"
+            android:exported="false" />
         <activity
             android:name=".VaccinationCertificateActivity"
             android:exported="false" />
