@@ -95,7 +95,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 }
             }
             DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
-            commentAdapter = new CommentAdapter(commentList , commentReference);
+            commentAdapter = new CommentAdapter(commentList , commentReference, user);
             holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
             holder.recylerViewComments.setAdapter(commentAdapter);
         }

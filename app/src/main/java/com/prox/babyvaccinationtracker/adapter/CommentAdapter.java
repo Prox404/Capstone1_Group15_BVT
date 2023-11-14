@@ -29,12 +29,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private List<Comment> comments;
     String post_id;
-
+    User user;
     DatabaseReference commentReference;
 
-    public CommentAdapter(List<Comment> comments, DatabaseReference commentReference) {
+    public CommentAdapter(List<Comment> comments, DatabaseReference commentReference, User user) {
         this.comments = comments;
         this.commentReference = commentReference;
+        this.user = user;
     }
 
     @NonNull
@@ -78,9 +79,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     HashMap<String, Comment> replies = comment.getReplies();
                     Comment newComment = new Comment();
                     newComment.setContent(content);
-                    newComment.setUser(comment.getUser());
+                    newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
                     replies.put(commentKey, newComment);
+
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);
                 }else {
@@ -89,6 +91,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     newComment.setContent(content);
                     newComment.setUser(comment.getUser());
                     String commentKey = commentReference.push().getKey();
+                    newComment.setComment_id(commentKey);
                     replies.put(commentKey, newComment);
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);
@@ -96,6 +99,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 holder.commentContainer.setVisibility(View.GONE);
                 holder.textViewReply.setVisibility(View.VISIBLE);
                 notifyDataSetChanged();
+                holder.editTextCommentContent.setText("");
             }
         });
 
@@ -117,7 +121,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     replyList.add((Comment) commentObject);
                 }
             }
-            CommentAdapter replyAdapter = new CommentAdapter(replyList, commentReference.child(comment.getComment_id()).child("replies"));
+            CommentAdapter replyAdapter = new CommentAdapter(replyList, commentReference.child(comment.getComment_id()).child("replies"), user);
             holder.recyclerViewReplies.setLayoutManager(new LinearLayoutManager(holder.recyclerViewReplies.getContext()));
             holder.recyclerViewReplies.setAdapter(replyAdapter);
         }
