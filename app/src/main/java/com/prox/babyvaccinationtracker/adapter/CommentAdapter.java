@@ -81,8 +81,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     newComment.setContent(content);
                     newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
-                    replies.put(commentKey, newComment);
                     newComment.setComment_id(commentKey);
+                    replies.put(commentKey, newComment);
+
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);
                 }else {
@@ -91,8 +92,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     newComment.setContent(content);
                     newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
-                    replies.put(commentKey, newComment);
                     newComment.setComment_id(commentKey);
+                    replies.put(commentKey, newComment);
+
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);
                 }
