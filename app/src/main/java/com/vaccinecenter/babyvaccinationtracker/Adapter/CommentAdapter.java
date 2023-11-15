@@ -1,5 +1,6 @@
 package com.vaccinecenter.babyvaccinationtracker.Adapter;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,11 +77,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             public void onClick(View view) {
                 String key = commentReference.push().getKey();
                 String content = holder.editTextCommentContent.getText().toString();
+
+                User user = new User();
+                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("user", view.getContext().MODE_PRIVATE);
+                user.setUser_name(sharedPreferences.getString("center_name", ""));
+                user.setUser_avatar(sharedPreferences.getString("center_image", ""));
+                user.setUser_id(sharedPreferences.getString("center_id", ""));
+                user.setUser_role("center");
+
                 if (comment.getReplies() != null){
                     HashMap<String, Comment> replies = comment.getReplies();
                     Comment newComment = new Comment();
                     newComment.setContent(content);
-                    newComment.setUser(comment.getUser());
+                    newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
                     replies.put(commentKey, newComment);
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
@@ -89,8 +98,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     HashMap<String, Comment> replies = new HashMap<>();
                     Comment newComment = new Comment();
                     newComment.setContent(content);
-                    newComment.setUser(comment.getUser());
+                    newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
+                    newComment.setComment_id(commentKey);
                     replies.put(commentKey, newComment);
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);

@@ -25,252 +25,259 @@
         android:layout_marginRight="20dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView26"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Xin chào "
-            android:textColor="#007F20"
-            android:textSize="34sp"
-            android:textStyle="bold" />
-
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.flexbox.FlexboxLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:alignContent="stretch"
-                app:alignItems="stretch"
-                app:flexWrap="wrap"
-                app:justifyContent="space_between">
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/registionContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63C97B"
-                    android:padding="10dp">
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Xin chào "
+                    android:textColor="#007F20"
+                    android:textSize="34sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:src="@drawable/paper_registration"
-                        android:tint="#FFFFFF" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:alignContent="stretch"
+                    app:alignItems="stretch"
+                    app:flexWrap="wrap"
+                    app:justifyContent="space_between">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="Đơn đăng ký tiêm chủng"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
+                    <RelativeLayout
+                        android:id="@+id/registionContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63C97B"
+                        android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/textViewNumberOfRegistration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="60sp" />
-                </RelativeLayout>
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:src="@drawable/paper_registration"
+                            android:tint="#FFFFFF" />
 
-                <RelativeLayout
-                    android:id="@+id/createvaccineContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63B1C9"
-                    android:padding="10dp"
-                    app:layout_gravity="right">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Đơn đăng ký tiêm chủng"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/white"
+                            android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/add"
-                        android:tint="#FFFFFF" />
+                        <TextView
+                            android:id="@+id/textViewNumberOfRegistration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="10dp"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="60sp" />
+                    </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/textView29"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="Thêm mới vắc-xin"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/createvaccineContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63B1C9"
+                        android:padding="10dp"
+                        app:layout_gravity="right">
 
-                <RelativeLayout
-                    android:id="@+id/vaccinesContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63C97B"
-                    android:padding="10dp">
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/add"
+                            android:tint="#FFFFFF" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="Danh sách các vắc-xin"
-                        android:textAlignment="textEnd"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/textView29"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Thêm mới vắc-xin"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/textViewNumberOfVaccines"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="0"
-                        android:textColor="#FFFFFF"
-                        android:textSize="60sp" />
+                    <RelativeLayout
+                        android:id="@+id/vaccinesContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63C97B"
+                        android:padding="10dp">
 
-                    <ImageView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Danh sách các vắc-xin"
+                            android:textAlignment="textEnd"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/display"
-                        android:tint="#FFFFFF" />
-                </RelativeLayout>
-                  
-                  <RelativeLayout
-                    android:id="@+id/QRScannerContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63C97B"
-                    android:padding="10dp">
+                        <TextView
+                            android:id="@+id/textViewNumberOfVaccines"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="0"
+                            android:textColor="#FFFFFF"
+                            android:textSize="60sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="QR Scanner"
-                        android:textAlignment="textEnd"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                        <ImageView
 
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/display"
+                            android:tint="#FFFFFF" />
+                    </RelativeLayout>
 
-                    <ImageView
+                    <RelativeLayout
+                        android:id="@+id/QRScannerContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63C97B"
+                        android:padding="10dp">
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/display"
-                        android:tint="#FFFFFF" />
-                </RelativeLayout>
-                  
-                  <RelativeLayout
-                    android:id="@+id/childContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63C97B"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="Danh sách các bé"
-                        android:textAlignment="textEnd"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textViewNumberOfChild"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="0"
-                        android:textColor="#FFFFFF"
-                        android:textSize="60sp" />
-
-                    <ImageView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/display"
-                        app:tint="#FFFFFF" />
-                </RelativeLayout>
-                  
-                  <RelativeLayout
-                    android:id="@+id/ChatContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63C97B"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="Tin nhắn"
-                        android:textAlignment="textEnd"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="QR Scanner"
+                            android:textAlignment="textEnd"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
 
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/display"
-                        app:tint="#FFFFFF" />
-                </RelativeLayout>
-                    
-                     <RelativeLayout
-                    android:id="@+id/CommunityContainer"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/home"
-                    android:backgroundTint="#63C97B"
-                    android:padding="10dp">
+                        <ImageView
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:text="Cộng đồng"
-                        android:textAlignment="textEnd"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/display"
+                            android:tint="#FFFFFF" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/childContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63C97B"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Danh sách các bé"
+                            android:textAlignment="textEnd"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textViewNumberOfChild"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="0"
+                            android:textColor="#FFFFFF"
+                            android:textSize="60sp" />
+
+                        <ImageView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/display"
+                            app:tint="#FFFFFF" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ChatContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63C97B"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Tin nhắn"
+                            android:textAlignment="textEnd"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
 
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/display"
-                        android:tint="#FFFFFF" />
-                </RelativeLayout>
-            </com.google.android.flexbox.FlexboxLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/display"
+                            app:tint="#FFFFFF" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/CommunityContainer"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/home"
+                        android:backgroundTint="#63C97B"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Cộng đồng"
+                            android:textAlignment="textEnd"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/display"
+                            android:tint="#FFFFFF" />
+                    </RelativeLayout>
+                </com.google.android.flexbox.FlexboxLayout>
+
+            </LinearLayout>
+
         </ScrollView>
-
 
     </LinearLayout>
 
