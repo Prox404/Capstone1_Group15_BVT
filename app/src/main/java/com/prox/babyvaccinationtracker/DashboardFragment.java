@@ -165,6 +165,7 @@ public class DashboardFragment extends Fragment {
 
                 // Đặt background cho Button đang chọn là color/primaryColor
                 button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+                button.setTextColor(context.getResources().getColor(R.color.white));
             }
         });
 
