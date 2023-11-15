@@ -133,19 +133,25 @@ public class DashboardFragment extends Fragment {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
 
-        params.setMargins(0, 0, 10, 0);
+        params.setMargins(0, 0, 15, 0);
         button.setLayoutParams(params);
+        button.setElevation(0);
+        button.setPadding(20, 5, 20, 5);
+        button.setHeight(30);
+        button.setMinimumHeight(130);
+        button.setMinHeight(0);
+        button.setStateListAnimator(null);
 
         // Nếu babyListContainer chưa có Button nào, hoặc Button đầu tiên được thêm vào
         if (babyListContainer.getChildCount() == 0) {
             // Thiết lập background cho Button đầu tiên là color/primaryColor
-            button.setBackground(context.getResources().getDrawable(R.drawable.button_bg));
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
             button.setTextColor(context.getResources().getColor(R.color.white));
             babyId = baby.getBaby_id();
             setTimeLine(babyId);
         } else {
             // Thiết lập background mặc định cho tất cả các Button khác
-            button.setBackground(context.getResources().getDrawable(R.drawable.white_button_bg));
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_white_button_bg));
         }
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +164,7 @@ public class DashboardFragment extends Fragment {
                 resetButtonBackgrounds();
 
                 // Đặt background cho Button đang chọn là color/primaryColor
-                button.setBackground(context.getResources().getDrawable(R.drawable.button_bg));
+                button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
             }
         });
 
@@ -170,7 +176,7 @@ public class DashboardFragment extends Fragment {
         for (int i = 0; i < babyListContainer.getChildCount(); i++) {
             View child = babyListContainer.getChildAt(i);
             if (child instanceof Button) {
-                ((Button) child).setBackground(context.getResources().getDrawable(R.drawable.white_button_bg));
+                ((Button) child).setBackground(context.getResources().getDrawable(R.drawable.rounded_white_button_bg));
                 ((Button) child).setTextColor(context.getResources().getColor(R.color.textColor));
             }
         }

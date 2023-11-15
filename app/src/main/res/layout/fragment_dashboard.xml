@@ -73,17 +73,16 @@
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foregroundGravity="right">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/babyListContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="left"
                     android:layout_marginBottom="10dp"
-                    android:gravity="right"
-                    android:orientation="horizontal"/>
+                    android:gravity="left"
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
 
             <!--            <FrameLayout-->
