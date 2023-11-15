@@ -82,17 +82,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
                     replies.put(commentKey, newComment);
-
+                    newComment.setComment_id(commentKey);
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);
                 }else {
                     HashMap<String, Comment> replies = new HashMap<>();
                     Comment newComment = new Comment();
                     newComment.setContent(content);
-                    newComment.setUser(comment.getUser());
+                    newComment.setUser(user);
                     String commentKey = commentReference.push().getKey();
-                    newComment.setComment_id(commentKey);
                     replies.put(commentKey, newComment);
+                    newComment.setComment_id(commentKey);
                     commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
                     comment.setReplies(replies);
                 }

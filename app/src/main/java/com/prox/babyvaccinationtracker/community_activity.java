@@ -31,6 +31,8 @@ import android.widget.Toast;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -143,8 +145,7 @@ public class community_activity extends AppCompatActivity {
                     post.setUser(user);
 
                     uploadImagesToCloudinaryAndFirebase(post);
-                    postArrayList.add(post);
-                    postAdapter.notifyDataSetChanged();
+
 
                 }
             }
@@ -184,51 +185,63 @@ public class community_activity extends AppCompatActivity {
 
     public void uploadImagesToCloudinaryAndFirebase(Post post) {
         int total_image = uri.size();
-        AtomicInteger uploadedImageCount = new AtomicInteger(0);
+        if(total_image != 0){
+            AtomicInteger uploadedImageCount = new AtomicInteger(0);
+            for (int i = 0; i < total_image; i++) {
+                Uri image = uri.get(i);
 
-        for (int i = 0; i < total_image; i++) {
-            Uri image = uri.get(i);
-
-            MediaManager.get().upload(image.toString()).callback(new UploadCallback() {
-                @Override
-                public void onStart(String requestId) {
-                    Log.i("upload image", "onStart: ");
-                }
-
-                @Override
-                public void onProgress(String requestId, long bytes, long totalBytes) {
-                    Log.i("uploading image", "Uploading... ");
-                }
-
-                @Override
-                public void onSuccess(String requestId, Map resultData) {
-                    String url = resultData.get("url").toString();
-                    Log.i("upload image onSuccess", "image URL: " + url);
-                    Image_url.add(url);
-                    uploadedImageCount.incrementAndGet();
-
-                    if (uploadedImageCount.get() == total_image) {
-                        // All images are uploaded, proceed with saving data to Firebase.
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
-                        String post_id = databaseReference.push().getKey();
-                        post.setImage_url(Image_url);
-                        databaseReference.child(post_id).setValue(post);
-                        Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
-                        hidePopupDialogWithAnimation();
+                MediaManager.get().upload(image.toString()).callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
+                        Log.i("upload image", "onStart: ");
                     }
-                }
 
-                @Override
-                public void onError(String requestId, ErrorInfo error) {
-                    Log.i("upload image onError", "error " + error.getDescription());
-                }
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                        Log.i("uploading image", "Uploading... ");
+                    }
 
-                @Override
-                public void onReschedule(String requestId, ErrorInfo error) {
-                    Log.i("upload image onReschedule", "Reschedule " + error.getDescription());
-                }
-            }).dispatch();
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String url = resultData.get("url").toString();
+                        Log.i("upload image onSuccess", "image URL: " + url);
+                        Image_url.add(url);
+                        uploadedImageCount.incrementAndGet();
+
+                        if (uploadedImageCount.get() == total_image) {
+                            // All images are uploaded, proceed with saving data to Firebase.
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+                            String post_id = databaseReference.push().getKey();
+                            post.setImage_url(Image_url);
+                            post.setPost_id(post_id);
+                            databaseReference.child(post_id).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        postArrayList.add(post);
+                                        postAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                            Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                            hidePopupDialogWithAnimation();
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
+                        Log.i("upload image onError", "error " + error.getDescription());
+                    }
+
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                        Log.i("upload image onReschedule", "Reschedule " + error.getDescription());
+                    }
+                }).dispatch();
+            }
         }
+
     }
 
     private ArrayList<String> getHashtag(String content) {
