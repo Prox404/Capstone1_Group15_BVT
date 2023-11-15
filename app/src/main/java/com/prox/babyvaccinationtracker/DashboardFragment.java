@@ -127,17 +127,53 @@ public class DashboardFragment extends Fragment {
 
     private void addButtonForBaby(final Baby baby) {
         Button button = new Button(context);
-        button.setBackground(context.getResources().getDrawable(R.drawable.button_bg));
         button.setText(baby.getBaby_name());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(0, 0, 10, 0);
+        button.setLayoutParams(params);
+
+        // Nếu babyListContainer chưa có Button nào, hoặc Button đầu tiên được thêm vào
+        if (babyListContainer.getChildCount() == 0) {
+            // Thiết lập background cho Button đầu tiên là color/primaryColor
+            button.setBackground(context.getResources().getDrawable(R.drawable.button_bg));
+            button.setTextColor(context.getResources().getColor(R.color.white));
+            babyId = baby.getBaby_id();
+            setTimeLine(babyId);
+        } else {
+            // Thiết lập background mặc định cho tất cả các Button khác
+            button.setBackground(context.getResources().getDrawable(R.drawable.white_button_bg));
+        }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 babyId = baby.getBaby_id();
                 setTimeLine(babyId);
+
+                // Đặt lại background cho tất cả các Button về màu trắng
+                resetButtonBackgrounds();
+
+                // Đặt background cho Button đang chọn là color/primaryColor
+                button.setBackground(context.getResources().getDrawable(R.drawable.button_bg));
             }
         });
 
         babyListContainer.addView(button);
+    }
+
+    private void resetButtonBackgrounds() {
+        // Lặp qua tất cả các Button trong babyListContainer và đặt background về màu trắng
+        for (int i = 0; i < babyListContainer.getChildCount(); i++) {
+            View child = babyListContainer.getChildAt(i);
+            if (child instanceof Button) {
+                ((Button) child).setBackground(context.getResources().getDrawable(R.drawable.white_button_bg));
+                ((Button) child).setTextColor(context.getResources().getColor(R.color.textColor));
+            }
+        }
     }
 
     public void setTimeLine(String baby_id) {

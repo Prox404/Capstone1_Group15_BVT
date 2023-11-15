@@ -71,6 +71,8 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
         String userID = sharedPreferences.getString("customer_id", "");
         databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers").child(userID);
+
+        Log.i("checkList", "onCreateView: " + GetStartedActivity.babyCheckList.toString());
         buttonCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +103,7 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         DatabaseReference vaccinationRegimenReference = FirebaseDatabase.getInstance().getReference("vaccination_regimen").child(babyID);
                         List<Regimen> regimens = null;
                         try {
-                            regimens = VaccineRegimen.getVaccinationRegimen(GetStartedActivity.baby.getBaby_birthday());
+                            regimens = VaccineRegimen.getVaccinationRegimen(GetStartedActivity.baby.getBaby_birthday(), GetStartedActivity.babyCheckList);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }

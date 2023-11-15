@@ -50,13 +50,14 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
+                    app:cardCornerRadius="35dp"
                     app:cardElevation="0dp">
 
                     <ImageView
                         android:id="@+id/imageViewAvatar"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
+                        android:scaleType="centerCrop"
                         app:srcCompat="@drawable/add_avatar_bg" />
                 </androidx.cardview.widget.CardView>
 
@@ -67,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 android:text="Phác đồ tiêm chủng" />
 
             <HorizontalScrollView
@@ -107,17 +109,24 @@
                 </androidx.recyclerview.widget.RecyclerView>
             </androidx.cardview.widget.CardView>
 
-<!--            <FrameLayout-->
+            <!--            <FrameLayout-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="10dp"-->
 <!--                android:background="@drawable/timeline_item_bottom_bg">-->
 
 <!--            </FrameLayout>-->
 
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Heading2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:text="Công cụ" />
+
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 app:alignContent="stretch"
                 app:alignItems="stretch"
                 app:flexWrap="wrap"

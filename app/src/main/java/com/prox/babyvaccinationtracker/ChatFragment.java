@@ -95,7 +95,6 @@ public class ChatFragment extends Fragment {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 Log.i("chat", "onDataChange: " + snapshot.toString());
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Log.i("chat", "onDataChange: " + dataSnapshot.toString());

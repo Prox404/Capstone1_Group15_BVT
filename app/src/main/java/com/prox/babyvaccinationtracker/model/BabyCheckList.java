@@ -54,6 +54,31 @@ public class BabyCheckList {
     public BabyCheckList() {
     }
 
+    @Override
+    public String toString() {
+        return "BabyCheckList{" +
+                "baby_id='" + baby_id + '\'' +
+                ", tuberculosis=" + tuberculosis +
+                ", hepatitis_b=" + hepatitis_b +
+                ", diphtheria_whooping_cough_poliomyelitis=" + diphtheria_whooping_cough_poliomyelitis +
+                ", paralysis=" + paralysis +
+                ", pneumonia_hib_meningitis=" + pneumonia_hib_meningitis +
+                ", rotavirus_diarrhea=" + rotavirus_diarrhea +
+                ", pneumonia_meningitis_otitis_media_caused_by_streptococcus=" + pneumonia_meningitis_otitis_media_caused_by_streptococcus +
+                ", meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_b_c=" + meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_b_c +
+                ", influenza=" + influenza +
+                ", measles=" + measles +
+                ", meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_a_c_w_y=" + meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_a_c_w_y +
+                ", japanese_encephalitis=" + japanese_encephalitis +
+                ", measles_mumps_rubella=" + measles_mumps_rubella +
+                ", chickenpox=" + chickenpox +
+                ", hepatitis_a=" + hepatitis_a +
+                ", hepatitis_a_b=" + hepatitis_a_b +
+                ", tetanus=" + tetanus +
+                ", anthrax=" + anthrax +
+                '}';
+    }
+
     public boolean isTuberculosis() {
         return tuberculosis;
     }
