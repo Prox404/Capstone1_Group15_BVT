@@ -126,8 +126,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     Comment comment = new Comment();
                     comment.setContent(commentContent);
                     comment.setUser(user);
-                    postReference.child(postItem.getPost_id()).child("comments").push().setValue(comment).addOnCompleteListener(task -> {
+                    DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
+                    commentRef.setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
+                            String commentKey = commentRef.getKey();
+                            comment.setComment_id(commentKey);
                             commentList.add(comment);
                             commentAdapter.notifyDataSetChanged();
                         }else {
