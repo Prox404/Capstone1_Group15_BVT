@@ -20,6 +20,7 @@ import com.prox.babyvaccinationtracker.model.Message;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -48,6 +49,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
             notifyDataSetChanged(); // Cập nhật giao diện khi có tin nhắn mới
         }
+    }
+
+    public void sortMessagesByKeyName(){
+        Collections.sort(messagesList, Comparator.comparing(Message::getMessage_id));
     }
 
     public void clearMessages() {
