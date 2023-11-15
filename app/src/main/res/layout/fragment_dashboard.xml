@@ -129,6 +129,54 @@
                     app:layout_flexBasisPercent="50%">
 
                     <LinearLayout
+                        android:id="@+id/community"
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/tool_item_bg"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/community" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="right"
+                            android:maxWidth="150dp"
+                            android:text="Cộng đồng"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_flexBasisPercent="50%">
+
+                    <LinearLayout
                         android:id="@+id/injectionHistory"
                         android:layout_width="match_parent"
                         android:layout_height="230dp"
@@ -172,7 +220,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     app:layout_flexBasisPercent="50%">
 
@@ -180,7 +228,8 @@
                         android:id="@+id/QRCodeScanner"
                         android:layout_width="match_parent"
                         android:layout_height="230dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="10dp"
                         android:background="@drawable/tool_item_bg"
                         android:gravity="right"
                         android:orientation="vertical"
