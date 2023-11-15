@@ -126,13 +126,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     Comment comment = new Comment();
                     comment.setContent(commentContent);
                     comment.setUser(user);
-                    String comment_id = postReference.child(postItem.getPost_id()).child("comments").getKey();
-                    comment.setComment_id(comment_id);
-                    postReference.child(postItem.getPost_id()).child("comments").push().setValue(comment).addOnCompleteListener(task -> {
+                    DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
+                    commentRef.setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
-                            HashMap<String, Comment> commentsMap = new HashMap<>();
-                            commentsMap.put(comment_id, comment);
-                            postItem.setComments(commentsMap);
+                            String commentKey = commentRef.getKey();
+                            comment.setComment_id(commentKey);
                             commentList.add(comment);
                             commentAdapter.notifyDataSetChanged();
                         }else {
