@@ -37,6 +37,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.PostAdapter;
 import com.prox.babyvaccinationtracker.model.Comment;
@@ -169,6 +170,14 @@ public class community_activity extends AppCompatActivity {
                     post.setPost_id(dataSnapshot.getKey());
                     post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
+
+                    HashMap<String, Boolean> visitors = (HashMap<String, Boolean>) dataSnapshot.child("Visitors").getValue();
+                    if(visitors != null){
+                        post.setVisitor(visitors);
+                    }else {
+                        post.setVisitor(new HashMap<>());
+                    }
+                    Log.i("VISITORS", visitors+"");
                     postArrayList.add(post);
                 }
                 postAdapter = new PostAdapter(postArrayList, user);
