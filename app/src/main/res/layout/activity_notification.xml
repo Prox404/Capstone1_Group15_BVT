@@ -7,8 +7,16 @@
     android:orientation="vertical"
     tools:context=".NotificationActivity">
 
+    <TextView
+        style="@style/Widget.AppCompat.TextView.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Thông báo" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylerViewNotification"
+        android:paddingHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

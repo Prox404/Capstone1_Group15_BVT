@@ -3,6 +3,8 @@ package com.prox.babyvaccinationtracker.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         if (notification.getDate() != null){
             holder.dateTextView.setText(formatDate(notification.getDate()));
         }
+
+        if (notification.getTitle().contains("Nhắc nhở")){
+            holder.imageViewNotiType.setImageResource(R.drawable.ic_remind);
+            holder.iconContainer.setBackgroundResource(R.drawable.tool_item_red_bg);
+        }else{
+            holder.imageViewNotiType.setImageResource(R.drawable.ic_notifications);
+            holder.iconContainer.setBackgroundResource(R.drawable.tool_item_bg);
+        }
     }
 
     @Override
@@ -57,11 +67,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public TextView messageTextView;
         public TextView dateTextView;
 
+        public LinearLayout iconContainer;
+
+        public ImageView imageViewNotiType;
+
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             messageTextView = itemView.findViewById(R.id.messageTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
+            iconContainer = itemView.findViewById(R.id.iconContainer);
+            imageViewNotiType = itemView.findViewById(R.id.imageViewNotiType);
         }
     }
 
