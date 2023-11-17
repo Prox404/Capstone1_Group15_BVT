@@ -54,7 +54,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post postItem = postItemList.get(position);
-        HashMap<String, Boolean> visitors = new HashMap<String, Boolean> (postItem.getVisitor());
+        HashMap<String, Boolean> visitors;
+        if(postItem.getVisitor()!= null){
+            visitors = new HashMap<String, Boolean> (postItem.getVisitor());
+        }
+        else {
+            visitors = new HashMap<String, Boolean>();
+        }
         Log.i("Post", "onBindViewHolder: " + postItem.toString());
         holder.userName.setText(postItem.getUser().getUser_name());
         holder.postTime.setText(postItem.getCreated_at());
