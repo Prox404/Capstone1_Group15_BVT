@@ -163,10 +163,14 @@ public class community_activity extends AppCompatActivity {
                     post.setUser(dataSnapshot.child("user").getValue(User.class));
                     post.setContent(dataSnapshot.child("content").getValue(String.class));
                     post.setCreated_at(dataSnapshot.child("created_at").getValue(String.class));
-                    ArrayList<String> hashtags = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("hashtags").getValue());
-                    post.setHashtags(hashtags);
-                    ArrayList<String> image_url = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("image_url").getValue());
-                    post.setImage_url(image_url);
+                    ArrayList<String> hashtags = (ArrayList<String>) dataSnapshot.child("hashtags").getValue();
+                    if(hashtags != null){
+                        post.setHashtags(hashtags);
+                    }
+                    ArrayList<String> image_url = (ArrayList<String>) dataSnapshot.child("image_url").getValue();
+                    if(image_url != null){
+                        post.setImage_url(image_url);
+                    }
                     post.setPost_id(dataSnapshot.getKey());
                     post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
@@ -177,7 +181,7 @@ public class community_activity extends AppCompatActivity {
                     }else {
                         post.setVisitor(new HashMap<>());
                     }
-                    Log.i("VISITORS", visitors+"");
+                    Log.i("VISITORS", post+"");
                     postArrayList.add(post);
                 }
                 postAdapter = new PostAdapter(postArrayList, user);
@@ -229,6 +233,9 @@ public class community_activity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         postArrayList.add(post);
                                         postAdapter.notifyDataSetChanged();
+                                        editTextHashtag.setText("");
+                                        editTextPopupContent.setText("");
+                                        uri.clear();
                                     }
                                 }
                             });
@@ -249,7 +256,29 @@ public class community_activity extends AppCompatActivity {
                     }
                 }).dispatch();
             }
+        }else {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+            String post_id = databaseReference.push().getKey();
+            post.setPost_id(post_id);
+            databaseReference.child(post_id).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        postArrayList.add(post);
+                        postAdapter.notifyDataSetChanged();
+                        editTextHashtag.setText("");
+                        editTextPopupContent.setText("");
+                        uri.clear();
+                    }
+                }
+            });
+            Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+            hidePopupDialogWithAnimation();
         }
+
+    }
+
+    public void updateFirebasebyPost(){
 
     }
 
