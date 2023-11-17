@@ -34,6 +34,7 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
 
     ArrayList<Post> posts = new ArrayList<>();
     ArrayList<String> post_id = new ArrayList<>();
+    int currentTabPossion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentTabPossion = viewPager.getCurrentItem();
                 posts.clear();
                 post_id.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -56,10 +58,14 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
                         post.setUser(dataSnapshot.child("user").getValue(User.class));
                         post.setContent(dataSnapshot.child("content").getValue(String.class));
                         post.setCreated_at(dataSnapshot.child("created_at").getValue(String.class));
-                        ArrayList<String> hashtags = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("hashtags").getValue());
-                        post.setHashtags(hashtags);
-                        ArrayList<String> image_url = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("image_url").getValue());
-                        post.setImage_url(image_url);
+                        ArrayList<String> hashtags = (ArrayList<String>) dataSnapshot.child("hashtags").getValue();
+                        if(hashtags != null){
+                            post.setHashtags(hashtags);
+                        }
+                        ArrayList<String> image_url = (ArrayList<String>) dataSnapshot.child("image_url").getValue();
+                        if(image_url != null){
+                            post.setImage_url(image_url);
+                        }
                         post.setPost_id(dataSnapshot.getKey());
                         post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                         post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
@@ -70,13 +76,13 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
                         }else {
                             post.setVisitor(new HashMap<>());
                         }
-                        Log.i("VISITORS", visitors+"");
                         posts.add(post);
                     }
                 }
                 adapter = new PostViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, posts);
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
+                viewPager.setCurrentItem(currentTabPossion);
             }
 
             @Override
@@ -87,4 +93,5 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
 
 
     }
+
 }
