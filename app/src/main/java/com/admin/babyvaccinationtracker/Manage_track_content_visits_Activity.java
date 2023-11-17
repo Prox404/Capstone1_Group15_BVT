@@ -47,6 +47,8 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                posts.clear();
+                post_id.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     String id = dataSnapshot.getKey();
                     if(!post_id.contains(id)){
