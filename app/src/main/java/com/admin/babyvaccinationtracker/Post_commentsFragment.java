@@ -59,7 +59,7 @@ public class Post_commentsFragment extends Fragment {
         View view =   inflater.inflate(R.layout.fragment_post_comments, container, false);
         context = container != null ? container.getContext() : null;
         DeleteP= view.findViewById(R.id.Rcview);
-        DetetePAdapter = new DeletePostAdapter(posts, context);
+        DetetePAdapter = new DeletePostAdapter(posts);
         DeleteP.setLayoutManager(new LinearLayoutManager(context));
         DeleteP.setAdapter(DetetePAdapter);
         Log.i("POSSTTT", posts +"");

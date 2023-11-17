@@ -24,11 +24,11 @@ import java.util.ArrayList;
 
 public class DeletePostAdapter extends RecyclerView.Adapter<DeletePostAdapter.view > {
     ArrayList<Post> PostDete ;
-    Context Deletepost;
 
-    public DeletePostAdapter ( ArrayList<Post> PostDete, Context delete){
+
+    public DeletePostAdapter ( ArrayList<Post> PostDete){
         this.PostDete=PostDete;
-        this.Deletepost =delete;
+
     }
     @NonNull
     @Override
@@ -40,23 +40,23 @@ public class DeletePostAdapter extends RecyclerView.Adapter<DeletePostAdapter.vi
     @Override
     public void onBindViewHolder(@NonNull DeletePostAdapter.view holder, int position) {
         Post delteteP = PostDete.get(position);
-    holder.tv_deletenumber.setText ((position +1)+"");
-    holder.tv_user.setText(delteteP.getUser().getUser_name());
-    holder.tv_content.setText(delteteP.getContent().toString());
-    holder.bt_delete.setOnClickListener(new View.OnClickListener() {
+        holder.tv_deletenumber.setText ((position +1)+"");
+        holder.tv_user.setText(delteteP.getUser().getUser_name());
+        holder.tv_content.setText(delteteP.getContent().toString());
+        holder.bt_delete.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
-            EditContent.child(delteteP.getPost_id()).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(Deletepost, "Xóa bài viết thành công", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
+                EditContent.child(delteteP.getPost_id()).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(holder.bt_delete.getContext(), "Xóa bài viết thành công", Toast.LENGTH_SHORT).show();
 
-                }
-            });
+                    }
+                });
 
-        }
-    });
+            }
+        });
     }
 
 

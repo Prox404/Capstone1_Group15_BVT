@@ -1,6 +1,8 @@
 package com.admin.babyvaccinationtracker.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     String user_id;
     String user_name;
     String user_avatar;

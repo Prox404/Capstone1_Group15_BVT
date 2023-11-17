@@ -47,26 +47,28 @@ public class PostVisitsAdapter extends RecyclerView.Adapter<PostVisitsAdapter.vi
         Long number_comment = 0L;
         if (post.getComments() != null){
             number_comment += post.getComments().size();
-//            for (Map.Entry<String, Comment> entry : post.getComments().entrySet()) {
-//                Object commentObject = entry.getValue();
-//                if (commentObject != null && commentObject instanceof HashMap) {
-//                    number_comment += countComments((HashMap<String, Object>) commentObject);
-//                }
-//            }
-            number_comment += countComments(post.getComments());
-
+            for (Map.Entry<String, Comment> entry : post.getComments().entrySet()) {
+                Object commentObject = entry.getValue();
+                if (commentObject != null && commentObject instanceof HashMap) {
+                    number_comment += countComments((HashMap<String, Object>) commentObject);
+                }
+            }
         }
         holder.tv_post_number_comment.setText(number_comment+"");
     }
 
-    private Long countComments(HashMap<String,Comment> comments) {
+    private Long countComments(HashMap<String,Object> comments) {
         Object commentObject = comments.get("replies");
         Long number_comments = 0L;
-        if(commentObject != null){
-//           number_comments = (long) commentObject.size();
-//            for(Map.Entry<String, Object> entry: commentObject.entrySet()){
-//                number_comments += countComments((HashMap<String, Object>) entry);
-//            }
+        if(commentObject != null && commentObject instanceof HashMap){
+           number_comments = (long) ((HashMap<String, Object>) commentObject).size();
+            for(Map.Entry<String, Object> entry: ((HashMap<String, Object>) commentObject).entrySet()){
+                Object object = entry.getValue();
+                if(object != null && object instanceof HashMap){
+                    number_comments += countComments((HashMap<String, Object>) object);
+                }
+
+            }
         }
         return number_comments;
     }
