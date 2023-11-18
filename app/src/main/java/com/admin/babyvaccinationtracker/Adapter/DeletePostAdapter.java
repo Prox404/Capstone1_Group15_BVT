@@ -1,6 +1,8 @@
 package com.admin.babyvaccinationtracker.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,20 +48,37 @@ public class DeletePostAdapter extends RecyclerView.Adapter<DeletePostAdapter.vi
         holder.bt_delete.setOnClickListener(new View.OnClickListener() {
         @Override
             public void onClick(View view) {
-                DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
-                EditContent.child(delteteP.getPost_id()).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(holder.bt_delete.getContext(), "Xóa bài viết thành công", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder b = new AlertDialog.Builder(holder.bt_delete.getContext());
+                b.setTitle("Cảnh báo");
+                b.setMessage("Bạn có muốn xóa bài đăng này không?");
+                b.setIcon(R.drawable.block);
+                b.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
+                        EditContent.child(delteteP.getPost_id()).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(holder.bt_delete.getContext(), "Xóa bài viết thành công", Toast.LENGTH_SHORT).show();
 
+                            }
+                        });
                     }
                 });
-
+                b.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       dialogInterface.cancel();
+                    }
+                });
+                b.create().show();
             }
         });
     }
-
-
+    public void filter_post(ArrayList<Post> posts){
+        this.PostDete = new ArrayList<>(posts);
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return PostDete.size();

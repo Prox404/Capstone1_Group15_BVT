@@ -26,6 +26,15 @@ public class Post implements Serializable {
     public void setVisitor(HashMap<String, Boolean> visitor) {
         this.visitor = visitor;
     }
+    public int number_comment;
+
+    public int getNumber_comment() {
+        return number_comment;
+    }
+
+    public void setNumber_comment(int number_comment) {
+        this.number_comment = number_comment;
+    }
 
     public Post(String content, User user, String created_at, int likes) {
         this.content = content;
