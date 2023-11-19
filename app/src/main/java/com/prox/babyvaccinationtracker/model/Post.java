@@ -15,6 +15,15 @@ public class Post {
     private int likes = 0;
     private HashMap<String, Comment> comments;
     private ArrayList<String> hashtags;
+    private  HashMap<String, Boolean> visitor;
+
+    public HashMap<String, Boolean> getVisitor() {
+        return visitor;
+    }
+
+    public void setVisitor(HashMap<String, Boolean> visitor) {
+        this.visitor = visitor;
+    }
 
     public Post(String content, User user, String created_at, int likes) {
         this.content = content;

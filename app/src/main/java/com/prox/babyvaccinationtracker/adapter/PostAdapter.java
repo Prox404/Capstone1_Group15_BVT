@@ -38,6 +38,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     List<Comment> commentList;
     CommentAdapter commentAdapter;
 
+
     public PostAdapter(List<Post> postItemList, User user) {
         this.postItemList = postItemList;
         this.user = user;
@@ -53,7 +54,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post postItem = postItemList.get(position);
-
+        HashMap<String, Boolean> visitors;
+        if(postItem.getVisitor()!= null){
+            visitors = new HashMap<String, Boolean> (postItem.getVisitor());
+        }
+        else {
+            visitors = new HashMap<String, Boolean>();
+        }
         Log.i("Post", "onBindViewHolder: " + postItem.toString());
         holder.userName.setText(postItem.getUser().getUser_name());
         holder.postTime.setText(postItem.getCreated_at());
@@ -99,7 +106,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
             holder.recylerViewComments.setAdapter(commentAdapter);
         }
+        holder.viewPagerImage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if(!visitors.containsKey(user_id)){
+                    Log.i("VISITORS", visitors+"");
+                    postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                }
+            }
+        });
         holder.likeContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,9 +141,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 }
                 postItem.setLiked_users(liked_users);
                 postReference.child(postItem.getPost_id()).child("liked_users").setValue(liked_users);
+                Log.i("VISITORS", visitors+"");
+                if(!visitors.containsKey(user_id)){
+                    Log.i("VISITORS", visitors+"");
+                    postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                }
             }
         });
-
+        holder.imageViewComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.recylerViewComments.getVisibility() == View.GONE){
+                    holder.recylerViewComments.setVisibility(View.VISIBLE);
+                }
+                else {
+                    holder.recylerViewComments.setVisibility(View.GONE);
+                }
+                if(!visitors.containsKey(user_id)){
+                    postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                }
+                //holder.recylerViewComments.smoothScrollToPosition(holder.getLayoutPosition());
+            }
+        });
         holder.buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,16 +174,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
                     commentRef.setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
-                            String commentKey = commentRef.getKey();
-                            comment.setComment_id(commentKey);
-                            commentList.add(comment);
-                            commentAdapter.notifyDataSetChanged();
+                            if(holder.recylerViewComments.getVisibility() == View.GONE){
+                                holder.recylerViewComments.setVisibility(View.VISIBLE);
+                            }
+                            //holder.recylerViewComments.smoothScrollToPosition(holder.getLayoutPosition());
                         }else {
                             Log.i("Comment", "onClick: Comment failed");
                         }
                     });
                     holder.editTextCommentContent.setText("");
+                    if(!visitors.containsKey(user_id)){
+                        postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                    }
                 }
+
             }
         });
 
@@ -180,13 +229,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView postTime;
         TextView postContent;
         TextView textViewHashtag;
-        ImageView userAvatar, imageViewHeart;
+        ImageView userAvatar, imageViewHeart,imageViewComment;
         ViewPager2 viewPagerImage;
         LinearLayout likeContainer, commentContainer;
         SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("user", itemView.getContext().MODE_PRIVATE);
         EditText editTextCommentContent;
         Button buttonSendComment;
-
         RecyclerView recylerViewComments;
 
         public PostViewHolder(@NonNull View itemView) {
@@ -204,7 +252,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             recylerViewComments = itemView.findViewById(R.id.recyclerViewComments);
             buttonSendComment = itemView.findViewById(R.id.buttonSendComment);
             editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
-
+            imageViewComment = itemView.findViewById(R.id.imageViewComment);
             user_id = sharedPreferences.getString("customer_id", "");
 
         }

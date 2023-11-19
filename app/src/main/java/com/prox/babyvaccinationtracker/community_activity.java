@@ -40,6 +40,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.PostAdapter;
 import com.prox.babyvaccinationtracker.model.Comment;
@@ -68,7 +69,7 @@ public class community_activity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE = 1;
     RecyclerView recyclerViewPost;
-    ArrayList<Post> postArrayList;
+    ArrayList<Post> postArrayList = new ArrayList<>();
     PostAdapter postAdapter;
     Button buttonAddNewPost;
 
@@ -113,6 +114,10 @@ public class community_activity extends AppCompatActivity {
         recyclerAdapter = new RecyclerAdapter(uri,community_activity.this);
         recycleViewImage.setLayoutManager(new GridLayoutManager(community_activity.this, 3));
         recycleViewImage.setAdapter(recyclerAdapter);
+
+        postAdapter = new PostAdapter(postArrayList, user);
+        recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+        recyclerViewPost.setAdapter(postAdapter);
 
         editTextContent.setFocusable(false);
         editTextContent.setOnClickListener(new View.OnClickListener() {
@@ -181,21 +186,35 @@ public class community_activity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                postArrayList = new ArrayList<>();
+                postArrayList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Post post = new Post();
                     post.setUser(dataSnapshot.child("user").getValue(User.class));
                     post.setContent(dataSnapshot.child("content").getValue(String.class));
                     post.setCreated_at(dataSnapshot.child("created_at").getValue(String.class));
-                    ArrayList<String> hashtags = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("hashtags").getValue());
-                    post.setHashtags(hashtags);
-                    ArrayList<String> image_url = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("image_url").getValue());
-                    post.setImage_url(image_url);
+                    ArrayList<String> hashtags = (ArrayList<String>) dataSnapshot.child("hashtags").getValue();
+                    if(hashtags != null){
+                        post.setHashtags(hashtags);
+                    }
+                    ArrayList<String> image_url = (ArrayList<String>) dataSnapshot.child("image_url").getValue();
+                    if(image_url != null){
+                        post.setImage_url(image_url);
+                    }
                     post.setPost_id(dataSnapshot.getKey());
                     post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
+
+                    HashMap<String, Boolean> visitors = (HashMap<String, Boolean>) dataSnapshot.child("Visitors").getValue();
+                    if(visitors != null){
+                        post.setVisitor(visitors);
+                    }else {
+                        post.setVisitor(new HashMap<>());
+                    }
+                    Log.i("VISITORS", post+"");
                     postArrayList.add(post);
                 }
+               
+
                 postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
@@ -355,8 +374,9 @@ public class community_activity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        postArrayList.add(post);
-                                        postAdapter.notifyDataSetChanged();
+                                        editTextHashtag.setText("");
+                                        editTextPopupContent.setText("");
+                                        uri.clear();
                                     }
                                 }
                             });
@@ -377,7 +397,27 @@ public class community_activity extends AppCompatActivity {
                     }
                 }).dispatch();
             }
+        }else {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+            String post_id = databaseReference.push().getKey();
+            post.setPost_id(post_id);
+            databaseReference.child(post_id).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        editTextHashtag.setText("");
+                        editTextPopupContent.setText("");
+                        uri.clear();
+                    }
+                }
+            });
+            Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+            hidePopupDialogWithAnimation();
         }
+
+    }
+
+    public void updateFirebasebyPost(){
 
     }
 
