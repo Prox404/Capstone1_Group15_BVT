@@ -8,6 +8,13 @@
     android:padding="20dp"
     tools:context=".ScheduleFragment">
 
+    <TextView
+        android:id="@+id/textView39"
+        style="@style/Widget.AppCompat.TextView.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lịch trình" />
+
     <com.google.android.flexbox.FlexboxLayout
         app:alignContent="stretch"
         app:alignItems="stretch"
@@ -41,7 +48,8 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_history" />
+                        android:src="@drawable/ic_history"
+                        app:tint="@color/textColor"/>
                 </LinearLayout>
 
                 <FrameLayout
@@ -55,11 +63,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
-                    android:gravity="right"
                     android:maxWidth="150dp"
                     android:text="Đăng ký tiêm chủng!"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -89,7 +96,8 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_qr" />
+                        android:src="@drawable/ic_qr"
+                        app:tint="@color/textColor"/>
                 </LinearLayout>
 
                 <FrameLayout
@@ -106,7 +114,7 @@
                     android:maxWidth="150dp"
                     android:text="Đơn đăng ký tiêm chủng"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:textSize="20sp" />
 
             </LinearLayout>

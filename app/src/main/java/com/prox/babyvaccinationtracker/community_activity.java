@@ -3,6 +3,7 @@ package com.prox.babyvaccinationtracker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,11 +27,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +48,10 @@ import com.prox.babyvaccinationtracker.model.Post;
 import com.prox.babyvaccinationtracker.model.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,6 +73,14 @@ public class community_activity extends AppCompatActivity {
     PostAdapter postAdapter;
     Button buttonAddNewPost;
 
+    User user;
+
+    private List<String> topHashtagsList;
+
+    CardView highlightContainer;
+    FlexboxLayout topHashTag;
+    String  selectedHashtag = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,13 +95,21 @@ public class community_activity extends AppCompatActivity {
         buttonAddNewPost = findViewById(R.id.buttonAddNewPost);
         editTextPopupContent = findViewById(R.id.editTextPopupContent);
         recyclerViewPost = findViewById(R.id.recyclerViewPost);
+        highlightContainer = findViewById(R.id.highlightContainer);
+        topHashTag = findViewById(R.id.topHashTag);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String user_id = sharedPreferences.getString("customer_id", "");
         String user_name = sharedPreferences.getString("cus_name", "");
         String user_avatar = sharedPreferences.getString("cus_avatar", "");
 
-        User user = new User(user_id, user_name, user_avatar, "customer");
+        Calendar calendar = Calendar.getInstance();
+        final long currentTime = calendar.getTimeInMillis();
+
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        final long thirtyDaysAgo = calendar.getTimeInMillis();
+
+        user = new User(user_id, user_name, user_avatar, "customer");
 
         recyclerAdapter = new RecyclerAdapter(uri,community_activity.this);
         recycleViewImage.setLayoutManager(new GridLayoutManager(community_activity.this, 3));
@@ -156,6 +178,9 @@ public class community_activity extends AppCompatActivity {
             }
         });
 
+
+
+
         // Hiển thị bài viết
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -188,7 +213,23 @@ public class community_activity extends AppCompatActivity {
                     Log.i("VISITORS", post+"");
                     postArrayList.add(post);
                 }
-                postAdapter.notifyDataSetChanged();
+               
+
+                postAdapter = new PostAdapter(postArrayList, user);
+                recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+                recyclerViewPost.setAdapter(postAdapter);
+
+                List<String> allHashtags = getAllHashtags(postArrayList);
+                Map<String, Integer> hashtagCounts = countHashtags(allHashtags);
+                List<String> topHashtags = getTopHashtags(hashtagCounts);
+
+
+                if (topHashtags != null && topHashtags.size() > 0){
+                    highlightContainer.setVisibility(View.VISIBLE);
+                    addHashTagsToContainer(topHashtags);
+                }
+
+
             }
 
             @Override
@@ -197,6 +238,106 @@ public class community_activity extends AppCompatActivity {
             }
         });
     }
+
+    private List<Post> getPostsByHashtag(List<Post> posts, String hashtag) {
+        List<Post> postsWithHashtag = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getHashtags() != null && post.getHashtags().contains(hashtag)) {
+                postsWithHashtag.add(post);
+            }
+        }
+        return postsWithHashtag;
+    }
+
+    private void addHashTagsToContainer(List<String> topHashtags) {
+        for (String hashtag : topHashtags) {
+
+            if (topHashtagsList != null && topHashtagsList.contains(hashtag)) {
+                continue;
+            }
+
+            TextView textView = new TextView(this);
+            textView.setText(hashtag);
+            textView.setPadding(8, 4, 8, 4);
+            textView.setTextSize(20);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Xử lý khi bấm vào hashtag
+                    Log.i("selectedHashtag", "onClick: " + hashtag);
+                    handleHashtagClick(hashtag);
+                    if (selectedHashtag.equals(hashtag)) {
+                        resetHashtagColors();
+                        textView.setBackgroundResource(R.drawable.hashtag_selected);
+                    } else {
+                        textView.setBackgroundResource(R.drawable.hashtag_unselected);
+                    }
+                }
+            });
+            topHashTag.addView(textView);
+        }
+    }
+
+    private void resetHashtagColors() {
+        for (int i = 0; i < topHashTag.getChildCount(); i++) {
+            TextView textView = (TextView) topHashTag.getChildAt(i);
+            textView.setBackgroundResource(R.drawable.hashtag_unselected);
+        }
+    }
+
+    private void handleHashtagClick(String hashtag) {
+        if (selectedHashtag.equals(hashtag)) {
+            // Đã chọn hashtag này rồi, bấm lần nữa để bỏ chọn
+            selectedHashtag = "";
+            postAdapter = new PostAdapter(postArrayList, user);
+            recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+            recyclerViewPost.setAdapter(postAdapter);
+            postAdapter.notifyDataSetChanged();
+            return;
+        }else{
+            selectedHashtag = hashtag;
+            List<Post> postsWithHashtag = getPostsByHashtag(postArrayList, hashtag);
+            Log.i("FilterSize", "handleHashtagClick: " + postsWithHashtag.size());
+            postAdapter = new PostAdapter(postsWithHashtag, user);
+            recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+            recyclerViewPost.setAdapter(postAdapter);
+            postAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
+    private List<String> getAllHashtags(List<Post> posts) {
+        List<String> allHashtags = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getHashtags() != null) {
+                allHashtags.addAll(post.getHashtags());
+            }
+        }
+        return allHashtags;
+    }
+
+    private Map<String, Integer> countHashtags(List<String> allHashtags) {
+        Map<String, Integer> hashtagCounts = new HashMap<>();
+        for (String hashtag : allHashtags) {
+            hashtagCounts.put(hashtag, hashtagCounts.getOrDefault(hashtag, 0) + 1);
+        }
+        return hashtagCounts;
+    }
+
+    private List<String> getTopHashtags(Map<String, Integer> hashtagCounts) {
+        List<Map.Entry<String, Integer>> sortedHashtags = new ArrayList<>(hashtagCounts.entrySet());
+
+        Collections.sort(sortedHashtags, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        List<String> topHashtags = new ArrayList<>();
+        for (int i = 0; i < Math.min(sortedHashtags.size(), 10); i++) {
+            topHashtags.add(sortedHashtags.get(i).getKey());
+        }
+        return topHashtags;
+    }
+
+
 
     public void uploadImagesToCloudinaryAndFirebase(Post post) {
         int total_image = uri.size();

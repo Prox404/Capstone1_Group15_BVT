@@ -153,6 +153,8 @@ public class HomeActivity extends AppCompatActivity {
             // Xử lý sự kiện khi người dùng nhấn vào biểu tượng thông báo ở đây
             // Ví dụ: mở màn hình thông báo, hiển thị danh sách thông báo, vv.
             Log.i("Home", "onOptionsItemSelected: notification" );
+            Intent i = new Intent(HomeActivity.this, NotificationActivity.class);
+            startActivity(i);
             return true;
         }
 

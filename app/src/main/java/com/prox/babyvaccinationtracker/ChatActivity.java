@@ -81,8 +81,11 @@ public class ChatActivity extends AppCompatActivity {
                         //convert hashmap to arraylist
                         for (String key : messages.keySet()) {
                             Message message = messages.get(key);
+                            message.setMessage_id(key);
                             chatAdapter.addMessage(message);
+                            Log.i("Messages", "onDataChange: " + message.getMess_content());
                         }
+                        chatAdapter.sortMessagesByKeyName();
                         chatAdapter.notifyDataSetChanged();
                         recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
                     }

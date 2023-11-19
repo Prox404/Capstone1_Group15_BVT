@@ -7,6 +7,8 @@ public class NotificationMessage implements Serializable, Comparable<Notificatio
     private String title;
     private String message;
     private Date date;
+    private String user_id;
+    private String baby_id;
 
     public NotificationMessage(String title,String user_id,  String baby_id, String message, Date date) {
         this.title = title;
@@ -24,7 +26,7 @@ public class NotificationMessage implements Serializable, Comparable<Notificatio
         this.user_id = user_id;
     }
 
-    private String user_id;
+
 
     public String getBaby_id() {
         return baby_id;
@@ -34,7 +36,7 @@ public class NotificationMessage implements Serializable, Comparable<Notificatio
         this.baby_id = baby_id;
     }
 
-    private String baby_id;
+
 
     public NotificationMessage(String title, String message, Date date) {
         this.title = title;
@@ -74,6 +76,17 @@ public class NotificationMessage implements Serializable, Comparable<Notificatio
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "NotificationMessage{" +
+                "title='" + title + '\'' +
+                ", message='" + message + '\'' +
+                ", date=" + date +
+                ", user_id='" + user_id + '\'' +
+                ", baby_id='" + baby_id + '\'' +
+                '}';
     }
 
     @Override
