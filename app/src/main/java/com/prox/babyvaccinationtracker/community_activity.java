@@ -213,7 +213,8 @@ public class community_activity extends AppCompatActivity {
                     Log.i("VISITORS", post+"");
                     postArrayList.add(post);
                 }
-               
+
+//                postAdapter.notifyDataSetChanged();
 
                 postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));

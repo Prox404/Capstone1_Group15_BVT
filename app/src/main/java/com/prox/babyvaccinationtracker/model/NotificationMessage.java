@@ -10,7 +10,46 @@ public class NotificationMessage implements Serializable, Comparable<Notificatio
     private String user_id;
     private String baby_id;
 
-    public NotificationMessage(String title,String user_id,  String baby_id, String message, Date date) {
+    private String notification_id;
+
+    private String type;
+
+    public String getNotification_id() {
+        return notification_id;
+    }
+
+    public NotificationMessage(String title, String message, Date date, String user_id, String baby_id, String notification_id, String type) {
+        this.title = title;
+        this.message = message;
+        this.date = date;
+        this.user_id = user_id;
+        this.baby_id = baby_id;
+        this.notification_id = notification_id;
+        this.type = type;
+    }
+
+    public void setNotification_id(String notification_id) {
+        this.notification_id = notification_id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public NotificationMessage(String title, String message, Date date, String user_id, String baby_id, String type) {
+        this.title = title;
+        this.message = message;
+        this.date = date;
+        this.user_id = user_id;
+        this.baby_id = baby_id;
+        this.type = type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public NotificationMessage(String title, String user_id, String baby_id, String message, Date date) {
         this.title = title;
         this.message = message;
         this.date = date;

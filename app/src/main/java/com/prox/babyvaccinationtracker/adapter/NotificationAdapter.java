@@ -2,6 +2,7 @@ package com.prox.babyvaccinationtracker.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.R;
 import com.prox.babyvaccinationtracker.RemindLaterActivity;
 import com.prox.babyvaccinationtracker.Schedule_an_injection;
@@ -29,7 +32,9 @@ import com.prox.babyvaccinationtracker.model.Regimen;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -37,6 +42,9 @@ import java.util.Objects;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
     private List<NotificationMessage> notificationList;
     Context context;
+
+    private List<NotificationMessage> reminderList = new ArrayList<>();
+    private HashMap<String, String> firstReminderMap = new HashMap<>();
 
     public NotificationAdapter(List<NotificationMessage> notificationList) {
         this.notificationList = notificationList;
@@ -47,6 +55,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification, parent, false);
         context = parent.getContext();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("RemindLaterPrefs", Context.MODE_PRIVATE);
+        String notificationsJson = sharedPreferences.getString("notifications", null);
+        if (notificationsJson != null) {
+            // Có dữ liệu trong SharedPreferences, giải mã danh sách từ JSON
+            List<NotificationMessage> notificationList_ = new Gson().fromJson(notificationsJson, new TypeToken<List<NotificationMessage>>() {
+            }.getType());
+            reminderList.clear();
+            reminderList.addAll(notificationList_);
+        }
         return new NotificationViewHolder(view);
     }
 
@@ -56,74 +74,140 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         holder.titleTextView.setText(notification.getTitle());
         holder.messageTextView.setText(notification.getMessage());
-        if (notification.getDate() != null){
+        if (notification.getDate() != null) {
             holder.dateTextView.setText(formatDate(notification.getDate()));
         }
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("vaccination_regimen");
         holder.actionContainer.setVisibility(View.GONE);
-        if (notification.getTitle().contains("Nhắc nhở")){
+        String vaccineType = getEnglishVaccineType(notification.getMessage());
+        if (notification.getTitle().contains("Nhắc nhở")) {
             holder.imageViewNotiType.setImageResource(R.drawable.ic_remind);
             holder.iconContainer.setBackgroundResource(R.drawable.tool_item_red_bg);
-            Date queryDate = notification.getDate();
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date formatDate = new Date();
-            try {
-                formatDate = outputFormat.parse(outputFormat.format(queryDate));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            Log.i("Date__", "onBindViewHolder: " + formatDate);
-            String vaccineType = getEnglishVaccineType(notification.getMessage());
-            Log.i("VaccineType", "onBindViewHolder: " + vaccineType);
-            if (vaccineType.equals("")){
-                Log.i("VaccineType", "Message: " + notification.getMessage());
-            }
 
+            if (notification.getMessage().contains("Nhắc lại")) {
+                if (!isFirstReminder(notification.getBaby_id(), vaccineType)) {
+                    // Nếu không phải là lời nhắc đầu tiên, không hiển thị action
+                    return;
+                }
+                if (!isReminder(notification.getNotification_id())){
+                    holder.actionContainer.setVisibility(View.VISIBLE);
+                    holder.action1.setText("Đăng ký ngay");
+                    holder.action2.setVisibility(View.VISIBLE);
+                    holder.action2.setText("Nhắc lại sau");
+                    holder.action1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(context, Schedule_an_injection.class);
+                            context.startActivity(i);
+                        }
+                    });
 
-            Query regimenRef = databaseReference.child(notification.getBaby_id()).orderByChild("vaccination_type").equalTo(vaccineType);
-            Date finalFormatDate = formatDate;
-            regimenRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            Regimen regimen = dataSnapshot.getValue(Regimen.class);
-                            if (regimen.getDate().equals(finalFormatDate) && !regimen.isVaccinated()) {
-                                holder.actionContainer.setVisibility(View.VISIBLE);
-                                holder.action1.setText("Đăng ký ngay");
-                                holder.action2.setVisibility(View.VISIBLE);
-                                holder.action2.setText("Nhắc lại sau");
-                                holder.action1.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v)
-                                    {
-                                        Intent i = new Intent(context, Schedule_an_injection.class);
-                                        context.startActivity(i);
-                                    }
-                                });
+                    holder.action2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(context, RemindLaterActivity.class);
+                            notification.setType(vaccineType);
+                            i.putExtra("notification", notification);
+                            context.startActivity(i);
+                        }
+                    });
+                }else{
+                    return;
+                }
 
-                                holder.action2.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent i = new Intent(context, RemindLaterActivity.class);
-                                        i.putExtra("notification", notification);
-                                        context.startActivity(i);
-                                    }
-                                });
+            } else {
+                if (isVaccineType(vaccineType , notification.getBaby_id())){
+                    return;
+                }
+                Date queryDate = notification.getDate();
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date formatDate = new Date();
+                try {
+                    formatDate = outputFormat.parse(outputFormat.format(queryDate));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                Log.i("Date__", "onBindViewHolder: " + formatDate);
+
+                Log.i("VaccineType", "onBindViewHolder: " + vaccineType);
+                if (vaccineType.equals("")) {
+                    Log.i("VaccineType", "Message: " + notification.getMessage());
+                }
+
+                Query regimenRef = databaseReference.child(notification.getBaby_id()).orderByChild("vaccination_type").equalTo(vaccineType);
+                Date finalFormatDate = formatDate;
+                regimenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                Regimen regimen = dataSnapshot.getValue(Regimen.class);
+                                if (regimen.getDate().equals(finalFormatDate) && !regimen.isVaccinated()) {
+                                    holder.actionContainer.setVisibility(View.VISIBLE);
+                                    holder.action1.setText("Đăng ký ngay");
+                                    holder.action2.setVisibility(View.VISIBLE);
+                                    holder.action2.setText("Nhắc lại sau");
+                                    holder.action1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent i = new Intent(context, Schedule_an_injection.class);
+                                            context.startActivity(i);
+                                        }
+                                    });
+
+                                    holder.action2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent i = new Intent(context, RemindLaterActivity.class);
+                                            notification.setType(vaccineType);
+                                            i.putExtra("notification", notification);
+                                            context.startActivity(i);
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Xử lý lỗi nếu cần
-                }
-            });
-        }else{
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Xử lý lỗi nếu cần
+                    }
+                });
+            }
+
+
+        } else {
             holder.imageViewNotiType.setImageResource(R.drawable.ic_notifications);
             holder.iconContainer.setBackgroundResource(R.drawable.tool_item_bg);
         }
+    }
+
+    private boolean isFirstReminder(String baby_id, String vaccineType) {
+        if (firstReminderMap.containsKey(baby_id) && firstReminderMap.get(baby_id).equals(vaccineType)) {
+            return false;
+        } else {
+            firstReminderMap.put(baby_id, vaccineType);
+            return true;
+        }
+    }
+
+    private Boolean isReminder(String notification_id){
+        for (NotificationMessage reminder : reminderList) {
+            if (reminder.getNotification_id().equals(notification_id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean isVaccineType(String vaccineType, String baby_id){
+        for (NotificationMessage reminder : reminderList) {
+            if (reminder.getType().equals(vaccineType) && reminder.getBaby_id().equals(baby_id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getEnglishVaccineType(String notificationTitle) {

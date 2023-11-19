@@ -91,9 +91,7 @@ public class RemindLaterActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("notifications");
-                    String id = databaseReference.push().getKey();
-                    databaseReference.child(id).setValue(message);
+
                     SharedPreferences sharedPreferences = getSharedPreferences("RemindLaterPrefs", MODE_PRIVATE);
                     String notificationsJson = sharedPreferences.getString("notifications", null);
                     List<NotificationMessage> notificationList;
@@ -110,6 +108,11 @@ public class RemindLaterActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("notifications", updatedNotificationsJson);
                     editor.apply();
+                    message.setNotification_id(null);
+                    message.setType(null);
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("notifications");
+                    String id = databaseReference.push().getKey();
+                    databaseReference.child(id).setValue(message);
                     Toast.makeText(RemindLaterActivity.this, "Đã đặt lịch nhắc nhở", Toast.LENGTH_LONG).show();
                     finish();
                 }

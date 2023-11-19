@@ -49,6 +49,7 @@ public class NotificationActivity extends AppCompatActivity {
                     Log.i("NotificationActivity", "onDataChange: " + snapshot.getValue());
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         NotificationMessage notificationMessage = dataSnapshot.getValue(NotificationMessage.class);
+                        notificationMessage.setNotification_id(dataSnapshot.getKey());
                         if (notificationMessage.getDate().before(new Date())) {
                             notificationList.add(notificationMessage);
                         }
