@@ -79,6 +79,17 @@ public class NotificationMessage implements Serializable, Comparable<Notificatio
     }
 
     @Override
+    public String toString() {
+        return "NotificationMessage{" +
+                "title='" + title + '\'' +
+                ", message='" + message + '\'' +
+                ", date=" + date +
+                ", user_id='" + user_id + '\'' +
+                ", baby_id='" + baby_id + '\'' +
+                '}';
+    }
+
+    @Override
     public int compareTo(NotificationMessage notificationMessage) {
         return this.date.compareTo(notificationMessage.date);
     }

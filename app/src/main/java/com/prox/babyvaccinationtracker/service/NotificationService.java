@@ -130,7 +130,7 @@ public class NotificationService extends Service {
         return null;
     }
 
-    private void scheduleNotification(NotificationMessage notification) {
+    public void scheduleNotification(NotificationMessage notification) {
         Log.i("Notification_service", "schedule notification");
         // Định dạng thời gian lấy từ cơ sở dữ liệu
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
