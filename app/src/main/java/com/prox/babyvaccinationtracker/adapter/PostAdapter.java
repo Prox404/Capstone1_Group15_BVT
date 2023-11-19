@@ -1,21 +1,27 @@
 package com.prox.babyvaccinationtracker.adapter;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prox.babyvaccinationtracker.R;
@@ -37,11 +43,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     List<Comment> commentList;
     CommentAdapter commentAdapter;
+    Context MenuEditPost;
 
-
-    public PostAdapter(List<Post> postItemList, User user) {
+    public PostAdapter(List<Post> postItemList, User user, Context Menueditpost) {
         this.postItemList = postItemList;
         this.user = user;
+        this.MenuEditPost= Menueditpost;
     }
 
     @NonNull
@@ -59,6 +66,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.userName.setText(postItem.getUser().getUser_name());
         holder.postTime.setText(postItem.getCreated_at());
         holder.postContent.setText(postItem.getContent());
+
+        holder.imageEditPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(postItem.getUser().getUser_id().equals(user_id)){
+                    Showmenu(view, postItem.getPost_id());
+                }
+
+            }
+        });
         if(postItem.getHashtags() != null)
             holder.textViewHashtag.setText(String.join(" ", postItem.getHashtags()));
         if (postItem.getUser().getUser_avatar() != null)
@@ -191,6 +208,35 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     }
 
+    private void Showmenu(View view, String idpost) {
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.editpost, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                Log.i("IDDDD", id+" "+menuItem.getItemId());
+                if (id == R.id.itemdeletepost) {
+                    // thêm xóa hồi nãy làm bên admin
+                    DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
+                    EditContent.child(idpost).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+                    Toast.makeText(view.getContext(), " Đã xóa bài viết thành công", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.itemeditpost_edit) {
+                    Toast.makeText(view.getContext(), " Đã cập nhật bài viết thành công", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
+
     private Comment convertMapToComment(HashMap<String, Object> commentMap) {
         try {
             Comment comment = new Comment();
@@ -234,6 +280,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         EditText editTextCommentContent;
         Button buttonSendComment;
         RecyclerView recylerViewComments;
+        ImageView imageEditPost;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -252,6 +299,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
             imageViewComment = itemView.findViewById(R.id.imageViewComment);
             user_id = sharedPreferences.getString("customer_id", "");
+            imageEditPost = itemView.findViewById(R.id.imageEditPost);
 
         }
     }

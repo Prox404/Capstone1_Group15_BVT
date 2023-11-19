@@ -180,7 +180,7 @@ public class community_activity extends AppCompatActivity {
                     Log.i("VISITORS", visitors+"");
                     postArrayList.add(post);
                 }
-                postAdapter = new PostAdapter(postArrayList, user);
+                postAdapter = new PostAdapter(postArrayList, user, community_activity.this);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
             }
