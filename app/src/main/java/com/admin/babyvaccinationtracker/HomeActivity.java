@@ -64,7 +64,12 @@ public class HomeActivity extends AppCompatActivity {
                startActivity(intent);
            }
        });
-
+        imageView_article.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, Manage_track_content_visits_Activity.class));
+            }
+        });
        imageView_user_management.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {

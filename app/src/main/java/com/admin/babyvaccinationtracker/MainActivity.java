@@ -13,11 +13,16 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Map config = new HashMap();
+    private boolean isCloudinaryInitialized = false;
     private void configCloudinary() {
-        config.put("cloud_name", "du42cexqi");
-        config.put("api_key", "346965553513552");
-        config.put("api_secret", "SguEwSEbwQNgOgHRTkyxeuG-478");
-        MediaManager.init(this, config);
+        if(isCloudinaryInitialized){
+            config.put("cloud_name", "du42cexqi");
+            config.put("api_key", "346965553513552");
+            config.put("api_secret", "SguEwSEbwQNgOgHRTkyxeuG-478");
+            MediaManager.init(this, config);
+            isCloudinaryInitialized = true;
+        }
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
