@@ -63,7 +63,7 @@ public class community_activity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 1;
     private static final int PICK_IMAGE = 1;
     RecyclerView recyclerViewPost;
-    ArrayList<Post> postArrayList;
+    ArrayList<Post> postArrayList = new ArrayList<>();
     PostAdapter postAdapter;
     Button buttonAddNewPost;
 
@@ -92,6 +92,10 @@ public class community_activity extends AppCompatActivity {
         recyclerAdapter = new RecyclerAdapter(uri,community_activity.this);
         recycleViewImage.setLayoutManager(new GridLayoutManager(community_activity.this, 3));
         recycleViewImage.setAdapter(recyclerAdapter);
+
+        postAdapter = new PostAdapter(postArrayList, user);
+        recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+        recyclerViewPost.setAdapter(postAdapter);
 
         editTextContent.setFocusable(false);
         editTextContent.setOnClickListener(new View.OnClickListener() {
@@ -154,10 +158,10 @@ public class community_activity extends AppCompatActivity {
 
         // Hiển thị bài viết
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                postArrayList = new ArrayList<>();
+                postArrayList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Post post = new Post();
                     post.setUser(dataSnapshot.child("user").getValue(User.class));
@@ -184,9 +188,7 @@ public class community_activity extends AppCompatActivity {
                     Log.i("VISITORS", post+"");
                     postArrayList.add(post);
                 }
-                postAdapter = new PostAdapter(postArrayList, user);
-                recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
-                recyclerViewPost.setAdapter(postAdapter);
+                postAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -231,8 +233,6 @@ public class community_activity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        postArrayList.add(post);
-                                        postAdapter.notifyDataSetChanged();
                                         editTextHashtag.setText("");
                                         editTextPopupContent.setText("");
                                         uri.clear();
@@ -264,8 +264,6 @@ public class community_activity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        postArrayList.add(post);
-                        postAdapter.notifyDataSetChanged();
                         editTextHashtag.setText("");
                         editTextPopupContent.setText("");
                         uri.clear();

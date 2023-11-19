@@ -174,10 +174,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
                     commentRef.setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
-                            String commentKey = commentRef.getKey();
-                            comment.setComment_id(commentKey);
-                            commentList.add(comment);
-                            commentAdapter.notifyDataSetChanged();
                             if(holder.recylerViewComments.getVisibility() == View.GONE){
                                 holder.recylerViewComments.setVisibility(View.VISIBLE);
                             }

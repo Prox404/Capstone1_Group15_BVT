@@ -100,6 +100,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 holder.textViewReply.setVisibility(View.VISIBLE);
                 notifyDataSetChanged();
                 holder.editTextCommentContent.setText("");
+                
             }
         });
 
