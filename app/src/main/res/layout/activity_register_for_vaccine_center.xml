@@ -194,6 +194,22 @@
                 android:background="@drawable/home" />
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ cụ thể"
+                android:textColor="#686868" />
+
+            <EditText
+                android:id="@+id/register_edt_address2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/home"
+                android:ems="10"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" />
+
+            <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

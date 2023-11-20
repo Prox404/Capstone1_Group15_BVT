@@ -79,6 +79,7 @@ public class login_for_vaccine_center extends AppCompatActivity {
                     Toast.makeText(login_for_vaccine_center.this,"Phải nhập tài khoản đăng nhập", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 mAuth = FirebaseAuth.getInstance();
                 mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -124,6 +125,7 @@ public class login_for_vaccine_center extends AppCompatActivity {
                                                         editor.putString("center_image", center.getCenter_image());
                                                         editor.putString("hotline", center.getHotline());
                                                         editor.putString("work_time", center.getWork_time());
+                                                        editor.putString("center_name", center.getCenter_name());
 
                                                         editor.apply();
 //
@@ -172,5 +174,10 @@ public class login_for_vaccine_center extends AppCompatActivity {
         if(requestCode == 1 && resultCode == RESULT_OK){
             Toast.makeText(login_for_vaccine_center.this,"Đăng ký thành công, vui lòng chờ xác nhận!",Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

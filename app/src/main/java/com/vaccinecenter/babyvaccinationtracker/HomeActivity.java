@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.Manifest;
@@ -27,15 +28,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity {
 
 
     RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer, ChatContainer, childContainer, CommunityContainer;
-
-
-
-    TextView textViewNumberOfRegistration,textViewNumberOfVaccines, textViewNumberOfChild;
+    ImageView imageViewAvatar;
+    TextView textViewNumberOfRegistration,textViewNumberOfVaccines, textViewNumberOfChild, textViewGreetings;
 
     Toolbar toolbar;
 
@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
 
-
+        imageViewAvatar = findViewById(R.id.imageViewAvatar);
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
 
         setSupportActionBar(toolbar);
@@ -89,7 +89,25 @@ public class HomeActivity extends AppCompatActivity {
         QRScannerContainer = findViewById(R.id.QRScannerContainer);
         CommunityContainer = findViewById(R.id.CommunityContainer);
         ChatContainer = findViewById(R.id.ChatContainer);
+        textViewGreetings = findViewById(R.id.textViewGreetings);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String center_name = sharedPreferences.getString("center_name", "Trần Công Trí");
+        String center_image = sharedPreferences.getString("center_image", "");
+        textViewGreetings.setText(center_name);
+
+        if (!center_image.equals("")) {
+            String imgaeUrl = center_image.contains("https") ? center_image : center_image.replace("http", "https");
+            Picasso.get().load(imgaeUrl).into(imageViewAvatar);
+        }
+
+        imageViewAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         check();
 
