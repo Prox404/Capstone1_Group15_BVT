@@ -60,6 +60,34 @@ public class information_center extends AppCompatActivity {
         txt_sdt.setText(vaccineCenter.getHotline());
         txt_thoigianlamviec.setText(vaccineCenter.getWork_time());
 
+        String address2 = vaccineCenter.getCenter_address2();
+        String address = vaccineCenter.getCenter_address();
+        String fullAddress = address;
+        if (address2 != null && !address2.isEmpty()) {
+            fullAddress = address2 + ", " + address;
+            txt_diachi.setText(fullAddress);
+        }
+
+        String finalFullAddress = fullAddress;
+        txt_diachi.setOnClickListener(view -> {
+
+            // Tạo URI với địa chỉ
+            Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(finalFullAddress));
+
+            // Tạo Intent để mở ứng dụng Google Maps
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+
+            // Chỉ định gói ứng dụng của Google Maps
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            // Nếu có, mở ứng dụng Google Maps
+            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(mapIntent);
+            } else {
+                Toast.makeText(this, "Không tìm thấy ứng dụng Google Maps", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         vaccineRecycleview.setLayoutManager(new  LinearLayoutManager(this));
 //        vaccinesHashMap = vaccineCenter.getVaccines();
