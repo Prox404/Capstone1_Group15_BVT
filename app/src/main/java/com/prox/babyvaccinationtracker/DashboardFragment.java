@@ -17,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.adapter.TimeLineAdapter;
 import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Regimen;
+import com.squareup.picasso.Picasso;
 
 
 import org.json.JSONArray;
@@ -52,6 +55,8 @@ public class DashboardFragment extends Fragment {
 
     String babyId = "";
     String firstBabyId = "";
+    TextView textViewGreetings;
+    ImageView imageViewAvatar;
 
 
     public DashboardFragment() {
@@ -82,9 +87,18 @@ public class DashboardFragment extends Fragment {
         babyListContainer = view.findViewById(R.id.babyListContainer);
         familyContainer = view.findViewById(R.id.familyContainer);
         commnunity = view.findViewById(R.id.community);
+        textViewGreetings = view.findViewById(R.id.textViewGreetings);
+        imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         String babiesList = sharedPreferences.getString("babiesList", "");
+        String cus_name = sharedPreferences.getString("cus_name", "Trần Công Trí");
+        String cus_avatar = sharedPreferences.getString("cus_avatar", "");
+        if (!cus_avatar.equals("")){
+            String imgaeUrl = cus_avatar.contains("https") ? cus_avatar : cus_avatar.replace("http", "https");
+            Picasso.get().load(imgaeUrl).into(imageViewAvatar);
+        }
+        textViewGreetings.setText(cus_name.split(" ")[cus_name.split(" ").length - 1]);
         String babyID = "";
         try {
             Gson gson = new Gson();
@@ -118,6 +132,14 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, FamilyActivity.class);
+                startActivity(i);
+            }
+        });
+
+        imageViewAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, UserProfileActivity.class);
                 startActivity(i);
             }
         });
