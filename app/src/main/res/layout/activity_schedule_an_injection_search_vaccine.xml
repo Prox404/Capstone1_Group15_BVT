@@ -5,37 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingBottom="20dp"
     tools:context=".Schedule_an_injection_search_vaccine">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#4CAF50"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
-        <ImageView
-            android:id="@+id/schedule_back_vaccine"
+        <LinearLayout
             android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/baseline_arrow_back_ios_24" />
+            android:layout_height="56dp"
+            android:background="@drawable/rounded_input_bg"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="Tìm kiếm trung tâm vắc-xin"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/schedule_back_vaccine"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_arrow_back_ios_24"
+                android:tint="@color/textColor" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/schedule_edt_vaccine_search"
+    <TextView
+        android:id="@+id/textView"
+        style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Tìm kiếm\ntrung tâm vắc-xin"
+        android:textColor="@color/textColor" />
+
+    <EditText
+        android:id="@+id/schedule_edt_vaccine_search"
+        style="@style/Widget.App.EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Search"
         android:inputType="text" />
@@ -50,7 +65,9 @@
             android:id="@+id/schedule_tv_cus_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:fontFamily="@font/inter_semibold"
+            android:text="Address"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/schedule_tv_display_all_vaccine"
@@ -63,7 +80,9 @@
     <ListView
         android:id="@+id/schedule_list_vaccine_search"
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp">
 
     </ListView>
 

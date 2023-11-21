@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ import java.util.regex.Pattern;
 public class search_vaccine_center extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteTextViewTimKiem;
     private TextView centerInfoTextView;
-    Button btntimkiem;
+    LinearLayout btntimkiem;
     RecyclerView rcvcenter;
     vaccine_center_adapter mvaccinecenteradapter;
 
@@ -45,8 +46,8 @@ public class search_vaccine_center extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvcenter.setLayoutManager(linearLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        rcvcenter.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+//        rcvcenter.addItemDecoration(dividerItemDecoration);
         mvaccinecenteradapter = new vaccine_center_adapter(this, mlistvaccinecenter);
         rcvcenter.setAdapter(mvaccinecenteradapter);
         centerInfoTextView = findViewById(R.id.centerInfoTextView);
