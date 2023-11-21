@@ -75,11 +75,12 @@ public class community_activity extends AppCompatActivity {
 
     User user;
 
-    private List<String> topHashtagsList;
+    private List<String> topHashtagsList = new ArrayList<>();
 
     CardView highlightContainer;
     FlexboxLayout topHashTag;
     String  selectedHashtag = "";
+    List<String> topHashtags = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,15 +215,15 @@ public class community_activity extends AppCompatActivity {
                     postArrayList.add(post);
                 }
 
-//                postAdapter.notifyDataSetChanged();
+                postAdapter.notifyDataSetChanged();
 
-                postAdapter = new PostAdapter(postArrayList, user);
-                recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
-                recyclerViewPost.setAdapter(postAdapter);
+//                postAdapter = new PostAdapter(postArrayList, user);
+//                recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+//                recyclerViewPost.setAdapter(postAdapter);
 
                 List<String> allHashtags = getAllHashtags(postArrayList);
                 Map<String, Integer> hashtagCounts = countHashtags(allHashtags);
-                List<String> topHashtags = getTopHashtags(hashtagCounts);
+                topHashtags = getTopHashtags(hashtagCounts);
 
 
                 if (topHashtags != null && topHashtags.size() > 0){
@@ -250,11 +251,13 @@ public class community_activity extends AppCompatActivity {
         return postsWithHashtag;
     }
 
-    private void addHashTagsToContainer(List<String> topHashtags) {
-        for (String hashtag : topHashtags) {
+    private void addHashTagsToContainer(List<String> topHashtags_) {
+        for (String hashtag : topHashtags_) {
 
             if (topHashtagsList != null && topHashtagsList.contains(hashtag)) {
                 continue;
+            }else{
+                topHashtagsList.add(hashtag);
             }
 
             TextView textView = new TextView(this);
@@ -310,9 +313,14 @@ public class community_activity extends AppCompatActivity {
 
     private List<String> getAllHashtags(List<Post> posts) {
         List<String> allHashtags = new ArrayList<>();
+        Log.i("getAllHashtags", "getAllHashtags: " + topHashtagsList);
         for (Post post : posts) {
             if (post.getHashtags() != null) {
-                allHashtags.addAll(post.getHashtags());
+                for (String hashtag : post.getHashtags()) {
+                    if (!topHashtagsList.contains(hashtag)) {
+                        allHashtags.add(hashtag);
+                    }
+                }
             }
         }
         return allHashtags;
@@ -331,11 +339,11 @@ public class community_activity extends AppCompatActivity {
 
         Collections.sort(sortedHashtags, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
-        List<String> topHashtags = new ArrayList<>();
+        List<String> topHashtags_ = new ArrayList<>();
         for (int i = 0; i < Math.min(sortedHashtags.size(), 10); i++) {
-            topHashtags.add(sortedHashtags.get(i).getKey());
+            topHashtags_.add(sortedHashtags.get(i).getKey());
         }
-        return topHashtags;
+        return topHashtags_;
     }
 
 

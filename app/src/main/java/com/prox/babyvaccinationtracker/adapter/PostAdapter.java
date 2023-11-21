@@ -38,10 +38,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     List<Comment> commentList;
     CommentAdapter commentAdapter;
 
+    Boolean commentVisible = false;
+
 
     public PostAdapter(List<Post> postItemList, User user) {
         this.postItemList = postItemList;
         this.user = user;
+        Log.i("Post", "PostAdapter: " + "render");
     }
 
     @NonNull
@@ -151,10 +154,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.imageViewComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(holder.recylerViewComments.getVisibility() == View.GONE){
+                if(commentVisible == false){
+                    commentVisible = true;
                     holder.recylerViewComments.setVisibility(View.VISIBLE);
                 }
                 else {
+                    commentVisible = false;
                     holder.recylerViewComments.setVisibility(View.GONE);
                 }
                 if(!visitors.containsKey(user_id)){
