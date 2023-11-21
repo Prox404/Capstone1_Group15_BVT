@@ -215,11 +215,11 @@ public class community_activity extends AppCompatActivity {
                     postArrayList.add(post);
                 }
 
-                postAdapter.notifyDataSetChanged();
+//                postAdapter.notifyDataSetChanged();
 
-//                postAdapter = new PostAdapter(postArrayList, user);
-//                recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
-//                recyclerViewPost.setAdapter(postAdapter);
+                postAdapter = new PostAdapter(postArrayList, user);
+                recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
+                recyclerViewPost.setAdapter(postAdapter);
 
                 List<String> allHashtags = getAllHashtags(postArrayList);
                 Map<String, Integer> hashtagCounts = countHashtags(allHashtags);

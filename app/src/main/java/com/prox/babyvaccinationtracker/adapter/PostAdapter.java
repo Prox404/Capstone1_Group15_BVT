@@ -31,14 +31,12 @@ import java.util.Map;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<Post> postItemList;
-    DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");;
+    DatabaseReference postReference = FirebaseDatabase.getInstance().getReference("posts");
     String user_id;
     User user;
 
     List<Comment> commentList;
     CommentAdapter commentAdapter;
-
-    Boolean commentVisible = false;
 
 
     public PostAdapter(List<Post> postItemList, User user) {
@@ -58,35 +56,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post postItem = postItemList.get(position);
         HashMap<String, Boolean> visitors;
-        if(postItem.getVisitor()!= null){
-            visitors = new HashMap<String, Boolean> (postItem.getVisitor());
-        }
-        else {
+        if (postItem.getVisitor() != null) {
+            visitors = new HashMap<String, Boolean>(postItem.getVisitor());
+        } else {
             visitors = new HashMap<String, Boolean>();
         }
-        Log.i("Post", "onBindViewHolder: " + postItem.toString());
+        Log.i("Post", "onBindViewHolder: " + postItem);
         holder.userName.setText(postItem.getUser().getUser_name());
         holder.postTime.setText(postItem.getCreated_at());
         holder.postContent.setText(postItem.getContent());
-        if(postItem.getHashtags() != null)
+        if (postItem.getHashtags() != null)
             holder.textViewHashtag.setText(String.join(" ", postItem.getHashtags()));
         if (postItem.getUser().getUser_avatar() != null)
             Picasso.get().load(postItem.getUser().getUser_avatar()).into(holder.userAvatar);
-        if (postItem.getImage_url() != null){
+        if (postItem.getImage_url() != null) {
             ImageCarouselAdapter postImageAdapter = new ImageCarouselAdapter(holder.viewPagerImage.getContext(), postItem.getImage_url());
             holder.viewPagerImage.setAdapter(postImageAdapter);
         }
-        if (postItem.getLiked_users() != null){
+        if (postItem.getLiked_users() != null) {
             ArrayList<String> liked_users = postItem.getLiked_users();
 
-            if (liked_users.contains(user_id)){
+            if (liked_users.contains(user_id)) {
                 holder.imageViewHeart.setImageResource(R.drawable.ic_heart_solid);
-            }else {
+            } else {
                 holder.imageViewHeart.setImageResource(R.drawable.ic_heart);
             }
-            Log.i("LIKED_USERS", liked_users+" \n "+user_id);
+            Log.i("LIKED_USERS", liked_users + " \n " + user_id);
         }
-        if (postItem.getComments() != null){
+        if (postItem.getComments() != null) {
             commentList = new ArrayList<>();
 
             for (Map.Entry<String, Comment> entry : postItem.getComments().entrySet()) {
@@ -105,10 +102,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 }
             }
             DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
-            commentAdapter = new CommentAdapter(commentList , commentReference, user);
+            commentAdapter = new CommentAdapter(commentList, commentReference, user);
             holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
             holder.recylerViewComments.setAdapter(commentAdapter);
         }
+
         holder.viewPagerImage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -123,8 +121,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
-                if(!visitors.containsKey(user_id)){
-                    Log.i("VISITORS", visitors+"");
+                if (!visitors.containsKey(user_id)) {
+                    Log.i("VISITORS", visitors + "");
                     postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
                 }
             }
@@ -135,68 +133,50 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 ArrayList<String> liked_users = new ArrayList<>();
                 if (postItem.getLiked_users() != null)
                     liked_users = postItem.getLiked_users();
-                if (liked_users.contains(user_id)){
+                if (liked_users.contains(user_id)) {
                     holder.imageViewHeart.setImageResource(R.drawable.ic_heart);
                     liked_users.remove(user_id);
-                }else {
+                } else {
                     holder.imageViewHeart.setImageResource(R.drawable.ic_heart_solid);
                     liked_users.add(user_id);
                 }
                 postItem.setLiked_users(liked_users);
                 postReference.child(postItem.getPost_id()).child("liked_users").setValue(liked_users);
-                Log.i("VISITORS", visitors+"");
-                if(!visitors.containsKey(user_id)){
-                    Log.i("VISITORS", visitors+"");
+                Log.i("VISITORS", visitors + "");
+                if (!visitors.containsKey(user_id)) {
+                    Log.i("VISITORS", visitors + "");
                     postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
                 }
             }
         });
-        holder.imageViewComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(commentVisible == false){
-                    commentVisible = true;
-                    holder.recylerViewComments.setVisibility(View.VISIBLE);
-                }
-                else {
-                    commentVisible = false;
-                    holder.recylerViewComments.setVisibility(View.GONE);
-                }
-                if(!visitors.containsKey(user_id)){
-                    postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
-                }
-                //holder.recylerViewComments.smoothScrollToPosition(holder.getLayoutPosition());
-            }
-        });
+
+
         holder.buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String commentContent = holder.editTextCommentContent.getText().toString();
-                if (!commentContent.isEmpty()){
+                if (!commentContent.isEmpty()) {
                     Comment comment = new Comment();
                     comment.setContent(commentContent);
                     comment.setUser(user);
                     DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
                     commentRef.setValue(comment).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            if(holder.recylerViewComments.getVisibility() == View.GONE){
-                                holder.recylerViewComments.setVisibility(View.VISIBLE);
-                            }
-                            //holder.recylerViewComments.smoothScrollToPosition(holder.getLayoutPosition());
-                        }else {
+                        if (task.isSuccessful()) {
+                            Log.i("Comment", "onClick: Comment success");
+                        } else {
                             Log.i("Comment", "onClick: Comment failed");
                         }
                     });
                     holder.editTextCommentContent.setText("");
-                    if(!visitors.containsKey(user_id)){
+                    if (!visitors.containsKey(user_id)) {
                         postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
                     }
                 }
 
             }
         });
-
     }
+
 
     private Comment convertMapToComment(HashMap<String, Object> commentMap) {
         try {
@@ -215,7 +195,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }else if (commentMap.get("user") instanceof User){
                 comment.setUser((User) commentMap.get("user"));
             }
-            Log.i("Alooo", "convertMapToComment: " + comment.toString());
+            Log.i("Alooo", "convertMapToComment: " + comment);
             // Set other fields accordingly
             return comment;
         } catch (Exception e) {
