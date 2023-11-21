@@ -35,7 +35,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     String user_id;
     User user;
 
-    List<Comment> commentList;
+    List<Comment> commentList = new ArrayList<>();
     CommentAdapter commentAdapter;
 
     public PostAdapter(List<Post> postItemList, User user) {
@@ -58,6 +58,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.userName.setText(postItem.getUser().getUser_name());
         holder.postTime.setText(postItem.getCreated_at());
         holder.postContent.setText(postItem.getContent());
+
+        DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
         if(postItem.getHashtags() != null)
             holder.textViewHashtag.setText(String.join(" ", postItem.getHashtags()));
         if (postItem.getUser().getUser_avatar() != null)
@@ -92,9 +94,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     commentList.add((Comment) commentObject);
                 }
             }
-            DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
-            commentAdapter = new CommentAdapter(commentList , commentReference);
+
             holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
+            commentAdapter = new CommentAdapter(commentList , commentReference);
             holder.recylerViewComments.setAdapter(commentAdapter);
         }
 
@@ -126,7 +128,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     comment.setUser(user);
                     postReference.child(postItem.getPost_id()).child("comments").push().setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
+                            if (commentList == null)
+                                commentList = new ArrayList<>();
+
                             commentList.add(comment);
+                            commentAdapter = new CommentAdapter(commentList , commentReference);
+                            holder.recylerViewComments.setAdapter(commentAdapter);
                             commentAdapter.notifyDataSetChanged();
                         }else {
                             Log.i("Comment", "onClick: Comment failed");
