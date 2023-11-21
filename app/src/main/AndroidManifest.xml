@@ -2,9 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -16,22 +25,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BabyVaccinationTracker"
         tools:targetApi="31">
-      
-      <activity
+        <activity
+            android:name=".AddPost"
+            android:exported="false" />
+        <activity
             android:name=".AuthActivity"
             android:exported="false" />
-      
         <activity
             android:name=".SendNotificationActivity"
             android:exported="false" />
-
         <activity
             android:name=".Admin_management_of_vaccine_center_registration"
             android:exported="false" />
-
-        <activity android:name=".HomeActivity"
-            android:exported="true"/>
-
+        <activity
+            android:name=".HomeActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -42,6 +50,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

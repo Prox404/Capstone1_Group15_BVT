@@ -149,6 +149,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/Qlybaiviet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -159,13 +160,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_article_management"/>
+                    android:src="@drawable/ic_article_management" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Quản lý bài viết"/>
+                    android:text="Quản lý bài viết" />
             </LinearLayout>
 
             <LinearLayout

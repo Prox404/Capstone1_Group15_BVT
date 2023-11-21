@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,16 +17,15 @@ public class HomeActivity extends AppCompatActivity {
     ImageView imageView_Menu, imageView_Search,imageView_Notification, imageView_Account, imageView_article_management,
             imageView_user_management, imageView_report, imageView_health_monitoring, imageView_edit, imageView_home,
             imageView_article, imageView_user, imageView_setting, imageView_send_notification;
-
+LinearLayout Qlybaiviet;
     EditText editText_Search;
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Qlybaiviet = findViewById(R.id.Qlybaiviet);
         imageView_Menu = findViewById(R.id.imageView_Menu);
         imageView_Search = findViewById(R.id.imageView_Search);
         imageView_Notification = findViewById(R.id.imageView_Notification);
@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
            }
        });
 
+
        imageView_user_management.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
@@ -57,6 +58,14 @@ public class HomeActivity extends AppCompatActivity {
                startActivity(intent);
            }
        });
-       
+
+        Qlybaiviet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, AddPost.class);
+                startActivity(intent);
+
+            }
+        });
     }
 }
