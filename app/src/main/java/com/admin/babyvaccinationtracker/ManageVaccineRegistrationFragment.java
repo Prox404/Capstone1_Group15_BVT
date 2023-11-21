@@ -56,6 +56,8 @@ public class ManageVaccineRegistrationFragment extends Fragment {
     Context context;
     TextView editTexte_Search_Vaccine_Center;
 
+    View empty_layout;
+
     public ManageVaccineRegistrationFragment() {
         // Required empty public constructor
     }
@@ -101,6 +103,7 @@ public class ManageVaccineRegistrationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_manage_vaccine_registration, container, false);
         confirm_vaccine_center_registration = view.findViewById(R.id.confirm_vaccine_center_registration);
         editTexte_Search_Vaccine_Center = view.findViewById(R.id.editTexte_Search_Vaccine_Center);
+        empty_layout = view.findViewById(R.id.empty_layout);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference vaccineRef = database.getReference("Vaccine_center_registration");
@@ -118,10 +121,17 @@ public class ManageVaccineRegistrationFragment extends Fragment {
                 registrations.clear();
                 for(DataSnapshot snap : snapshot.getChildren()){
                     Vaccine_center_registration regi = snap.getValue(Vaccine_center_registration.class);
+                    regi.getCenter().setCenter_address2(snap.child("center").child("center_address2").getValue(String.class));
                     regi.setCenter_registration_id(snap.getKey());
                     registrations.add(regi);
                 }
                 registrations_origin = new ArrayList<>(registrations);
+                if (registrations_origin.size() <= 0){
+                    empty_layout.setVisibility(View.VISIBLE);
+                } else {
+                    empty_layout.setVisibility(View.GONE);
+                }
+
                 adapter.notifyDataSetChanged();
             }
             @Override
