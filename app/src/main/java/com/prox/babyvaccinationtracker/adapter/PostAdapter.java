@@ -107,26 +107,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.recylerViewComments.setAdapter(commentAdapter);
         }
 
-        holder.viewPagerImage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-                if (!visitors.containsKey(user_id)) {
-                    Log.i("VISITORS", visitors + "");
-                    postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+        if (postItem.getImage_url() != null && postItem.getImage_url().size() >0){
+            holder.viewPagerImage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 }
-            }
-        });
+
+                @Override
+                public void onPageSelected(int position) {
+                    super.onPageSelected(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                    if (!visitors.containsKey(user_id)) {
+                        Log.i("VISITORS", visitors + "");
+                        postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                    }
+                }
+            });
+        }else {
+            holder.viewPagerImage.setVisibility(View.GONE);
+        }
+
         holder.likeContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
