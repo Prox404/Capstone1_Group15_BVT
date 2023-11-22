@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,68 +12,53 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông kê bài đăng"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="10dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="Thông kê bài đăng"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/button_manage_display_all"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:backgroundTint="@color/backgroundColor"
-                android:text="Hiển thị tất cả"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12sp" />
+                <Button
+                    android:id="@+id/button_manage_display_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:backgroundTint="@color/backgroundColor"
+                    android:text="Hiển thị tất cả"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:cornerRadius="5dp" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/button_manage_post_visist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:backgroundTint="@color/backgroundColor"
+                    android:text="sắp xếp lượt quan tâm"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:cornerRadius="5dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|left">
+                <Button
+                    android:id="@+id/button_manage_post_comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/backgroundColor"
+                    android:text="sắp xếp theo lượng bình luận"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:cornerRadius="5dp" />
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="STT" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Thông tin" />
-
-            <TextView
-                android:id="@+id/tv_manage_soft_post_visist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/filter_up"
-                android:gravity="center"
-                android:text="Lượt quan tâm" />
-
-            <TextView
-                android:id="@+id/tv_manage_soft_post_comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/filter_up"
-                android:gravity="center"
-                android:text="Lượt bình luận" />
-        </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewVisits"

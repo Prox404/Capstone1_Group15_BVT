@@ -15,6 +15,7 @@
             android:id="@+id/edt_search_post_delete_post"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/card_border_bg"
             android:drawableLeft="@drawable/ic_search"
             android:ems="10"

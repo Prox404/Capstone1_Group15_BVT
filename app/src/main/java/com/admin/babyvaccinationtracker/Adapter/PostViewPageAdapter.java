@@ -47,8 +47,8 @@ public class PostViewPageAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position){
-            case 0: return "Lượt xem, Lượt quan tâm của bài post";
-            case 1: return "Xóa bài post";
+            case 0: return "Thông kế bài đăng";
+            case 1: return "Xóa bài bài đăng";
         }
         return super.getPageTitle(position);
     }

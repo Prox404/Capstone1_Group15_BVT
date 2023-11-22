@@ -30,8 +30,7 @@ public class Post_VisitsFragment extends Fragment {
     Context context;
     RecyclerView recyclerViewVisits;
     PostVisitsAdapter adapter;
-    Button button_manage_display_all;
-    TextView tv_manage_post_visist,tv_manage_post_comments;
+    Button button_manage_display_all,button_manage_post_visist, button_manage_post_comments;
     public Post_VisitsFragment() {
         // Required empty public constructor
     }
@@ -59,8 +58,8 @@ public class Post_VisitsFragment extends Fragment {
         context = container != null ? container.getContext() : null;
         recyclerViewVisits = view.findViewById(R.id.recyclerViewVisits);
         button_manage_display_all = view.findViewById(R.id.button_manage_display_all);
-        tv_manage_post_visist = view.findViewById(R.id.tv_manage_soft_post_visist);
-        tv_manage_post_comments = view.findViewById(R.id.tv_manage_soft_post_comments);
+        button_manage_post_visist = view.findViewById(R.id.button_manage_post_visist);
+        button_manage_post_comments = view.findViewById(R.id.button_manage_post_comments);
         adapter = new PostVisitsAdapter(posts);
         Log.i("POSTTTSASSAC", posts+"");
         recyclerViewVisits.setLayoutManager(new LinearLayoutManager(context));
@@ -73,14 +72,14 @@ public class Post_VisitsFragment extends Fragment {
             }
         });
 
-        tv_manage_post_visist.setOnClickListener(new View.OnClickListener() {
+        button_manage_post_visist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter.arrayList_visits();
             }
         });
 
-        tv_manage_post_comments.setOnClickListener(new View.OnClickListener() {
+        button_manage_post_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter.arrayList_comments();

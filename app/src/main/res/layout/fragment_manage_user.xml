@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".ManageUserFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/rounded_layout"
+            android:backgroundTint="#FFFFFF"
             android:orientation="horizontal">
 
             <ImageButton
@@ -41,49 +43,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
                 android:background="@drawable/rounded_edittext_background"
+                android:backgroundTint="#FFFFFF"
                 android:ems="10"
                 android:hint="Tìm kiếm khách hàng"
                 android:inputType="text" />
 
         </LinearLayout>
-        <TableLayout
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecylerViewListUser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:stretchColumns="1,2,3">
-
-            <TableRow android:padding="5dp">
-
-                <TextView
-                    android:gravity="center"
-                    android:text="Tên người dùng"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Email"
-                    android:layout_column="1"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Chặn"
-                    android:layout_column="1"
-                    android:textStyle="bold" />
-            </TableRow>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RecylerViewListUser"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </TableLayout>
+            android:padding="10dp" />
 
     </LinearLayout>
 
