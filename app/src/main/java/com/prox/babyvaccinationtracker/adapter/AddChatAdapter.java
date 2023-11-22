@@ -53,7 +53,10 @@ public class AddChatAdapter extends RecyclerView.Adapter<AddChatAdapter.viewhold
         View view = layoutInflater.inflate(R.layout.vaccine_center_item, parent, false);
         return new viewholder(view);
     }
-
+    public void setCenters(ArrayList<Vaccine_center> vaccine_centers){
+        this.mlistvaccinecenter = vaccine_centers;
+        notifyDataSetChanged();
+    }
     @Override
     public void onBindViewHolder(@NonNull AddChatAdapter.viewholder holder, int position) {
         Vaccine_center vaccineCenter = mlistvaccinecenter.get(position);

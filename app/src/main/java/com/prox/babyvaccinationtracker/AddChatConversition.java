@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,7 +26,10 @@ import com.prox.babyvaccinationtracker.model.Vaccine_center;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AddChatConversition extends AppCompatActivity {
@@ -35,12 +39,10 @@ public class AddChatConversition extends AppCompatActivity {
     TextView tv_chat_display_all;
     RecyclerView rv_chat_list_vaccine_center;
     AddChatAdapter adapter;
-
+    ArrayList<Vaccine_center> vaccine_centers_origin = new ArrayList<>();
     ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>();// tất cả trung tâm tiêm chủng
     String address = "";
 
-    ArrayList<Vaccine_center> filterAddressCenter = new ArrayList<>(); // trung tâm lọc theo địa chỉ khách hàng
-    ArrayList<Vaccine_center> matchingCenters = new ArrayList<>(vaccine_centers); // tìm trung tâm vắc-xin
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,10 @@ public class AddChatConversition extends AppCompatActivity {
             address = intent.getStringExtra("cus_address");
             tv_chat_center_address.setText(address);
         }
-        vaccine_centers = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AddChatConversition.this);
         rv_chat_list_vaccine_center.setLayoutManager(linearLayoutManager);
-        adapter = new AddChatAdapter(AddChatConversition.this,vaccine_centers);
+        adapter = new AddChatAdapter(AddChatConversition.this, vaccine_centers_origin);
         rv_chat_list_vaccine_center.setAdapter(adapter);
 
         GetDataOnFireBase_vaccine();
@@ -70,8 +71,7 @@ public class AddChatConversition extends AppCompatActivity {
         tv_chat_display_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter = new AddChatAdapter(AddChatConversition.this, vaccine_centers);
-                rv_chat_list_vaccine_center.setAdapter(adapter);
+                adapter.setCenters(vaccine_centers_origin);
             }
         });
 
@@ -121,19 +121,18 @@ public class AddChatConversition extends AppCompatActivity {
         return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
     private void search_vaccines(String searchText){
+        ArrayList<Vaccine_center> matchingCenters = new ArrayList<>(); // tìm trung tâm vắc-xin
         if(!searchText.isEmpty()){
             matchingCenters.clear();
-            for(Vaccine_center center : vaccine_centers){
+            for(Vaccine_center center : vaccine_centers_origin){
                 if(removeDiacritics(center.getCenter_name().toLowerCase()).contains(removeDiacritics(searchText.toLowerCase()))){
                     matchingCenters.add(center);
                 }
             }
-            adapter = new AddChatAdapter(AddChatConversition.this, matchingCenters);
-            rv_chat_list_vaccine_center.setAdapter(adapter);
+            adapter.setCenters(matchingCenters);
         }
         else{
-            adapter = new AddChatAdapter(AddChatConversition.this, filterAddressCenter);
-            rv_chat_list_vaccine_center.setAdapter(adapter);
+            adapter.setCenters(vaccine_centers_origin);
         }
     }
     private void GetDataOnFireBase_vaccine(){
@@ -142,18 +141,14 @@ public class AddChatConversition extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String customerAddress = address;
-                vaccine_centers = new ArrayList<>();
+                vaccine_centers_origin.clear();
                 for (DataSnapshot vaccineSnapshot : snapshot.getChildren()) {
                     Vaccine_center center = vaccineSnapshot.getValue(Vaccine_center.class);
                     center.setCenter_id(vaccineSnapshot.getKey());
-                    String centerAddress = center.getCenter_address();
-                    vaccine_centers.add(center);
-                    if (isAddressNearCustomer(customerAddress, centerAddress)) {
-                        filterAddressCenter.add(center);
-                    }
+                    vaccine_centers_origin.add(center);
                 }
-
-                adapter.notifyDataSetChanged();
+                vaccine_centers_origin = sortCentersByRelativeDistance(customerAddress, vaccine_centers_origin);
+                adapter.setCenters(vaccine_centers_origin);
             }
 
             @Override
@@ -161,34 +156,32 @@ public class AddChatConversition extends AppCompatActivity {
             }
         });
     }
-    private boolean isAddressNearCustomer(String customerAddress, String centerAddress) {
-        String[] customerAddressParts = customerAddress.split(", "); // 0 1
-        String[] centerAddressParts = centerAddress.split(", "); // 0 1 2
+    private ArrayList<Vaccine_center> sortCentersByRelativeDistance(String customerAddress, ArrayList<Vaccine_center> vaccineCenters) {
+        String[] customerAddressParts = customerAddress.split(", ");
+        Map<Vaccine_center, Integer> centerMatchCountMap = new HashMap<>();
 
-        int customerSizeAddress = customerAddressParts.length;
+        for (Vaccine_center center : vaccineCenters) {
+            String centerAddress = center.getCenter_address();
+            String[] centerAddressParts = centerAddress.split(", ");
 
-        if(customerSizeAddress == 1){
-            if(!customerAddressParts[0].equals(centerAddressParts[2])){
-                return false;
-            }
-        }
-        else if(customerSizeAddress == 2){
-            if(customerAddressParts[1].equals(centerAddressParts[2]))
-                if(!customerAddressParts[0].equals(centerAddressParts[1])){
-                    return false;
-                }
-                else
-                    return true;
-            else
-                return false;
-        } else if (customerSizeAddress == 3){
-            for (int i = 0; i < customerSizeAddress; i++) {
-                if (!customerAddressParts[i].equals(centerAddressParts[i])) {
-                    return false;
+            int matchCount = 0;
+
+            for (int i = 0; i < customerAddressParts.length; i++) {
+                for (int j = 0; j < centerAddressParts.length; j++) {
+                    if (customerAddressParts[i].equalsIgnoreCase(centerAddressParts[j])) {
+                        matchCount++;
+                        break;
+                    }
                 }
             }
+
+            centerMatchCountMap.put(center, matchCount);
         }
-        return true;
+
+        ArrayList<Vaccine_center> sortedCenters = new ArrayList<>(centerMatchCountMap.keySet());
+        Collections.sort(sortedCenters, (center1, center2) -> Integer.compare(centerMatchCountMap.get(center2), centerMatchCountMap.get(center1)));
+
+        return sortedCenters;
     }
 
 }
