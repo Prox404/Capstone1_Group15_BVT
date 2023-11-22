@@ -40,7 +40,6 @@ public class AddChatConversition extends AppCompatActivity {
     RecyclerView rv_chat_list_vaccine_center;
     AddChatAdapter adapter;
     ArrayList<Vaccine_center> vaccine_centers_origin = new ArrayList<>();
-    ArrayList<Vaccine_center> vaccine_centers = new ArrayList<>();// tất cả trung tâm tiêm chủng
     String address = "";
 
 
