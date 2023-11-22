@@ -224,7 +224,81 @@ public class HealthFragment extends Fragment {
     private void addButtonForBaby(final Baby baby){
         Button button = new Button(context);
         button.setText(baby.getBaby_name());
-        health_baby.addView(button);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(0, 0, 15, 0);
+        button.setLayoutParams(params);
+        button.setElevation(0);
+        button.setPadding(20, 5, 20, 5);
+        button.setHeight(30);
+        button.setMinimumHeight(130);
+        button.setMinHeight(0);
+        button.setStateListAnimator(null);
+
+        if (health_baby.getChildCount() == 0) {
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+            button.setTextColor(context.getResources().getColor(R.color.white));
+
+            babychoose = baby;
+            String id = babychoose.getBaby_id();
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+
+            resetButtonBackgrounds();
+
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+            button.setTextColor(context.getResources().getColor(R.color.white));
+
+            databaseReference.child(id).child(""+year).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        health.clear();
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            Health h = dataSnapshot.getValue(Health.class);
+                            if(h != null){
+                                int k = Integer.parseInt(dataSnapshot.getKey());
+                                health.put(k,h);
+                            }
+                        }
+                        chartxyBMI(dataValues2(health));
+                        ArrayList<Health> a = new ArrayList<>(health.values());
+                        adapter = new HealthBabyAdapter(reverse_arraylist(a));
+                        health_baby_list_view.setLayoutManager(new GridLayoutManager(context,1));
+                        health_baby_list_view.setAdapter(adapter);
+                        //todo arlet
+                        Log.i("MONTHHHH",""+month);
+                        if(health.containsKey(month)){
+                            health_arlet.setVisibility(View.VISIBLE);
+                            display_health_arlet_baby(health.get(month), month);
+                            health_arlet_input.setVisibility(View.GONE);
+                        }
+                        else{
+                            health_arlet.setVisibility(View.GONE);
+                            health_arlet_input.setVisibility(View.VISIBLE);
+                            Toast.makeText(context,"Bạn chưa nhập thông tin chỉ số của bé trong tháng này!!",Toast.LENGTH_LONG).show();
+                        }
+
+                    }else {
+                        Toast.makeText(context,"Chưa có dữ liệu vui lòng nhập các thông tin cơ bản cho bé",Toast.LENGTH_LONG).show();
+                        health_arlet_input.setVisibility(View.VISIBLE);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } else {
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_white_button_bg));
+        }
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,6 +307,12 @@ public class HealthFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
+
+                resetButtonBackgrounds();
+
+                button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+                button.setTextColor(context.getResources().getColor(R.color.white));
+
                 databaseReference.child(id).child(""+year).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -276,7 +356,21 @@ public class HealthFragment extends Fragment {
             }
 
         });
+
+        health_baby.addView(button);
     }
+
+    private void resetButtonBackgrounds() {
+        // Lặp qua tất cả các Button trong babyListContainer và đặt background về màu trắng
+        for (int i = 0; i < health_baby.getChildCount(); i++) {
+            View child = health_baby.getChildAt(i);
+            if (child instanceof Button) {
+                ((Button) child).setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
+                ((Button) child).setTextColor(getResources().getColor(R.color.textColor));
+            }
+        }
+    }
+
     private void display_health_arlet_baby(Health health, int month){
         double heigh = health.getHeight();
         double weight = health.getWeight();

@@ -1,12 +1,15 @@
 package com.prox.babyvaccinationtracker.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.prox.babyvaccinationtracker.BabyProfileActivity;
 import com.prox.babyvaccinationtracker.R;
 import com.prox.babyvaccinationtracker.model.Baby;
 
@@ -49,10 +52,22 @@ public class BabyGridViewAdapter extends BaseAdapter {
         TextView txtName = gridViewItem.findViewById(R.id.textViewBabyName);
         TextView txtBirthday = gridViewItem.findViewById(R.id.textViewBirthday);
 
-
         // Set baby data
         txtName.setText(baby.getBaby_name());
         txtBirthday.setText(baby.getBaby_birthday());
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String UserID = sharedPreferences.getString("customer_id", "");
+
+        gridViewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, BabyProfileActivity.class);
+                intent.putExtra("baby_id", baby.getBaby_id());
+                intent.putExtra("cus_id", UserID);
+                mContext.startActivity(intent);
+            }
+        });
 
         return gridViewItem;
     }

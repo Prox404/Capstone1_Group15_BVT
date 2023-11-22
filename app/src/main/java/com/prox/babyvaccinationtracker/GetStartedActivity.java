@@ -28,6 +28,7 @@ public class GetStartedActivity extends AppCompatActivity {
     private int page = 1;
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     private Button buttonPrev, buttonNext;
     private LinearLayout nextContainer, prevContainer;
 
@@ -56,6 +57,14 @@ public class GetStartedActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_READ_EXTERNAL_STORAGE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Nếu quyền chưa được cấp, yêu cầu người dùng cấp quyền
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL_STORAGE);
         }
 
         buttonNext.setOnClickListener(new View.OnClickListener() {

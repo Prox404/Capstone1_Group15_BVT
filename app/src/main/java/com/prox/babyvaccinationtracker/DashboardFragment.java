@@ -47,7 +47,7 @@ public class DashboardFragment extends Fragment {
     Context context;
     RecyclerView recyclerViewTimeline;
     TimeLineAdapter timeLineAdapter;
-    LinearLayout injectionHistory, familyContainer, commnunity;
+    LinearLayout injectionHistory, familyContainer, commnunity, QRCodeScanner;
     List<Regimen> regimenList = new ArrayList<>();
 
     LinearLayout babyListContainer;
@@ -89,6 +89,7 @@ public class DashboardFragment extends Fragment {
         commnunity = view.findViewById(R.id.community);
         textViewGreetings = view.findViewById(R.id.textViewGreetings);
         imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
+        QRCodeScanner = view.findViewById(R.id.QRCodeScanner);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         String babiesList = sharedPreferences.getString("babiesList", "");
@@ -132,6 +133,14 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, FamilyActivity.class);
+                startActivity(i);
+            }
+        });
+
+        QRCodeScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, QrScannerActivity.class);
                 startActivity(i);
             }
         });

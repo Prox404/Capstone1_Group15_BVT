@@ -1,11 +1,16 @@
 package com.prox.babyvaccinationtracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +22,19 @@ import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.prox.babyvaccinationtracker.model.Customer;
 import com.prox.babyvaccinationtracker.model.NotificationMessage;
 import com.prox.babyvaccinationtracker.model.Regimen;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,6 +42,7 @@ import java.util.Map;
 public class GetStartedCompleteFragment extends Fragment implements GetStartedActivity.OnBackPressedListener {
 
     Button buttonCompleted;
+    Context context;
 
     DatabaseReference databaseReference;
 
@@ -66,6 +79,7 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_get_started_complete, container, false);
+        context = view.getContext();
         buttonCompleted = view.findViewById(R.id.buttonCompleted);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", getActivity().MODE_PRIVATE);
@@ -78,11 +92,22 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
             public void onClick(View v) {
                 DatabaseReference babiesReference = databaseReference.child("babies");
                 DatabaseReference newBabyReference = babiesReference.push();
+
                 newBabyReference.setValue(GetStartedActivity.baby).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String babyID = newBabyReference.getKey();
+
                         uploadAvatar(GetStartedActivity.filePath, babyID);
-//                        GetStartedActivity.health.setBaby_id(babyID);
+                        HashMap<String, String> qrContent = new HashMap<>();
+                        qrContent.put("baby_id", babyID);
+                        qrContent.put("cus_id", userID);
+                        qrContent.put("type", "baby_information");
+                        Gson gson = new Gson();
+                        String qrContentString = gson.toJson(qrContent);
+                        Bitmap bitmap = generateQRCode(qrContentString);
+                        uploadQR(bitmap, userID, babyID);
+
+                        GetStartedActivity.health.setBaby_id(babyID);
 
                         DatabaseReference checkList = FirebaseDatabase.getInstance().getReference("check_list");
                         checkList.child(babyID).setValue(GetStartedActivity.babyCheckList);
@@ -119,6 +144,8 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         for (NotificationMessage message : messages) {
                             notifications.push().setValue(message);
                         }
+
+
 
                         Customer customer = new Customer();
                         customer.uploadUserData(getActivity(), userID);
@@ -181,5 +208,69 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
             return true;
         }
 
+    }
+
+    private void uploadQR(Bitmap bitmap, String uid , String baby_id) {
+        Uri uri = getImageUri(context, bitmap);
+        MediaManager.get().upload(uri).callback(new UploadCallback() {
+            @Override
+            public void onStart(String requestId) {
+                Log.i("upload image", "onStart: ");
+            }
+
+            @Override
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+                Log.i("upload image", "Uploading... ");
+            }
+
+            @Override
+            public void onSuccess(String requestId, Map resultData) {
+                Log.i("upload image", "image URL: " + resultData.get("url").toString());
+                // save image url to firebase
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("customers").child(uid).child("babies");
+                databaseReference.child(baby_id).child("qr").setValue(resultData.get("url").toString());
+
+            }
+
+            @Override
+            public void onError(String requestId, ErrorInfo error) {
+                Log.i("upload image", "error " + error.getDescription());
+            }
+
+            @Override
+            public void onReschedule(String requestId, ErrorInfo error) {
+                Log.i("upload image", "Reshedule " + error.getDescription());
+            }
+        }).dispatch();
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        Log.i("SomeImage", "getImageUri: " + path);
+        return Uri.parse(path);
+    }
+
+    private Bitmap generateQRCode(String textToEncode) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = qrCodeWriter.encode(textToEncode, BarcodeFormat.QR_CODE, 300, 300);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? ContextCompat.getColor(context, R.color.black) : ContextCompat.getColor(context, R.color.white));
+                }
+            }
+
+            return bitmap;
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
