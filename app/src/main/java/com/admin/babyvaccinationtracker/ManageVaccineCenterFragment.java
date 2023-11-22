@@ -50,6 +50,7 @@ public class ManageVaccineCenterFragment extends Fragment {
     DatabaseReference databaseReference;
 
     ManageCenterListAdapter adapter;
+    View empty_layout;
 
     List<Vaccine_center> vaccineCenterList = new ArrayList<>();
     List<Vaccine_center> vaccineCenterList_origin = new ArrayList<>();
@@ -98,6 +99,7 @@ public class ManageVaccineCenterFragment extends Fragment {
         context = container != null ? container.getContext() : null;
         editTexte_Search_vaccine_center = view.findViewById(R.id.editTexte_Search_manager_vaccine_center);
         recyclerViewcenter = view.findViewById(R.id.RecylerViewManageListVaccineCenter);
+        empty_layout = view.findViewById(R.id.empty_layout);
 
         adapter = new ManageCenterListAdapter(vaccineCenterList,context);
         recyclerViewcenter.setLayoutManager(new LinearLayoutManager(context));
@@ -123,6 +125,12 @@ public class ManageVaccineCenterFragment extends Fragment {
                         vaccineCenterList.add(v);
                     }
                     vaccineCenterList_origin = new ArrayList<>(vaccineCenterList);
+                    if(vaccineCenterList_origin.size() <= 0){
+                        empty_layout.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        empty_layout.setVisibility(View.GONE);
+                    }
                     adapter.notifyDataSetChanged();
 
                     adapter.setOnItemClickListener(new ManageCenterListAdapter.OnItemClickListener() {
@@ -143,6 +151,11 @@ public class ManageVaccineCenterFragment extends Fragment {
                             blockUser.show(getActivity().getSupportFragmentManager(), "Chặn người dùng");
                         }
                     });
+                }else {
+                    vaccineCenterList_origin.clear();
+                    empty_layout.setVisibility(View.VISIBLE);
+                    vaccineCenterList.clear();
+                    adapter.notifyDataSetChanged();
                 }
             }
 

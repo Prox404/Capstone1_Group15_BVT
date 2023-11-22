@@ -59,6 +59,8 @@ public class ManageUserFragment extends Fragment {
     List<Customer> customers = new ArrayList<>();
     List<Customer> customers_origin = new ArrayList<>();
 
+    View empty_layout;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -112,6 +114,7 @@ public class ManageUserFragment extends Fragment {
         context = container != null ? container.getContext() : null;
         View view = inflater.inflate(R.layout.fragment_manage_user, container, false);
 
+        empty_layout = view.findViewById(R.id.empty_layout);
         editTexte_Search_user = view.findViewById(R.id.editTexte_Search_user);
         RecylerViewListUser = view.findViewById(R.id.RecylerViewListUser);
 
@@ -137,6 +140,12 @@ public class ManageUserFragment extends Fragment {
                         customers.add(customer);
                     }
                     customers_origin = new ArrayList<>(customers);
+                    if(customers_origin.size() <= 0){
+                        empty_layout.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        empty_layout.setVisibility(View.GONE);
+                    }
                     adapter.notifyDataSetChanged();
 
                     adapter.setOnItemClickListener(new ManageUserListViewAdapter.OnItemClickListener() {
@@ -158,6 +167,11 @@ public class ManageUserFragment extends Fragment {
 
                         }
                     });
+                }else {
+                    customers_origin.clear();
+                    empty_layout.setVisibility(View.VISIBLE);
+                    customers.clear();
+                    adapter.notifyDataSetChanged();
                 }
 
             }

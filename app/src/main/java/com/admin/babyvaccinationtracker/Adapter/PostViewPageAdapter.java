@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.admin.babyvaccinationtracker.Post_VisitsFragment;
-import com.admin.babyvaccinationtracker.Post_commentsFragment;
+import com.admin.babyvaccinationtracker.Fragment_delete_post;
 import com.admin.babyvaccinationtracker.model.Post;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class PostViewPageAdapter extends FragmentPagerAdapter {
                 return Post_VisitsFragment.newInstance(posts);
             case 1 :
                 Log.i("POST", posts+"");
-                return Post_commentsFragment.newInstance(posts);
+                return Fragment_delete_post.newInstance(posts);
             default: return Post_VisitsFragment.newInstance(posts);
         }
     }
@@ -47,7 +47,7 @@ public class PostViewPageAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position){
-            case 0: return "Thông kế bài đăng";
+            case 0: return "Thống kê bài đăng";
             case 1: return "Xóa bài bài đăng";
         }
         return super.getPageTitle(position);

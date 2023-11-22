@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,16 +22,14 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import retrofit2.http.POST;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Post_commentsFragment#newInstance} factory method to
+ * Use the {@link Fragment_delete_post#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Post_commentsFragment extends Fragment {
+public class Fragment_delete_post extends Fragment {
 
-    public Post_commentsFragment() {
+    public Fragment_delete_post() {
         // Required empty public constructor
     }
     ArrayList<Post> posts;
@@ -41,8 +38,8 @@ public class Post_commentsFragment extends Fragment {
     DeletePostAdapter DetetePAdapter;
     EditText edt_search_post_delete_post;
 
-    public static Post_commentsFragment newInstance(ArrayList<Post> posts) {
-        Post_commentsFragment fragment = new Post_commentsFragment();
+    public static Fragment_delete_post newInstance(ArrayList<Post> posts) {
+        Fragment_delete_post fragment = new Fragment_delete_post();
         Bundle args = new Bundle();
         args.putSerializable("post",posts);
         fragment.setArguments(args);
@@ -62,7 +59,7 @@ public class Post_commentsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_post_comments, container, false);
+        View view = inflater.inflate(R.layout.fragment_delete_post, container, false);
         context = container != null ? container.getContext() : null;
         DeleteP= view.findViewById(R.id.Rcview);
         edt_search_post_delete_post = view.findViewById(R.id.edt_search_post_delete_post);
