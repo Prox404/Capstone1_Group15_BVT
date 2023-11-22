@@ -3,19 +3,24 @@ package com.prox.babyvaccinationtracker.adapter;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prox.babyvaccinationtracker.R;
@@ -180,9 +185,71 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
             }
         });
+        holder.imageEditPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String id_post = postItem.getPost_id();
+                if(postItem.getUser().getUser_id().equals(user_id)){
+                    Showmenuedit(view,id_post);
+                }
+                else {
+                    report_menu(view,id_post);
+                }
+            }
+        });
     }
 
+    private void Showmenuedit(View view, String id_post){
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.editpost_menu, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                Log.i("IDDDD", id+" "+menuItem.getItemId());
+                if (id == R.id.itemdeletepost) {
+                    // thêm xóa hồi nãy làm bên admin
+                    DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
+                    EditContent.child(id_post).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
+                        }
+                    });
+                    Toast.makeText(view.getContext(), " Đã xóa bài viết thành công", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.itemeditpost_edit) {
+                    //todo cập nhập bài viết
+                    Toast.makeText(view.getContext(), " Đã cập nhật bài viết thành công", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
+    private void report_menu(View view, String id_post){
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.report_menu, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if(id == R.id.menu_report_item){
+                    DatabaseReference ReportContent = FirebaseDatabase.getInstance().getReference("posts");
+                    ReportContent.child(id_post).child("Report").child(user_id).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(view.getContext(),"Đã báo cáo bài viết này", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
     private Comment convertMapToComment(HashMap<String, Object> commentMap) {
         try {
             Comment comment = new Comment();
@@ -219,7 +286,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView postTime;
         TextView postContent;
         TextView textViewHashtag;
-        ImageView userAvatar, imageViewHeart,imageViewComment;
+        ImageView userAvatar, imageViewHeart,imageViewComment,imageEditPost;
         ViewPager2 viewPagerImage;
         LinearLayout likeContainer, commentContainer;
         SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("user", itemView.getContext().MODE_PRIVATE);
@@ -243,6 +310,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             buttonSendComment = itemView.findViewById(R.id.buttonSendComment);
             editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
             imageViewComment = itemView.findViewById(R.id.imageViewComment);
+            imageEditPost = itemView.findViewById(R.id.imageEditPost);
             user_id = sharedPreferences.getString("customer_id", "");
 
         }
