@@ -1,7 +1,6 @@
 package com.admin.babyvaccinationtracker;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -73,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
        imageView_user_management.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               Intent intent = new Intent(HomeActivity.this, Admin_management_of_vaccine_center_registration.class);
+               Intent intent = new Intent(HomeActivity.this, Admin_management_of_user.class);
                startActivity(intent);
            }
        });

@@ -17,21 +17,20 @@ public class VaccineCenterRegistration {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReferenceCenter;
     private DatabaseReference databaseReferenceRegistration;
-    boolean check = false;
     public  VaccineCenterRegistration(){
         // Khởi tạo Firebase Auth và Realtime Database
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReferenceCenter = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center");
         databaseReferenceRegistration = FirebaseDatabase.getInstance().getReference("Vaccine_center_registration");
     }
-    public boolean registerCenter(Context context, Vaccine_center center,String registration_id){
+    public void registerCenter(Context context, Vaccine_center center,String registration_id){
         if(context == null){
             Log.i("Contentttttttt",""+context);
-            return false;
+            return;
         }
         if(center == null){
             Log.i("Centerttttttt",""+center);
-            return false;
+            return;
         }
         byte[] decenter_passord = Base64.getDecoder().decode(center.getCenter_password());
         String password = new String(decenter_passord, StandardCharsets.UTF_8);
@@ -50,10 +49,8 @@ public class VaccineCenterRegistration {
                             }
                         });
                         Toast.makeText(context, "Xác nhận thành công !", Toast.LENGTH_SHORT).show();
-                        check = true;
                     }
                     else{
-                        check = false;
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // Đã tồn tại người dùng với cùng ic_email.xml, xử lý tùy ý
                             Log.i("CenterRegistration", "Duplicated center ic_email.xml");
@@ -70,7 +67,7 @@ public class VaccineCenterRegistration {
                     }
 
                 });
-        return check;
+
     }
 
 }

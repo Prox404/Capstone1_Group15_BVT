@@ -43,7 +43,7 @@ public class BlockUser extends AppCompatDialogFragment {
             tv_email.setText(cus_email);
         }
 
-        builder.setView(view).setTitle("Chặn người dùng").setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setView(view).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dismiss(); // Close the dialog
@@ -61,8 +61,8 @@ public class BlockUser extends AppCompatDialogFragment {
                     String user_email = args.getString("user_email", "");
                     DatabaseReference blacklistData = FirebaseDatabase.getInstance().getReference("BlackList");
                     BlackList blackList = new BlackList();
-                    blackList.setCus_email(user_name);
-                    blackList.setCus_name(user_email);
+                    blackList.setCus_email(user_email);
+                    blackList.setCus_name(user_name);
                     blackList.setReason(reason);
                     if(check == 1){
                         blacklistData.child("Customers").child(user_id).setValue(blackList).addOnSuccessListener(new OnSuccessListener<Void>() {

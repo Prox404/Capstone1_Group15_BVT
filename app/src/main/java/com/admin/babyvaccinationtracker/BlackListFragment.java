@@ -56,6 +56,8 @@ public class BlackListFragment extends Fragment {
     TextView editTexte_Search_Block_user;
     ImageView btn_blackListUser_Switch;
 
+    View empty_layout;
+
     Boolean check = true;
 
     public BlackListFragment() {
@@ -94,9 +96,8 @@ public class BlackListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    void Loaddata(){
+    void Loaddata(Boolean check){
         if(check == true){
-
             databaseReference.child("Customers").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -106,15 +107,24 @@ public class BlackListFragment extends Fragment {
                         blackListLists.clear();
                         for(DataSnapshot a : snapshot.getChildren()){
                             BlackList black = a.getValue(BlackList.class);
+                            black.setBlacklist_id(a.getKey());
                             blackListLists.add(black);
                         }
                         BlackList_origin = new ArrayList<>(blackListLists);
+                        if(BlackList_origin.size() <= 0){
+                            empty_layout.setVisibility(View.VISIBLE);
+                        }else {
+                            empty_layout.setVisibility(View.GONE);
+                        }
                         blockUserAdapter.notifyDataSetChanged();
+                        blockUserAdapter.setCheckisCustomer(true);
 
-                        check = false;
-                        editTexte_Search_Block_user.setHint("Tìm kiếm khách hàng bị chặn");
                     }
                     else {
+                        BlackList_origin.clear();
+                        blackListLists.clear();
+                        empty_layout.setVisibility(View.VISIBLE);
+                        blockUserAdapter.notifyDataSetChanged();
                         Log.i("DataNotExists", "Data does not exist in the snapshot");
                     }
                 }
@@ -124,8 +134,7 @@ public class BlackListFragment extends Fragment {
                     Toast.makeText(context,"Xảy ra lỗi", Toast.LENGTH_LONG).show();
                 }
             });
-        }else {
-
+        }else  {
             databaseReference.child("Vaccine_centers").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,15 +144,24 @@ public class BlackListFragment extends Fragment {
                         blackListLists.clear();
                         for(DataSnapshot a : snapshot.getChildren()){
                             BlackList black = a.getValue(BlackList.class);
+                            black.setBlacklist_id(a.getKey());
                             blackListLists.add(black);
                         }
                         BlackList_origin = new ArrayList<>(blackListLists);
+                        if(BlackList_origin.size() <= 0){
+                            empty_layout.setVisibility(View.VISIBLE);
+                        }else {
+                            empty_layout.setVisibility(View.GONE);
+                        }
                         blockUserAdapter.notifyDataSetChanged();
+                        blockUserAdapter.setCheckisCustomer(false);
 
-                        check = true;
-                        editTexte_Search_Block_user.setHint("Tìm kiếm trung tâm bị chặn");
                     }
                     else {
+                        BlackList_origin.clear();
+                        empty_layout.setVisibility(View.VISIBLE);
+                        blackListLists.clear();
+                        blockUserAdapter.notifyDataSetChanged();
                         Log.i("DataNotExists", "Data does not exist in the snapshot");
                     }
                 }
@@ -165,17 +183,30 @@ public class BlackListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.RecylerViewListBlockUser);
         editTexte_Search_Block_user = view.findViewById(R.id.editTexte_Search_Block_user);
         btn_blackListUser_Switch = view.findViewById(R.id.btn_blackListUser_Switch);
+        empty_layout = view.findViewById(R.id.empty_layout);
+
+
         databaseReference = FirebaseDatabase.getInstance().getReference("BlackList");
-        blockUserAdapter = new BlockUserAdapter(blackListLists,context);
+        blockUserAdapter = new BlockUserAdapter(blackListLists,check);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(blockUserAdapter);
 
-        Loaddata();
+        Loaddata(check);
 
         btn_blackListUser_Switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Loaddata();
+                if(check == true){
+                    Loaddata(false);
+                    editTexte_Search_Block_user.setHint("Tìm kiếm trung tâm bị chặn");
+                    check = false;
+                }
+                else {
+                    Loaddata(true);
+                    editTexte_Search_Block_user.setHint("Tìm kiếm khách hàng bị chặn");
+                    check = true;
+                }
+
             }
         });
 

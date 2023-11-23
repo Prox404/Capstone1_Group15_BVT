@@ -3,7 +3,6 @@ package com.admin.babyvaccinationtracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.widget.ImageView;
 import com.admin.babyvaccinationtracker.Adapter.ManagerUserViewPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-public class Admin_management_of_vaccine_center_registration extends AppCompatActivity {
+public class Admin_management_of_user extends AppCompatActivity {
     ImageView imageView_back;
     private TabLayout mTablayout;
     private ViewPager mViewPager;
@@ -21,7 +20,7 @@ public class Admin_management_of_vaccine_center_registration extends AppCompatAc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_management_of_vaccine_center_registration);
+        setContentView(R.layout.activity_admin_management_of_user);
 
         imageView_back = findViewById(R.id.imageView_back);
         mTablayout = findViewById(R.id.ManagerTabLayout);

@@ -118,21 +118,28 @@ public class ManageVaccineRegistrationFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                registrations.clear();
-                for(DataSnapshot snap : snapshot.getChildren()){
-                    Vaccine_center_registration regi = snap.getValue(Vaccine_center_registration.class);
-                    regi.getCenter().setCenter_address2(snap.child("center").child("center_address2").getValue(String.class));
-                    regi.setCenter_registration_id(snap.getKey());
-                    registrations.add(regi);
-                }
-                registrations_origin = new ArrayList<>(registrations);
-                if (registrations_origin.size() <= 0){
+                if(snapshot.exists()){
+                    registrations.clear();
+                    for(DataSnapshot snap : snapshot.getChildren()){
+                        Vaccine_center_registration regi = snap.getValue(Vaccine_center_registration.class);
+                        regi.getCenter().setCenter_address2(snap.child("center").child("center_address2").getValue(String.class));
+                        regi.setCenter_registration_id(snap.getKey());
+                        registrations.add(regi);
+                    }
+                    registrations_origin = new ArrayList<>(registrations);
+                    if (registrations_origin.size() <= 0){
+                        empty_layout.setVisibility(View.VISIBLE);
+                    } else {
+                        empty_layout.setVisibility(View.GONE);
+                    }
+                    adapter.notifyDataSetChanged();
+                }else {
+                    registrations_origin.clear();
+                    registrations.clear();
                     empty_layout.setVisibility(View.VISIBLE);
-                } else {
-                    empty_layout.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
                 }
 
-                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

@@ -55,10 +55,8 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
                         return;
                     }
                     vaccineCenterRegistration = new VaccineCenterRegistration();
-                    if(vaccineCenterRegistration.registerCenter(context,re.getCenter(),re.getCenter_registration_id())){
-                        Vaccine_center_registration.remove(position);
-                        notifyDataSetChanged();
-                    }
+                    vaccineCenterRegistration.registerCenter(context,re.getCenter(),re.getCenter_registration_id());
+
                 }
             });
         }
