@@ -140,6 +140,7 @@ public class GetStartedStep1Fragment extends Fragment {
                         // Xử lý khi người dùng chọn ngày
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         editTextBirthday.setText(selectedDate);
+                        textViewMessage.setVisibility(View.INVISIBLE);
                         GetStartedActivity.baby.setBaby_birthday(selectedDate);
                         Log.i("GetStarted", "Birthday: " + selectedDate);
                     }
@@ -160,10 +161,6 @@ public class GetStartedStep1Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 datePickerDialog.show();
-                if (editTextBirthday.getText().toString().isEmpty()) {
-                    textViewMessage.setVisibility(View.VISIBLE);
-                    textViewMessage.setText("Vui lòng nhập ngày sinh của bé 🥲");
-                }
             }
         });
 
@@ -195,8 +192,7 @@ public class GetStartedStep1Fragment extends Fragment {
                 if (s.toString() != null && !s.toString().isEmpty()) {
                     name = s.toString();
                 } else {
-                    textViewMessage.setVisibility(View.VISIBLE);
-                    textViewMessage.setText("Vui lòng nhập tên của bé 🥲");
+                    editTextName.setError("Vui lòng nhập tên của bé");
                 }
                 Log.i("GetStarted", "afterTextChanged: " + name);
                 GetStartedActivity.baby.setBaby_name(name);
@@ -225,8 +221,7 @@ public class GetStartedStep1Fragment extends Fragment {
                     height = Double.parseDouble(s.toString());
                     Log.i("GetStarted", "afterTextChanged: " + String.valueOf(height));
                 } else {
-                    textViewMessage.setVisibility(View.VISIBLE);
-                    textViewMessage.setText("Vui lòng nhập chiều cao của bé 🥲");
+                    editTextHeight.setError("Vui lòng nhập chiều cao của bé 🥲");
                 }
                 GetStartedActivity.health.setHeight(height);
             }
@@ -254,8 +249,7 @@ public class GetStartedStep1Fragment extends Fragment {
                     weight = Double.parseDouble(s.toString());
                     Log.i("GetStarted", "afterTextChanged: " + String.valueOf(weight));
                 } else {
-                    textViewMessage.setVisibility(View.VISIBLE);
-                    textViewMessage.setText("Vui lòng nhập cân nặng của bé 🥲");
+                    editTextWeight.setError("Vui lòng nhập cân nặng của bé 🥲");
                 }
                 GetStartedActivity.health.setWeight(weight);
             }
@@ -283,8 +277,7 @@ public class GetStartedStep1Fragment extends Fragment {
                     sleep = Double.parseDouble(s.toString());
                     Log.i("GetStarted", "afterTextChanged: " + String.valueOf(sleep));
                 } else {
-                    textViewMessage.setVisibility(View.VISIBLE);
-                    textViewMessage.setText("Vui lòng nhập thời gian ngử của bé 🥲");
+                    editTextSleep.setError("Vui lòng nhập số giờ bé ngủ mỗi ngày 🥲");
                 }
                 GetStartedActivity.health.setSleep(sleep);
             }

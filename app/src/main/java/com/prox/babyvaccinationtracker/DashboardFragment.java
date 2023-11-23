@@ -17,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.adapter.TimeLineAdapter;
 import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Regimen;
+import com.squareup.picasso.Picasso;
 
 
 import org.json.JSONArray;
@@ -44,7 +47,7 @@ public class DashboardFragment extends Fragment {
     Context context;
     RecyclerView recyclerViewTimeline;
     TimeLineAdapter timeLineAdapter;
-    LinearLayout injectionHistory, familyContainer;
+    LinearLayout injectionHistory, familyContainer, commnunity, QRCodeScanner;
     List<Regimen> regimenList = new ArrayList<>();
 
     LinearLayout babyListContainer;
@@ -52,6 +55,8 @@ public class DashboardFragment extends Fragment {
 
     String babyId = "";
     String firstBabyId = "";
+    TextView textViewGreetings;
+    ImageView imageViewAvatar;
 
 
     public DashboardFragment() {
@@ -81,9 +86,20 @@ public class DashboardFragment extends Fragment {
         injectionHistory = view.findViewById(R.id.injectionHistory);
         babyListContainer = view.findViewById(R.id.babyListContainer);
         familyContainer = view.findViewById(R.id.familyContainer);
+        commnunity = view.findViewById(R.id.community);
+        textViewGreetings = view.findViewById(R.id.textViewGreetings);
+        imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
+        QRCodeScanner = view.findViewById(R.id.QRCodeScanner);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         String babiesList = sharedPreferences.getString("babiesList", "");
+        String cus_name = sharedPreferences.getString("cus_name", "Trần Công Trí");
+        String cus_avatar = sharedPreferences.getString("cus_avatar", "");
+        if (!cus_avatar.equals("")){
+            String imgaeUrl = cus_avatar.contains("https") ? cus_avatar : cus_avatar.replace("http", "https");
+            Picasso.get().load(imgaeUrl).into(imageViewAvatar);
+        }
+        textViewGreetings.setText(cus_name.split(" ")[cus_name.split(" ").length - 1]);
         String babyID = "";
         try {
             Gson gson = new Gson();
@@ -97,6 +113,13 @@ public class DashboardFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        commnunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, community_activity.class));
+            }
+        });
 
         injectionHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,22 +137,81 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        QRCodeScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, QrScannerActivity.class);
+                startActivity(i);
+            }
+        });
+
+        imageViewAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
         return view;
     }
 
     private void addButtonForBaby(final Baby baby) {
         Button button = new Button(context);
-        button.setBackground(context.getResources().getDrawable(R.drawable.button_bg));
         button.setText(baby.getBaby_name());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(0, 0, 15, 0);
+        button.setLayoutParams(params);
+        button.setElevation(0);
+        button.setPadding(20, 5, 20, 5);
+        button.setHeight(30);
+        button.setMinimumHeight(130);
+        button.setMinHeight(0);
+        button.setStateListAnimator(null);
+
+        // Nếu babyListContainer chưa có Button nào, hoặc Button đầu tiên được thêm vào
+        if (babyListContainer.getChildCount() == 0) {
+            // Thiết lập background cho Button đầu tiên là color/primaryColor
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+            button.setTextColor(context.getResources().getColor(R.color.white));
+            babyId = baby.getBaby_id();
+            setTimeLine(babyId);
+        } else {
+            // Thiết lập background mặc định cho tất cả các Button khác
+            button.setBackground(context.getResources().getDrawable(R.drawable.rounded_white_button_bg));
+        }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 babyId = baby.getBaby_id();
                 setTimeLine(babyId);
+
+                // Đặt lại background cho tất cả các Button về màu trắng
+                resetButtonBackgrounds();
+
+                // Đặt background cho Button đang chọn là color/primaryColor
+                button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+                button.setTextColor(context.getResources().getColor(R.color.white));
             }
         });
 
         babyListContainer.addView(button);
+    }
+
+    private void resetButtonBackgrounds() {
+        // Lặp qua tất cả các Button trong babyListContainer và đặt background về màu trắng
+        for (int i = 0; i < babyListContainer.getChildCount(); i++) {
+            View child = babyListContainer.getChildAt(i);
+            if (child instanceof Button) {
+                ((Button) child).setBackground(context.getResources().getDrawable(R.drawable.rounded_white_button_bg));
+                ((Button) child).setTextColor(context.getResources().getColor(R.color.textColor));
+            }
+        }
     }
 
     public void setTimeLine(String baby_id) {

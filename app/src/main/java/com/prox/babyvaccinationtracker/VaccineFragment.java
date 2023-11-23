@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 public class VaccineFragment extends Fragment {
 
-    LinearLayout searchVaccine, searchVaccineCenter;
+    LinearLayout searchVaccine, searchVaccineCenter, injectionHistory;
 
     public VaccineFragment() {
         // Required empty public constructor
@@ -37,6 +37,7 @@ public class VaccineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vaccine, container, false);
         searchVaccine = view.findViewById(R.id.searchVaccine);
         searchVaccineCenter = view.findViewById(R.id.searchVaccineCenter);
+        injectionHistory = view.findViewById(R.id.injectionHistory);
 
         searchVaccine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +54,15 @@ public class VaccineFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        injectionHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), InjectionHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return  view;
     }
 }

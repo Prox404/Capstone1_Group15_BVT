@@ -33,16 +33,36 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/Widget.AppCompat.TextView.Title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Xin Chào" />
-
-                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_medium"
-                        android:text="Một nụ cười bằng 10 liều ma toé" />
+                        android:text="Baby Vaccination Tracker"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorSecondary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            style="@style/Widget.AppCompat.TextView.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_semibold"
+                            android:text="Xin Chào, "
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:id="@+id/textViewGreetings"
+                            style="@style/Widget.AppCompat.TextView.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Tri"
+                            android:textSize="25sp" />
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -50,13 +70,14 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
+                    app:cardCornerRadius="35dp"
                     app:cardElevation="0dp">
 
                     <ImageView
                         android:id="@+id/imageViewAvatar"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
+                        android:scaleType="centerCrop"
                         app:srcCompat="@drawable/add_avatar_bg" />
                 </androidx.cardview.widget.CardView>
 
@@ -67,21 +88,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 android:text="Phác đồ tiêm chủng" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foregroundGravity="right">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/babyListContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="left"
                     android:layout_marginBottom="10dp"
-                    android:gravity="right"
-                    android:orientation="horizontal"/>
+                    android:gravity="left"
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
 
             <!--            <FrameLayout-->
@@ -107,33 +128,41 @@
                 </androidx.recyclerview.widget.RecyclerView>
             </androidx.cardview.widget.CardView>
 
-<!--            <FrameLayout-->
+            <!--            <FrameLayout-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="10dp"-->
 <!--                android:background="@drawable/timeline_item_bottom_bg">-->
 
 <!--            </FrameLayout>-->
 
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Heading2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:text="Công cụ" />
+
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 app:alignContent="stretch"
                 app:alignItems="stretch"
                 app:flexWrap="wrap"
                 app:justifyContent="space_between">
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     app:layout_flexBasisPercent="50%">
 
                     <LinearLayout
-                        android:id="@+id/injectionHistory"
+                        android:id="@+id/community"
                         android:layout_width="match_parent"
-                        android:layout_height="230dp"
+                        android:layout_height="180dp"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/tool_item_bg"
+                        android:background="@drawable/tool_item_red_bg"
                         android:gravity="right"
                         android:orientation="vertical"
                         android:padding="10dp">
@@ -147,7 +176,101 @@
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/ic_history" />
+                                android:src="@drawable/community"
+                                android:tint="@color/textColor" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="right"
+                            android:maxWidth="150dp"
+                            android:text="Cộng đồng"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/QRCodeScanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/tool_item_ocean_blue_bg"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_qr"
+                                android:tint="@color/textColor" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold"
+                            android:maxWidth="150dp"
+                            android:text="Quét mã"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_flexBasisPercent="50%">
+
+                    <LinearLayout
+                        android:id="@+id/injectionHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/tool_item_blue_bg"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_history"
+                                android:tint="@color/textColor" />
                         </LinearLayout>
 
                         <FrameLayout
@@ -165,69 +288,16 @@
                             android:maxWidth="150dp"
                             android:text="Lịch sử tiêm chủng"
                             android:textAlignment="textEnd"
-                            android:textColor="@color/white"
+                            android:textColor="@color/textColor"
                             android:textSize="20sp" />
 
                     </LinearLayout>
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_flexBasisPercent="50%">
-
-                    <LinearLayout
-                        android:id="@+id/QRCodeScanner"
-                        android:layout_width="match_parent"
-                        android:layout_height="230dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/tool_item_bg"
-                        android:gravity="right"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:src="@drawable/ic_qr" />
-                        </LinearLayout>
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                        </FrameLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_bold"
-                            android:maxWidth="150dp"
-                            android:text="Quét mã"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/white"
-                            android:textSize="20sp" />
-
-                    </LinearLayout>
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:layout_flexBasisPercent="50%">
 
                     <LinearLayout
                         android:id="@+id/familyContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="230dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/tool_item_bg"
                         android:gravity="right"
@@ -243,7 +313,8 @@
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/ic_history" />
+                                android:src="@drawable/ic_home"
+                                android:tint="@color/textColor" />
                         </LinearLayout>
 
                         <FrameLayout
@@ -261,11 +332,11 @@
                             android:maxWidth="150dp"
                             android:text="Gia đình"
                             android:textAlignment="textEnd"
-                            android:textColor="@color/white"
+                            android:textColor="@color/textColor"
                             android:textSize="20sp" />
 
                     </LinearLayout>
-                </FrameLayout>
+                </LinearLayout>
 
             </com.google.android.flexbox.FlexboxLayout>
 

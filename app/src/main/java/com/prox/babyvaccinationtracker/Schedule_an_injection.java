@@ -190,10 +190,12 @@ public class Schedule_an_injection extends AppCompatActivity {
                 reference.push().setValue(vaccinationRegistration).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful())
-                            Toast.makeText(Schedule_an_injection.this, "successfully", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(Schedule_an_injection.this, "failed", Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(Schedule_an_injection.this, "Đăng ký thành công, vui lòng đợi trung tâm xác nhận", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(Schedule_an_injection.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -333,6 +335,38 @@ public class Schedule_an_injection extends AppCompatActivity {
     private void addButtonForBaby(final Baby baby) {
         Button button = new Button(this);
         button.setText(baby.getBaby_name());
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(0, 0, 15, 0);
+        button.setLayoutParams(params);
+        button.setElevation(0);
+        button.setPadding(20, 5, 20, 5);
+        button.setHeight(30);
+        button.setMinimumHeight(130);
+        button.setMinHeight(0);
+        button.setStateListAnimator(null);
+
+        // Nếu babyListContainer chưa có Button nào, hoặc Button đầu tiên được thêm vào
+        if (schedule_list_btn_babies.getChildCount() == 0) {
+            // Thiết lập background cho Button đầu tiên là color/primaryColor
+            button.setBackground(getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+            button.setTextColor(getResources().getColor(R.color.white));
+
+            babyhavebeenchoose = baby;
+            baby_id = baby.getBaby_id();
+            schedule_bady_name.setText(baby.getBaby_name());
+            schedule_baby_gender.setText(baby.getBaby_gender());
+            schedule_bady_birthday.setText(baby.getBaby_birthday());
+            schedule_baby_congenital_disease.setText(baby.getBaby_congenital_disease());
+        } else {
+            // Thiết lập background mặc định cho tất cả các Button khác
+            button.setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
+        }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -343,10 +377,26 @@ public class Schedule_an_injection extends AppCompatActivity {
                 schedule_baby_gender.setText(baby.getBaby_gender());
                 schedule_bady_birthday.setText(baby.getBaby_birthday());
                 schedule_baby_congenital_disease.setText(baby.getBaby_congenital_disease());
+
+                resetButtonBackgrounds();
+
+                button.setBackground(getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+                button.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
         schedule_list_btn_babies.addView(button);
+    }
+
+    private void resetButtonBackgrounds() {
+        // Lặp qua tất cả các Button trong babyListContainer và đặt background về màu trắng
+        for (int i = 0; i < schedule_list_btn_babies.getChildCount(); i++) {
+            View child = schedule_list_btn_babies.getChildAt(i);
+            if (child instanceof Button) {
+                ((Button) child).setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
+                ((Button) child).setTextColor(getResources().getColor(R.color.textColor));
+            }
+        }
     }
 
 }

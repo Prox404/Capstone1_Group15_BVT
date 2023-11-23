@@ -6,6 +6,13 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -23,7 +30,25 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".BabyProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QrScannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RemindLaterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".community_activity"
+            android:exported="false" />
+        <activity
             android:name=".DisplayBlockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddChatConversition"
             android:exported="false" />
         <activity
             android:name=".heatlth_input_for_babies"
@@ -33,6 +58,9 @@
             android:exported="false" />
         <activity
             android:name=".InjectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity_user"
             android:exported="false" />
         <activity
             android:name=".ChatActivity"

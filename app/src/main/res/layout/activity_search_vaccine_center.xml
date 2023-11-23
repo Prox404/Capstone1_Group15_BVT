@@ -2,42 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".search_vaccine_center">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="428dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="25dp"
-        android:background="#36BD5E"
-        android:gravity="center"
-        android:text="BABY VACCINEATION TRACKER"
-        android:textSize="22dp" />
+
 
     <TextView
-        android:id="@+id/textView3"
+        style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:text="DANH SÁCH TRUNG TÂM TIÊM CHỦNG"
+        android:layout_marginBottom="20dp"
+        android:gravity="center|left"
+        android:text="Tìm kiếm \nTrung Tâm Tiêm Chủng"
         android:textSize="32dp"
         android:textStyle="bold" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <AutoCompleteTextView
-        android:id="@+id/edttimkiem"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="#F0F0F0"
-        android:gravity="center"
-        android:hint="Tìm kiếm" />
+        <AutoCompleteTextView
+            android:id="@+id/edttimkiem"
+            style="@style/Widget.App.RoundedEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:hint="Tìm kiếm" />
+
+        <LinearLayout
+            android:id="@+id/btntimkiem"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_primary_button_bg"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+
 
     <TextView
         android:id="@+id/centerInfoTextView"
@@ -46,14 +59,10 @@
         android:padding="8dp"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/btntimkiem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tìm" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvcenter"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp" />
 </LinearLayout>

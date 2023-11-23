@@ -4,8 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".InjectionHistoryActivity">
+
+    <TextView
+        style="@style/Widget.AppCompat.TextView.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Chứng nhận\ntiêm chủng" />
 
     <include
         android:id="@+id/emptyLayout"

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".GetStartedStep2Fragment">
 
     <ScrollView
@@ -17,6 +18,7 @@
 
             <EditText
                 android:id="@+id/editCongenitalDisease"
+                style="@style/Widget.App.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -28,56 +30,56 @@
                 android:id="@+id/checkBoxTuberculosis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Lao" />
 
             <CheckBox
                 android:id="@+id/checkBoxHepatitisB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm gan B (Hepatitis B)" />
 
             <CheckBox
                 android:id="@+id/checkBoxDiphtheria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Bạch hầu, ho gà, uốn ván" />
 
             <CheckBox
                 android:id="@+id/checkBoxParalysis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Bại liệt" />
 
             <CheckBox
                 android:id="@+id/checkBoxPneumoniaHIBMeningitis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm phổi, viêm màng não do Hib" />
 
             <CheckBox
                 android:id="@+id/checkBoxRotavirusDiarrhea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Tiêu chảy do Rota Virus" />
 
             <CheckBox
                 android:id="@+id/checkBoxPneumoniaMeningitisOtitisMedia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn" />
 
             <CheckBox
                 android:id="@+id/checkBoxMeningitisSepsisPneumoniaBC"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C" />
 
 
@@ -92,63 +94,63 @@
                 android:id="@+id/checkBoxMeningitisSepsisPneumoniaACWY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y" />
 
             <CheckBox
                 android:id="@+id/checkBoxInfluenza"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Cúm (Influenza)" />
 
             <CheckBox
                 android:id="@+id/checkBoxMeasles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Sởi (Measles)" />
 
             <CheckBox
                 android:id="@+id/checkBoxMeaslesMumpsRubella"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Sởi, Quai bị, Rubella (Measles, Mumps, Rubella)" />
 
             <CheckBox
                 android:id="@+id/checkBoxChickenpox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Thủy đậu (Chickenpox)" />
 
             <CheckBox
                 android:id="@+id/checkBoxHepatitisA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm gan A (Hepatitis A)" />
 
             <CheckBox
                 android:id="@+id/checkBoxHepatitisAandB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Viêm gan A + B (Hepatitis A + B)" />
 
             <CheckBox
                 android:id="@+id/checkBoxTetanus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Thương hàn (Tetanus)" />
 
             <CheckBox
                 android:id="@+id/checkBoxAnthrax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:padding="16dp"
+                android:padding="16dp"
                 android:text="Bệnh tả (Anthrax)" />
 
         </LinearLayout>

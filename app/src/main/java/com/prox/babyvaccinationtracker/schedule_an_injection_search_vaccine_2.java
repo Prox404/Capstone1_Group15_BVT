@@ -11,10 +11,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +52,11 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
     VaccineAdapter adapter;
     TextView textViewMessage;
 
+    Spinner spinnerOrigin;
+
+    List<String> vaccineOrigin = new ArrayList<>();
+    HashMap<String, Vaccines> vaccinesHashMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         schedule_edt_search_vaccine2 = findViewById(R.id.schedule_edt_search_vaccine2);
         schedule_list_vaccine = findViewById(R.id.schedule_list_vaccine);
         buttonClearFilter = findViewById(R.id.buttonClearFilter);
+        spinnerOrigin = findViewById(R.id.spinnerOrigin);
         schedule_image_back_vaccine2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +73,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             }
         });
         Intent intent = getIntent();
-        HashMap<String, Vaccines> vaccinesHashMap = (HashMap<String, Vaccines>) intent.getSerializableExtra("Vaccines"); // hashmap
+        vaccinesHashMap = (HashMap<String, Vaccines>) intent.getSerializableExtra("Vaccines"); // hashmap
         baby_id = intent.getStringExtra("baby_id");
         if (baby_id.isEmpty()) {
             Toast.makeText(this, "Hãy chọn trẻ để chúng tôi có thể gợi ý những loại vaccine phù hợp với bé !!", Toast.LENGTH_SHORT).show();
@@ -150,6 +158,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
                                 break;
                         }
                         textViewMessage.setText("Gợi ý những loại vaccine phù hợp với bé: " + vaccineName);
+                        filterVaccines();
                     }
                     Log.i("Home", "onDataChange: " + regimenList.size());
                 }
@@ -162,18 +171,27 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         }
 
 
-        vaccines = new ArrayList<>();
-        for (Map.Entry<String, Vaccines> entry : vaccinesHashMap.entrySet()) {
-            Vaccines vaccine = entry.getValue();
-            vaccine.setVaccine_id(entry.getKey());
-            vaccines.add(vaccine);
-            if (vaccine.getVac_effectiveness().equals(closestVaccineType)) {
-                filterVaccine.add(vaccine);
-            }
-        }
-        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
-        schedule_list_vaccine.setAdapter(adapter);
 
+
+        Log.i("select vaccine", "onCreate: " + vaccineOrigin.toString());
+        ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
+        adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerOrigin.setAdapter(adapterOrigin);
+
+        spinnerOrigin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Lấy xuất xứ được chọn từ Spinner
+                String selectedOrigin = (String) parentView.getItemAtPosition(position);
+                // Lọc danh sách vaccine dựa trên xuất xứ
+                filterVaccineByOrigin(selectedOrigin);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Xử lý sự kiện khi không có mục nào được chọn
+            }
+        });
 
         schedule_list_vaccine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -214,6 +232,44 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void filterVaccines() {
+        vaccines = new ArrayList<>();
+        vaccineOrigin.add("Tất cả");
+        for (Map.Entry<String, Vaccines> entry : vaccinesHashMap.entrySet()) {
+            Vaccines vaccine = entry.getValue();
+            vaccine.setVaccine_id(entry.getKey());
+            vaccines.add(vaccine);
+            if (!vaccineOrigin.contains(vaccine.getOrigin())) {
+                vaccineOrigin.add(vaccine.getOrigin());
+            }
+            Log.i("select vaccine", "onCreate ohhhh: " + vaccine.getVac_effectiveness() + " " + closestVaccineType);
+            if (vaccine.getVac_effectiveness().equals(closestVaccineType)) {
+                filterVaccine.add(vaccine);
+            }
+        }
+        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
+        schedule_list_vaccine.setAdapter(adapter);
+    }
+
+    private void filterVaccineByOrigin(String selectedOrigin) {
+        if (!selectedOrigin.isEmpty() && !selectedOrigin.equals("Tất cả")) {
+            List<Vaccines> filteredList_ = new ArrayList<>();
+            for (Vaccines vaccine : filterVaccine) {
+                if (vaccine.getOrigin().equals(selectedOrigin)) {
+                    filteredList_.add(vaccine);
+                }
+            }
+
+            // Cập nhật Adapter và hiển thị danh sách lọc
+            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filteredList_);
+            schedule_list_vaccine.setAdapter(adapter);
+        } else {
+            // Nếu không có xuất xứ nào được chọn, hiển thị toàn bộ danh sách
+            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
+            schedule_list_vaccine.setAdapter(adapter);
+        }
     }
 
     public static String removeDiacritics(String input) {

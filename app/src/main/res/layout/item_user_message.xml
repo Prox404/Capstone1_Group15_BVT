@@ -5,11 +5,14 @@
     android:layout_gravity="end"
     android:gravity="end"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:paddingVertical="8dp"
+    android:paddingStart="50dp"
+    android:paddingEnd="8dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="@drawable/user_message_bg"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -18,13 +21,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sender"
+            android:textColor="@android:color/white"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/messageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Message text" />
+            android:text="Message text"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>

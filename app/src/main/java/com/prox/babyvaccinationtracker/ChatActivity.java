@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +46,10 @@ public class ChatActivity extends AppCompatActivity {
 
     Conversation conversation = new Conversation();
     private HashMap<String, Message> messages = new HashMap<>();
+    ImageView imageViewBack;
+
+    TextView textViewTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +59,14 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewChat = findViewById(R.id.recyclerViewChat);
         editTextMessage = findViewById(R.id.editTextMessage);
         sendButton = findViewById(R.id.sendButton);
+        imageViewBack = findViewById(R.id.imageViewBack);
+        textViewTitle = findViewById(R.id.textViewTitle);
 
         Intent intent = getIntent();
         conversation_id = intent.getStringExtra("conversation_id");
+        String conversation_name = intent.getStringExtra("center_name");
+
+        textViewTitle.setText(conversation_name);
 
         chatAdapter = new ChatAdapter(this);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -64,30 +75,42 @@ public class ChatActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         user_name = sharedPreferences.getString("cus_name", "");
 
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("chat").child(conversation_id);
-        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    // dataSnapshot is the "issue" node with all children with id 0
-                    conversation = dataSnapshot.getValue(Conversation.class);
-                    assert conversation != null;
-                    messages = conversation.getMessages();
-                    Log.i("chat mess", "onDataChange: " + messages);
-                    //convert hashmap to arraylist
-                    for (String key : messages.keySet()) {
-                        Message message = messages.get(key);
-                        chatAdapter.addMessage(message);
+        if(conversation_id != null){
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("chat").child(conversation_id);
+            databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        // dataSnapshot is the "issue" node with all children with id 0
+                        conversation = dataSnapshot.getValue(Conversation.class);
+                        assert conversation != null;
+                        messages = conversation.getMessages();
+                        Log.i("chat mess", "onDataChange: " + messages);
+                        //convert hashmap to arraylist
+                        for (String key : messages.keySet()) {
+                            Message message = messages.get(key);
+                            message.setMessage_id(key);
+                            chatAdapter.addMessage(message);
+                            Log.i("Messages", "onDataChange: " + message.getMess_content());
+                        }
+                        chatAdapter.sortMessagesByKeyName();
+                        chatAdapter.notifyDataSetChanged();
+                        recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
                     }
-                    chatAdapter.notifyDataSetChanged();
-                    recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
                 }
-            }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View view) {
+                finish();
             }
         });
 

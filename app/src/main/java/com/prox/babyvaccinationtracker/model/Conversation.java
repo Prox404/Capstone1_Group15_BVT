@@ -7,6 +7,8 @@ import java.util.Map;
 public class Conversation implements java.io.Serializable{
     private String conversation_id;
 
+    private String conversation_name;
+
     @Override
     public String toString() {
         return "Conversation{" +
@@ -14,6 +16,14 @@ public class Conversation implements java.io.Serializable{
                 ", messages=" + messages +
                 ", users=" + users +
                 '}';
+    }
+
+    public String getConversation_name() {
+        return conversation_name;
+    }
+
+    public void setConversation_name(String conversation_name) {
+        this.conversation_name = conversation_name;
     }
 
     private HashMap<String, Message> messages;

@@ -13,10 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,19 +36,31 @@ import com.prox.babyvaccinationtracker.adapter.ConversationAdapter;
 import com.prox.babyvaccinationtracker.model.Conversation;
 import com.prox.babyvaccinationtracker.model.Message;
 
+import java.io.Serializable;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ChatFragment extends Fragment {
 
     Context context;
     RecyclerView recyclerConversation;
-    List<Conversation> conversations = new ArrayList<>();
+
     LinearLayout chatWithBot;
     ConversationAdapter conversationAdapter;
     ArrayList<String> conversation_ids = new ArrayList<>();
+    List<Conversation> conversations = new ArrayList<>();
+    List<Conversation> conversations_all = new ArrayList<>();
+    List<Conversation> conversations_filter = new ArrayList<>();
+    EditText editTextSearch;
+
+    ImageButton AddConversation;
+
+    DatabaseReference databaseRef;
+    DatabaseReference chatUserRef;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -63,37 +80,22 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        context = container != null ? container.getContext() : null;
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        recyclerConversation = view.findViewById(R.id.recyclerConversation);
-        chatWithBot = view.findViewById(R.id.chatWithBot);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        recyclerConversation.setLayoutManager(linearLayoutManager);
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
-        String user_id = sharedPreferences.getString("customer_id", "");
-        String user_name = sharedPreferences.getString("cus_name", "");
-
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("chat");
-        DatabaseReference chatUserRef = FirebaseDatabase.getInstance().getReference("chat_users").child(user_id);
-
+    public void onResume() {
+        super.onResume();
+        addConversation();
         conversationAdapter = new ConversationAdapter(conversations);
         recyclerConversation.setAdapter(conversationAdapter);
 
-//        String path  = "users/" + user_id;
-//        Query query = chatUserRef.orderByChild(user_id).equalTo(true);
-//        Log.i("chat", "onCreateView: " + query.toString());
+    }
 
+    private void addConversation(){
+        conversations.clear();
+        conversation_ids.clear();
         chatUserRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.i("chat", "onDataChange: " + snapshot.toString());
-                conversations.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Log.i("chat", "onDataChange: " + dataSnapshot.toString());
                     String conversation_id = dataSnapshot.getKey();
@@ -103,10 +105,12 @@ public class ChatFragment extends Fragment {
                             Log.i("chat", "onDataChange: " + snapshot.toString());
                             Conversation conversation = snapshot.getValue(Conversation.class);
                             conversation.setConversation_id(conversation_id);
-                            if (!conversation_ids.contains(conversation_id)){
+                            if(!conversation_ids.contains(conversation_id)){
                                 conversation_ids.add(conversation_id);
                                 conversations.add(conversation);
                             }
+                            conversations_all = new ArrayList<>(conversations);
+                            Log.i("chat_conversation_all", "onCreateView: " + conversations_all.size()+" "+conversations.size());
                             conversationAdapter.notifyDataSetChanged();
 //                            Log.i("chat", "onDataChange: " + conversations.size());
                         }
@@ -126,6 +130,39 @@ public class ChatFragment extends Fragment {
         });
 
         Log.i("chat", "onCreateView: " + conversations.size());
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        context = container != null ? container.getContext() : null;
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        recyclerConversation = view.findViewById(R.id.recyclerConversation);
+        chatWithBot = view.findViewById(R.id.chatWithBot);
+        AddConversation = view.findViewById(R.id.AddConversation);
+        editTextSearch = view.findViewById(R.id.editTextSearch);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        recyclerConversation.setLayoutManager(linearLayoutManager);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
+        String user_id = sharedPreferences.getString("customer_id", "");
+        String user_name = sharedPreferences.getString("cus_name", "");
+        String user_address = sharedPreferences.getString("cus_address","");
+
+        databaseRef = FirebaseDatabase.getInstance().getReference("chat");
+        chatUserRef = FirebaseDatabase.getInstance().getReference("chat_users").child(user_id);
+
+        conversationAdapter = new ConversationAdapter(conversations);
+        recyclerConversation.setAdapter(conversationAdapter);
+
+        addConversation();
+//        String path  = "users/" + user_id;
+//        Query query = chatUserRef.orderByChild(user_id).equalTo(true);
+//        Log.i("chat", "onCreateView: " + query.toString());
 
         chatWithBot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +228,33 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        AddConversation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,AddChatConversition.class);
+                intent.putExtra("cus_address", user_address);
+                startActivity(intent);
+            }
+        });
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String name = editable.toString();
+                search(name);
+            }
+        });
+
         //---------------------------------------------------
 
 
@@ -228,5 +292,8 @@ public class ChatFragment extends Fragment {
 //            Log.e("chat", "Conversation ID is null.");
 //        }
         return view;
+    }
+    private void search(String searchText) {
+        conversationAdapter.search(searchText,conversations_all);
     }
 }

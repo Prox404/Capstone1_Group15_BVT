@@ -34,6 +34,8 @@ android {
 
 
 dependencies {
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.8'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.google.code.gson:gson:2.10.1'

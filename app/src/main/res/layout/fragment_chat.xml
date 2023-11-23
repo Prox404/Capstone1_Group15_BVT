@@ -8,12 +8,27 @@
     android:padding="20dp"
     tools:context=".ChatFragment">
 
-    <TextView
-        style="@style/Widget.AppCompat.TextView.Title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:text="Tin nhắn" />
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Widget.AppCompat.TextView.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_weight="1"
+            android:text="Tin nhắn" />
+
+        <ImageButton
+            android:id="@+id/AddConversation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:backgroundTint="#FFFFFF"
+            android:src="@drawable/add" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editTextSearch"

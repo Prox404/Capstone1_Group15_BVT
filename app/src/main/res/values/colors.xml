@@ -16,4 +16,6 @@
     <color name="textColorTitle">#007F20</color>
     <color name="backgroundColor">#F5F6F7</color>
     <color name="lineColor">#F5F6F7</color>
+    <color name="mask_scanner_color">#00FFFFFF</color>
+    <color name="popup_bg">#FFFFFF</color>
 </resources>

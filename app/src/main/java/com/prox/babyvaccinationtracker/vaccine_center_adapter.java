@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prox.babyvaccinationtracker.model.Vaccine_center;
 import com.prox.babyvaccinationtracker.model.Vaccines;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,6 +47,12 @@ public class vaccine_center_adapter extends RecyclerView.Adapter<vaccine_center_
             Log.i("TAG", "onBindViewHolder: "+ vaccineCenter.toString());
             holder.txtten.setText(vaccineCenter.getCenter_name());
             holder.txtdiachi.setText(vaccineCenter.getCenter_address());
+            holder.txtworktime.setText(vaccineCenter.getWork_time());
+            holder.txthotline.setText(vaccineCenter.getHotline());
+            if (vaccineCenter.getCenter_image() != null) {
+                String imgaeUrl = vaccineCenter.getCenter_image().contains("https") ? vaccineCenter.getCenter_image() : vaccineCenter.getCenter_image().replace("http", "https");
+                Picasso.get().load(imgaeUrl).into(holder.imageViewCenterImage);
+            }
         }
         holder.vaccine_center_id.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,14 +80,19 @@ public class vaccine_center_adapter extends RecyclerView.Adapter<vaccine_center_
 
     public class list_vacine_center extends RecyclerView.ViewHolder {
         private TextView txtten;
-        private TextView txtdiachi;
+        private TextView txtdiachi,txtworktime, txthotline;
         private LinearLayout vaccine_center_id;
+
+        ImageView imageViewCenterImage;
 
         public list_vacine_center(@NonNull View itemView) {
             super(itemView);
             txtten = itemView.findViewById(R.id.txtten);
             txtdiachi = itemView.findViewById(R.id.txtdichi);
             vaccine_center_id = itemView.findViewById(R.id.vaccine_center_id);
+            imageViewCenterImage = itemView.findViewById(R.id.imageViewCenterImage);
+            txtworktime = itemView.findViewById(R.id.txtworktime);
+            txthotline = itemView.findViewById(R.id.txthotline);
         }
     }
 }

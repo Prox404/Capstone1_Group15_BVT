@@ -37,21 +37,16 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.Regime
     @Override
     public void onBindViewHolder(RegimenViewHolder holder, int position) {
         Regimen regimen = regimenList.get(position);
+
         holder.contentTextView.setText(regimen.getContent());
-        // Format and set the date in your desired way
         holder.dateTextView.setText(formatDate(regimen.getDate()));
         holder.radioButtonVaccinated.setClickable(false);
-        if (regimen.isVaccinated()){
-            holder.radioButtonVaccinated.setChecked(true);
-        }
-        // Set other TextViews for additional properties
 
-        // You can also handle clicks on items here if needed
+        holder.radioButtonVaccinated.setChecked(regimen.isVaccinated());
+
         if (position == highlightedPosition) {
-            // Đổi màu nền hoặc background của Regimen này
             Log.i("Bind", "onBindViewHolder: " + highlightedPosition);
             holder.itemContainer.setBackgroundColor(context.getResources().getColor(R.color.colorSelected));
-//            holder.radioButtonVaccinated.setChecked(true);
         } else {
             holder.itemView.setBackgroundResource(R.drawable.timeline_item_bg);
         }
