@@ -30,6 +30,8 @@ public class home_upgrade extends AppCompatActivity {
                     return true;
                 }
                 else if(id == R.id.navigation_posts){
+                    Fragment fragment = new Fragment_manage_post();
+                    loadFragment(fragment);
                     return true;
                 }
                 else if(id == R.id.navigation_user){
