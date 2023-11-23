@@ -39,8 +39,11 @@ public class BabyHealthAdapter extends RecyclerView.Adapter<BabyHealthAdapter.Ba
         holder.tvBabyBirthday.setText(baby.getBaby_birthday());
         holder.tvBabyGender.setText(baby.getBaby_gender());
 
+        String imgaeUrl = baby.getBaby_avatar().contains("https") ? baby.getBaby_avatar() : baby.getBaby_avatar().replace("http", "https");
         // Load baby avatar using Picasso or any other image loading library
-        Picasso.get().load(baby.getBaby_avatar()).into(holder.ivBabyAvatar);
+        Picasso.get().load(imgaeUrl)
+                .error(R.drawable.ic_launcher_background)
+                .into(holder.ivBabyAvatar);
 
         // onClickListener for each baby item
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,7 +21,15 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        loadFragment(new LoginFragment());
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String admin_id = sharedPreferences.getString("admin_id", "");
+        Log.i("Auth", "onCreate: " + admin_id);
+        if (admin_id.equals("")) {
+            loadFragment(new LoginFragment());
+        } else {
+            Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void loadFragment(@NonNull Fragment fragment) {

@@ -13,11 +13,16 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Map config = new HashMap();
+    private boolean isCloudinaryInitialized = false;
     private void configCloudinary() {
-        config.put("cloud_name", "daahr9bmg");
-        config.put("api_key", "166289647394352");
-        config.put("api_secret", "g_WMi7qAWJV3HipXdZ7CKWgcjjc");
-        MediaManager.init(this, config);
+        if(isCloudinaryInitialized){
+            config.put("cloud_name", "du42cexqi");
+            config.put("api_key", "346965553513552");
+            config.put("api_secret", "SguEwSEbwQNgOgHRTkyxeuG-478");
+            MediaManager.init(this, config);
+            isCloudinaryInitialized = true;
+        }
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         configCloudinary();
-        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+
+        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
         startActivity(intent);
-        finish();
     }
 }

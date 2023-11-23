@@ -18,9 +18,15 @@
         android:theme="@style/Theme.BabyVaccinationTracker"
         tools:targetApi="31">
         <activity
+            android:name=".Manage_track_content_visits_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivity"
+            android:exported="false" />
+        <activity
             android:name=".BabyHealthActivity"
             android:exported="false" />
-      <activity
+        <activity
             android:name=".BabyManagement"
             android:exported="false" />
         <activity
@@ -47,6 +53,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
