@@ -190,10 +190,12 @@ public class Schedule_an_injection extends AppCompatActivity {
                 reference.push().setValue(vaccinationRegistration).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful())
-                            Toast.makeText(Schedule_an_injection.this, "successfully", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(Schedule_an_injection.this, "failed", Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(Schedule_an_injection.this, "Đăng ký thành công, vui lòng đợi trung tâm xác nhận", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(Schedule_an_injection.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }

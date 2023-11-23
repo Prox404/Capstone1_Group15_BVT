@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,9 @@ public class ChatActivity_user extends AppCompatActivity {
     Conversation conversation = new Conversation();
     private HashMap<String, Message> messages = new HashMap<>();
     private ArrayList<String> messages_id_list = new ArrayList<>();
+    ImageView imageViewBack;
+    TextView textViewTitle;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +56,15 @@ public class ChatActivity_user extends AppCompatActivity {
         recyclerViewChat = findViewById(R.id.recyclerViewChat);
         editTextMessage = findViewById(R.id.editTextMessage);
         sendButton = findViewById(R.id.sendButton);
+        imageViewBack = findViewById(R.id.imageViewBack);
+        textViewTitle = findViewById(R.id.textViewTitle);
 
         Intent intent = getIntent();
         conversation_id = intent.getStringExtra("conversation_id");
         Log.i("CHATACTIVITY_USERRRRRRR", conversation_id+"");
+        String conversation_name = intent.getStringExtra("center_name");
+
+        textViewTitle.setText(conversation_name);
 
         chatAdapter = new ChatAdapter(this);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -97,6 +107,13 @@ public class ChatActivity_user extends AppCompatActivity {
                 }
             });
         }
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

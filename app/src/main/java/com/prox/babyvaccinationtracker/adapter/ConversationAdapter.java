@@ -82,11 +82,13 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                  if(conversation.getUsers().containsKey("bot")){
                      intent = new Intent(v.getContext(), ChatActivity.class);
                      intent.putExtra("conversation_id", conversation.getConversation_id());
+                        intent.putExtra("center_name", "Bot");
                      Log.i("CONVERSATIONNN",""+conversation.getUsers());
                      v.getContext().startActivity(intent);
                  }else {
                      intent = new Intent(v.getContext(), ChatActivity_user.class);
                      intent.putExtra("conversation_id", conversation.getConversation_id());
+                     intent.putExtra("center_name", conversation.getConversation_name());
                      Log.i("CONVERSATIONNN",""+conversation.getUsers());
                      v.getContext().startActivity(intent);
                  }

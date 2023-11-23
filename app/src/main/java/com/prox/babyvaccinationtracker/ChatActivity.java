@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,7 +46,9 @@ public class ChatActivity extends AppCompatActivity {
 
     Conversation conversation = new Conversation();
     private HashMap<String, Message> messages = new HashMap<>();
+    ImageView imageViewBack;
 
+    TextView textViewTitle;
 
 
     @Override
@@ -55,9 +59,14 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewChat = findViewById(R.id.recyclerViewChat);
         editTextMessage = findViewById(R.id.editTextMessage);
         sendButton = findViewById(R.id.sendButton);
+        imageViewBack = findViewById(R.id.imageViewBack);
+        textViewTitle = findViewById(R.id.textViewTitle);
 
         Intent intent = getIntent();
         conversation_id = intent.getStringExtra("conversation_id");
+        String conversation_name = intent.getStringExtra("center_name");
+
+        textViewTitle.setText(conversation_name);
 
         chatAdapter = new ChatAdapter(this);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
@@ -97,6 +106,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
         }
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

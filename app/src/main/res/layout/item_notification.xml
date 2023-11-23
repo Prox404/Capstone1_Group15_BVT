@@ -79,6 +79,7 @@
             android:id="@+id/action2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="Button"
             android:visibility="gone" />
@@ -87,6 +88,7 @@
             android:id="@+id/action3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="Button"
             android:visibility="gone" />

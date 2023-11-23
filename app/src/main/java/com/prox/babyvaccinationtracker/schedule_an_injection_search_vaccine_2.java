@@ -55,6 +55,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
     Spinner spinnerOrigin;
 
     List<String> vaccineOrigin = new ArrayList<>();
+    HashMap<String, Vaccines> vaccinesHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             }
         });
         Intent intent = getIntent();
-        HashMap<String, Vaccines> vaccinesHashMap = (HashMap<String, Vaccines>) intent.getSerializableExtra("Vaccines"); // hashmap
+        vaccinesHashMap = (HashMap<String, Vaccines>) intent.getSerializableExtra("Vaccines"); // hashmap
         baby_id = intent.getStringExtra("baby_id");
         if (baby_id.isEmpty()) {
             Toast.makeText(this, "Hãy chọn trẻ để chúng tôi có thể gợi ý những loại vaccine phù hợp với bé !!", Toast.LENGTH_SHORT).show();
@@ -157,6 +158,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
                                 break;
                         }
                         textViewMessage.setText("Gợi ý những loại vaccine phù hợp với bé: " + vaccineName);
+                        filterVaccines();
                     }
                     Log.i("Home", "onDataChange: " + regimenList.size());
                 }
@@ -169,21 +171,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         }
 
 
-        vaccines = new ArrayList<>();
-        vaccineOrigin.add("Tất cả");
-        for (Map.Entry<String, Vaccines> entry : vaccinesHashMap.entrySet()) {
-            Vaccines vaccine = entry.getValue();
-            vaccine.setVaccine_id(entry.getKey());
-            vaccines.add(vaccine);
-            if (!vaccineOrigin.contains(vaccine.getOrigin())) {
-                vaccineOrigin.add(vaccine.getOrigin());
-            }
-            if (vaccine.getVac_effectiveness().equals(closestVaccineType)) {
-                filterVaccine.add(vaccine);
-            }
-        }
-        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
-        schedule_list_vaccine.setAdapter(adapter);
+
 
         Log.i("select vaccine", "onCreate: " + vaccineOrigin.toString());
         ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
@@ -244,6 +232,25 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void filterVaccines() {
+        vaccines = new ArrayList<>();
+        vaccineOrigin.add("Tất cả");
+        for (Map.Entry<String, Vaccines> entry : vaccinesHashMap.entrySet()) {
+            Vaccines vaccine = entry.getValue();
+            vaccine.setVaccine_id(entry.getKey());
+            vaccines.add(vaccine);
+            if (!vaccineOrigin.contains(vaccine.getOrigin())) {
+                vaccineOrigin.add(vaccine.getOrigin());
+            }
+            Log.i("select vaccine", "onCreate ohhhh: " + vaccine.getVac_effectiveness() + " " + closestVaccineType);
+            if (vaccine.getVac_effectiveness().equals(closestVaccineType)) {
+                filterVaccine.add(vaccine);
+            }
+        }
+        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
+        schedule_list_vaccine.setAdapter(adapter);
     }
 
     private void filterVaccineByOrigin(String selectedOrigin) {

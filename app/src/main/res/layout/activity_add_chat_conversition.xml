@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".AddChatConversition"
-    android:padding="10dp">
+    android:padding="20dp"
+    tools:context=".AddChatConversition">
+
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/Widget.AppCompat.TextView.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="Thêm đoạn chat mới"
+        android:textSize="32dp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edt_chat_search"
+        style="@style/Widget.App.RoundedEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="Tìm kiếm"
         android:inputType="text" />
