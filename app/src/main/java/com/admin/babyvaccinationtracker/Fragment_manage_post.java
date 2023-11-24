@@ -27,7 +27,7 @@ public class Fragment_manage_post extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button buttonThemBaiDang,buttonXemBaiDang;
+    Button buttonThemBaiDang,buttonXemBaiDang,buttonNoidungbaocao;
 
     public Fragment_manage_post() {
         // Required empty public constructor
@@ -80,6 +80,14 @@ public class Fragment_manage_post extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, Activity_display_content_post.class));
+            }
+        });
+        // nội dung báo cáo
+        buttonNoidungbaocao = view.findViewById(R.id.buttonNoidungbaocao);
+        buttonNoidungbaocao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context,Activity_report_comment_and_post.class));
             }
         });
 
