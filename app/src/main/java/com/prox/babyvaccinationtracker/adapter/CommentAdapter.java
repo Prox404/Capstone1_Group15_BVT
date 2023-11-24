@@ -1,22 +1,32 @@
 package com.prox.babyvaccinationtracker.adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.prox.babyvaccinationtracker.R;
 import com.prox.babyvaccinationtracker.model.Comment;
+import com.prox.babyvaccinationtracker.model.Post;
+import com.prox.babyvaccinationtracker.model.Report;
 import com.prox.babyvaccinationtracker.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -28,14 +38,15 @@ import java.util.Map;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
     private List<Comment> comments;
-    String post_id;
+    Post post;
     User user;
     DatabaseReference commentReference;
 
-    public CommentAdapter(List<Comment> comments, DatabaseReference commentReference, User user) {
+    public CommentAdapter(List<Comment> comments, DatabaseReference commentReference, User user, Post post) {
         this.comments = comments;
         this.commentReference = commentReference;
         this.user = user;
+        this.post = post;
     }
 
     @NonNull
@@ -122,11 +133,94 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     replyList.add((Comment) commentObject);
                 }
             }
-            CommentAdapter replyAdapter = new CommentAdapter(replyList, commentReference.child(comment.getComment_id()).child("replies"), user);
+            CommentAdapter replyAdapter = new CommentAdapter(replyList, commentReference.child(comment.getComment_id()).child("replies"), user, post);
             holder.recyclerViewReplies.setLayoutManager(new LinearLayoutManager(holder.recyclerViewReplies.getContext()));
             holder.recyclerViewReplies.setAdapter(replyAdapter);
         }
+        holder.imageEditComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(comment.getUser().getUser_id().equals(user.getUser_id())){
+                    editComment(view,comment);
+                }else {
+                    reportComment(view, comment);
+                }
+
+            }
+        });
     }
+
+    private void reportComment(View view, Comment comment) {
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.report_menu, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                Log.i("IDDDD", id+" "+menuItem.getItemId());
+                if (id == R.id.menu_report_item) {
+                    // todo xóa comment
+                    View view_report = LayoutInflater.from(view.getContext()).inflate(R.layout.report_fragment,null, false);
+                    TextView textView = view_report.findViewById(R.id.edt_report_reason);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setView(view_report).setPositiveButton("Báo cáo", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String reason = textView.getText().toString();
+                            if(!reason.trim().isEmpty()){
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Report");
+                                Report report = new Report();
+                                report.setComment(comment);
+                                report.setType_report(0);
+                                report.setReason(reason);
+                                post.setComments(null);
+                                report.setPost(post);
+                                databaseReference.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(view.getContext(),"Đã báo cáo bài viết này",Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
+                    }).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    builder.create().show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
+
+    private void editComment(View view, Comment comment) {
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.editpost_menu, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                Log.i("IDDDD", id+" "+menuItem.getItemId());
+                if (id == R.id.itemdeletepost) {
+                    // todo xóa comment
+                    Toast.makeText(view.getContext(), " Đã xóa bình luận thành công", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.itemeditpost_edit) {
+                    // todo cập nhập comment
+                    Toast.makeText(view.getContext(), " Đã cập nhật bình luận thành công", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
+
 
     private Comment convertMapToComment(HashMap<String, Object> commentMap) {
         try {
@@ -161,7 +255,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView textViewComment,textViewUserName, textViewReply, textViewCancel;
-        ImageView imageViewUserAvatar;
+        ImageView imageViewUserAvatar,imageEditComment;
         LinearLayout commentContainer;
         EditText editTextCommentContent;
         Button buttonSendComment;
@@ -180,6 +274,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
             buttonSendComment = itemView.findViewById(R.id.buttonSendComment);
             recyclerViewReplies = itemView.findViewById(R.id.recyclerViewReplies);
+            imageEditComment = itemView.findViewById(R.id.imageEditComment);
+
         }
     }
 
