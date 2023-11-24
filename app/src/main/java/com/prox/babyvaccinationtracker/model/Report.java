@@ -9,10 +9,18 @@ public class Report {
     int type_report;
     Post post;
     Comment comment;
+    int check;
 
+    public int getCheck() {
+        return check;
+    }
 
+    public void setCheck(int check) {
+        this.check = check;
+    }
 
     public Report() {
+        this.check = 0;
     }
 
     public Report(String report_id, String reason, int type_report, Post post, Comment comment) {
