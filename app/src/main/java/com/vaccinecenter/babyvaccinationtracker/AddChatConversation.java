@@ -23,6 +23,9 @@ import com.vaccinecenter.babyvaccinationtracker.model.Vaccine_center;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AddChatConversation extends AppCompatActivity {
@@ -127,12 +130,12 @@ public class AddChatConversation extends AppCompatActivity {
                     customer.setCus_avatar(vaccineSnapshot.child("cus_avatar").getValue().toString());
                     String cusAddress = customer.getCus_address();
                     customers.add(customer);
-                    if (isAddressNearCustomer(customerAddress, cusAddress)) {
-                        filterAddressCenter.add(customer);
-                    }
-                }
 
-                adapter.notifyDataSetChanged();
+                }
+                filterAddressCenter = sortCentersByRelativeDistance(customerAddress, customers);
+                adapter = new AddChatAdapter(AddChatConversation.this, filterAddressCenter);
+                rv_chat_list_vaccine_center.setAdapter(adapter);
+
             }
 
             @Override
@@ -140,33 +143,61 @@ public class AddChatConversation extends AppCompatActivity {
             }
         });
     }
-    private boolean isAddressNearCustomer(String customerAddress, String centerAddress) {
-        String[] customerAddressParts = customerAddress.split(", "); // 0 1
-        String[] centerAddressParts = centerAddress.split(", "); // 0 1 2
+//    private boolean isAddressNearCustomer(String customerAddress, String centerAddress) {
+//        String[] customerAddressParts = customerAddress.split(", "); // 0 1
+//        String[] centerAddressParts = centerAddress.split(", "); // 0 1 2
+//
+//        int customerSizeAddress = customerAddressParts.length;
+//
+//        if(customerSizeAddress == 1){
+//            if(!customerAddressParts[0].equals(centerAddressParts[2])){
+//                return false;
+//            }
+//        }
+//        else if(customerSizeAddress == 2){
+//            if(customerAddressParts[1].equals(centerAddressParts[2]))
+//                if(!customerAddressParts[0].equals(centerAddressParts[1])){
+//                    return false;
+//                }
+//                else
+//                    return true;
+//            else
+//                return false;
+//        } else if (customerSizeAddress == 3){
+//            for (int i = 0; i < customerSizeAddress; i++) {
+//                if (!customerAddressParts[i].equals(centerAddressParts[i])) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
-        int customerSizeAddress = customerAddressParts.length;
+    private ArrayList<Customer> sortCentersByRelativeDistance(String customerAddress, ArrayList<Customer> vaccineCenters) {
+        String[] customerAddressParts = customerAddress.split(", ");
+        Map<Customer, Integer> centerMatchCountMap = new HashMap<>();
 
-        if(customerSizeAddress == 1){
-            if(!customerAddressParts[0].equals(centerAddressParts[2])){
-                return false;
-            }
-        }
-        else if(customerSizeAddress == 2){
-            if(customerAddressParts[1].equals(centerAddressParts[2]))
-                if(!customerAddressParts[0].equals(centerAddressParts[1])){
-                    return false;
-                }
-                else
-                    return true;
-            else
-                return false;
-        } else if (customerSizeAddress == 3){
-            for (int i = 0; i < customerSizeAddress; i++) {
-                if (!customerAddressParts[i].equals(centerAddressParts[i])) {
-                    return false;
+        for (Customer center : vaccineCenters) {
+            String centerAddress = center.getCus_address();
+            String[] centerAddressParts = centerAddress.split(", ");
+
+            int matchCount = 0;
+
+            for (int i = 0; i < customerAddressParts.length; i++) {
+                for (int j = 0; j < centerAddressParts.length; j++) {
+                    if (customerAddressParts[i].equalsIgnoreCase(centerAddressParts[j])) {
+                        matchCount++;
+                        break;
+                    }
                 }
             }
+
+            centerMatchCountMap.put(center, matchCount);
         }
-        return true;
+
+        ArrayList<Customer> sortedCenters = new ArrayList<>(centerMatchCountMap.keySet());
+        Collections.sort(sortedCenters, (center1, center2) -> Integer.compare(centerMatchCountMap.get(center2), centerMatchCountMap.get(center1)));
+
+        return sortedCenters;
     }
 }

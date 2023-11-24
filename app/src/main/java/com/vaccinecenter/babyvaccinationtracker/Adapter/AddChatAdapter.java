@@ -59,6 +59,7 @@ public class AddChatAdapter extends RecyclerView.Adapter<AddChatAdapter.viewhold
         Customer vaccineCenter = mlistvaccinecenter.get(position);
         String center_name = vaccineCenter.getCus_name();
         holder.chat_txtten.setText(center_name);
+        holder.chat_txtdichi.setText(vaccineCenter.getCus_address());
 
 
         String image_center =  vaccineCenter.getCus_avatar().toString();
@@ -124,6 +125,7 @@ public class AddChatAdapter extends RecyclerView.Adapter<AddChatAdapter.viewhold
                 if(isExist){
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("conversation_id", conversation_id);
+                    intent.putExtra("center_name", center_name);
                     view.getContext().startActivity(intent);
                 }else{
                     Map<String, Boolean> users = new HashMap<>();
@@ -151,6 +153,7 @@ public class AddChatAdapter extends RecyclerView.Adapter<AddChatAdapter.viewhold
 
                         Intent intent = new Intent(context, ChatActivity.class);
                         intent.putExtra("conversation_id",conversation_id);
+                        intent.putExtra("center_name", center_name);
                         view.getContext().startActivity(intent);
                     } else {
                         // Handle the case where conversation_id is null

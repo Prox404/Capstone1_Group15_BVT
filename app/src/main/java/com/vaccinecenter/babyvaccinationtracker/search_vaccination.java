@@ -53,8 +53,6 @@ public class search_vaccination extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recvaccine.setLayoutManager(linearLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recvaccine.addItemDecoration(dividerItemDecoration);
         mVaccineadapter = new VaccineAdapter(this, mlistvaccine);
         recvaccine.setAdapter(mVaccineadapter);
         vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);

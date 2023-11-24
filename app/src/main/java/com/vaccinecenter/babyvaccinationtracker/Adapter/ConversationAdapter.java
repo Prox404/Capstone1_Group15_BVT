@@ -80,6 +80,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
                 intent = new Intent(v.getContext(), ChatActivity.class);
                 intent.putExtra("conversation_id", conversation.getConversation_id());
+                intent.putExtra("center_name", conversation.getConversation_name());
                 Log.i("CONVERSATIONNN", "" + conversation.getUsers());
                 v.getContext().startActivity(intent);
 

@@ -59,7 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.postTime.setText(postItem.getCreated_at());
         holder.postContent.setText(postItem.getContent());
 
-        DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
+
         if(postItem.getHashtags() != null)
             holder.textViewHashtag.setText(String.join(" ", postItem.getHashtags()));
         if (postItem.getUser().getUser_avatar() != null)
@@ -68,6 +68,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             ImageCarouselAdapter postImageAdapter = new ImageCarouselAdapter(holder.viewPagerImage.getContext(), postItem.getImage_url());
             holder.viewPagerImage.setAdapter(postImageAdapter);
         }
+
+        if (postItem.getImage_url().size() == 0)
+            holder.viewPagerImage.setVisibility(View.GONE);
+        else
+            holder.viewPagerImage.setVisibility(View.VISIBLE);
+
         if (postItem.getLiked_users() != null){
             ArrayList<String> liked_users = postItem.getLiked_users();
             if (liked_users.contains(user_id)){
@@ -94,7 +100,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     commentList.add((Comment) commentObject);
                 }
             }
-
+            DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
             holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
             commentAdapter = new CommentAdapter(commentList , commentReference);
             holder.recylerViewComments.setAdapter(commentAdapter);
@@ -126,15 +132,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     Comment comment = new Comment();
                     comment.setContent(commentContent);
                     comment.setUser(user);
-                    postReference.child(postItem.getPost_id()).child("comments").push().setValue(comment).addOnCompleteListener(task -> {
+                    DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
+                    commentRef.setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
-                            if (commentList == null)
-                                commentList = new ArrayList<>();
-
-                            commentList.add(comment);
-                            commentAdapter = new CommentAdapter(commentList , commentReference);
-                            holder.recylerViewComments.setAdapter(commentAdapter);
-                            commentAdapter.notifyDataSetChanged();
+                            Log.i("Comment", "onClick: Comment success");
                         }else {
                             Log.i("Comment", "onClick: Comment failed");
                         }

@@ -57,9 +57,6 @@ public class children_data_management extends AppCompatActivity {
         mlistchild = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvchild.setLayoutManager(linearLayoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        rcvchild.addItemDecoration(dividerItemDecoration);
         childAdapter = new ChildAdapter(this, mlistchild);
         rcvchild.setAdapter(childAdapter);
     }
@@ -87,11 +84,11 @@ public class children_data_management extends AppCompatActivity {
             }
         });
         // nút quay lại
+
         imageView_Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(children_data_management.this, HomeActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -101,12 +98,6 @@ public class children_data_management extends AppCompatActivity {
                 getdatafromrealtimedatabase();
             }
         });
-    }
-
-    public void onRestart() {
-        super.onRestart();
-        String search_text = editText_Search.getText().toString().trim();
-        getdatafromrealtimedatabase();
     }
 
     private void getdatafromrealtimedatabase() {

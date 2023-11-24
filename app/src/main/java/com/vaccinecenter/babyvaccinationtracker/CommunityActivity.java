@@ -146,9 +146,6 @@ public class CommunityActivity extends AppCompatActivity {
                     post.setUser(user);
 
                     uploadImagesToCloudinaryAndFirebase(post);
-                    postArrayList.add(post);
-                    postAdapter.notifyDataSetChanged();
-
                 }
             }
         });
@@ -164,15 +161,21 @@ public class CommunityActivity extends AppCompatActivity {
                     post.setUser(dataSnapshot.child("user").getValue(User.class));
                     post.setContent(dataSnapshot.child("content").getValue(String.class));
                     post.setCreated_at(dataSnapshot.child("created_at").getValue(String.class));
-                    ArrayList<String> hashtags = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("hashtags").getValue());
+
+                    ArrayList<String> hashtags = new ArrayList<>();
+                    if (dataSnapshot.child("hashtags").getValue() instanceof ArrayList)
+                        hashtags = (ArrayList<String>) dataSnapshot.child("hashtags").getValue();
                     post.setHashtags(hashtags);
-                    ArrayList<String> image_url = (ArrayList<String>) Objects.requireNonNull(dataSnapshot.child("image_url").getValue());
+                    ArrayList<String> image_url = new ArrayList<>();
+                    if (dataSnapshot.child("image_url").getValue() instanceof ArrayList)
+                        image_url = (ArrayList<String>) dataSnapshot.child("image_url").getValue();
                     post.setImage_url(image_url);
                     post.setPost_id(dataSnapshot.getKey());
                     post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
                     postArrayList.add(post);
                 }
+                reverseArrayList(postArrayList);
                 postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
@@ -183,6 +186,14 @@ public class CommunityActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void reverseArrayList(ArrayList<Post> arrayList) {
+        for (int i = 0; i < arrayList.size() / 2; i++) {
+            Post temp = arrayList.get(i);
+            arrayList.set(i, arrayList.get(arrayList.size() - i - 1));
+            arrayList.set(arrayList.size() - i - 1, temp);
+        }
     }
 
     public void uploadImagesToCloudinaryAndFirebase(Post post) {

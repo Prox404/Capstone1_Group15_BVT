@@ -84,10 +84,10 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
                 tv_date_of_entry.setText(vaccine.getDate_of_entry());
                 tv_price.setText(vaccine.getPrice());
                 if(vaccine.isDeleted()){
-                    tv_detail_deleted.setText("Đã xóa");
+                    tv_detail_deleted.setText("Đã ngừng bán");
                 }
                 else{
-                    tv_detail_deleted.setText("Chưa xóa");
+                    tv_detail_deleted.setText("Đang bán");
                 }
                 ArrayList<String> url_image = vaccine.getVaccine_image();
                 for(String a : url_image){
@@ -160,10 +160,10 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
             tv_date_of_entry.setText(vaccine.getDate_of_entry());
             tv_price.setText(vaccine.getPrice());
             if(vaccine.isDeleted()){
-                tv_detail_deleted.setText("Đã xóa");
+                tv_detail_deleted.setText("Đã ngừng bán");
             }
             else{
-                tv_detail_deleted.setText("Chưa xóa");
+                tv_detail_deleted.setText("Đang bán");
             }
             vacimage.clear();
             for(String a : vaccine.getVaccine_image()){

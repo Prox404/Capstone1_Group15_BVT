@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/child_id"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/vaccine_item_bg"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/imageView_Baby_Avatar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:padding="10dp"
-            android:src="@drawable/ic_launcher_background" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="50dp">
+
+            <ImageView
+                android:id="@+id/imageView_Baby_Avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_launcher_background" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center|left"
+            android:gravity="left"
             android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:paddingHorizontal="10dp">
 
             <TextView
                 android:id="@+id/txttenbe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_semibold"
                 android:text="Tên bé"
+                android:textColor="#686868" />
+
+            <TextView
+                android:id="@+id/txtNgaySinh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="03/11/2002"
                 android:textColor="#686868" />
 
             <TextView
@@ -37,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Giới tính "
                 android:textColor="#686868" />
+
         </LinearLayout>
 
     </LinearLayout>

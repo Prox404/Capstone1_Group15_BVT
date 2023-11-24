@@ -70,9 +70,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
     TextView tv_center_image,tv_center_chungchi;
 
     ImageView image_back_register_account_center;
-
-
-
+    DataValidate dataValidate = new DataValidate();
     TextInputEditText register_tv_time_begin,register_tv_time_end;
 
     Spinner Register_spn_provinces,Register_spn_districts,Register_spn_wards;
@@ -382,6 +380,11 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                     Toast.makeText(Register_for_vaccine_center.this,"Hãy nhập tên trung tâm vắc-xin", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if (!dataValidate.isValidName(center_name)){
+                    register_edt_center_name.requestFocus();
+                    Toast.makeText(Register_for_vaccine_center.this,"Tên trung tâm không hợp lệ", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 // Địa chỉ trung tâm
                 String province = Register_spn_provinces.getSelectedItem().toString();
                 String district = Register_spn_districts.getSelectedItem().toString();
@@ -398,7 +401,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                     register_edt_hotline.requestFocus();
                     return;
                 }
-                if(hotline.length() !=  10){
+                if(hotline.length() < 9 || hotline.length() > 11){
                     Toast.makeText(Register_for_vaccine_center.this,"Hãy nhập đúng điện thoại", Toast.LENGTH_LONG).show();
                     register_edt_hotline.requestFocus();
                     return;
@@ -442,8 +445,14 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                     register_edt_center_password.requestFocus();
                     return;
                 }
+                if(!dataValidate.isValidPassword(center_password)){
+                    Toast.makeText(Register_for_vaccine_center.this, "Mật khẩu nhất 8 kí tự, bao gồm chữ hoa, chữ thường, số và kí tự đặc biệt", Toast.LENGTH_SHORT).show();
+                    register_edt_center_password.requestFocus();
+                    return;
+                }
+
                 if(center_repassword.length()==0){
-                    Toast.makeText(Register_for_vaccine_center.this, "Phải nhập lại password nhập lại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register_for_vaccine_center.this, "Phải nhập lại re-password", Toast.LENGTH_SHORT).show();
                     register_edt_center_re_password.requestFocus();
                     return;
                 }

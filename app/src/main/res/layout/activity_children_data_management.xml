@@ -5,65 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".children_data_management">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="71dp"
-        android:background="#36BD5E"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
-        <ImageView
-            android:id="@+id/imageView_Back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:src="@drawable/back_arrow" />
-
-        <TextView
-            android:id="@+id/textView28"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
+        <LinearLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/rounded_solid_input_bg"
             android:gravity="center"
-            android:textSize="24dp"
-            android:textColor="#fff"
-            android:text="Quản lý dữ liệu trẻ em" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView_Back"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_arrow_back_ios_24"
+                android:tint="@color/textColor" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <TextView
+        style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Danh sách trẻ em đã tiêm tại trung tâm"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:layout_margin="20dp"/>
+        android:layout_marginVertical="20dp"
+        android:text="Quản lý bé" />
 
     <LinearLayout
-        android:layout_width="231dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:orientation="horizontal"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/rounded_layout">
+        android:background="@drawable/rounded_layout"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageView_Search_Child"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search"
             android:layout_gravity="center"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_search" />
 
         <AutoCompleteTextView
             android:id="@+id/editText_Search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Nhập để tìm kiếm"
-            android:background="@drawable/rounded_edittext_background"/>
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Nhập để tìm kiếm" />
 
 
     </LinearLayout>

@@ -9,8 +9,10 @@
 
     <EditText
         android:id="@+id/edt_chat_search"
+        style="@style/Widget.App.RoundedSolidEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:ems="10"
         android:hint="Tìm kiếm"
         android:inputType="text" />

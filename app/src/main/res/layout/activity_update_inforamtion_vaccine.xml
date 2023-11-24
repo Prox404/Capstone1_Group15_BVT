@@ -6,40 +6,66 @@
     android:layout_height="match_parent"
     android:background="#F0F0F0"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context=".update_inforamtion_vaccine">
 
-
-    <ImageView
-        android:id="@+id/image_back"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:tint="#000000"
-        app:srcCompat="@drawable/back_arrow" />
-
-    <TextView
-        android:id="@+id/textView2"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:paddingLeft="10dp"
-        android:text="Cập nhập vắc-xin"
-        android:textColor="#007F20"
-        android:textSize="34sp"
-        android:textStyle="bold" />
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp">
+
+        <ImageView
+            android:id="@+id/image_back"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center|left"
+            android:src="@drawable/baseline_arrow_back_ios_24"
+            app:tint="@color/textColor" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="Cập nhập vắc-xin"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btn_update_new_information"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check"
+            app:tint="@android:color/holo_blue_dark" />
+
+    </LinearLayout>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/image_back"-->
+    <!--        android:layout_width="45dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:layout_marginBottom="5dp"-->
+    <!--        android:tint="#000000"-->
+    <!--        app:srcCompat="@drawable/back_arrow" />-->
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/home_white"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="20dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/update_recyclerview_image"
@@ -145,6 +171,7 @@
 
             <EditText
                 android:id="@+id/update_vaccination_target_group"
+                style="@style/Widget.App.RoundedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/home"
@@ -209,7 +236,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/home"
                 android:ems="10"
-                android:inputType="number"
+                android:inputType="number|numberDecimal|numberSigned"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp" />
 
@@ -286,26 +313,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_update_new_information"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="#36BD5E"
-                    android:text="Cập nhập" />
 
-                <Button
-                    android:id="@+id/btn_delete"
-                    android:layout_width="match_parent"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="#FF0000"
-                    android:text="Xóa" />
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="0dp">
+
+                    <Button
+                        android:id="@+id/btn_delete"
+                        android:layout_width="65dp"
+                        android:layout_height="70dp"
+                        android:backgroundTint="#fa897b"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="0dp"
+                        app:icon="@drawable/ic_delele"
+                        app:iconGravity="textStart"
+                        app:iconSize="25dp" />
+                </androidx.cardview.widget.CardView>
+
             </LinearLayout>
 
         </LinearLayout>

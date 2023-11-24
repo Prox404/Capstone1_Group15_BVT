@@ -46,6 +46,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.listchild>{
         }else{
             holder.txttenbe.setText(baby.getBaby_name());
             holder.txtgioitinh.setText(baby.getBaby_gender());
+            holder.txtNgaySinh.setText(baby.getBaby_birthday());
             Picasso.get().load(baby.getBaby_avatar()).error(R.drawable.ic_launcher_foreground).into(holder.imageView_Baby_Avatar);
         }
         holder.child_id.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +60,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.listchild>{
     private void onClickgotoInfor(Baby baby){
         Intent intent = new Intent(context, view_child_information.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("baby_name", baby);
+        bundle.putSerializable("baby", baby);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
@@ -74,7 +75,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.listchild>{
 
     public class listchild extends RecyclerView.ViewHolder{
         private TextView txttenbe;
-        private TextView txtgioitinh;
+        private TextView txtgioitinh, txtNgaySinh;
         private ImageView imageView_Baby_Avatar;
         private LinearLayout child_id;
         public listchild(@NonNull View itemView) {
@@ -83,6 +84,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.listchild>{
             txtgioitinh = itemView.findViewById(R.id.txtgioitinh);
             imageView_Baby_Avatar = itemView.findViewById(R.id.imageView_Baby_Avatar);
             child_id = itemView.findViewById(R.id.child_id);
+            txtNgaySinh = itemView.findViewById(R.id.txtNgaySinh);
         }
     }
 }

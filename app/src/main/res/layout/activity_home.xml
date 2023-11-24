@@ -33,11 +33,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -92,6 +94,13 @@
 
                 </LinearLayout>
 
+                <EditText
+                    style="@style/Widget.App.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Tìm kiểm..." />
+
                 <com.google.android.flexbox.FlexboxLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,8 +122,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63C97B"
+                            android:background="@drawable/tool_item_bg"
                             android:padding="10dp">
 
                             <ImageView
@@ -124,7 +132,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentTop="true"
                                 android:src="@drawable/paper_registration"
-                                app:tint="#FFFFFF" />
+                                app:tint="@color/textColor" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -133,7 +141,7 @@
                                 android:layout_alignParentBottom="true"
                                 android:text="Đơn đăng ký tiêm chủng"
                                 android:textAlignment="textEnd"
-                                android:textColor="@color/white"
+                                android:textColor="@color/textColor"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -143,7 +151,7 @@
                                 android:layout_centerInParent="true"
                                 android:layout_marginLeft="10dp"
                                 android:text="0"
-                                android:textColor="@color/white"
+                                android:textColor="@color/textColor"
                                 android:textSize="60sp" />
                         </RelativeLayout>
 
@@ -152,8 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63C97B"
+                            android:background="@drawable/tool_item_red_bg"
                             android:padding="10dp">
 
                             <TextView
@@ -163,7 +170,7 @@
                                 android:layout_alignParentBottom="true"
                                 android:text="Danh sách các vắc-xin"
                                 android:textAlignment="textEnd"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -172,24 +179,24 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:text="0"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textSize="60sp" />
 
                             <ImageView
 
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/display"
-                                app:tint="#FFFFFF" />
+                                android:src="@drawable/ic_vaccine"
+                                app:tint="@color/textColor" />
                         </RelativeLayout>
 
                         <RelativeLayout
                             android:id="@+id/QRScannerContainer"
                             android:layout_width="match_parent"
-                            android:layout_height="220dp"
+                            android:layout_height="170dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63C97B"
+                            android:background="@drawable/tool_item_bg"
+                            android:backgroundTint="#D7D7D7"
                             android:padding="10dp">
 
                             <TextView
@@ -199,7 +206,7 @@
                                 android:layout_alignParentBottom="true"
                                 android:text="QR Scanner"
                                 android:textAlignment="textEnd"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textStyle="bold" />
 
 
@@ -207,36 +214,10 @@
 
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/display"
-                                app:tint="#FFFFFF" />
+                                android:src="@drawable/ic_qr"
+                                app:tint="@color/textColor" />
                         </RelativeLayout>
 
-                        <RelativeLayout
-                            android:id="@+id/CommunityContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="220dp"
-                            android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63C97B"
-                            android:padding="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentBottom="true"
-                                android:text="Cộng đồng"
-                                android:textAlignment="textEnd"
-                                android:textColor="#FFFFFF"
-                                android:textStyle="bold" />
-
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/display"
-                                app:tint="#FFFFFF" />
-                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -251,10 +232,9 @@
                         <RelativeLayout
                             android:id="@+id/createvaccineContainer"
                             android:layout_width="match_parent"
-                            android:layout_height="220dp"
+                            android:layout_height="170dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63B1C9"
+                            android:background="@drawable/tool_item_blue_bg"
                             android:padding="10dp"
                             app:layout_gravity="right">
 
@@ -263,7 +243,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/add"
-                                app:tint="#FFFFFF" />
+                                app:tint="@color/textColor" />
 
                             <TextView
                                 android:id="@+id/textView29"
@@ -272,7 +252,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_alignParentBottom="true"
                                 android:text="Thêm mới vắc-xin"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textStyle="bold" />
                         </RelativeLayout>
 
@@ -281,8 +261,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63C97B"
+                            android:background="@drawable/tool_item_yellow_bg"
                             android:padding="10dp">
 
                             <TextView
@@ -292,7 +271,7 @@
                                 android:layout_alignParentBottom="true"
                                 android:text="Danh sách các bé"
                                 android:textAlignment="textEnd"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -301,15 +280,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:text="0"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textSize="60sp" />
 
                             <ImageView
 
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/display"
-                                app:tint="#FFFFFF" />
+                                android:src="@drawable/ic_baby"
+                                app:tint="@color/textColor" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -317,8 +296,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
                             android:layout_marginBottom="10dp"
-                            android:background="@drawable/home"
-                            android:backgroundTint="#63C97B"
+                            android:background="@drawable/tool_item_bg"
+                            android:backgroundTint="#c3ffbe"
                             android:padding="10dp">
 
                             <TextView
@@ -328,23 +307,51 @@
                                 android:layout_alignParentBottom="true"
                                 android:text="Tin nhắn"
                                 android:textAlignment="textEnd"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/textColor"
                                 android:textStyle="bold" />
 
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/display"
-                                app:tint="#FFFFFF" />
+                                android:src="@drawable/ic_message"
+                                app:tint="@color/textColor" />
                         </RelativeLayout>
 
 
                     </LinearLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/CommunityContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/tool_item_bg"
+                        android:backgroundTint="#f2e0d4"
+                        android:padding="10dp"
+
+                        app:layout_flexBasisPercent="100%">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="Cộng đồng"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/textColor"
+                            android:textStyle="bold" />
+
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/community"
+                            app:tint="@color/textColor" />
+                    </RelativeLayout>
+
 
                 </com.google.android.flexbox.FlexboxLayout>
-
 
 
             </LinearLayout>
