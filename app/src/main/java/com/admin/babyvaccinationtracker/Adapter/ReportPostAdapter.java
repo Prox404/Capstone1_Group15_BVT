@@ -11,21 +11,24 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.admin.babyvaccinationtracker.BlockUser;
+import com.admin.babyvaccinationtracker.BlockDeletePost;
 import com.admin.babyvaccinationtracker.R;
 import com.admin.babyvaccinationtracker.model.Post;
 import com.admin.babyvaccinationtracker.model.Report;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
     @Override
     public void onBindViewHolder(@NonNull ReportPostAdapter.viewholder holder, int position) {
         Post post = reports.get(position).getPost();
+        String post_id = post.getPost_id();
         holder.textViewUsername2.setText(post.getUser().getUser_name());
         holder.textViewTime.setText(post.getCreated_at());
         String url_avatar = post.getUser().getUser_avatar();
@@ -77,61 +81,56 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
         holder.imageVIew_delete_block2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showMenu(view, post);
+                showMenu(view, post,post_id);
             }
         });
     }
 
-    private void showMenu(View view, Post post) {
+    private void showMenu(View view, Post post, String post_id) {
         PopupMenu menu = new PopupMenu(view.getContext(), view);
         menu.getMenuInflater().inflate(R.menu.menu_block_delete, menu.getMenu());
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                if(id == R.id.item_menu_block_user){
-                    String cus_name = post.getUser().getUser_name();
-                    String cus_email = "";
-                    String cus_id = post.getUser().getUser_id();
-                    if(post.getUser().getUser_role().equals("customer")){
-                        DialogBlock(cus_name,cus_email, cus_id,1);
-                    }else if(post.getUser().getUser_role().equals("center")){
-                        DialogBlock(cus_name,cus_email, cus_id,0);
-                    }
+                if(id == R.id.item_delete_post){
+                    DatabaseReference reference_deletePost = FirebaseDatabase
+                            .getInstance()
+                            .getReference("posts");
+                    reference_deletePost.child(post_id)
+                            .setValue(null)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            DatabaseReference reference_report = FirebaseDatabase
+                                    .getInstance().getReference("Report");
+                            Query query = reference_report
+                                    .orderByChild("post/post_id").equalTo(post_id);
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.exists()){
+                                        for(DataSnapshot s : snapshot.getChildren()){
+                                            s.getRef().removeValue();
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
+                                }
+                            });
+                        }
+                    });
                     return true;
                 }
-                else if (id == R.id.item_menu_block_delete_user) {
+                else if (id == R.id.item_delete_block) {
                     String cus_name = post.getUser().getUser_name();
-                    String cus_email = "";
                     String cus_id = post.getUser().getUser_id();
-                    BlockUser blockUser = new BlockUser();
                     if(post.getUser().getUser_role().equals("customer")){
-                        DialogBlock(cus_name,cus_email, cus_id,1);
-                        DatabaseReference reference = FirebaseDatabase
-                                .getInstance()
-                                .getReference("posts");
-                        reference.child(post.getPost_id())
-                                .setValue(null)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(view.getContext(), "Đã xóa bài đăng này",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        Block_Delete_Post(cus_name,cus_id,1,post_id);
                     }else if(post.getUser().getUser_role().equals("center")){
-                        DialogBlock(cus_name,cus_email, cus_id,0);
-                        DatabaseReference reference = FirebaseDatabase
-                                .getInstance().getReference("posts");
-                        reference.child(post.getPost_id()).setValue(null)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(view.getContext(), "Đã xóa bài đăng này",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        Block_Delete_Post(cus_name,cus_id,0,post_id);
                     }
                     return true;
                 }
@@ -140,13 +139,13 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
         });
         menu.show();
     }
-    void DialogBlock(String cus_name, String cus_email, String cus_id,int isCus){
+    void Block_Delete_Post(String cus_name, String cus_id,int isCus, String post_id){
         Bundle args = new Bundle();
         args.putInt("isCus",isCus);
         args.putString("user_name", cus_name);
-        args.putString("user_email", cus_email);
         args.putString("user_id", cus_id );
-        BlockUser blockUser = new BlockUser();
+        args.putString("post_id", post_id );
+        BlockDeletePost blockUser = new BlockDeletePost();
         blockUser.setArguments(args);
         blockUser.show(((AppCompatActivity) context).getSupportFragmentManager(), "Chặn người dùng");
     }

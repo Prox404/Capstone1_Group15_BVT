@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_menu_block_user"
-        android:title="Chặn người dùng đăng bài này" />
+        android:id="@+id/item_delete_post"
+        android:title="Xóa bài đăng này" />
     <item
-        android:id="@+id/item_menu_block_delete_user"
-        android:title="Chặn người dùng và xóa đăng bài này" />
+        android:id="@+id/item_delete_block"
+        android:title="Xóa bài đăng và chặn người dùng này" />
 
 </menu>

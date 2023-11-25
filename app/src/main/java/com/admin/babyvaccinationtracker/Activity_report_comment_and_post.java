@@ -44,7 +44,9 @@ public class Activity_report_comment_and_post extends AppCompatActivity {
         LLreport_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Activity_report_comment_and_post.this, ActivityReport_post.class));
+                startActivity(new Intent(
+                        Activity_report_comment_and_post.this,
+                        ActivityReport_post.class));
             }
         });
 
@@ -57,7 +59,7 @@ public class Activity_report_comment_and_post extends AppCompatActivity {
                     number_report_comment.setText(snapshot.getChildrenCount()+"");
                 }
                 else {
-                    number_report_comment.setText(0);
+                    number_report_comment.setText(0+"");
                 }
             }
 
@@ -74,7 +76,7 @@ public class Activity_report_comment_and_post extends AppCompatActivity {
                     number_report_post.setText(snapshot.getChildrenCount()+"");
                 }
                 else {
-                    number_report_post.setText(0);
+                    number_report_post.setText(0+"");
                 }
             }
 

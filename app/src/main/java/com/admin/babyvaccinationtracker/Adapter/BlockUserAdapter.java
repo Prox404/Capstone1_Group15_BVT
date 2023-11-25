@@ -1,14 +1,12 @@
 package com.admin.babyvaccinationtracker.Adapter;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class BlockUserAdapter extends RecyclerView.Adapter<BlockUserAdapter.viewholder> {
     List<BlackList> blackLists;
@@ -51,7 +48,7 @@ public class BlockUserAdapter extends RecyclerView.Adapter<BlockUserAdapter.view
         BlackList blackList = blackLists.get(position);
         String id_user = blackList.getBlacklist_id();
         holder.tv_name.setText(blackList.getCus_name());
-        holder.tv_email.setText(blackList.getCus_email());
+        holder.tv_id.setText(id_user);
         holder.Reason.setText(blackList.getReason());
 
         holder.btn_unlock_for_user.setOnClickListener(new View.OnClickListener() {
@@ -71,9 +68,8 @@ public class BlockUserAdapter extends RecyclerView.Adapter<BlockUserAdapter.view
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                                 DatabaseReference reference_user = firebaseDatabase.getReference("BlackList");
-                                Log.i("CUstomerUnlock", isCustomer+"");
                                 if(isCustomer){
-                                    reference_user.child("Customers").child(id_user).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    reference_user.child("customers").child(id_user).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             DatabaseReference reference_user = firebaseDatabase.getReference("users");
@@ -86,7 +82,7 @@ public class BlockUserAdapter extends RecyclerView.Adapter<BlockUserAdapter.view
                                         }
                                     });
                                 }else {
-                                    reference_user.child("Vaccine_centers").child(id_user).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    reference_user.child("Vaccine_center").child(id_user).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             DatabaseReference reference_user = firebaseDatabase.getReference("users");
@@ -120,14 +116,14 @@ public class BlockUserAdapter extends RecyclerView.Adapter<BlockUserAdapter.view
 
     public class viewholder extends RecyclerView.ViewHolder {
         TextView tv_name;
-        TextView tv_email;
+        TextView tv_id;
         TextView Reason;
         Button btn_unlock_for_user;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.tv_manage_block_username);
-            tv_email = itemView.findViewById(R.id.tv_manage_block_email);
+            tv_id = itemView.findViewById(R.id.tv_manage_block_id);
             Reason = itemView.findViewById(R.id.tv_manage_block_reason);
             btn_unlock_for_user = itemView.findViewById(R.id.btn_unlock_for_user);
         }

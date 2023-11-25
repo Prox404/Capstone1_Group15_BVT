@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -21,11 +20,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ActivityReport_post extends AppCompatActivity {
@@ -56,13 +53,13 @@ public class ActivityReport_post extends AppCompatActivity {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Report");
         Query query = reference.orderByChild("type_report").equalTo(1); // bài đăng : 0 || comment : 1
-        Query query1 = query.orderByChild("check").equalTo(0);
 
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot_big) {
                 if (snapshot_big.exists()) {
                     reports.clear(); // Clear the previous data
+                    report_port.clear();
                     for (DataSnapshot snapshot : snapshot_big.getChildren()) {
                         Post post = snapshot.child("post").getValue(Post.class);
                         String reason = snapshot.child("reason").getValue(String.class);
@@ -73,6 +70,7 @@ public class ActivityReport_post extends AppCompatActivity {
                         }else {
                             Report report = new Report();
                             report.setPost(post);
+                            report.setReport_id(snapshot.getKey());
                             ArrayList<String> reasons = new ArrayList<>();
                             reasons.add(reason);
                             report.setReasons(reasons);

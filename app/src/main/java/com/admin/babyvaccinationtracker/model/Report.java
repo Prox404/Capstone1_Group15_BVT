@@ -6,6 +6,16 @@ public class Report {
     Post post;
     ArrayList<String> reasons;
 
+    String report_id;
+
+    public String getReport_id() {
+        return report_id;
+    }
+
+    public void setReport_id(String report_id) {
+        this.report_id = report_id;
+    }
+
     public Report() {
     }
 
