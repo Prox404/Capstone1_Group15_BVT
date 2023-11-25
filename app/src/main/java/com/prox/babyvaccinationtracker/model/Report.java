@@ -6,21 +6,20 @@ import java.util.HashMap;
 public class Report {
     String report_id;
     String reason;
-    int type_report;
-    Post post;
-    Comment comment;
-    int check;
+    int type_report; // 1: post || 0: Comment
+    Post post; // trường hợp 1
+    Comment comment; // trường hợp 0
+    String post_id; // trường hợp 0
 
-    public int getCheck() {
-        return check;
+    public String getPost_id() {
+        return post_id;
     }
 
-    public void setCheck(int check) {
-        this.check = check;
+    public void setPost_id(String post_id) {
+        this.post_id = post_id;
     }
 
     public Report() {
-        this.check = 0;
     }
 
     public Report(String report_id, String reason, int type_report, Post post, Comment comment) {

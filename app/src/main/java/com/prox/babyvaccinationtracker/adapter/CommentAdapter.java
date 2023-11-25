@@ -174,7 +174,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                                 report.setType_report(0);
                                 report.setReason(reason);
                                 post.setComments(null);
-                                report.setPost(post);
+                                report.setPost_id(post.getPost_id());
                                 databaseReference.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

@@ -255,6 +255,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                             if(!str_report.isEmpty()){
                                 Report report = new Report();
                                 report.setType_report(1);
+                                post.setComments(null); // đặt lại comment
                                 report.setPost(post);
                                 report.setReason(str_report);
                                 ReportContent.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
