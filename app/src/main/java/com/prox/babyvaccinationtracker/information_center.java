@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class information_center extends AppCompatActivity {
-    TextView txt_tentrungtam, txt_chungnhan, txt_diachi, txt_sdt, txt_thoigianlamviec;
+    TextView txt_tentrungtam, txt_chungnhan, txt_diachi, txt_sdt, txt_thoigianlamviec, txt_goToMap;
     RecyclerView vaccineRecycleview;
     Vaccine_center vaccineCenter;
     vaccine_incenter_adapter vaccineIncenterAdapter;
@@ -57,6 +57,7 @@ public class information_center extends AppCompatActivity {
         txt_diachi = findViewById(R.id.txt_diachi);
         txt_sdt = findViewById(R.id.txt_sdt);
         txt_thoigianlamviec = findViewById(R.id.txt_thoigianlamviec);
+        txt_goToMap = findViewById(R.id.txt_goToMap);
         vaccineRecycleview = findViewById(R.id.vaccineRecyclerView);
         imageViewCenterImage = findViewById(R.id.imageViewCenterImage);
         closeBtn = findViewById(R.id.closeBtn);
@@ -82,7 +83,7 @@ public class information_center extends AppCompatActivity {
         }
 
         String finalFullAddress = fullAddress;
-        txt_diachi.setOnClickListener(view -> {
+        txt_goToMap.setOnClickListener(view -> {
 
             // Tạo URI với địa chỉ
             Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(finalFullAddress));

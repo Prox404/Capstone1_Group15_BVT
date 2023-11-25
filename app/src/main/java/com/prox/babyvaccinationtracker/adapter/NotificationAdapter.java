@@ -42,7 +42,7 @@ import java.util.Objects;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
     private List<NotificationMessage> notificationList;
     Context context;
-
+    public static ArrayList<String> notificationIdsCanDelete = new ArrayList<>();
     private List<NotificationMessage> reminderList = new ArrayList<>();
     private HashMap<String, String> firstReminderMap = new HashMap<>();
 
@@ -86,7 +86,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             if (notification.getMessage().contains("Nhắc lại")) {
                 if (!isFirstReminder(notification.getBaby_id(), vaccineType)) {
-                    // Nếu không phải là lời nhắc đầu tiên, không hiển thị action
+                    notificationIdsCanDelete.add(notification.getNotification_id());
                     return;
                 }
                 if (!isReminder(notification.getNotification_id())){
@@ -178,6 +178,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
 
         } else {
+            notificationIdsCanDelete.add(notification.getNotification_id());
             holder.imageViewNotiType.setImageResource(R.drawable.ic_notifications);
             holder.iconContainer.setBackgroundResource(R.drawable.tool_item_bg);
         }
@@ -190,6 +191,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             firstReminderMap.put(baby_id, vaccineType);
             return true;
         }
+    }
+
+    public static ArrayList<String> getNotificationIdsCanDelete(){
+        return notificationIdsCanDelete;
     }
 
     private Boolean isReminder(String notification_id){
