@@ -49,6 +49,14 @@ public class Activity_report_comment_and_post extends AppCompatActivity {
                         ActivityReport_post.class));
             }
         });
+        LLreport_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(
+                        Activity_report_comment_and_post.this,
+                        ActivityReport_comment.class));
+            }
+        });
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Report");
         Query query_comment = reference.orderByChild("type_report").equalTo(0);

@@ -36,10 +36,11 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.viewholder> {
         holder.textViewTime.setText(post.getCreated_at());
         holder.textViewPostContent.setText(post.getContent());
         String hashtag = "";
-        for(String a : post.getHashtags()){
-            hashtag = " "+ a;
+        if(post.getHashtags()!= null){
+            for(String a : post.getHashtags()){
+                hashtag = " "+ a;
+            }
         }
-
         holder.textViewHashtag.setText(hashtag);
         String image_user = post.getUser().getUser_avatar();
 //        image_user = image_user.contains("http") ? image_user.replace("http", "https") : image_user;

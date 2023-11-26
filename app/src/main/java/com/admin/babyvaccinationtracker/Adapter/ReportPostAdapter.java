@@ -1,5 +1,6 @@
 package com.admin.babyvaccinationtracker.Adapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -94,34 +96,49 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 if(id == R.id.item_delete_post){
-                    DatabaseReference reference_deletePost = FirebaseDatabase
-                            .getInstance()
-                            .getReference("posts");
-                    reference_deletePost.child(post_id)
-                            .setValue(null)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            DatabaseReference reference_report = FirebaseDatabase
-                                    .getInstance().getReference("Report");
-                            Query query = reference_report
-                                    .orderByChild("post/post_id").equalTo(post_id);
-                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("Xóa bài đăng này!!")
+                            .setMessage("Lưu ý: sau khi xóa bài đăng này thì những báo cáo này sẽ mất")
+                            .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if(snapshot.exists()){
-                                        for(DataSnapshot s : snapshot.getChildren()){
-                                            s.getRef().removeValue();
-                                        }
-                                    }
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
                                 }
+                            })
+                            .setPositiveButton("Chắc chắn", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    DatabaseReference reference_deletePost = FirebaseDatabase
+                                            .getInstance()
+                                            .getReference("posts");
+                                    reference_deletePost.child(post_id)
+                                            .setValue(null)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    DatabaseReference reference_report = FirebaseDatabase
+                                                            .getInstance().getReference("Report");
+                                                    Query query = reference_report
+                                                            .orderByChild("post/post_id").equalTo(post_id);
+                                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            if(snapshot.exists()){
+                                                                for(DataSnapshot s : snapshot.getChildren()){
+                                                                    s.getRef().removeValue();
+                                                                }
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
 
+                                                        }
+                                                    });
+                                                }
+                                            });
                                 }
                             });
-                        }
-                    });
+                    builder.create().show();
                     return true;
                 }
                 else if (id == R.id.item_delete_block) {
