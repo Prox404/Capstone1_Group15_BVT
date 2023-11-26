@@ -1,6 +1,8 @@
 package com.prox.babyvaccinationtracker.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +51,35 @@ public class RegistrationTimelineAdapter extends RecyclerView.Adapter<Registrati
         holder.textViewCenterAddress.setText(registration.getCenter().getCenter_address());
         holder.textViewWorkingTime.setText(registration.getCenter().getWork_time().split(",")[1].trim());
         holder.textViewPrice.setText(registration.getVaccine().getPrice());
+
+        String address2 = registration.getCenter().getCenter_address2();
+        String address = registration.getCenter().getCenter_address();
+        String fullAddress = address;
+        if (address2 != null && !address2.isEmpty()) {
+            fullAddress = address2 + ", " + address;
+            holder.textViewCenterAddress.setText(fullAddress);
+        }
+
+        String finalFullAddress = fullAddress;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(finalFullAddress));
+
+                // Tạo Intent để mở ứng dụng Google Maps
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+
+                // Chỉ định gói ứng dụng của Google Maps
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Nếu có, mở ứng dụng Google Maps
+                if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+                    context.startActivity(mapIntent);
+                } else {
+                    Toast.makeText(context, "Không tìm thấy ứng dụng Google Maps", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

@@ -80,8 +80,6 @@
 
     </LinearLayout>
 
-
-
     <com.google.android.flexbox.FlexboxLayout
         app:alignContent="stretch"
         app:alignItems="stretch"
@@ -115,7 +113,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_history"
+                        android:src="@drawable/ic_edit"
                         app:tint="@color/textColor"/>
                 </LinearLayout>
 
@@ -163,7 +161,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_qr"
+                        android:src="@drawable/ic_document"
                         app:tint="@color/textColor"/>
                 </LinearLayout>
 
