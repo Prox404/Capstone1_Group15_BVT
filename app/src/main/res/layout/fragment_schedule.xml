@@ -9,11 +9,78 @@
     tools:context=".ScheduleFragment">
 
     <TextView
-        android:id="@+id/textView39"
         style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="Lịch trình" />
+
+    <LinearLayout
+        android:id="@+id/timelineContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/rounded_white_button_bg"
+                    android:backgroundTint="@color/textColor"
+                    android:orientation="horizontal"></LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTimeline"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/rounded_white_button_bg"
+                    android:backgroundTint="@color/textColor"
+                    android:orientation="horizontal"></LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
     <com.google.android.flexbox.FlexboxLayout
         app:alignContent="stretch"
