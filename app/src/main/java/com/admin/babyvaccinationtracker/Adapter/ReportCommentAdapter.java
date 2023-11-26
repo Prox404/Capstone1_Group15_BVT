@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.admin.babyvaccinationtracker.BlockDeleteComments;
@@ -58,6 +60,8 @@ public class ReportCommentAdapter extends RecyclerView.Adapter<ReportCommentAdap
 
     @Override
     public void onBindViewHolder(@NonNull ReportCommentAdapter.viewholder holder, int position) {
+        holder.lv_report_comment.setVisibility(View.GONE);
+        holder.image_buttonShowComments.setImageResource(R.drawable.ic_arrow_down);
         Report report = reports.get(position);
         Comment comment_reported = report.getComment();
 
@@ -75,12 +79,27 @@ public class ReportCommentAdapter extends RecyclerView.Adapter<ReportCommentAdap
         holder.textViewCommentContent.setText(content);
 
         ArrayList<String> reasons = report.getReasons();
-        ArrayAdapter<String> adapter = new
-                ArrayAdapter<>(
-                        holder.lv_report_comment.getContext(),
-                android.R.layout.simple_list_item_1,
-                reasons);
+//        ArrayAdapter<String> adapter = new
+//                ArrayAdapter<>(
+//                        holder.lv_report_comment.getContext(),
+//                android.R.layout.simple_list_item_1,
+//                reasons);
+        ReasonsAdapter adapter = new ReasonsAdapter(reasons);
+        holder.lv_report_comment.setLayoutManager(new LinearLayoutManager(holder.lv_report_comment.getContext()));
         holder.lv_report_comment.setAdapter(adapter);
+
+        holder.image_buttonShowComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.lv_report_comment.getVisibility() == View.GONE){
+                    holder.lv_report_comment.setVisibility(View.VISIBLE);
+                    holder.image_buttonShowComments.setImageResource(R.drawable.ic_arrow_up);
+                }else {
+                    holder.lv_report_comment.setVisibility(View.GONE);
+                    holder.image_buttonShowComments.setImageResource(R.drawable.ic_arrow_down);
+                }
+            }
+        });
 
         holder.imageViewMore_comment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,7 +253,8 @@ public class ReportCommentAdapter extends RecyclerView.Adapter<ReportCommentAdap
     public class viewholder extends RecyclerView.ViewHolder {
         ImageView imageViewCommentUserAvatar,imageViewMore_comment;
         TextView textViewCommentUserName,textViewCommentContent;
-        ListView lv_report_comment;
+        RecyclerView lv_report_comment;
+        ImageButton image_buttonShowComments;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
@@ -243,6 +263,7 @@ public class ReportCommentAdapter extends RecyclerView.Adapter<ReportCommentAdap
             textViewCommentContent = itemView.findViewById(R.id.textViewCommentContent);
             lv_report_comment = itemView.findViewById(R.id.lv_report_comment);
             imageViewMore_comment = itemView.findViewById(R.id.imageViewmore_comment);
+            image_buttonShowComments = itemView.findViewById(R.id.image_buttonShowComments);
         }
     }
 }

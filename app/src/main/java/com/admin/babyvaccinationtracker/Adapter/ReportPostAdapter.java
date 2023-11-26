@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -54,6 +56,8 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
 
     @Override
     public void onBindViewHolder(@NonNull ReportPostAdapter.viewholder holder, int position) {
+        holder.ListView_reason_report_post.setVisibility(View.GONE);
+        holder.image_buttonShowPost.setImageResource(R.drawable.ic_arrow_down);
         Post post = reports.get(position).getPost();
         String post_id = post.getPost_id();
         holder.textViewUsername2.setText(post.getUser().getUser_name());
@@ -75,11 +79,27 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
             holder.viewPagerImage.setVisibility(View.GONE);
         }
         ArrayList<String> reasons = reports.get(position).getReasons();
-        Log.i("REASONSSSS",reasons +"");
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(holder.ListView_reason_report_post.getContext(),
-                        android.R.layout.simple_list_item_1, reasons );
+//        Log.i("REASONSSSS",reasons +"");
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<>(holder.ListView_reason_report_post.getContext(),
+//                        android.R.layout.simple_list_item_1, reasons );
+        ReasonsAdapter adapter = new ReasonsAdapter(reasons);
+        holder.ListView_reason_report_post.setLayoutManager(new LinearLayoutManager(holder.ListView_reason_report_post.getContext()));
         holder.ListView_reason_report_post.setAdapter(adapter);
+
+        holder.image_buttonShowPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.ListView_reason_report_post.getVisibility() == View.GONE){
+                    holder.ListView_reason_report_post.setVisibility(View.VISIBLE);
+                    holder.image_buttonShowPost.setImageResource(R.drawable.ic_arrow_up);
+                }
+                else {
+                    holder.ListView_reason_report_post.setVisibility(View.GONE);
+                    holder.image_buttonShowPost.setImageResource(R.drawable.ic_arrow_down);
+                }
+            }
+        });
         holder.imageVIew_delete_block2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +201,8 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
         ImageView imageViewUserAvatar,imageVIew_delete_block2;
         TextView textViewUsername2,textViewTime,textViewPostContent,textViewHashtag;
         ViewPager2 viewPagerImage;
-        ListView ListView_reason_report_post;
+        RecyclerView ListView_reason_report_post;
+        ImageButton image_buttonShowPost;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
@@ -193,6 +214,7 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
             viewPagerImage = itemView.findViewById(R.id.viewPagerImage2);
             ListView_reason_report_post = itemView.findViewById(R.id.ListView_reason_report_post);
             imageVIew_delete_block2 = itemView.findViewById(R.id.imageVIew_delete_block2);
+            image_buttonShowPost = itemView.findViewById(R.id.image_buttonShowPost);
         }
     }
 }
