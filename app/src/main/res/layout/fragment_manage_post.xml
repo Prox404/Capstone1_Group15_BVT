@@ -7,108 +7,120 @@
     android:orientation="vertical"
     tools:context=".Fragment_manage_post">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/corner_bottom_card"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:orientation="vertical"
-        android:padding="45dp">
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Quản lí bài đăng"
-                android:textAlignment="center"
-                android:textColor="@color/backgroundColor"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:id="@+id/imageView_admin"
-                android:layout_width="65dp"
-                android:layout_height="49dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="162dp"
-                android:layout_marginEnd="162dp"
-                android:src="@drawable/ic_account" />
-
-            <TextView
-                android:id="@+id/text_user"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Admin"
-                android:textAlignment="center"
-                android:textColor="@color/backgroundColor"
-                android:textSize="16sp" />
+                android:background="@drawable/corner_bottom_card"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:orientation="vertical"
+                android:padding="45dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Quản lí bài đăng"
+                        android:textAlignment="center"
+                        android:textColor="@color/backgroundColor"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/imageView_admin"
+                        android:layout_width="65dp"
+                        android:layout_height="49dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="162dp"
+                        android:layout_marginEnd="162dp"
+                        android:src="@drawable/ic_account" />
+
+                    <TextView
+                        android:id="@+id/text_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Admin"
+                        android:textAlignment="center"
+                        android:textColor="@color/backgroundColor"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="52dp"
+                    android:text="XEM BÁO CÁO CHI TIẾT"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/buttonThemBaiDang"
+                    android:layout_width="match_parent"
+                    android:layout_height="89dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Thêm bài đăng"
+                    android:textColor="@color/textColor" />
+
+                <Button
+                    android:id="@+id/buttonXemBaiDang"
+                    android:layout_width="match_parent"
+                    android:layout_height="89dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Xem bài đăng"
+                    android:textColor="@color/textColor" />
+
+                <Button
+                    android:id="@+id/buttonXoaBaiDang"
+                    android:layout_width="match_parent"
+                    android:layout_height="89dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Xóa bài đăng"
+                    android:textColor="@color/textColor" />
+
+                <Button
+                    android:id="@+id/buttonNoidungbaocao"
+                    android:layout_width="match_parent"
+                    android:layout_height="89dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Nội dung báo cáo"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 
     <!-- Button Thêm bài đăng -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:text="XEM BÁO CÁO CHI TIẾT"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/buttonThemBaiDang"
-            android:layout_width="match_parent"
-            android:layout_height="89dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/white"
-            android:text="Thêm bài đăng"
-            android:textColor="@color/textColor" />
-
-        <Button
-            android:id="@+id/buttonXemBaiDang"
-            android:layout_width="match_parent"
-            android:layout_height="89dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/white"
-            android:text="Xem bài đăng"
-            android:textColor="@color/textColor" />
-
-        <Button
-            android:id="@+id/buttonXoaBaiDang"
-            android:layout_width="match_parent"
-            android:layout_height="89dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/white"
-            android:text="Xóa bài đăng"
-            android:textColor="@color/textColor" />
-
-        <Button
-            android:id="@+id/buttonThongKeBaiDang"
-            android:layout_width="match_parent"
-            android:layout_height="89dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/white"
-            android:text="Thống kê bài đăng"
-            android:textColor="@color/textColor" />
-
-    </LinearLayout>
 </LinearLayout>
 
 

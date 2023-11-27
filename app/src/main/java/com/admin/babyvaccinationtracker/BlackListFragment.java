@@ -98,7 +98,7 @@ public class BlackListFragment extends Fragment {
     }
     void Loaddata(Boolean check){
         if(check == true){
-            databaseReference.child("Customers").addValueEventListener(new ValueEventListener() {
+            databaseReference.child("customers").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Log.i("BLACKLISTSNAPSHOT", ""+snapshot);
@@ -135,7 +135,7 @@ public class BlackListFragment extends Fragment {
                 }
             });
         }else  {
-            databaseReference.child("Vaccine_centers").addValueEventListener(new ValueEventListener() {
+            databaseReference.child("Vaccine_center").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Log.i("BLACKLISTSNAPSHOT", ""+snapshot);

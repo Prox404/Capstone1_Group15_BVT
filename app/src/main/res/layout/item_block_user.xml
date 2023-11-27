@@ -40,11 +40,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="Email: "
+            android:text="ID: "
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_manage_block_email"
+            android:id="@+id/tv_manage_block_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center|left"
