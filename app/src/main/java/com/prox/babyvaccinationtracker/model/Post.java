@@ -1,11 +1,12 @@
 package com.prox.babyvaccinationtracker.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Post {
+public class Post implements Serializable {
 
     private String content;
     private ArrayList<String> image_url;

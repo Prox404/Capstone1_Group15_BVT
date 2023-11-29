@@ -30,6 +30,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_Edit_post"
+            android:exported="false" />
+        <activity
             android:name=".BabyProfileActivity"
             android:exported="false" />
         <activity

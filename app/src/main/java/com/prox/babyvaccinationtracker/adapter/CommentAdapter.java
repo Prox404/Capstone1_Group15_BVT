@@ -21,8 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.R;
 import com.prox.babyvaccinationtracker.model.Comment;
 import com.prox.babyvaccinationtracker.model.Post;
@@ -200,25 +203,92 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private void editComment(View view, Comment comment) {
         PopupMenu MENU = new PopupMenu(view.getContext(), view);
-        MENU.getMenuInflater().inflate(R.menu.editpost_menu, MENU.getMenu());
+        MENU.getMenuInflater().inflate(R.menu.editcomment_menu, MENU.getMenu());
         MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 Log.i("IDDDD", id+" "+menuItem.getItemId());
-                if (id == R.id.itemdeletepost) {
+                if (id == R.id.itemdeletecomment) {
                     // todo xóa comment
+                    DatabaseReference reference_delete = FirebaseDatabase.getInstance()
+                            .getReference("posts").child(post.getPost_id());
+                    reference_delete.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            HashMap<String, Comment> comments = (HashMap<String, Comment>)
+                                    snapshot.child("comments").getValue();
+                            if(comments != null){
+                                DataSnapshot snapshot_comment = snapshot.child("comments");
+                                if(comments.containsKey(comment.getComment_id())){
+                                    snapshot_comment.child(comment.getComment_id()).getRef().removeValue();
+
+                                }
+                                else {
+                                    for(Map.Entry<String, Comment> entry : comments.entrySet()){
+                                        Object commentObject = entry.getValue();
+                                        Log.i("REPLIESSSSS", commentObject +"");
+                                        Log.i("KEYYYYYY", entry.getKey());
+                                        if(commentObject != null){
+                                            if(remove_comment(snapshot_comment, // đường dẫn để xóa comment
+                                                    entry.getKey(), // child cha
+                                                    comment.getComment_id(), // comment cần xóa
+                                                    (HashMap<String, Object>) commentObject)){
+                                                break;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                     Toast.makeText(view.getContext(), " Đã xóa bình luận thành công", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (id == R.id.itemeditpost_edit) {
-                    // todo cập nhập comment
-                    Toast.makeText(view.getContext(), " Đã cập nhật bình luận thành công", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 return false;
             }
         });
         MENU.show();
+    }
+
+    boolean remove_comment(DataSnapshot snapshot_comment_child,
+                           String comment_id,
+                           String comment_delete,
+                           HashMap<String, Object> Object){
+        DataSnapshot snapshot_comment = snapshot_comment_child.child(comment_id);
+        Object replies =  Object.get("replies");
+        Log.i("replies_1", replies+"");
+        if(replies instanceof HashMap && replies != null){
+            if(((HashMap<String, Object>) replies).containsKey(comment_delete)){
+                Log.i("replies_2", comment_delete + " "+ comment_id);
+                Log.i("snapshot_comment", snapshot_comment+"");
+                snapshot_comment.child("replies").child(comment_delete).getRef().removeValue();
+                return true;
+            }
+            else {
+                for(Map.Entry<String, Object> entry: ((HashMap<String, Object>) replies).entrySet()){
+                    Object object = entry.getValue();
+                    Log.i("snapshot_replies", object+"");
+                    if(object != null && object instanceof HashMap){
+                        DataSnapshot snapshot_comment2 = snapshot_comment_child
+                                .child(comment_id).child("replies");
+                        if(remove_comment(snapshot_comment2,
+                                entry.getKey(),
+                                comment_delete,
+                                (HashMap<String, java.lang.Object>) object)){
+                            return true;
+                        };
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
