@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/backgroundColor"
     tools:context=".Manage_track_content_visits_Activity"
     >
     <com.google.android.material.tabs.TabLayout

@@ -27,6 +27,24 @@
         <item name="android:textSize">26sp</item>
     </style>
 
+    <style name="Widget.App.Button" parent="@android:style/Theme.Holo.Light">
+        <item name="android:background">@drawable/button_bg</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">7dp</item>
+    </style>
+
+    <style name="Widget.App.UnSelectedButton" parent="@android:style/Theme.Holo.Light">
+        <item name="android:background">@drawable/unselected_button_bg</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">7dp</item>
+    </style>
+
     <style name="Widget.AppCompat.TextView.Label" parent="@android:style/Theme.Holo.Light">
         <item name="android:textColor">#4B4B4B</item>
         <item name="android:fontFamily">@font/inter_medium</item>

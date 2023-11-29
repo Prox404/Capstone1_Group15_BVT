@@ -38,7 +38,7 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
 
     public static String searchQuery = "";
 
-    private ImageView imageView_back;
+//    private ImageView imageView_back;
 
     private EditText editTextNotificationSearch, editTextDate, editTextTime, editTextTitle, editTextMessage;
     private Button buttonSearch, buttonSendNotification;
@@ -56,7 +56,7 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_notification);
-        imageView_back = findViewById(R.id.imageView_back);
+//        imageView_back = findViewById(R.id.imageView_back);
         editTextNotificationSearch = findViewById(R.id.editTextNotificationSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         editTextDate = findViewById(R.id.editTextDate);
@@ -80,12 +80,12 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        imageView_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+//        imageView_back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override

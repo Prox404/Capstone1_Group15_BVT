@@ -1,6 +1,7 @@
 package com.admin.babyvaccinationtracker;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.admin.babyvaccinationtracker.Adapter.PostVisitsAdapter;
@@ -30,6 +32,8 @@ public class Post_VisitsFragment extends Fragment {
     Context context;
     RecyclerView recyclerViewVisits;
     PostVisitsAdapter adapter;
+    LinearLayout linear_layout_sort_post;
+    String selectedSort = "all";
     Button button_manage_display_all,button_manage_post_visist, button_manage_post_comments;
     public Post_VisitsFragment() {
         // Required empty public constructor
@@ -60,15 +64,23 @@ public class Post_VisitsFragment extends Fragment {
         button_manage_display_all = view.findViewById(R.id.button_manage_display_all);
         button_manage_post_visist = view.findViewById(R.id.button_manage_post_visist);
         button_manage_post_comments = view.findViewById(R.id.button_manage_post_comments);
+        linear_layout_sort_post = view.findViewById(R.id.linear_layout_sort_post);
         adapter = new PostVisitsAdapter(posts);
         Log.i("POSTTTSASSAC", posts+"");
         recyclerViewVisits.setLayoutManager(new LinearLayoutManager(context));
         recyclerViewVisits.setAdapter(adapter);
 
+        clearBackgroundButton();
+        button_manage_display_all.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+        button_manage_display_all.setTextColor(getResources().getColor(R.color.white));
+
         button_manage_display_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter.arraylist_all();
+                clearBackgroundButton();
+                button_manage_display_all.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+                button_manage_display_all.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
@@ -76,6 +88,9 @@ public class Post_VisitsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 adapter.arrayList_visits();
+                clearBackgroundButton();
+                button_manage_post_visist.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+                button_manage_post_visist.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
@@ -83,9 +98,22 @@ public class Post_VisitsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 adapter.arrayList_comments();
+                clearBackgroundButton();
+                button_manage_post_comments.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
+                button_manage_post_comments.setTextColor(getResources().getColor(R.color.white));
             }
         });
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void clearBackgroundButton(){
+        for (int i = 0; i < linear_layout_sort_post.getChildCount(); i++) {
+            View v = linear_layout_sort_post.getChildAt(i);
+            if (v instanceof Button) {
+                ((Button) v).setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                ((Button) v).setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        }
     }
 }

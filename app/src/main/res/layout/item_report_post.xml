@@ -19,12 +19,14 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="25dp">
+            app:cardCornerRadius="25dp"
+            app:cardElevation="0dp">
 
             <ImageView
                 android:id="@+id/imageViewUserAvatar2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:elevation="0dp"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
@@ -83,7 +85,13 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerImage2"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="295dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/lineColor"
+        android:orientation="horizontal"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,7 +106,6 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:text="Các báo cáo từ người dùng:"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -107,7 +114,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#FFFFFF"
-            android:src="@drawable/ic_arrow_down" />
+            android:src="@drawable/ic_arrow_down"
+            android:tint="@color/textColor" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

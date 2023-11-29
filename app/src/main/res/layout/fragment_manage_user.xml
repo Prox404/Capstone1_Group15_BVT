@@ -14,12 +14,12 @@
 
         <TextView
             android:id="@+id/textView4"
+            style="@style/Widget.AppCompat.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:text="Quản lý khách hàng"
-            android:textSize="20sp"
+            android:text="Quản lý\nkhách hàng"
             android:textStyle="bold" />
 
         <LinearLayout

@@ -45,7 +45,7 @@ public class homeFragment extends Fragment {
 
     TextView textViewNumOfUser,textViewNumOfRegisterInjection;
 
-    LinearLayout send_notification,user_management,report;
+    LinearLayout send_notification,user_management,report, viewHealthContainer, managePostContainer;
 
     FirebaseDatabase firebaseDatabase;
 
@@ -155,6 +155,21 @@ public class homeFragment extends Fragment {
             }
         });
 
+        viewHealthContainer = view.findViewById(R.id.viewHealthContainer);
+        viewHealthContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, BabyManagement.class));
+            }
+        });
+
+        managePostContainer = view.findViewById(R.id.managePostContainer);
+        managePostContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadFragment(new Fragment_manage_post());
+            }
+        });
 
         return view;
     }

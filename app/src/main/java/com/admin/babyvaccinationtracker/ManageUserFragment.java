@@ -133,10 +133,12 @@ public class ManageUserFragment extends Fragment {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         String cus_name = snapshot1.child("cus_name").getValue(String.class);
                         String cus_email = snapshot1.child("cus_email").getValue(String.class);
+                        String cus_avatar = snapshot1.child("cus_avatar").getValue(String.class);
                         Customer customer = new Customer();
                         customer.setCustomer_id(snapshot1.getKey());
                         customer.setCus_name(cus_name);
                         customer.setCus_email(cus_email);
+                        customer.setCus_avatar(cus_avatar);
                         customers.add(customer);
                     }
                     customers_origin = new ArrayList<>(customers);

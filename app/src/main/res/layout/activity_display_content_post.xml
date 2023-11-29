@@ -10,12 +10,11 @@
 
     <TextView
         android:id="@+id/textView29"
+        style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Xem nội dung bài viết"
-        android:textColor="@color/colorPrimary"
-        android:textSize="34sp"
+        android:layout_marginBottom="20dp"
+        android:text="Xem nội dung\nbài viết"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView

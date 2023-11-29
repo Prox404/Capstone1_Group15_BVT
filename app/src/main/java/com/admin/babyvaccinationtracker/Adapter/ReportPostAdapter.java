@@ -70,6 +70,11 @@ public class ReportPostAdapter extends RecyclerView.Adapter<ReportPostAdapter.vi
         if(post.getHashtags()!= null){
             holder.textViewHashtag.setText(String.join(" ", post.getHashtags()));
         }
+        if (post.getImage_url() != null && post.getImage_url().size() > 0){
+            holder.viewPagerImage.setVisibility(View.VISIBLE);
+        } else {
+            holder.viewPagerImage.setVisibility(View.GONE);
+        }
         if (post.getImage_url() != null) {
             ImageCarouselAdapter postImageAdapter =
                     new ImageCarouselAdapter(holder.viewPagerImage.getContext(), post.getImage_url());

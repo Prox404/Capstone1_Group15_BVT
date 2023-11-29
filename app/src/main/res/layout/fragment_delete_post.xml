@@ -11,6 +11,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            style="@style/Widget.AppCompat.TextView.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="Xoá bài đăng" />
+
         <EditText
             android:id="@+id/edt_search_post_delete_post"
             android:layout_width="match_parent"
@@ -18,9 +25,11 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/card_border_bg"
             android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="10dp"
             android:ems="10"
             android:hint="Tìm kiếm người đăng, nội dung "
-            android:inputType="text" />
+            android:inputType="text"
+            android:paddingLeft="10dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Rcview"

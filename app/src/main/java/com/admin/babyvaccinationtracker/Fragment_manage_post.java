@@ -27,7 +27,7 @@ public class Fragment_manage_post extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button buttonThemBaiDang,buttonXemBaiDang,buttonNoidungbaocao;
+    View buttonThemBaiDang,buttonXemBaiDang,buttonNoidungbaocao;
 
     public Fragment_manage_post() {
         // Required empty public constructor

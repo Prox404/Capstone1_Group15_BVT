@@ -6,38 +6,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activity_add_post">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linearLayoutAddImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|start"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_add" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Thêm ảnh" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="15dp">
+
+            <TextView
+                style="@style/Widget.AppCompat.TextView.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thêm bài đăng mới" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,44 +33,72 @@
                 android:orientation="horizontal">
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleViewImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:paddingHorizontal="10dp"
-                    android:scrollbarStyle="outsideInset"
-                    android:scrollbars="" />
             </LinearLayout>
-
-            <EditText
-                android:id="@+id/editTextTopic"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:gravity="start"
-                android:hint="#hashtag#cua#ban" />
 
             <EditText
                 android:id="@+id/editTextContent"
                 android:layout_width="match_parent"
-                android:layout_height="257dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Hãy nhập nội dung,,,"
                 android:inputType="textMultiLine"
+                android:padding="10dp"
                 android:paddingVertical="15dp"
                 android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTextTopic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:hint="#hashtag #cua #ban"
+                android:padding="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleViewImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingHorizontal="10dp"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutAddImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:orientation="horizontal"
+                android:paddingVertical="10dp">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_add" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Thêm ảnh" />
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/buttonAddNewPost"
+        style="@style/Widget.App.Button"
         android:layout_width="370dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
         android:text="Tạo bài viết" />
 
 </LinearLayout>

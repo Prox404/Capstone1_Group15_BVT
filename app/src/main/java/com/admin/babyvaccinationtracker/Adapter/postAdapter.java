@@ -43,9 +43,13 @@ public class postAdapter extends RecyclerView.Adapter<postAdapter.viewholder> {
         }
         holder.textViewHashtag.setText(hashtag);
         String image_user = post.getUser().getUser_avatar();
-//        image_user = image_user.contains("http") ? image_user.replace("http", "https") : image_user;
+        image_user = image_user.contains("https") ? image_user : image_user.replace("http", "https");
         Picasso.get().load(image_user).into(holder.imageViewUserAvatar);
-
+        if (post.getImage_url() != null && post.getImage_url().size() > 0) {
+            holder.viewPagerImage.setVisibility(View.VISIBLE);
+        }else{
+            holder.viewPagerImage.setVisibility(View.GONE);
+        }
         if (post.getImage_url() != null) {
             ImageCarouselAdapter postImageAdapter = new ImageCarouselAdapter(holder.viewPagerImage.getContext(), post.getImage_url());
             holder.viewPagerImage.setAdapter(postImageAdapter);

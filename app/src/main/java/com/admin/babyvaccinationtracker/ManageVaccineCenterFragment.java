@@ -121,6 +121,7 @@ public class ManageVaccineCenterFragment extends Fragment {
                         v.setCenter_id(center_id);
                         v.setCenter_name(center_name);
                         v.setCenter_email(center_email);
+                        v.setCenter_image(a.child("center_image").getValue(String.class));
 
                         vaccineCenterList.add(v);
                     }

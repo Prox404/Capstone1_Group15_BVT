@@ -38,10 +38,11 @@ public class home_upgrade extends AppCompatActivity {
 //                    Fragment fragment = new Fragment_manage_user_upgrade();
 //                    loadFragment(fragment);
                     startActivity(new Intent(home_upgrade.this, Admin_management_of_user.class));
-                    return true;
+                    return false;
                 }
                 else if(id == R.id.navigation_setting){
-                    return true;
+                    startActivity(new Intent(home_upgrade.this, UserActivity.class));
+                    return false;
                 }
                 return false;
             }

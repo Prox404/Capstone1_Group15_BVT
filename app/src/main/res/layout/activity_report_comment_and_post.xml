@@ -5,25 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="20dp"
     tools:context=".Activity_report_comment_and_post">
 
-    <ImageView
-        android:id="@+id/Iv_back"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_back" />
+        android:background="@drawable/rounded_bg"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/Iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView30"
+        style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
         android:text="Báo cáo"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="34sp"
         android:textStyle="bold" />
 
     <LinearLayout
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -31,10 +43,11 @@
             android:id="@+id/LLreport_post"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_margin="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/card_border_bg"
-            android:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/tool_white_bg"
+            android:backgroundTint="#FF4484"
+            android:elevation="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -54,17 +67,18 @@
                 android:layout_margin="10dp"
                 android:text="0"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="48sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/LLreport_comment"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@drawable/card_border_bg"
-            android:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/tool_white_bg"
+            android:backgroundTint="#03A9F4"
+            android:elevation="10dp"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp">
@@ -85,7 +99,7 @@
                 android:layout_margin="10dp"
                 android:text="0"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="48sp" />
         </LinearLayout>
     </LinearLayout>
 

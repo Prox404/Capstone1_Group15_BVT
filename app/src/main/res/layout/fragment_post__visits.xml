@@ -13,10 +13,11 @@
         android:padding="10dp">
 
         <TextView
+            style="@style/Widget.AppCompat.TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thông kê bài đăng"
-            android:textSize="24sp"
+            android:layout_marginBottom="10dp"
+            android:text="Thống kê bài đăng"
             android:textStyle="bold" />
 
         <HorizontalScrollView
@@ -25,6 +26,7 @@
             android:layout_marginBottom="10dp">
 
             <LinearLayout
+                android:id="@+id/linear_layout_sort_post"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
@@ -33,29 +35,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:backgroundTint="@color/backgroundColor"
-                    android:text="Hiển thị tất cả"
-                    android:textColor="@color/colorPrimaryDark"
-                    app:cornerRadius="5dp" />
+                    android:background="@drawable/unselected_button_bg"
+                    android:text="Tất cả"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/button_manage_post_visist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:backgroundTint="@color/backgroundColor"
-                    android:text="sắp xếp lượt quan tâm"
-                    android:textColor="@color/colorPrimaryDark"
-                    app:cornerRadius="5dp" />
+                    android:background="@drawable/unselected_button_bg"
+                    android:text="Lượt xem"
+                    android:textColor="@color/colorPrimaryDark" />
 
                 <Button
                     android:id="@+id/button_manage_post_comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/backgroundColor"
-                    android:text="sắp xếp theo lượng bình luận"
-                    android:textColor="@color/colorPrimaryDark"
-                    app:cornerRadius="5dp" />
+                    android:background="@drawable/unselected_button_bg"
+                    android:text="Bình luận"
+                    android:textColor="@color/colorPrimaryDark" />
 
             </LinearLayout>
         </HorizontalScrollView>
