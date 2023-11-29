@@ -44,9 +44,11 @@ public class HomeActivity extends AppCompatActivity {
     final int MY_BOOT_COMPLETED_PERMISSION_REQUEST_CODE = 2;
 
     private void check(){
-        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Customers").child(id);
-        reference.addValueEventListener(new ValueEventListener() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String id = sharedPreferences.getString("customer_id", "Trần Công Trí");
+//        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("customers").child(id);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
@@ -60,6 +62,19 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        check();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        check();
     }
 
     @Override

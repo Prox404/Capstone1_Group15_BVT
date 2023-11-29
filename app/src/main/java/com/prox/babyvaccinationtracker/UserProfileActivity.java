@@ -62,6 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
             editor.clear();
             editor.apply();
             Intent intent = new Intent(UserProfileActivity.this, AuthActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
     }

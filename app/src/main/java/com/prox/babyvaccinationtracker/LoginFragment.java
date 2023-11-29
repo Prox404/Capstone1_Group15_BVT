@@ -119,8 +119,8 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             String id = mAuth.getCurrentUser().getUid();
                             Log.i("LOGINGGGGGGG", id);
-                            DatabaseReference checkblacklist = FirebaseDatabase.getInstance().getReference("BlackList").child("Customers").child(id);
-                            checkblacklist.addValueEventListener(new ValueEventListener() {
+                            DatabaseReference checkblacklist = FirebaseDatabase.getInstance().getReference("BlackList").child("customers").child(id);
+                            checkblacklist.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if(!snapshot.exists()){
@@ -204,6 +204,7 @@ public class LoginFragment extends Fragment {
                                     }
                                     else {
                                         Toast.makeText(context, "Tài khoản này đã bị chặn",Toast.LENGTH_LONG).show();
+                                        mAuth.signOut();
                                     }
                                 }
 
