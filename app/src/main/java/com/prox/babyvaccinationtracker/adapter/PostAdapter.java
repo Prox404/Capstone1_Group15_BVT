@@ -1,5 +1,8 @@
 package com.prox.babyvaccinationtracker.adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +26,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.prox.babyvaccinationtracker.Activity_Edit_post;
 import com.prox.babyvaccinationtracker.R;
 import com.prox.babyvaccinationtracker.model.Comment;
 import com.prox.babyvaccinationtracker.model.Post;
+import com.prox.babyvaccinationtracker.model.Report;
 import com.prox.babyvaccinationtracker.model.User;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +59,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.post_item_layout, parent, false);
         return new PostViewHolder(view);
     }
 
@@ -75,7 +82,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         if (postItem.getUser().getUser_avatar() != null)
             Picasso.get().load(postItem.getUser().getUser_avatar()).into(holder.userAvatar);
         if (postItem.getImage_url() != null) {
-            ImageCarouselAdapter postImageAdapter = new ImageCarouselAdapter(holder.viewPagerImage.getContext(), postItem.getImage_url());
+            ImageCarouselAdapter postImageAdapter = new ImageCarouselAdapter
+                    (holder.viewPagerImage.getContext(),
+                            postItem.getImage_url());
+
             holder.viewPagerImage.setAdapter(postImageAdapter);
         }
         if (postItem.getLiked_users() != null) {
@@ -106,9 +116,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     commentList.add((Comment) commentObject);
                 }
             }
-            DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
-            commentAdapter = new CommentAdapter(commentList, commentReference, user);
-            holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
+            DatabaseReference commentReference = FirebaseDatabase.getInstance()
+                    .getReference("posts")
+                    .child(postItem.getPost_id())
+                    .child("comments");
+
+            commentAdapter = new CommentAdapter
+                    (commentList, commentReference, user, postItem);
+            holder.recylerViewComments.setLayoutManager
+                    (new LinearLayoutManager(holder.recylerViewComments.getContext()));
             holder.recylerViewComments.setAdapter(commentAdapter);
         }
 
@@ -129,7 +145,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     super.onPageScrollStateChanged(state);
                     if (!visitors.containsKey(user_id)) {
                         Log.i("VISITORS", visitors + "");
-                        postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                        postReference.child(postItem.getPost_id())
+                                .child("Visitors")
+                                .child(user_id).setValue(true);
                     }
                 }
             });
@@ -151,11 +169,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     liked_users.add(user_id);
                 }
                 postItem.setLiked_users(liked_users);
-                postReference.child(postItem.getPost_id()).child("liked_users").setValue(liked_users);
-                Log.i("VISITORS", visitors + "");
+                postReference.child(postItem.getPost_id())
+                        .child("liked_users")
+                        .setValue(liked_users);
+
                 if (!visitors.containsKey(user_id)) {
                     Log.i("VISITORS", visitors + "");
-                    postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                    postReference
+                            .child(postItem.getPost_id())
+                            .child("Visitors")
+                            .child(user_id).setValue(true);
                 }
             }
         });
@@ -169,7 +192,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     Comment comment = new Comment();
                     comment.setContent(commentContent);
                     comment.setUser(user);
-                    DatabaseReference commentRef = postReference.child(postItem.getPost_id()).child("comments").push();
+                    DatabaseReference commentRef = postReference
+                            .child(postItem.getPost_id())
+                            .child("comments").push();
+
                     commentRef.setValue(comment).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Log.i("Comment", "onClick: Comment success");
@@ -177,9 +203,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                             Log.i("Comment", "onClick: Comment failed");
                         }
                     });
+
                     holder.editTextCommentContent.setText("");
                     if (!visitors.containsKey(user_id)) {
-                        postReference.child(postItem.getPost_id()).child("Visitors").child(user_id).setValue(true);
+                        postReference
+                                .child(postItem.getPost_id())
+                                .child("Visitors")
+                                .child(user_id).setValue(true);
                     }
                 }
 
@@ -188,39 +218,42 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.imageEditPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id_post = postItem.getPost_id();
                 if(postItem.getUser().getUser_id().equals(user_id)){
-                    Showmenuedit(view,id_post);
+                    Showmenuedit(view,postItem);
                 }
                 else {
-                    report_menu(view,id_post);
+                    report_menu(view,postItem);
                 }
             }
         });
     }
 
-    private void Showmenuedit(View view, String id_post){
+    private void Showmenuedit(View view, Post post_edit){
+        String id_post = post_edit.getPost_id();
         PopupMenu MENU = new PopupMenu(view.getContext(), view);
         MENU.getMenuInflater().inflate(R.menu.editpost_menu, MENU.getMenu());
         MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                Log.i("IDDDD", id+" "+menuItem.getItemId());
                 if (id == R.id.itemdeletepost) {
-                    // thêm xóa hồi nãy làm bên admin
                     DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
-                    EditContent.child(id_post).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    EditContent.child(id_post)
+                            .setValue(null)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-
+                            Toast.makeText(view.getContext(),
+                                    " Đã xóa bài viết thành công",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Toast.makeText(view.getContext(), " Đã xóa bài viết thành công", Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (id == R.id.itemeditpost_edit) {
                     //todo cập nhập bài viết
-                    Toast.makeText(view.getContext(), " Đã cập nhật bài viết thành công", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), Activity_Edit_post.class);
+                    intent.putExtra("Post", post_edit);
+                    view.getContext().startActivity(intent);
                     return true;
                 }
                 return false;
@@ -228,7 +261,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         });
         MENU.show();
     }
-    private void report_menu(View view, String id_post){
+    private void report_menu(View view, Post post){
         PopupMenu MENU = new PopupMenu(view.getContext(), view);
         MENU.getMenuInflater().inflate(R.menu.report_menu, MENU.getMenu());
         MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -236,13 +269,46 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 if(id == R.id.menu_report_item){
-                    DatabaseReference ReportContent = FirebaseDatabase.getInstance().getReference("posts");
-                    ReportContent.child(id_post).child("Report").child(user_id).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    View report_view = LayoutInflater.from
+                            (view.getContext())
+                            .inflate(R.layout.report_fragment,null, false );
+                    TextView edt_report_reason = report_view.findViewById(R.id.edt_report_reason);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setView(report_view)
+                            .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(view.getContext(),"Đã báo cáo bài viết này", Toast.LENGTH_LONG).show();
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    }).setPositiveButton("Báo cáo", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DatabaseReference ReportContent = FirebaseDatabase
+                                    .getInstance().getReference("Report");
+                            String str_report = edt_report_reason.getText().toString();
+
+                            if(!str_report.isEmpty()){
+                                Report report = new Report();
+                                report.setType_report(1);
+                                post.setComments(null); // đặt lại comment
+                                report.setPost(post);
+                                report.setReason(str_report);
+                                ReportContent.push()
+                                        .setValue(report)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                        Toast.makeText(view.getContext(),
+                                                "Báo cáo thành công",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }
                         }
                     });
+                    builder.create().show();
                     return true;
                 }
                 return false;
@@ -289,7 +355,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         ImageView userAvatar, imageViewHeart,imageViewComment,imageEditPost;
         ViewPager2 viewPagerImage;
         LinearLayout likeContainer, commentContainer;
-        SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("user", itemView.getContext().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = itemView.getContext()
+                .getSharedPreferences("user", itemView.getContext().MODE_PRIVATE);
         EditText editTextCommentContent;
         Button buttonSendComment;
         RecyclerView recylerViewComments;

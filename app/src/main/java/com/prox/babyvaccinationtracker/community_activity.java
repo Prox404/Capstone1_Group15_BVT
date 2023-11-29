@@ -161,7 +161,10 @@ public class community_activity extends AppCompatActivity {
                 String hashtag = editTextHashtag.getText().toString();
                 ArrayList<String> hashtags = new ArrayList<>();
                 if (content.isEmpty()) {
-                    Toast.makeText(community_activity.this, "Nội dung không được để trống", Toast.LENGTH_SHORT).show();
+                    Toast.makeText
+                            (community_activity.this,
+                                    "Nội dung không được để trống",
+                                    Toast.LENGTH_SHORT).show();
                 } else {
                     if (hashtag.length() > 0) {
                         hashtags = getHashtag(hashtag);
@@ -464,7 +467,9 @@ public class community_activity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult
+            (int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -473,6 +478,7 @@ public class community_activity extends AppCompatActivity {
                 Toast.makeText(this, "Hãy cấp quyền chọn ảnh!", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
     @Override
@@ -496,7 +502,9 @@ public class community_activity extends AppCompatActivity {
     }
 
     private String getRealPathFromUri(Uri imageUri, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+        Cursor cursor = activity
+                .getContentResolver()
+                .query(imageUri, null, null, null, null);
         if (cursor == null) {
             return imageUri.getPath();
         } else {

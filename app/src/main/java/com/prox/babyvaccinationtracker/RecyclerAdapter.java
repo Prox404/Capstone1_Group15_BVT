@@ -22,10 +22,8 @@ import java.util.ArrayList;
 
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-
     private ArrayList<Uri> uriArrayList;
     private Context context;
-
 
     private OnItemClickListener onItemClickListener;
 
@@ -54,10 +52,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         Uri uri =  uriArrayList.get(position);
         String url = String.valueOf(uri);
-        if(url.startsWith("/mnt/shared")){
-            holder.imageView.setImageURI(uri);
-        }
-        else {
+        if(url.startsWith("http://res.cloudinary.com/") || url.startsWith("https://res.cloudinary.com/")){
             Picasso.get().load(url).error(R.drawable.ic_launcher_foreground).into(holder.imageView, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -70,12 +65,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 }
             });
         }
-
+        else {
+            holder.imageView.setImageURI(uri);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(uri);
+
                 }
             }
         });
