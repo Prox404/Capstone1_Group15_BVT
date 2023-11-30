@@ -1,6 +1,8 @@
 package com.prox.babyvaccinationtracker;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +45,14 @@ public class search_vaccination extends AppCompatActivity {
     private List<Vaccines> mlistvaccine = new ArrayList<>();
     GridView gridViewSearchVaccine;
 
+    String customer_id = "";
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getdatafromrealtimedatabase();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +64,7 @@ public class search_vaccination extends AppCompatActivity {
         vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);
 
         mVaccineadapter = new vaccineadapter(this, mlistvaccine);
-        gridViewSearchVaccine.setAdapter(new vaccineadapter(this, mlistvaccine));
+        gridViewSearchVaccine.setAdapter(mVaccineadapter);
         getdatafromrealtimedatabase();
         btntimkiem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +72,9 @@ public class search_vaccination extends AppCompatActivity {
                 getdatafromrealtimedatabase();
             }
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        customer_id = sharedPreferences.getString("customer_id", "");
     }
 
     private void getdatafromrealtimedatabase() {
@@ -85,9 +98,18 @@ public class search_vaccination extends AppCompatActivity {
                         Vaccines vaccine = vaccines.get(key);
                         vaccine.setVaccine_id(key);
                         HashMap<String, String> additional_info = new HashMap<>();
-                        additional_info.put("center_id", vaccine_center.getCenter_id());
+                        additional_info.put("center_id", datasnapshot.getKey());
                         additional_info.put("center_name", vaccine_center.getCenter_name());
                         additional_info.put("center_address", vaccine_center.getCenter_address());
+
+                        if(vaccine.getUser_cares().containsKey(customer_id)){
+                            additional_info.put("is_user_care", "true" );
+                        }
+                        else {
+                            additional_info.put("is_user_care", "false" );
+                        }
+
+
                         vaccine.setAdditionInformation(additional_info);
                         if (removeDiacritics(vaccine.getVaccine_name().toLowerCase(Locale.getDefault())).contains(removeDiacritics(searchTerm.toLowerCase(Locale.getDefault()))) && !vaccine.isDeleted()) {
                             mlistvaccine.add(vaccine);
@@ -95,7 +117,6 @@ public class search_vaccination extends AppCompatActivity {
                     }
                 }
                 mVaccineadapter.notifyDataSetChanged();
-                gridViewSearchVaccine.setAdapter(new vaccineadapter(search_vaccination.this, mlistvaccine));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

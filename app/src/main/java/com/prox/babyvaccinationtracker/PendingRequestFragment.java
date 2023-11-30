@@ -57,7 +57,7 @@ public class PendingRequestFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pending_request, container, false);
         recycleViewPendingRequest = view.findViewById(R.id.recycleViewPendingRequest);
-        timelineContainer = view.findViewById(R.id.timelineContainer);
+        //timelineContainer = view.findViewById(R.id.timelineContainer);
 
         context = container != null ? container.getContext() : null;
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -77,8 +77,8 @@ public class PendingRequestFragment extends Fragment {
                         vaccination_registrations.add(vaccination_registration);
                     }
                 }
-                if (vaccination_registrations.size() == 0)
-                    timelineContainer.setVisibility(View.GONE);
+//                if (vaccination_registrations.size() == 0)
+//                    timelineContainer.setVisibility(View.GONE);
                 Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
                 PendingRequestAdapter pendingRequestAdapter = new PendingRequestAdapter( getContext() , vaccination_registrations);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

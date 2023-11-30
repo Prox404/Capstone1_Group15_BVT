@@ -49,9 +49,6 @@ public class Schedule_an_injection extends AppCompatActivity {
     EditText schedule_edt_date_vaccine, schedule_edt_vaccine_center;
     EditText schedule_edt_tinh, schedule_edt_quan, schedule_edt_phuong;
     EditText schedule_edt_type_vaccine;
-
-
-    String id = "IMdLT6gpalXk3aJTDWlndkye2tN2";
     Customer customer;
     Baby babyhavebeenchoose = new Baby();
 
@@ -59,6 +56,7 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     Vaccine_center vaccineCenter = new Vaccine_center();
 
+    boolean take_care_vaccine = true;
 
     ArrayList<Baby> babies = new ArrayList<>();
 
@@ -71,6 +69,7 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     final int VACCINE_CENTER_NAME = 1;
     final int VACCINE_CHOOSE = 5;
+    final int VACCINE_CHOOSE_2 = 6;
     final int VACCINE_PROVINCES = 2;
     final int VACCINE_DISTRICT = 3;
     final int VACCINE_WARD = 4;
@@ -114,6 +113,17 @@ public class Schedule_an_injection extends AppCompatActivity {
         schedule_edt_type_vaccine = findViewById(R.id.schedule_edt_type_vaccine);
         schedule_edt_type_vaccine.setFocusable(false);
         schedule_edt_type_vaccine.setClickable(false);
+
+        schedule_edt_type_vaccine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(take_care_vaccine){
+                    Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2_2.class);
+                    intent.putExtra("baby_id", baby_id);
+                    startActivityForResult(intent, VACCINE_CHOOSE_2);
+                }
+            }
+        });
 
         // chọn ngày
         Calendar currentDate = Calendar.getInstance();
@@ -166,7 +176,7 @@ public class Schedule_an_injection extends AppCompatActivity {
         schedule_btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (schedule_edt_vaccine_center.length() == 0) {
+                if (vaccineCenter == null) {
                     Toast.makeText(Schedule_an_injection.this, "Phải chọn trung tâm tiêm chủng", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -208,6 +218,7 @@ public class Schedule_an_injection extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VACCINE_CENTER_NAME) {
             if (resultCode == RESULT_OK) {
+                take_care_vaccine = false;
                 schedule_edt_type_vaccine.setText("");
                 vaccineCenter = (Vaccine_center) data.getSerializableExtra("selected_vaccine"); // đối tượng vaccine center được chọn
                 HashMap<String, Vaccines> vaccines = vaccineCenter.getVaccines();
@@ -215,23 +226,18 @@ public class Schedule_an_injection extends AppCompatActivity {
                 schedule_edt_vaccine_center.setText(vaccineCenter.getCenter_name());
                 // Todo không hiển thị trung tâm không có vắc-xin
                 Log.i("VVAAAAANINEIE", vaccineCenter.toString());
-                schedule_edt_type_vaccine.setClickable(false);
-                if (vaccineCenter == null) {
-                    schedule_edt_type_vaccine.setClickable(false);
-                } else if (vaccineCenter.getVaccines() == null) {
-                    schedule_edt_type_vaccine.setClickable(false);
-                }
+
                 schedule_edt_type_vaccine.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (vaccines != null) {
-                            Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2.class);
-                            intent.putExtra("Vaccines", vaccines);
-                            intent.putExtra("baby_id", baby_id);
-                            startActivityForResult(intent, VACCINE_CHOOSE);
-                        } else {
-                            Toast.makeText(Schedule_an_injection.this, "Bệnh viện này chưa có vắc-xin", Toast.LENGTH_LONG).show();
-                        }
+                            if (vaccines != null) {
+                                Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2.class);
+                                intent.putExtra("Vaccines", vaccines);
+                                intent.putExtra("baby_id", baby_id);
+                                startActivityForResult(intent, VACCINE_CHOOSE);
+                            } else {
+                                Toast.makeText(Schedule_an_injection.this, "Bệnh viện này chưa có vắc-xin", Toast.LENGTH_LONG).show();
+                            }
                     }
                 });
             }
@@ -240,7 +246,18 @@ public class Schedule_an_injection extends AppCompatActivity {
                 vaccineschoose = (Vaccines) data.getSerializableExtra("vaccine_choose");
                 schedule_edt_type_vaccine.setText(vaccineschoose.getVaccine_name());
             }
-        } else if (requestCode == VACCINE_PROVINCES) {
+        }
+        else if(requestCode == VACCINE_CHOOSE_2){
+            if(resultCode == RESULT_OK){
+                take_care_vaccine = true;
+                vaccineCenter = (Vaccine_center) data.getSerializableExtra("selected_vaccine");
+                vaccineschoose = (Vaccines) data.getSerializableExtra("vaccine_choose");
+                schedule_edt_type_vaccine.setText(vaccineschoose.getVaccine_name());
+                schedule_edt_vaccine_center.setText(vaccineCenter.getCenter_name());
+            }
+
+        }
+        else if (requestCode == VACCINE_PROVINCES) {
             if (resultCode == RESULT_OK) {
                 // đặt lại quận phường
                 schedule_edt_quan.setText("");

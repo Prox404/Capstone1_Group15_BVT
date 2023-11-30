@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,9 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class information_vaccine extends AppCompatActivity {
-    private ImageView large_image;
+    private ImageView large_image,imageView_care;
         private RecyclerView smallImageRecyclerView;
-        private TextView txt_ten;
+        private TextView txt_ten,tv_detail_deleted;
         private TextView txt_hieuqua;
         private TextView txt_phanungsautiem;
         private TextView txt_nguongoc;
@@ -43,7 +46,13 @@ public class information_vaccine extends AppCompatActivity {
         private image_adapter imageAdapter;
         ArrayList<Uri> vacimage = new ArrayList<>();
         Vaccines vaccine;
-//        String id = "-NgF6FMuUzxw2hjRiwu6";
+        String Vaccine_center_id = "";
+        String customer_id = "";
+        String vaccine_id = "";
+
+        boolean care = false;
+
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,31 @@ public class information_vaccine extends AppCompatActivity {
         txt_donvi = findViewById(R.id.txt_donvi);
         txt_hansudung = findViewById(R.id.txt_hansudung);
         txt_gia = findViewById(R.id.txt_gia);
+        tv_detail_deleted = findViewById(R.id.tv_detail_deleted);
+
+        imageView_care = findViewById(R.id.imageView_care);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        customer_id = sharedPreferences.getString("customer_id", "");
+
+
+
+
+        imageView_care.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!care){
+                    reference.setValue(true);
+                    care = true;
+                    imageView_care.setImageResource(R.drawable.ic_heart_solid);
+                }else {
+                    reference.setValue(null);
+                    care = false;
+                    imageView_care.setImageResource(R.drawable.ic_heart);
+                }
+
+            }
+        });
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -78,6 +112,34 @@ public class information_vaccine extends AppCompatActivity {
             txt_donvi.setText(vaccine.getUnit());
             txt_hansudung.setText(vaccine.getDate_of_entry());
             txt_gia.setText(vaccine.getPrice());
+
+            if(vaccine.isDeleted()){
+                tv_detail_deleted.setText("Đã ngừng bán");
+
+            }
+            else{
+                tv_detail_deleted.setText("Đang bán");
+            }
+
+            if(vaccine.getAdditionInformation().get("is_user_care").equals("true")){
+                care = true;
+                imageView_care.setImageResource(R.drawable.ic_heart_solid);
+            }
+            else {
+                care = false;
+                imageView_care.setImageResource(R.drawable.ic_heart);
+            }
+
+            Log.i("Information_ADDITION", vaccine.getAdditionInformation()+"");
+            Vaccine_center_id = vaccine.getAdditionInformation().get("center_id");
+            reference = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child("Vaccine_center")
+                    .child(Vaccine_center_id)
+                    .child("vaccines")
+                    .child(vaccine.getVaccine_id())
+                    .child("user_cares")
+                    .child(customer_id);
 
             for(String a : vaccine.getVaccine_image()){
                 Uri b = Uri.parse(a);

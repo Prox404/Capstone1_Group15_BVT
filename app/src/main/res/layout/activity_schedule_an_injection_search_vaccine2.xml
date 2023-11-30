@@ -36,7 +36,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_View_take_care_header_scheulde"
         style="@style/Widget.AppCompat.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,7 +65,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:text="Huỷ lọc" />
+            android:text="Huỷ lọc"
+            android:visibility="visible" />
     </LinearLayout>
 
     <Spinner
