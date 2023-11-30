@@ -60,6 +60,5 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, login_for_vaccine_center.class);
         startActivity(intent);
-        finish();
     }
 }

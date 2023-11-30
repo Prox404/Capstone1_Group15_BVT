@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -49,10 +50,12 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         buttonLogout.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
             Intent intent = new Intent(UserProfileActivity.this, login_for_vaccine_center.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
     }

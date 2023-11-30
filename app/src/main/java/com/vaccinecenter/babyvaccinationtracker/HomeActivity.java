@@ -53,10 +53,10 @@ public class HomeActivity extends AppCompatActivity {
     Boolean check = false;
 
     void check() {
-
-        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_centers").child(id);
-        reference.addValueEventListener(new ValueEventListener() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        String id = sharedPreferences.getString("center_id","");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -75,12 +75,30 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        check();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        check();
+    }
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        check();
 
         imageViewAvatar = findViewById(R.id.imageViewAvatar);
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
@@ -116,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        check();
+
 
 
         vaccinesContainer.setOnClickListener(new View.OnClickListener() {
