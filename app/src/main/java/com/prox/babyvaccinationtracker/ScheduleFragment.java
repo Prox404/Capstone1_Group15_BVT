@@ -31,7 +31,7 @@ import java.util.List;
 
 public class ScheduleFragment extends Fragment {
 
-    LinearLayout pendingInjection, scheduleInjection;
+    LinearLayout pendingInjection, scheduleInjection,timelineContainer;
     RecyclerView recyclerViewTimeline;
     Context context;
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
@@ -63,6 +63,7 @@ public class ScheduleFragment extends Fragment {
         scheduleInjection = view.findViewById(R.id.scheduleInjection);
         pendingInjection = view.findViewById(R.id.pendingInjection);
         recyclerViewTimeline = view.findViewById(R.id.recyclerViewTimeline);
+        timelineContainer = view.findViewById(R.id.timelineContainer);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String id_vaccine_center = sharedPreferences.getString("customer_id","");
@@ -72,20 +73,27 @@ public class ScheduleFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                vaccination_registrations.clear();
-                Log.i("Pending", "onDataChange: " + snapshot.getChildrenCount());
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
-                    if(vaccination_registration.getStatus() == 0){
-                        vaccination_registration.setRegist_id(dataSnapshot.getKey());
-                        vaccination_registrations.add(vaccination_registration);
+                if(snapshot.exists()){
+                    vaccination_registrations.clear();
+                    Log.i("Pending", "onDataChange: " + snapshot.getChildrenCount());
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
+                        if(vaccination_registration.getStatus() == 0){
+                            vaccination_registration.setRegist_id(dataSnapshot.getKey());
+                            vaccination_registrations.add(vaccination_registration);
+                        }
                     }
+                    Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
+                    if(vaccination_registrations.size() == 0){
+                        timelineContainer.setVisibility(View.GONE);
+                    }
+                    RegistrationTimelineAdapter pendingRequestAdapter = new RegistrationTimelineAdapter( getContext() , vaccination_registrations);
+                    recyclerViewTimeline.setAdapter(pendingRequestAdapter);
+                    recyclerViewTimeline.setLayoutManager(new LinearLayoutManager(context));
+                }else {
+                    timelineContainer.setVisibility(View.GONE);
                 }
-                Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
-                RegistrationTimelineAdapter pendingRequestAdapter = new RegistrationTimelineAdapter( getContext() , vaccination_registrations);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-                recyclerViewTimeline.setAdapter(pendingRequestAdapter);
-                recyclerViewTimeline.setLayoutManager(linearLayoutManager);
+
             }
 
             @Override

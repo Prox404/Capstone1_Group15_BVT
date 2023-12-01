@@ -18,16 +18,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.prox.babyvaccinationtracker.model.Vaccine_center;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class information_vaccine extends AppCompatActivity {
     private ImageView large_image,imageView_care;
@@ -52,7 +58,12 @@ public class information_vaccine extends AppCompatActivity {
 
         boolean care = false;
 
-    DatabaseReference reference;
+    DatabaseReference reference_Favorite;
+    Query query_Favorite;
+    String key_Favorite = "";
+
+    Vaccine_center center_f;
+    Vaccines vaccine_f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +95,17 @@ public class information_vaccine extends AppCompatActivity {
         imageView_care.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!care){
-                    reference.setValue(true);
-                    care = true;
-                    imageView_care.setImageResource(R.drawable.ic_heart_solid);
-                }else {
-                    reference.setValue(null);
+                if(care == true ){
+                    reference_Favorite.child(key_Favorite).setValue(null);
                     care = false;
                     imageView_care.setImageResource(R.drawable.ic_heart);
+                }
+                else {
+                    key_Favorite = reference_Favorite.push().getKey();
+                    Log.i("KEYYYY", key_Favorite);
+                    reference_Favorite.child(key_Favorite).child("vaccines").setValue(vaccine_f);
+                    care = true;
+                    imageView_care.setImageResource(R.drawable.ic_heart_solid);
                 }
 
             }
@@ -121,25 +135,59 @@ public class information_vaccine extends AppCompatActivity {
                 tv_detail_deleted.setText("Đang bán");
             }
 
-            if(vaccine.getAdditionInformation().get("is_user_care").equals("true")){
-                care = true;
-                imageView_care.setImageResource(R.drawable.ic_heart_solid);
-            }
-            else {
-                care = false;
-                imageView_care.setImageResource(R.drawable.ic_heart);
-            }
 
-            Log.i("Information_ADDITION", vaccine.getAdditionInformation()+"");
-            Vaccine_center_id = vaccine.getAdditionInformation().get("center_id");
-            reference = FirebaseDatabase.getInstance()
-                    .getReference("users")
-                    .child("Vaccine_center")
-                    .child(Vaccine_center_id)
-                    .child("vaccines")
-                    .child(vaccine.getVaccine_id())
-                    .child("user_cares")
-                    .child(customer_id);
+            vaccine_id = vaccine.getVaccine_id();
+            center_f = vaccine.getVaccine_center_owner();
+            vaccine_f = vaccine;
+
+            center_f.setVaccines(null);
+            vaccine_f.setVaccine_center_owner(center_f);
+
+            reference_Favorite = FirebaseDatabase.getInstance().getReference("Favorite").child(customer_id);
+            query_Favorite = reference_Favorite.orderByChild("vaccines/vaccine_id").equalTo(vaccine_id);
+
+            query_Favorite.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        HashMap<String, Objects> a = (HashMap<String, Objects>) snapshot.getValue();
+                        key_Favorite = a.keySet().toString();
+                        key_Favorite = key_Favorite.replace("[","").replace("]","");
+                        Log.i("KEYYYY", key_Favorite+"");
+                        care = true;
+                        imageView_care.setImageResource(R.drawable.ic_heart_solid);
+                    }
+                    else {
+                        care = false;
+                        imageView_care.setImageResource(R.drawable.ic_heart);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+//            if(vaccine.getAdditionInformation().get("is_user_care").equals("true")){
+//                care = true;
+//                imageView_care.setImageResource(R.drawable.ic_heart_solid);
+//            }
+//            else {
+//                care = false;
+//                imageView_care.setImageResource(R.drawable.ic_heart);
+//            }
+
+//            Log.i("Information_ADDITION", vaccine.getAdditionInformation()+"");
+//            Vaccine_center_id = vaccine.getAdditionInformation().get("center_id");
+//            reference = FirebaseDatabase.getInstance()
+//                    .getReference("users")
+//                    .child("Vaccine_center")
+//                    .child(Vaccine_center_id)
+//                    .child("vaccines")
+//                    .child(vaccine.getVaccine_id())
+//                    .child("user_cares")
+//                    .child(customer_id);
 
             for(String a : vaccine.getVaccine_image()){
                 Uri b = Uri.parse(a);

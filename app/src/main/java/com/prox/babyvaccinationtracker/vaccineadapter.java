@@ -49,8 +49,8 @@ public class vaccineadapter extends ArrayAdapter<Vaccines> {
         txtXuatXu.setText(vaccines.getOrigin());
         textViewAddress.setVisibility(View.VISIBLE);
         textViewVaccineCenterName.setVisibility(View.VISIBLE);
-        textViewAddress.setText(vaccines.getAdditionInformation().get("center_address"));
-        textViewVaccineCenterName.setText(vaccines.getAdditionInformation().get("center_name"));
+        textViewAddress.setText(vaccines.getVaccine_center_owner().getCenter_address());
+        textViewVaccineCenterName.setText(vaccines.getVaccine_center_owner().getCenter_name());
         String imageUrl = vaccines.getVaccine_image().get(0);
         Log.i("image url", "getView: " + imageUrl);
         imageUrl = imageUrl.replace("https", "http");

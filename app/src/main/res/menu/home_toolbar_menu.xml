@@ -6,4 +6,10 @@
         android:icon="@drawable/ic_notifications"
         android:title="Thông báo"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_vaccine_care"
+        android:icon="@drawable/ic_heart_solid"
+        android:iconTint="#4B4B4B"
+        android:title="Các vắc-xin trong giỏ hàng"
+        app:showAsAction="always" />
 </menu>

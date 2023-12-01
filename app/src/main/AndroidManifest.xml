@@ -92,6 +92,9 @@
             android:name=".search_vaccination"
             android:exported="true" />
         <activity
+            android:name=".search_care_vaccines"
+            android:exported="true" />
+        <activity
             android:name=".VaccinationCertificateActivity"
             android:exported="false" />
         <activity

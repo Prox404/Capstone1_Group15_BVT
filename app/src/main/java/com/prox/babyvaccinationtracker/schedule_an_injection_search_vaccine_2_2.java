@@ -54,6 +54,12 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
     Spinner spinnerOrigin;
     List<String> vaccineOrigin = new ArrayList<>();
     List<Vaccines> vaccines_care = new ArrayList<>();
+    List<Vaccines> vaccines_filter = new ArrayList<>();
+    List<Vaccines> vaccines = new ArrayList<>();
+
+    List<Regimen> regimenList = new ArrayList<>();
+    Date closestDate = null;
+    String closestVaccineType = "";
 
     String customer_id = "";
 
@@ -69,11 +75,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
         textViewMessage = findViewById(R.id.textViewMessage);
 
         text_View_take_care_header_scheulde = findViewById(R.id.text_View_take_care_header_scheulde);
-        text_View_take_care_header_scheulde.setText("Các vắc-xin hiện bạn đang quan tâm");
+        text_View_take_care_header_scheulde.setText("Các vắc-xin đang trong giỏ hàng");
 
-        buttonClearFilter.setVisibility(View.GONE);
 
-        SharedPreferences.Editor a = getSharedPreferences("user", Context.MODE_PRIVATE).edit();
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         customer_id = sharedPreferences.getString("customer_id", "");
 
@@ -93,46 +97,89 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this,vaccines_care );
             schedule_list_vaccine.setAdapter(adapter);
 
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center");
-            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            Log.i("select vaccine", "onCreate: baby_id: " + baby_id);
+            DatabaseReference vaccinationRegimenReference = FirebaseDatabase.getInstance().getReference("vaccination_regimen").child(baby_id);
+            vaccinationRegimenReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot s : snapshot.getChildren()){
-                        Vaccine_center vaccine_center = s.getValue(Vaccine_center.class);
-                        vaccine_center.setCenter_id(s.getKey());
-
-                        HashMap<String, Vaccines> vaccinesAll = vaccine_center.getVaccines();
-                        if(vaccinesAll != null){
-                            for(Map.Entry<String,Vaccines> vaccine_item : vaccinesAll.entrySet()){
-                                if(vaccine_item.getValue().getUser_cares().containsKey(customer_id)){
-                                    Vaccines vaccines1 = vaccine_item.getValue();
-                                    vaccines1.setVaccine_id(vaccine_item.getKey());
-                                    vaccines1.setVaccine_center_owner(vaccine_center);
-                                    vaccines_care.add(vaccines1);
+                    regimenList.clear();
+                    Date currentDate = new Date();
+                    closestDate = null;
+                    for (DataSnapshot regimenSnapshot : snapshot.getChildren()) {
+                        Regimen regimen = regimenSnapshot.getValue(Regimen.class);
+                        Date regimenDate = regimen.getDate();
+                        if (regimenDate.before(currentDate) || regimenDate.equals(currentDate)) {
+                            if (closestDate == null || closestDate.before(regimenDate)) {
+                                if (!regimen.isVaccinated()) {
+                                    closestDate = regimenDate;
+                                    closestVaccineType = regimen.getVaccination_type();
                                 }
                             }
                         }
-                        adapter.notifyDataSetChanged();
-                        vaccine_origin_fuc(vaccines_care);
-                        ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(schedule_an_injection_search_vaccine_2_2.this, android.R.layout.simple_spinner_item, vaccineOrigin);
-                        adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerOrigin.setAdapter(adapterOrigin);
-
-                        spinnerOrigin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                // Lấy xuất xứ được chọn từ Spinner
-                                String selectedOrigin = (String) adapterView.getItemAtPosition(i);
-                                // Lọc danh sách vaccine dựa trên xuất xứ
-                                filterVaccineByOrigin(selectedOrigin);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                            }
-                        });
+                        regimenList.add(regimen);
                     }
+                    Log.i("select vaccine", "onDataChange: " + closestVaccineType);
+                    if (!closestVaccineType.isEmpty()) {
+                        textViewMessage = findViewById(R.id.textViewMessage);
+                        textViewMessage.setVisibility(View.VISIBLE);
+                        String vaccineName = "";
+                        switch (closestVaccineType) {
+                            case "tuberculosis":
+                                vaccineName = "Lao";
+                                break;
+                            case "hepatitis_b":
+                                vaccineName = "Viêm gan B";
+                                break;
+                            case "diphtheria_whooping_cough_poliomyelitis":
+                                vaccineName = "Bạch hầu, ho gà, uốn ván";
+                                break;
+                            case "paralysis":
+                                vaccineName = "Bại liệt";
+                                break;
+                            case "pneumonia_hib_meningitis":
+                                vaccineName = "Viêm phổi, viêm màng não mủ do Hib";
+                                break;
+                            case "pneumonia_meningitis_otitis_media_caused_by_streptococcus":
+                                vaccineName = "Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn";
+                                break;
+                            case "meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_b_c":
+                                vaccineName = "Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C";
+                                break;
+                            case "influenza":
+                                vaccineName = "Cúm";
+                                break;
+                            case "measles":
+                                vaccineName = "Sởi";
+                                break;
+                            case "meningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_a_c_w_y":
+                                vaccineName = "Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y";
+                                break;
+                            case "japanese_encephalitis":
+                                vaccineName = "Viêm não Nhật Bản";
+                                break;
+                            case "measles_mumps_rubella":
+                                vaccineName = "Sởi, Quai bị, Rubella";
+                                break;
+                            case "chickenpox":
+                                vaccineName = "Thủy đậu";
+                                break;
+                            case "hepatitis_a":
+                                vaccineName = "Viêm gan A";
+                                break;
+                            case "anthrax":
+                                vaccineName = "Bệnh tả ";
+                                break;
+                            case "hepatitis_a_b":
+                                vaccineName = "Viêm gan A + B";
+                                break;
+                            case "tetanus":
+                                vaccineName = "Thương hàn";
+                                break;
+                        }
+                        textViewMessage.setText("Gợi ý những loại vaccine phù hợp với bé: " + vaccineName);
+
+                    }
+                    Log.i("Home", "onDataChange: " + regimenList.size());
                 }
 
                 @Override
@@ -140,6 +187,45 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
 
                 }
             });
+
+            DatabaseReference reference_Favorite = FirebaseDatabase.getInstance().getReference("Favorite").child(customer_id);
+            reference_Favorite.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                        Vaccines vaccines = snapshot1.child("vaccines").getValue(Vaccines.class);
+                        vaccines_care.add(vaccines);
+                    }
+                    adapter.notifyDataSetChanged();
+                    filterVaccines();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
+            adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerOrigin.setAdapter(adapterOrigin);
+
+            spinnerOrigin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    // Lấy xuất xứ được chọn từ Spinner
+                    String selectedOrigin = (String) adapterView.getItemAtPosition(i);
+                    Log.i("selectedOrigin", ""+selectedOrigin);
+                    // Lọc danh sách vaccine dựa trên xuất xứ
+                    filterVaccineByOrigin(selectedOrigin);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
         }
         schedule_edt_search_vaccine2.addTextChangedListener(new TextWatcher() {
             @Override
@@ -158,6 +244,17 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             }
         });
 
+        buttonClearFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_care);
+                schedule_list_vaccine.setAdapter(adapter);
+                schedule_edt_search_vaccine2.setText("");
+                textViewMessage.setVisibility(View.GONE);
+                vaccines = new ArrayList<>(vaccines_care);
+            }
+        });
+
         schedule_list_vaccine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -166,8 +263,6 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
 
                 vaccineCenter.setVaccines(null);
                 vaccines1.setVaccine_center_owner(null);
-                vaccines1.setUser_cares(null);
-
 
                 Intent intent1 = new Intent();
                 intent1.putExtra("vaccine_choose", vaccines1);
@@ -177,18 +272,28 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             }
         });
     }
-    void vaccine_origin_fuc(List<Vaccines> vaccines_care){
-        vaccineOrigin.clear();
+
+    void filterVaccines(){
+        vaccines_filter = new ArrayList<>();
         vaccineOrigin.add("Tất cả");
-        for(Vaccines a : vaccines_care){
-            vaccineOrigin.add(a.getOrigin());
+        for (Vaccines a  : vaccines_care) {
+            if (!vaccineOrigin.contains(a.getOrigin())) {
+                vaccineOrigin.add(a.getOrigin());
+            }
+            if (a.getVac_effectiveness().equals(closestVaccineType)) {
+                vaccines_filter.add(a);
+            }
         }
+        vaccines = new ArrayList<>(vaccines_filter);
+        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_filter);
+        schedule_list_vaccine.setAdapter(adapter);
     }
+
 
     private void filterVaccineByOrigin(String selectedOrigin) {
         if (!selectedOrigin.isEmpty() && !selectedOrigin.equals("Tất cả")) {
             List<Vaccines> filteredList_ = new ArrayList<>();
-            for (Vaccines vaccine : vaccines_care) {
+            for (Vaccines vaccine : vaccines) {
                 if (vaccine.getOrigin().equals(selectedOrigin)) {
                     filteredList_.add(vaccine);
                 }
