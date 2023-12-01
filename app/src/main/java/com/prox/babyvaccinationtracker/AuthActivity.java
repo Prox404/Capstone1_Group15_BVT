@@ -47,6 +47,11 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     public void loadFragment(@NonNull Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
