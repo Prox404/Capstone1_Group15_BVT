@@ -172,6 +172,11 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         }
+        else if(id == R.id.action_vaccine_care){
+            Intent i = new Intent(HomeActivity.this, search_care_vaccines.class);
+            startActivity(i);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

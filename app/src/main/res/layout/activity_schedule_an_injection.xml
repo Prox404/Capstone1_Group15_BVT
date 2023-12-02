@@ -39,14 +39,19 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <LinearLayout
-                        android:id="@+id/schedule_list_btn_babies"
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent" >
 
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/schedule_list_btn_babies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -61,7 +66,7 @@
                             android:text="Thông tin bé" />
 
                         <TextView
-                            android:id="@+id/textView3"
+                            android:id="@+id/textViewVaccine_care_header"
                             style="@style/Widget.AppCompat.TextView.Label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

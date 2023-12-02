@@ -68,18 +68,7 @@ public class Vaccines implements Serializable {
     public void setVaccine_center_owner(Vaccine_center vaccine_center_owner) {
         this.vaccine_center_owner = vaccine_center_owner;
     }
-
     HashMap<String, String> additionInformation = new HashMap<>();
-
-    HashMap<String, Boolean> user_cares = new HashMap<>();
-
-    public HashMap<String, Boolean> getUser_cares() {
-        return user_cares;
-    }
-
-    public void setUser_cares(HashMap<String, Boolean> user_cares) {
-        this.user_cares = user_cares;
-    }
 
     public Vaccines(String vaccine_id, String vaccine_name, String vac_effectiveness, String post_vaccination_reactions, String origin, String vaccination_target_group, String contraindications, String quantity, String dosage, String unit, String date_of_entry, String price, ArrayList<String> vaccine_image, boolean deleted) {
         this.vaccine_id = vaccine_id;

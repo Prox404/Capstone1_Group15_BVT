@@ -28,12 +28,14 @@
                 android:id="@+id/timelineContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="10dp"
@@ -46,7 +48,8 @@
                             android:layout_height="5dp"
                             android:background="@drawable/rounded_white_button_bg"
                             android:backgroundTint="@color/textColor"
-                            android:orientation="horizontal"></LinearLayout>
+                            android:orientation="horizontal"
+                            android:visibility="visible"></LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -58,7 +61,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewTimeline"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
+                    android:layout_height="250dp"
+                    android:visibility="visible">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -78,7 +82,8 @@
                             android:layout_height="5dp"
                             android:background="@drawable/rounded_white_button_bg"
                             android:backgroundTint="@color/textColor"
-                            android:orientation="horizontal"></LinearLayout>
+                            android:orientation="horizontal"
+                            android:visibility="visible"></LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
