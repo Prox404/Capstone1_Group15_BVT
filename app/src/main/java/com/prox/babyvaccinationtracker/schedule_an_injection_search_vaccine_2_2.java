@@ -249,9 +249,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             public void onClick(View view) {
                 adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_care);
                 schedule_list_vaccine.setAdapter(adapter);
-                schedule_edt_search_vaccine2.setText("");
                 textViewMessage.setVisibility(View.GONE);
                 vaccines = new ArrayList<>(vaccines_care);
+                schedule_edt_search_vaccine2.setText("");
             }
         });
 
@@ -318,7 +318,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
     void search_vaccines(String searchText) {
         ArrayList<Vaccines> filterVaccine = new ArrayList<>();
         if (!searchText.isEmpty()) {
-            for (Vaccines a : vaccines_care) {
+            for (Vaccines a : vaccines) {
                 if (removeDiacritics(a.getVaccine_name().toLowerCase()).contains(removeDiacritics(searchText.toLowerCase()))) {
                     filterVaccine.add(a);
                 }
@@ -326,8 +326,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, filterVaccine);
             schedule_list_vaccine.setAdapter(adapter);
         } else {
-            filterVaccine = new ArrayList<>(vaccines_care);
-            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, filterVaccine);
+            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines);
             schedule_list_vaccine.setAdapter(adapter);
         }
     }
