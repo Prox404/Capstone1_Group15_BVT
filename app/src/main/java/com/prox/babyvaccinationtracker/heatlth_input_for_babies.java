@@ -115,14 +115,56 @@ public class heatlth_input_for_babies extends AppCompatActivity {
         return -1; // Return -1 for an unknown month
     }
     private void addButtonForBaby(final Baby baby){
-        Button button = new Button(heatlth_input_for_babies.this);
+        Button button = new Button(this);
         button.setText(baby.getBaby_name());
-        health_input_button.addView(button);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(0, 0, 15, 0);
+        button.setLayoutParams(params);
+        button.setElevation(0);
+        button.setPadding(20, 5, 20, 5);
+        button.setHeight(30);
+        button.setMinimumHeight(130);
+        button.setMinHeight(0);
+        button.setStateListAnimator(null);
+
+        // Nếu babyListContainer chưa có Button nào, hoặc Button đầu tiên được thêm vào
+        if (health_input_button.getChildCount() == 0) {
+            // Thiết lập background cho Button đầu tiên là color/primaryColor
+            button.setBackground(getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+            button.setTextColor(getResources().getColor(R.color.white));
+
+            babychoose = baby;
+        } else {
+            // Thiết lập background mặc định cho tất cả các Button khác
+            button.setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
+        }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 babychoose = baby;
+
+                resetButtonBackgrounds();
+
+                button.setBackground(getResources().getDrawable(R.drawable.rounded_primary_button_bg));
+                button.setTextColor(getResources().getColor(R.color.white));
             }
         });
+
+        health_input_button.addView(button);
+    }
+    private void resetButtonBackgrounds() {
+        // Lặp qua tất cả các Button trong babyListContainer và đặt background về màu trắng
+        for (int i = 0; i < health_input_button.getChildCount(); i++) {
+            View child = health_input_button.getChildAt(i);
+            if (child instanceof Button) {
+                ((Button) child).setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
+                ((Button) child).setTextColor(getResources().getColor(R.color.textColor));
+            }
+        }
     }
 }

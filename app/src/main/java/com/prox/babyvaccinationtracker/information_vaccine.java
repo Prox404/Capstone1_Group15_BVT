@@ -98,14 +98,14 @@ public class information_vaccine extends AppCompatActivity {
                 if(care == true ){
                     reference_Favorite.child(key_Favorite).setValue(null);
                     care = false;
-                    imageView_care.setImageResource(R.drawable.ic_heart);
+                    imageView_care.setImageResource(R.drawable.store_default);
                 }
                 else {
                     key_Favorite = reference_Favorite.push().getKey();
                     Log.i("KEYYYY", key_Favorite);
                     reference_Favorite.child(key_Favorite).child("vaccines").setValue(vaccine_f);
                     care = true;
-                    imageView_care.setImageResource(R.drawable.ic_heart_solid);
+                    imageView_care.setImageResource(R.drawable.store_choose);
                 }
 
             }
@@ -155,11 +155,11 @@ public class information_vaccine extends AppCompatActivity {
                         key_Favorite = key_Favorite.replace("[","").replace("]","");
                         Log.i("KEYYYY", key_Favorite+"");
                         care = true;
-                        imageView_care.setImageResource(R.drawable.ic_heart_solid);
+                        imageView_care.setImageResource(R.drawable.store_choose);
                     }
                     else {
                         care = false;
-                        imageView_care.setImageResource(R.drawable.ic_heart);
+                        imageView_care.setImageResource(R.drawable.store_default);
                     }
                 }
 
