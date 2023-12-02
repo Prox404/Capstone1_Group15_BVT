@@ -218,6 +218,12 @@ public class GetStartedStep1Fragment extends Fragment {
                                 !s.toString().equals("-") &&
                                 !s.toString().equals("0")
                 ) {
+                    if (Double.parseDouble(s.toString()) > 200) {
+                        editTextHeight.setError("Chiều cao của bé không hợp lý 🥲");
+                        return;
+                    }else{
+                        editTextHeight.setError(null);
+                    }
                     height = Double.parseDouble(s.toString());
                     Log.i("GetStarted", "afterTextChanged: " + String.valueOf(height));
                 } else {
@@ -246,6 +252,12 @@ public class GetStartedStep1Fragment extends Fragment {
                                 !s.toString().equals("-") &&
                                 !s.toString().equals("0")
                 ) {
+                    if (Double.parseDouble(s.toString()) > 150) {
+                        editTextWeight.setError("Cân nặng của bé không hợp lý 🥲");
+                        return;
+                    }else{
+                        editTextWeight.setError(null);
+                    }
                     weight = Double.parseDouble(s.toString());
                     Log.i("GetStarted", "afterTextChanged: " + String.valueOf(weight));
                 } else {
@@ -274,6 +286,12 @@ public class GetStartedStep1Fragment extends Fragment {
                                 !s.toString().equals("-") &&
                                 !s.toString().equals("0")
                 ) {
+                    if (Double.parseDouble(s.toString()) > 24) {
+                        editTextSleep.setError("Số giờ bé ngủ mỗi ngày không quá 24h 🥲");
+                        return;
+                    }else{
+                        editTextSleep.setError(null);
+                    }
                     sleep = Double.parseDouble(s.toString());
                     Log.i("GetStarted", "afterTextChanged: " + String.valueOf(sleep));
                 } else {
