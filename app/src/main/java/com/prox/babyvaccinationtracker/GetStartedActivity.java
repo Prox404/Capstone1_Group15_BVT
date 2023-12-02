@@ -123,6 +123,10 @@ public class GetStartedActivity extends AppCompatActivity {
                 message = "Hãy nhập thời gian ngủ cho bé !";
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                 return;
+            } else if (filePath == null) {
+                message = "Hãy chọn ảnh cho bé !";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                return;
             }
 
 

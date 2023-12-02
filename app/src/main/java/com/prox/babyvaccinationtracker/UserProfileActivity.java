@@ -34,7 +34,7 @@ public class UserProfileActivity extends AppCompatActivity {
         buttonLogout = findViewById(R.id.buttonLogout);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        //String cus_avatar = sharedPreferences.getString("cus_avatar", "");
+        String cus_avatar = sharedPreferences.getString("cus_avatar", "");
         String cus_name = sharedPreferences.getString("cus_name", "Trần Công Trí");
         String cus_birthday = sharedPreferences.getString("cus_birthday", "03/11/2002");
         String cus_address = sharedPreferences.getString("cus_address", "Tiên Phước, Quảng Nam");
@@ -50,8 +50,8 @@ public class UserProfileActivity extends AppCompatActivity {
         textViewUserEthnicity.setText(cus_ethnicity);
         textViewUserBirthday.setText(cus_birthday);
 
-        //String imgaeUrl = cus_avatar.contains("https") ? cus_avatar : cus_avatar.replace("http", "https");
-        //Picasso.get().load(imgaeUrl).into(imageViewUser);
+        String imgaeUrl = cus_avatar.contains("https") ? cus_avatar : cus_avatar.replace("http", "https");
+        Picasso.get().load(imgaeUrl).into(imageViewUser);
         if (cus_gender.equals("Nữ")){
             imageViewGender.setImageResource(R.drawable.ic_female);
         }

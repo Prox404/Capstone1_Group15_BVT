@@ -239,38 +239,71 @@
                             android:ems="10"
                             android:inputType="text" />
 
-                        <TextView
-                            android:id="@+id/textView23"
-                            style="@style/Widget.AppCompat.TextView.Label"
+                        <RadioGroup
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Trung tâm tiêm chủng"
-                            android:textSize="16sp" />
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:background="@drawable/card_border_bg"
+                            android:orientation="horizontal">
 
-                        <EditText
-                            android:id="@+id/schedule_edt_vaccine_center"
-                            style="@style/Widget.App.EditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="text"
-                            android:textSize="12sp" />
+                            <RadioButton
+                                android:id="@+id/radioButton_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:gravity="center|left"
+                                android:text="Trung tâm" />
 
-                        <TextView
-                            android:id="@+id/textView21"
-                            style="@style/Widget.AppCompat.TextView.Label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Loại vaccine"
-                            android:textSize="16sp" />
+                            <RadioButton
+                                android:id="@+id/radioButton_cares"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center|left"
+                                android:text="Giỏ hàng" />
 
-                        <EditText
-                            android:id="@+id/schedule_edt_type_vaccine"
-                            style="@style/Widget.App.EditText"
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/linear_select_vaccine"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="text" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/TV_headerschedule_edt_vaccine_center"
+                                style="@style/Widget.AppCompat.TextView.Label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Trung tâm tiêm chủng"
+                                android:textSize="16sp" />
+
+                            <EditText
+                                android:id="@+id/schedule_edt_vaccine_center"
+                                style="@style/Widget.App.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView21"
+                                style="@style/Widget.AppCompat.TextView.Label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Loại vaccine"
+                                android:textSize="16sp" />
+
+                            <EditText
+                                android:id="@+id/schedule_edt_type_vaccine"
+                                style="@style/Widget.App.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/textView24"
