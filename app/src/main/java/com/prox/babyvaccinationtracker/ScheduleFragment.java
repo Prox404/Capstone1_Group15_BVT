@@ -86,6 +86,8 @@ public class ScheduleFragment extends Fragment {
                     Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
                     if(vaccination_registrations.size() == 0){
                         timelineContainer.setVisibility(View.GONE);
+                    }else {
+                        timelineContainer.setVisibility(View.VISIBLE);
                     }
                     RegistrationTimelineAdapter pendingRequestAdapter = new RegistrationTimelineAdapter( getContext() , vaccination_registrations);
                     recyclerViewTimeline.setAdapter(pendingRequestAdapter);
