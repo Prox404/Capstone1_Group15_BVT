@@ -54,12 +54,6 @@
                             android:layout_height="match_parent" />
                     </HorizontalScrollView>
 
-                    <ImageView
-                        android:id="@+id/imageView_care"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/store_default" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -88,6 +82,35 @@
                             android:text="TextView"
                             android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/addToCartContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:background="@drawable/button_bg"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="6dp">
+
+                        <ImageView
+                            android:id="@+id/imageView_care"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/store_default"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/textViewAddToCart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Thêm vào giỏ hàng"
+                            android:textColor="@color/white" />
                     </LinearLayout>
 
                 </LinearLayout>

@@ -79,6 +79,7 @@ public class BabyGridViewAdapter extends BaseAdapter {
         TextView txtBirthday = gridViewItem.findViewById(R.id.textViewBirthday);
         ImageView imageViewBaby_delete = gridViewItem.findViewById(R.id.imageViewBaby_delete);
         LinearLayout backgroud_baby = gridViewItem.findViewById(R.id.backgroud_baby);
+        LinearLayout deleteContainer = gridViewItem.findViewById(R.id.deleteContainer);
 
 
         // Set baby data
@@ -88,7 +89,7 @@ public class BabyGridViewAdapter extends BaseAdapter {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
         String UserID = sharedPreferences.getString("customer_id", "");
 
-        imageViewBaby_delete.setOnClickListener(new View.OnClickListener() {
+        deleteContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(mBabies.size() > 1){
@@ -98,7 +99,7 @@ public class BabyGridViewAdapter extends BaseAdapter {
                             .setNegativeButton("Không", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    imageViewBaby_delete_root.setVisibility(View.GONE);
+                                    deleteContainer.setVisibility(View.GONE);
                                     backgroud_baby_root.setBackgroundResource(R.color.white);
                                     dialogInterface.cancel();
                                 }
@@ -204,13 +205,13 @@ public class BabyGridViewAdapter extends BaseAdapter {
                     backgroud_baby_root = backgroud_baby;
 
                 }else {
-                    imageViewBaby_delete_root.setVisibility(View.GONE);
+                    deleteContainer.setVisibility(View.GONE);
                     backgroud_baby_root.setBackgroundResource(R.color.white);
                     imageViewBaby_delete_root = imageViewBaby_delete;
                     backgroud_baby_root = backgroud_baby;
                 }
-                imageViewBaby_delete.setVisibility(View.VISIBLE);
-                backgroud_baby.setBackgroundResource(R.color.gray_400);
+                deleteContainer.setVisibility(View.VISIBLE);
+                backgroud_baby.setBackgroundResource(R.color.gray_100);
                 checkLongClick = true;
 
                 return false;
@@ -226,7 +227,7 @@ public class BabyGridViewAdapter extends BaseAdapter {
                     intent.putExtra("cus_id", UserID);
                     mContext.startActivity(intent);
                 }else {
-                    imageViewBaby_delete_root.setVisibility(View.GONE);
+                    deleteContainer.setVisibility(View.GONE);
                     backgroud_baby_root.setBackgroundResource(R.color.white);
                     checkLongClick = false;
                 }

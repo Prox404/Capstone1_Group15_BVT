@@ -16,14 +16,14 @@ public class RetrofitClient {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
-                .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                .connectTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
+                .readTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
+                .writeTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
                 .build();
 
         // Khởi tạo Retrofit
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.20.10.4:3000/")  // Thay đổi URL tương ứng với API của bạn
+                .baseUrl("http://172.16.0.2:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

@@ -18,4 +18,5 @@
     <color name="lineColor">#F5F6F7</color>
     <color name="mask_scanner_color">#00FFFFFF</color>
     <color name="popup_bg">#FFFFFF</color>
+    <color name="gray_100">#FFCACA</color>
 </resources>

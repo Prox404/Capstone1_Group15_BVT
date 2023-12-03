@@ -34,19 +34,30 @@
                     android:layout_weight="1"
                     android:text="TextView" />
 
-                <ImageView
-                    android:id="@+id/imageViewBaby_delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:src="@drawable/x"
-                    android:visibility="gone" />
             </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/deleteContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_white_button_bg"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imageViewBaby_delete"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_trash_outline"
+                        android:visibility="visible" />
+                </LinearLayout>
 
             </FrameLayout>
 

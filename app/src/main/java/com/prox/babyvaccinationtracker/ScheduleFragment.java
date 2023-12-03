@@ -78,7 +78,7 @@ public class ScheduleFragment extends Fragment {
                     Log.i("Pending", "onDataChange: " + snapshot.getChildrenCount());
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
-                        if(vaccination_registration.getStatus() == 0){
+                        if(vaccination_registration.getStatus() == 1){
                             vaccination_registration.setRegist_id(dataSnapshot.getKey());
                             vaccination_registrations.add(vaccination_registration);
                         }
