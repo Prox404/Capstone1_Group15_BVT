@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         tools:listitem="@layout/item_vaccine_registration_timeline" />
 
 </LinearLayout>
