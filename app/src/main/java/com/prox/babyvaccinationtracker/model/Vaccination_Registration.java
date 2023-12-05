@@ -1,6 +1,8 @@
 package com.prox.babyvaccinationtracker.model;
 
-public class Vaccination_Registration {
+import java.io.Serializable;
+
+public class Vaccination_Registration implements Serializable {
     String regist_id;
     Baby baby;
     Customer cus;

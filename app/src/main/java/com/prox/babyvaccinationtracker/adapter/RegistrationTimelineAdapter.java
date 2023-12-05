@@ -57,8 +57,8 @@ public class RegistrationTimelineAdapter extends RecyclerView.Adapter<Registrati
         String fullAddress = address;
         if (address2 != null && !address2.isEmpty()) {
             fullAddress = address2 + ", " + address;
-            holder.textViewCenterAddress.setText(fullAddress);
         }
+        holder.textViewCenterAddress.setText(fullAddress);
 
         String finalFullAddress = fullAddress;
         holder.itemView.setOnClickListener(new View.OnClickListener() {

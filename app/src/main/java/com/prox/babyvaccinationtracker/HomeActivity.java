@@ -101,6 +101,12 @@ public class HomeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.FOREGROUND_SERVICE}, MY_FOREGROUND_SERVICE_PERMISSION_REQUEST_CODE);
         }
 
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BIND_REMOTEVIEWS) == PackageManager.PERMISSION_GRANTED) {
+            Log.i("main", "BIND_REMOTEVIEWS Permission granted");
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BIND_REMOTEVIEWS}, 3);
+        }
+
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECEIVE_BOOT_COMPLETED) == PackageManager.PERMISSION_GRANTED) {
             Log.i("main", "RECEIVE_BOOT_COMPLETED Permission granted");
         } else {

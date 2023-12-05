@@ -36,11 +36,9 @@ public class ScheduleFragment extends Fragment {
     Context context;
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
 
-
     public ScheduleFragment() {
         // Required empty public constructor
     }
-
 
     public static ScheduleFragment newInstance(String param1, String param2) {
         ScheduleFragment fragment = new ScheduleFragment();
