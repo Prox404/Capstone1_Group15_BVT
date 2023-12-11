@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -41,7 +41,7 @@
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <LinearLayout
                             android:id="@+id/schedule_list_btn_babies"
@@ -78,8 +78,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView5"
@@ -109,8 +108,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView11"
@@ -125,8 +123,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView13"
@@ -149,8 +146,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView16"
@@ -165,8 +161,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView18"
@@ -181,8 +176,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView20"
@@ -244,33 +238,33 @@
                             android:layout_height="match_parent"
                             android:layout_marginVertical="10dp"
                             android:background="@drawable/card_border_bg"
-                            android:padding="5dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:padding="5dp">
 
                             <RadioButton
-                                android:background="@drawable/custom_radio_button_selector"
                                 android:id="@+id/radioButton_center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:background="@drawable/custom_radio_button_selector"
                                 android:button="@color/white"
-                                android:textColor="@drawable/custom_radio_button_text_selector"
                                 android:checked="true"
                                 android:gravity="center|left"
                                 android:text="Trung tâm"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textColor="@drawable/custom_radio_button_text_selector" />
 
                             <RadioButton
-                                android:background="@drawable/custom_radio_button_selector"
                                 android:id="@+id/radioButton_cares"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@drawable/custom_radio_button_text_selector"
                                 android:layout_weight="1"
+                                android:background="@drawable/custom_radio_button_selector"
                                 android:button="@color/white"
                                 android:gravity="center|left"
                                 android:text="Giỏ hàng"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textColor="@drawable/custom_radio_button_text_selector" />
 
                         </RadioGroup>
 
@@ -348,4 +342,9 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading_layout"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -37,6 +37,8 @@ public class search_care_vaccines  extends AppCompatActivity {
     private List<Vaccines> mlistvaccine = new ArrayList<>();
     GridView gridViewSearchVaccine;
 
+    View loadingLayout;
+
     String customer_id = "";
 
     @Override
@@ -55,8 +57,9 @@ public class search_care_vaccines  extends AppCompatActivity {
         gridViewSearchVaccine = findViewById(R.id.gridViewSearchVaccine);
         vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);
         textViewVaccine_care_header = findViewById(R.id.textViewVaccine_care_header);
+        loadingLayout = findViewById(R.id.loadingLayout);
 
-        textViewVaccine_care_header.setText("Các vắc-xin đang trong giỏ hàng");
+        textViewVaccine_care_header.setText("Giỏ hàng");
 
 
         mVaccineadapter = new vaccineadapter(this, mlistvaccine);
@@ -77,6 +80,7 @@ public class search_care_vaccines  extends AppCompatActivity {
     }
 
     private void getdatafromrealtimedatabase() {
+        loadingLayout.setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Favorite").child(customer_id);
         Log.i("customerId", customer_id);
@@ -98,12 +102,13 @@ public class search_care_vaccines  extends AppCompatActivity {
                 else {
                     mVaccineadapter.notifyDataSetChanged();
                 }
-
+                loadingLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                loadingLayout.setVisibility(View.GONE);
+                Toast.makeText(search_care_vaccines.this, "Đã xảy ra lỗi !", Toast.LENGTH_SHORT).show();
             }
         });
     }

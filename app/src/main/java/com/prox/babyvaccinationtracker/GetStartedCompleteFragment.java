@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
@@ -94,6 +95,7 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
         buttonCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GetStartedActivity.loadingLayout.setVisibility(View.VISIBLE);
                 DatabaseReference babiesReference = databaseReference.child("babies");
                 DatabaseReference newBabyReference = babiesReference.push();
 
@@ -163,6 +165,8 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         GetStartedActivity.babyCheckList = new BabyCheckList();
                         GetStartedActivity.checkList = new ArrayList<>();
                         GetStartedActivity.filePath = "";
+                        Toast.makeText(context, "Thêm bé thành công !", Toast.LENGTH_SHORT).show();
+                        GetStartedActivity.loadingLayout.setVisibility(View.GONE);
                         getActivity().finish();
 
                         Log.i("Completed", "onClick: " + babyID);

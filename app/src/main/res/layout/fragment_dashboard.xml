@@ -119,13 +119,27 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewTimeline"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:background="@color/white">
+                    android:layout_height="match_parent">
 
-                </androidx.recyclerview.widget.RecyclerView>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewTimeline"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:background="@color/white">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <include
+                        android:id="@+id/loadingLayout"
+                        layout="@layout/loading_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
             </androidx.cardview.widget.CardView>
 
             <!--            <FrameLayout-->

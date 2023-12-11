@@ -61,6 +61,7 @@ public class ChatFragment extends Fragment {
 
     DatabaseReference databaseRef;
     DatabaseReference chatUserRef;
+    View loadingLayout;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -112,6 +113,7 @@ public class ChatFragment extends Fragment {
                             conversations_all = new ArrayList<>(conversations);
                             Log.i("chat_conversation_all", "onCreateView: " + conversations_all.size()+" "+conversations.size());
                             conversationAdapter.notifyDataSetChanged();
+                            loadingLayout.setVisibility(View.GONE);
 //                            Log.i("chat", "onDataChange: " + conversations.size());
                         }
 
@@ -144,6 +146,8 @@ public class ChatFragment extends Fragment {
         chatWithBot = view.findViewById(R.id.chatWithBot);
         AddConversation = view.findViewById(R.id.AddConversation);
         editTextSearch = view.findViewById(R.id.editTextSearch);
+        loadingLayout = view.findViewById(R.id.loadingLayout);
+        loadingLayout.setVisibility(View.VISIBLE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerConversation.setLayoutManager(linearLayoutManager);

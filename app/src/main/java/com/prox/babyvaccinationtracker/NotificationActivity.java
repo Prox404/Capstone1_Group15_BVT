@@ -33,7 +33,7 @@ public class NotificationActivity extends AppCompatActivity {
     List<NotificationMessage> notificationList = new ArrayList<>();
     TextView textViewClearNotification;
 
-    View emptyView;
+    View emptyView, loadingLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,8 @@ public class NotificationActivity extends AppCompatActivity {
         recylerViewNotification = findViewById(R.id.recylerViewNotification);
         textViewClearNotification = findViewById(R.id.textViewClearNotification);
         emptyView = findViewById(R.id.emptyLayout);
+        loadingLayout = findViewById(R.id.loadingLayout);
+        loadingLayout.setVisibility(View.VISIBLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         user_id = sharedPreferences.getString("customer_id", "");
@@ -72,6 +74,7 @@ public class NotificationActivity extends AppCompatActivity {
                 notificationAdapter = new NotificationAdapter(notificationList);
                 recylerViewNotification.setAdapter(notificationAdapter);
                 notificationAdapter.notifyDataSetChanged();
+                loadingLayout.setVisibility(View.GONE);
                 if (notificationList.size() == 0) {
                     emptyView.setVisibility(View.VISIBLE);
                 } else {

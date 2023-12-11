@@ -82,6 +82,8 @@ public class community_activity extends AppCompatActivity {
     String  selectedHashtag = "";
     List<String> topHashtags = new ArrayList<>();
 
+    View loadingLayout, loadingLayoutPost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +100,10 @@ public class community_activity extends AppCompatActivity {
         recyclerViewPost = findViewById(R.id.recyclerViewPost);
         highlightContainer = findViewById(R.id.highlightContainer);
         topHashTag = findViewById(R.id.topHashTag);
+        loadingLayout = findViewById(R.id.loadingLayout);
+        loadingLayoutPost = findViewById(R.id.loadingLayoutPost);
+
+        loadingLayout.setVisibility(View.VISIBLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String user_id = sharedPreferences.getString("customer_id", "");
@@ -166,6 +172,7 @@ public class community_activity extends AppCompatActivity {
                                     "Nội dung không được để trống",
                                     Toast.LENGTH_SHORT).show();
                 } else {
+                    loadingLayoutPost.setVisibility(View.VISIBLE);
                     if (hashtag.length() > 0) {
                         hashtags = getHashtag(hashtag);
                     }
@@ -176,8 +183,6 @@ public class community_activity extends AppCompatActivity {
                     post.setUser(user);
 
                     uploadImagesToCloudinaryAndFirebase(post);
-
-
                 }
             }
         });
@@ -216,10 +221,11 @@ public class community_activity extends AppCompatActivity {
                     }
                     Log.i("VISITORS", post+"");
                     postArrayList.add(post);
+                    loadingLayout.setVisibility(View.GONE);
                 }
 
 //                postAdapter.notifyDataSetChanged();
-
+                reverseArrayList(postArrayList);
                 postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(community_activity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
@@ -252,6 +258,14 @@ public class community_activity extends AppCompatActivity {
             }
         }
         return postsWithHashtag;
+    }
+
+    private void reverseArrayList(ArrayList<Post> arrayList) {
+        for (int i = 0; i < arrayList.size() / 2; i++) {
+            Post temp = arrayList.get(i);
+            arrayList.set(i, arrayList.get(arrayList.size() - i - 1));
+            arrayList.set(arrayList.size() - i - 1, temp);
+        }
     }
 
     private void addHashTagsToContainer(List<String> topHashtags_) {
@@ -394,7 +408,7 @@ public class community_activity extends AppCompatActivity {
                             });
                             Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
                             hidePopupDialogWithAnimation();
-
+                            loadingLayoutPost.setVisibility(View.GONE);
                         }
                     }
 
