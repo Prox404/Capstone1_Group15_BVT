@@ -41,6 +41,8 @@ public class GetStartedActivity extends AppCompatActivity {
 
     public static String filePath;
 
+    public static View loadingLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class GetStartedActivity extends AppCompatActivity {
         prevContainer = findViewById(R.id.prevContainer);
         buttonNext = findViewById(R.id.buttonNext);
         buttonPrev = findViewById(R.id.buttonPrev);
+        loadingLayout = findViewById(R.id.loadingLayout);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -202,6 +205,7 @@ public class GetStartedActivity extends AppCompatActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
         if (fragment instanceof OnBackPressedListener) {
             if (!((OnBackPressedListener) fragment).onBackPressed()) {
+
                 super.onBackPressed();
             }
         } else {

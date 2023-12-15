@@ -34,7 +34,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Calendar;
 
-public class GetStartedStep1Fragment extends Fragment {
+public class GetStartedStep1Fragment extends Fragment implements GetStartedActivity.OnBackPressedListener{
 
     private TextView editTextBirthday, editTextHeight, editTextWeight, editTextName, editTextSleep;
     private DatePickerDialog datePickerDialog;
@@ -336,5 +336,11 @@ public class GetStartedStep1Fragment extends Fragment {
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
             return cursor.getString(idx);
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getActivity().finish();
+        return true;
     }
 }

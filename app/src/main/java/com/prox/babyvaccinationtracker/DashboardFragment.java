@@ -58,6 +58,7 @@ public class DashboardFragment extends Fragment {
     String firstBabyId = "";
     TextView textViewGreetings;
     ImageView imageViewAvatar;
+    View loadingLayout;
 
 
     public DashboardFragment() {
@@ -91,6 +92,9 @@ public class DashboardFragment extends Fragment {
         textViewGreetings = view.findViewById(R.id.textViewGreetings);
         imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
         QRCodeScanner = view.findViewById(R.id.QRCodeScanner);
+        loadingLayout = view.findViewById(R.id.loadingLayout);
+
+        loadingLayout.setVisibility(View.VISIBLE);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         String babiesList = sharedPreferences.getString("babiesList", "");
@@ -232,6 +236,8 @@ public class DashboardFragment extends Fragment {
                 recyclerViewTimeline.setAdapter(timeLineAdapter);
                 recyclerViewTimeline.setLayoutManager(linearLayoutManager);
                 Log.i("Home", "onDataChange: " + regimenList.size());
+
+                loadingLayout.setVisibility(View.GONE);
             }
 
             @Override

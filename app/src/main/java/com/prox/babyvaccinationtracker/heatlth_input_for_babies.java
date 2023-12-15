@@ -71,18 +71,24 @@ public class heatlth_input_for_babies extends AppCompatActivity {
             public void onClick(View view) {
                 String height = health_input_height.getText().toString();
                 if(height.isEmpty()){
-                    Toast.makeText(heatlth_input_for_babies.this,"Phải nhập chiều cao",Toast.LENGTH_LONG).show();
+                    health_input_height.setError("Phải nhập chiều cao");
                     return;
+                }else {
+                    health_input_height.setError(null);
                 }
                 String weight = health_input_weight.getText().toString();
                 if(weight.isEmpty()){
-                    Toast.makeText(heatlth_input_for_babies.this,"Phải nhập cân nặng",Toast.LENGTH_LONG).show();
+                    health_input_weight.setError("Phải nhập cân nặng");
                     return;
+                }else {
+                    health_input_weight.setError(null);
                 }
                 String sleep = health_input_sleep.getText().toString();
                 if(sleep.isEmpty()){
                     Toast.makeText(heatlth_input_for_babies.this,"Phải nhập giờ ngủ",Toast.LENGTH_LONG).show();
                     return;
+                }else {
+                    health_input_sleep.setError(null);
                 }
                 SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                 Date now = new Date();
@@ -94,6 +100,19 @@ public class heatlth_input_for_babies extends AppCompatActivity {
                 health.setHeight(Double.parseDouble(height));
                 health.setWeight(Double.parseDouble(weight));
                 health.setSleep(Double.parseDouble(sleep));
+
+                if (health.getHeight() < 0 || health.getHeight() > 200) {
+                    Toast.makeText(heatlth_input_for_babies.this, "Chiều cao không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (health.getWeight() < 0 || health.getWeight() > 200) {
+                    Toast.makeText(heatlth_input_for_babies.this, "Cân nặng không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (health.getSleep() < 0 || health.getSleep() > 24) {
+                    Toast.makeText(heatlth_input_for_babies.this, "Giờ ngủ không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 int monthIndex = getMonthIndex(sl[1]);
                 String referenceKey = sl[sl.length-1];

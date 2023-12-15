@@ -29,9 +29,22 @@
         android:layout_width="match_parent"
         android:visibility="gone"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recylerViewNotification"
-        android:paddingHorizontal="10dp"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recylerViewNotification"
+            android:paddingHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include layout="@layout/loading_layout"
+            android:id="@+id/loadingLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
 </LinearLayout>

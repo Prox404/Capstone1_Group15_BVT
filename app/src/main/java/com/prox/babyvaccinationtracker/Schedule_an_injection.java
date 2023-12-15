@@ -69,6 +69,7 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatePickerDialog datePickerDialog;
+    View loadingLayout;
 
     String address = "";
 
@@ -90,6 +91,7 @@ public class Schedule_an_injection extends AppCompatActivity {
         linear_select_vaccine = findViewById(R.id.linear_select_vaccine);
         radioButton_center = findViewById(R.id.radioButton_center);
         radioButton_cares = findViewById(R.id.radioButton_cares);
+        loadingLayout = findViewById(R.id.loadingLayout);
 
         radioButton_center.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,6 +268,7 @@ public class Schedule_an_injection extends AppCompatActivity {
                     Toast.makeText(Schedule_an_injection.this, "Phải ngày mong muốn tiêm", Toast.LENGTH_LONG).show();
                     return;
                 }
+                loadingLayout.setVisibility(View.VISIBLE);
                 DatabaseReference reference = database.getReference("Vaccination_Registration");
 
                 Vaccination_Registration vaccinationRegistration = new Vaccination_Registration();
@@ -280,8 +283,10 @@ public class Schedule_an_injection extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(Schedule_an_injection.this, "Đăng ký thành công, vui lòng đợi trung tâm xác nhận", Toast.LENGTH_LONG).show();
+                            loadingLayout.setVisibility(View.GONE);
                             finish();
                         } else {
+                            loadingLayout.setVisibility(View.GONE);
                             Toast.makeText(Schedule_an_injection.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                         }
                     }

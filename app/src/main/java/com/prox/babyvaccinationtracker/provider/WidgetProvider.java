@@ -1,5 +1,6 @@
 package com.prox.babyvaccinationtracker.provider;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetProvider;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -73,8 +74,27 @@ public class WidgetProvider extends AppWidgetProvider {
             views.setRemoteAdapter(R.id.listViewTimeline, intent);
             views.setEmptyView(R.id.listViewTimeline, R.id.textViewEmpty);
 
+            //intent to open schedule injection activity
+            views.setOnClickPendingIntent(R.id.textViewEmpty, getPendingSelfIntent(context, "open_schedule_injection_activity"));
             appWidgetManager.updateAppWidget(appWidgetId, views);
 //            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewTimeline);
+        }
+    }
+
+    protected PendingIntent getPendingSelfIntent(Context context, String action) {
+        Intent intent = new Intent(context, getClass());
+        intent.setAction(action);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        if(intent.getAction().equals("open_schedule_injection_activity")){
+            Intent intent1 = new Intent(context, com.prox.babyvaccinationtracker.Schedule_an_injection.class);
+            intent1.putExtra("open_schedule_injection_activity", true);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent1);
         }
     }
 }
