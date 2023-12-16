@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.admin.babyvaccinationtracker.R;
 import com.admin.babyvaccinationtracker.SendNotificationActivity;
 import com.admin.babyvaccinationtracker.model.Customer;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +52,15 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         private TextView phoneTextView;
         private TextView addressTextView;
 
+        ImageView customerImage;
+
         public CustomerViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
             emailTextView = itemView.findViewById(R.id.emailTextView);
             phoneTextView = itemView.findViewById(R.id.phoneTextView);
             addressTextView = itemView.findViewById(R.id.addressTextView);
+            customerImage = itemView.findViewById(R.id.customerImage);
         }
 
         public void bind(Customer customer) {
@@ -84,6 +90,19 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
                 }
             });
 
+            String imageUrl = customer.getCus_avatar();
+            imageUrl = imageUrl.contains("https") ? imageUrl : imageUrl.replace("http", "https");
+            Picasso.get().load(imageUrl).into(customerImage, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    customerImage.setImageResource(R.drawable.user_default_avatar);
+                }
+            });
         }
     }
 }
