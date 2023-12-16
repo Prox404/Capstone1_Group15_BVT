@@ -37,8 +37,12 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccine_center;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccine_center_registration;
 
@@ -80,6 +84,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
     String jsonAddressDataString = "";
     JSONArray provincesArray;
     ArrayList<String> provinceList = new ArrayList<>();
+    View loadingLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +127,8 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         // Linner layout
         register_selected_hour_minute = findViewById(R.id.register_selected_hour_minute);
         register_edt_address2 = findViewById(R.id.register_edt_address2);
+
+        loadingLayout = findViewById(R.id.loadingLayout);
 
         // todo chọn ảnh
         register_img_btn_activity_certificate.setOnClickListener(new View.OnClickListener() {
@@ -373,8 +380,10 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         register_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataValidate dataValidate = new DataValidate();
+
                 // Tên trung tâm
-                String center_name = register_edt_center_name.getText().toString();
+                String center_name = register_edt_center_name.getText().toString().trim();
                 if (center_name.length()==0){
                     register_edt_center_name.requestFocus();
                     Toast.makeText(Register_for_vaccine_center.this,"Hãy nhập tên trung tâm vắc-xin", Toast.LENGTH_LONG).show();
@@ -430,10 +439,15 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                 }
                 String work_time = work_on_weekend+", "+work_hour;
                 // email center
-                String center_email = register_edt_center_email.getText().toString();
-                if(center_email.length() == 0){
+                String center_email = register_edt_center_email.getText().toString().trim();
+                if(center_email.length()==0){
                     register_edt_center_email.requestFocus();
                     Toast.makeText(Register_for_vaccine_center.this, "Phải nhập email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!dataValidate.isValidEmail(center_email)){
+                    register_edt_center_email.requestFocus();
+                    Toast.makeText(Register_for_vaccine_center.this, "Đia chỉ email không hợp lệ!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // password
@@ -483,55 +497,85 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                     Toast.makeText(Register_for_vaccine_center.this, "Phải có bằng chứng chứng chỉ hoạt động", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                loadingLayout.setVisibility(View.VISIBLE);
+                //check email exist
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReference = firebaseDatabase.getReference("users").child("Vaccine_center");
+                Query query = databaseReference.orderByChild("center_email").equalTo(center_email);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            if (snapshot.getChildrenCount() > 0) {
+                                Toast.makeText(Register_for_vaccine_center.this, "Email đã tồn tại", Toast.LENGTH_SHORT).show();
+                                loadingLayout.setVisibility(View.GONE);
+                                return;
+                            }else{
+                                ArrayList<String> url_image = new ArrayList<>();
+                                ArrayList<String> path_image = new ArrayList<>();
+                                path_image.add(filePath_center_image);
+                                path_image.add(filePath_center_certificate);
 
-                ArrayList<String> url_image = new ArrayList<>();
-                ArrayList<String> path_image = new ArrayList<>();
-                path_image.add(filePath_center_image);
-                path_image.add(filePath_center_certificate);
+                                for(int i = 0 ;i < path_image.size() ; i++){
+                                    String path = path_image.get(i);
+                                    MediaManager.get().upload(path).callback(new UploadCallback() {
+                                        @Override
+                                        public void onStart(String requestId) {
+                                            Log.i("upload image", "onStart: ");
+                                        }
 
-                for(int i = 0 ;i < path_image.size() ; i++){
-                    String path = path_image.get(i);
-                    MediaManager.get().upload(path).callback(new UploadCallback() {
-                        @Override
-                        public void onStart(String requestId) {
-                            Log.i("upload image", "onStart: ");
-                        }
+                                        @Override
+                                        public void onProgress(String requestId, long bytes, long totalBytes) {
+                                            Log.i("upload image", "Uploading... ");
+                                        }
 
-                        @Override
-                        public void onProgress(String requestId, long bytes, long totalBytes) {
-                            Log.i("upload image", "Uploading... ");
-                        }
+                                        @Override
+                                        public void onSuccess(String requestId, Map resultData) {
+                                            String url = resultData.get("url").toString();
+                                            Log.i("upload image", "image URL: "+url);
+                                            url_image.add(url);
+                                            if(url_image.size() == path_image.size()){
 
-                        @Override
-                        public void onSuccess(String requestId, Map resultData) {
-                            String url = resultData.get("url").toString();
-                            Log.i("upload image", "image URL: "+url);
-                            url_image.add(url);
-                            if(url_image.size() == path_image.size()){
+                                                register(center_name,
+                                                        center_address,
+                                                        hotline,work_time,
+                                                        center_email,
+                                                        encenter_password,
+                                                        url_image.get(0),
+                                                        url_image.get(1),
+                                                        address2
+                                                );
+                                            }
+                                        }
 
-                                register(center_name,
-                                        center_address,
-                                        hotline,work_time,
-                                        center_email,
-                                        encenter_password,
-                                        url_image.get(0),
-                                        url_image.get(1),
-                                        address2
-                                );
+                                        @Override
+                                        public void onError(String requestId, ErrorInfo error) {
+                                            Log.i("upload image", "error "+ error.getDescription());
+                                        }
+
+                                        @Override
+                                        public void onReschedule(String requestId, ErrorInfo error) {
+                                            Log.i("upload image", "Reshedule "+error.getDescription());
+                                        }
+                                    }).dispatch();
+                                }
                             }
+                        }else{
+                            Toast.makeText(Register_for_vaccine_center.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                            loadingLayout.setVisibility(View.GONE);
+                            return;
                         }
+                    }
 
-                        @Override
-                        public void onError(String requestId, ErrorInfo error) {
-                            Log.i("upload image", "error "+ error.getDescription());
-                        }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(Register_for_vaccine_center.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                        loadingLayout.setVisibility(View.GONE);
+                        return;
+                    }
+                });
 
-                        @Override
-                        public void onReschedule(String requestId, ErrorInfo error) {
-                            Log.i("upload image", "Reshedule "+error.getDescription());
-                        }
-                    }).dispatch();
-                }
+
             }
         });
 
@@ -571,6 +615,7 @@ public class Register_for_vaccine_center extends AppCompatActivity {
         datavaccineCenter.push().setValue(registration);
         setResult(RESULT_OK);
         finish();
+        loadingLayout.setVisibility(View.GONE);
     }
     private static final int PICK_IMAGE_CENTER = 1;
     private static final int PICK_IMAGE_CERTIFICATE = 2;

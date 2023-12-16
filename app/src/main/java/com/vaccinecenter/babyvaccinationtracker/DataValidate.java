@@ -13,7 +13,7 @@ public class DataValidate {
             return false;
         }
 
-        String nameRegex = "^[a-zA-Z0-9 ]+$";
+        String nameRegex = "^[a-zA-Z0-9À-ỹ ]+$";
         Pattern pattern = Pattern.compile(nameRegex);
         Matcher matcher = pattern.matcher(name);
 
@@ -21,7 +21,7 @@ public class DataValidate {
     }
 
     public boolean isValidEmail(String email) {
-        if (email.length() < 6 || email.length() > 30) {
+        if (email.length() < 6 || email.length() > 255) {
             return false;
         }
 

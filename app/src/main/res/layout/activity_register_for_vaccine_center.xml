@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,6 +21,7 @@
                 android:id="@+id/image_back_register_account_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:src="@drawable/back_arrow" />
 
             <TextView
@@ -35,7 +36,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="40dp"
                 android:text="Hãy nhập thông tin "
                 android:textColor="#3B3B3B"
                 android:textSize="16sp" />
@@ -252,24 +253,24 @@
                     android:layout_height="wrap_content"
                     android:buttonTint="#4CAF50"
                     android:checked="true"
-                    android:theme="@style/RadioButtonStyle"
-                    android:text="Thứ 2 đến thứ 6" />
+                    android:text="Thứ 2 đến thứ 6"
+                    android:theme="@style/RadioButtonStyle" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="#4CAF50"
-                    android:theme="@style/RadioButtonStyle"
-                    android:text="Thứ 2 đến thứ 7" />
+                    android:text="Thứ 2 đến thứ 7"
+                    android:theme="@style/RadioButtonStyle" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="#4CAF50"
-                    android:theme="@style/RadioButtonStyle"
-                    android:text="Cả tuần" />
+                    android:text="Cả tuần"
+                    android:theme="@style/RadioButtonStyle" />
             </RadioGroup>
 
             <TextView
@@ -288,17 +289,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="#4CAF50"
-                    android:theme="@style/RadioButtonStyle"
                     android:checked="true"
-                    android:text="Mở cửa cả ngày" />
+                    android:text="Mở cửa cả ngày"
+                    android:theme="@style/RadioButtonStyle" />
 
                 <RadioButton
                     android:id="@+id/register_radio_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:buttonTint="#4CAF50"
-                    android:theme="@style/RadioButtonStyle"
-                    android:text="Thời gian hoạt động" />
+                    android:text="Thời gian hoạt động"
+                    android:theme="@style/RadioButtonStyle" />
             </RadioGroup>
 
             <LinearLayout
@@ -389,5 +390,10 @@
                 app:cornerRadius="5dp" />
         </LinearLayout>
     </ScrollView>
-
-</LinearLayout>
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone"/>
+</FrameLayout>
