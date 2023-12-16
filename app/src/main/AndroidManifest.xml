@@ -19,6 +19,7 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -169,6 +170,15 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".receiver.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
         </receiver>
     </application>
 

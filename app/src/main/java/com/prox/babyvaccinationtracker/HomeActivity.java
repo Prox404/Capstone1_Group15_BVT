@@ -1,17 +1,25 @@
 package com.prox.babyvaccinationtracker;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 
 import androidx.appcompat.widget.Toolbar;
@@ -19,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.service.NotificationService;
+import com.prox.babyvaccinationtracker.util.NetworkUtils;
 
 import java.util.Objects;
 
@@ -39,6 +49,8 @@ public class HomeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     BottomNavigationView navigation;
+
+    public static boolean NETWORK_STATE = true;
 
     final int MY_FOREGROUND_SERVICE_PERMISSION_REQUEST_CODE = 1;
     final int MY_BOOT_COMPLETED_PERMISSION_REQUEST_CODE = 2;
@@ -84,6 +96,26 @@ public class HomeActivity extends AppCompatActivity {
 
         check();
 
+        boolean isNetworkAvailable = NetworkUtils.isNetworkAvailable(this);
+        NETWORK_STATE = isNetworkAvailable;
+
+        if (!isNetworkAvailable) {
+            showNetworkAlertDialog(this);
+        }
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                        showNetworkAlertDialog(context);
+
+                        Log.i("Network", "Network: " + isNetworkAvailable);
+                    }
+                },
+                new IntentFilter("network_change")
+
+        );
 
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
         setSupportActionBar(toolbar);
@@ -193,5 +225,29 @@ public class HomeActivity extends AppCompatActivity {
         // Ví dụ: Hiển thị hộp thoại xác nhận thoát chương trình, vv.
         Log.i("Home", "onBackPressed: ");
         moveTaskToBack(true);
+    }
+
+    public static void showNetworkAlertDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Mất kết nối mạng");
+        builder.setMessage("Vui lòng kiểm tra kết nối mạng của bạn.");
+
+        builder.setPositiveButton("Đóng", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Đóng dialog
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+
+        Window window = alertDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        wlp.gravity = Gravity.BOTTOM;
+        window.setAttributes(wlp);
+
+        alertDialog.show();
     }
 }

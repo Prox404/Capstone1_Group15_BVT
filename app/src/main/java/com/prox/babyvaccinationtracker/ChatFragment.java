@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.ConversationAdapter;
 import com.prox.babyvaccinationtracker.model.Conversation;
 import com.prox.babyvaccinationtracker.model.Message;
+import com.prox.babyvaccinationtracker.util.NetworkUtils;
 
 import java.io.Serializable;
 import java.text.Normalizer;
@@ -171,7 +172,13 @@ public class ChatFragment extends Fragment {
         chatWithBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean network_state = NetworkUtils.isNetworkAvailable(context);
+                HomeActivity.NETWORK_STATE = network_state;
                 Log.i("chat with bot", "onClick:  " + conversations.size());
+                if (!network_state){
+                    HomeActivity.showNetworkAlertDialog(context);
+                    return;
+                }
                 Boolean isExist = false;
                 String conversation_id = "";
                 for (Conversation conversation : conversations) {
