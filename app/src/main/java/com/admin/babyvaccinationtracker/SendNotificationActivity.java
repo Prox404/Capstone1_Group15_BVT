@@ -32,6 +32,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SendNotificationActivity extends AppCompatActivity implements SearchQueryListener {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        selectedCustomers.clear();
+    }
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -112,10 +117,10 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
         buttonSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = editTextTitle.getText().toString();
-                String message = editTextMessage.getText().toString();
-                String date = editTextDate.getText().toString();
-                String time = editTextTime.getText().toString();
+                String title = editTextTitle.getText().toString().trim();
+                String message = editTextMessage.getText().toString().trim();
+                String date = editTextDate.getText().toString().trim();
+                String time = editTextTime.getText().toString().trim();
 
                 if (title.isEmpty()) {
                     editTextTitle.setError("Vui lòng nhập tiêu đề thông báo");
@@ -137,7 +142,7 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
                     return;
                 }
 
-                if (selectedCustomers.isEmpty()) {
+                if (selectedCustomers.isEmpty() ) {
                     // Chưa chọn người dùng
                     // Hiển thị thông báo lỗi
                     Toast.makeText(SendNotificationActivity.this, "Vui lòng chọn người dùng", Toast.LENGTH_SHORT).show();
@@ -228,4 +233,6 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
         }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true);
         timePickerDialog.show();
     }
+
+
 }
