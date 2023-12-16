@@ -19,6 +19,31 @@ public class DataValidate {
 
         return matcher.matches();
     }
+    public boolean IsValidNameVN(String name){
+        if (name.length() < 6 || name.length() > 255) {
+            return false;
+        }
+
+        String nameRegex = "^[\\p{L}0-9 ]+$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
+    }
+    public boolean isValidNameOrigin(String name) {
+        String nameRegex = "^[a-zA-Z ]+$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
+    }
+    public boolean isValidNameOriginVN(String name){
+        String nameRegex = "^[\\p{L} ]+$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
+    }
 
     public boolean isValidEmail(String email) {
         if (email.length() < 6 || email.length() > 255) {

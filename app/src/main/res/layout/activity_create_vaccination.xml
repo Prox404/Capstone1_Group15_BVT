@@ -246,12 +246,12 @@
 
                 <EditText
                     android:id="@+id/date_of_entry"
+                    style="@style/Widget.App.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/home"
                     android:ems="10"
-                    android:inputType="text"
-                     />
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine" />
 
                 <TextView
                     android:id="@+id/textView16"
