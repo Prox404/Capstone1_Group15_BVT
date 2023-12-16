@@ -70,7 +70,8 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
                         post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                         post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
 
-                        HashMap<String, Boolean> visitors = (HashMap<String, Boolean>) dataSnapshot.child("Visitors").getValue();
+                        HashMap<String, Boolean> visitors = (HashMap<String, Boolean>) dataSnapshot
+                                .child("Visitors").getValue();
                         if(visitors != null){
                             post.setVisitor(visitors);
                         }else {
@@ -79,7 +80,8 @@ public class Manage_track_content_visits_Activity extends AppCompatActivity {
                         posts.add(post);
                     }
                 }
-                adapter = new PostViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, posts);
+                adapter = new PostViewPageAdapter(getSupportFragmentManager(),
+                        FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, posts);
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
                 viewPager.setCurrentItem(currentTabPossion);

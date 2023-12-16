@@ -27,7 +27,7 @@ public class Fragment_manage_post extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    View buttonThemBaiDang,buttonXemBaiDang,buttonNoidungbaocao;
+    View buttonThemBaiDang,buttonXemBaiDang,buttonNoidungbaocao,buttonXoaBaiDang;
 
     public Fragment_manage_post() {
         // Required empty public constructor
@@ -88,6 +88,13 @@ public class Fragment_manage_post extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(context,Activity_report_comment_and_post.class));
+            }
+        });
+        buttonXoaBaiDang = view.findViewById(R.id.buttonXoaBaiDang);
+        buttonXoaBaiDang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context,ActivityDeletePost.class));
             }
         });
 

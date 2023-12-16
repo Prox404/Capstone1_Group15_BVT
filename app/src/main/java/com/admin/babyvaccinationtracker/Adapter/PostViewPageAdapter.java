@@ -31,16 +31,16 @@ public class PostViewPageAdapter extends FragmentPagerAdapter {
             case 0 :
                 Log.i("POST", posts+"");
                 return Post_VisitsFragment.newInstance(posts);
-            case 1 :
-                Log.i("POST", posts+"");
-                return Fragment_delete_post.newInstance(posts);
+//            case 1 :
+//                Log.i("POST", posts+"");
+//                return Fragment_delete_post.newInstance(posts);
             default: return Post_VisitsFragment.newInstance(posts);
         }
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 1;
     }
 
     @Nullable
@@ -48,7 +48,7 @@ public class PostViewPageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
             case 0: return "Thống kê bài đăng";
-            case 1: return "Xóa bài bài đăng";
+//            case 1: return "Xóa bài bài đăng";
         }
         return super.getPageTitle(position);
     }

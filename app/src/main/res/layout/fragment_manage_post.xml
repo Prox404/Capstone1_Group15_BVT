@@ -197,6 +197,59 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingRight="10dp"
+                    app:layout_flexBasisPercent="50%">
+
+                    <LinearLayout
+                        android:id="@+id/buttonXoaBaiDang"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:background="@drawable/tool_white_bg"
+                        android:elevation="10dp"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/trash"
+                                app:tint="@color/textColor" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:fontFamily="@font/inter_bold"
+                            android:maxWidth="150dp"
+                            android:text="Xóa bài đăng"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
             </com.google.android.flexbox.FlexboxLayout>
         </LinearLayout>
     </ScrollView>
