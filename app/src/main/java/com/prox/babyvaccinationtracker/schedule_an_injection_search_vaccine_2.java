@@ -159,6 +159,9 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
                         }
                         textViewMessage.setText("Gợi ý những loại vaccine phù hợp với bé: " + vaccineName);
                         filterVaccines();
+                        ArrayAdapter<String> adapterOrigin = new ArrayAdapter<String>(schedule_an_injection_search_vaccine_2.this, android.R.layout.simple_spinner_item, vaccineOrigin);
+                        adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerOrigin.setAdapter(adapterOrigin);
                     }
                     Log.i("Home", "onDataChange: " + regimenList.size());
                 }
@@ -170,26 +173,22 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             });
         }
 
-
-
-
         Log.i("select vaccine", "onCreate: " + vaccineOrigin.toString());
-        ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
-        adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerOrigin.setAdapter(adapterOrigin);
+
 
         spinnerOrigin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Lấy xuất xứ được chọn từ Spinner
+
+                Log.i("select vaccine", "onItemSelected");
                 String selectedOrigin = (String) parentView.getItemAtPosition(position);
-                // Lọc danh sách vaccine dựa trên xuất xứ
+
                 filterVaccineByOrigin(selectedOrigin);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Xử lý sự kiện khi không có mục nào được chọn
+                Log.i("select vaccine", "onNothingSelected");
             }
         });
 
@@ -236,6 +235,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
 
     private void filterVaccines() {
         vaccines = new ArrayList<>();
+        vaccineOrigin.clear();
         vaccineOrigin.add("Tất cả");
         for (Map.Entry<String, Vaccines> entry : vaccinesHashMap.entrySet()) {
             Vaccines vaccine = entry.getValue();
@@ -254,6 +254,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
     }
 
     private void filterVaccineByOrigin(String selectedOrigin) {
+        Log.i("select vaccine", "filterVaccineByOrigin: " + selectedOrigin);
         if (!selectedOrigin.isEmpty() && !selectedOrigin.equals("Tất cả")) {
             List<Vaccines> filteredList_ = new ArrayList<>();
             for (Vaccines vaccine : filterVaccine) {

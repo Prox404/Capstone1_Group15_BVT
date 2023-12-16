@@ -2,10 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/back"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/primary_bg"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="20dp"
     tools:context=".search_vaccination">
 
 
@@ -54,12 +57,14 @@
         android:layout_height="match_parent">
 
 
-    <GridView
-        android:id="@+id/gridViewSearchVaccine"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:numColumns="2" />
+        <GridView
+            android:id="@+id/gridViewSearchVaccine"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="20dp"
+            android:horizontalSpacing="10dp"
+            android:numColumns="1"
+            android:verticalSpacing="10dp" />
 
         <include
             android:id="@+id/loadingLayout"

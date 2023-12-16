@@ -148,13 +148,9 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
                     center.setCenter_id(vaccineSnapshot.getKey());
                     String centerAddress = center.getCenter_address();
                     vaccine_centers.add(center);
-//                    if (isAddressNearCustomer(customerAddress, centerAddress)) {
-//                        filterAddressCenter.add(center);
-//                    }
                 }
 
                 filterAddressCenter = sortCentersByRelativeDistance(customerAddress, vaccine_centers);
-
 
                 adapter = new VaccineCenterAdapter(Schedule_an_injection_search_vaccine.this, filterAddressCenter);
                 schedule_list_vaccine_search.setAdapter(adapter);
@@ -165,35 +161,6 @@ public class Schedule_an_injection_search_vaccine extends AppCompatActivity {
             }
         });
     }
-//    private boolean isAddressNearCustomer(String customerAddress, String centerAddress) {
-//        String[] customerAddressParts = customerAddress.split(", "); // 0 1
-//        String[] centerAddressParts = centerAddress.split(", "); // 0 1 2
-//
-//        int customerSizeAddress = customerAddressParts.length;
-//
-//        if(customerSizeAddress == 1){
-//            if(!customerAddressParts[0].equals(centerAddressParts[2])){
-//                return false;
-//            }
-//        }
-//        else if(customerSizeAddress == 2){
-//            if(customerAddressParts[1].equals(centerAddressParts[2]))
-//                if(!customerAddressParts[0].equals(centerAddressParts[1])){
-//                    return false;
-//                }
-//                else
-//                    return true;
-//            else
-//                return false;
-//        } else if (customerSizeAddress == 3){
-//            for (int i = 0; i < customerSizeAddress; i++) {
-//                if (!customerAddressParts[i].equals(centerAddressParts[i])) {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
 
     private ArrayList<Vaccine_center> sortCentersByRelativeDistance(String customerAddress, ArrayList<Vaccine_center> vaccineCenters) {
         String[] customerAddressParts = customerAddress.split(", ");

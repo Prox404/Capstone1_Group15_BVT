@@ -90,6 +90,24 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
         Intent intent = getIntent();
         baby_id = intent.getStringExtra("baby_id");
 
+        DatabaseReference reference_Favorite = FirebaseDatabase.getInstance().getReference("Favorite").child(customer_id);
+        reference_Favorite.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                    Vaccines vaccines = snapshot1.child("vaccines").getValue(Vaccines.class);
+                    vaccines_care.add(vaccines);
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         if (baby_id.isEmpty()) {
             Toast.makeText(this, "Hãy chọn trẻ để chúng tôi có thể gợi ý những loại vaccine phù hợp với bé !!", Toast.LENGTH_SHORT).show();
@@ -177,7 +195,10 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                                 break;
                         }
                         textViewMessage.setText("Gợi ý những loại vaccine phù hợp với bé: " + vaccineName);
-
+                        filterVaccines();
+                        ArrayAdapter<String> adapterOrigin = new ArrayAdapter<String>(schedule_an_injection_search_vaccine_2_2.this, android.R.layout.simple_spinner_item, vaccineOrigin);
+                        adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerOrigin.setAdapter(adapterOrigin);
                     }
                     Log.i("Home", "onDataChange: " + regimenList.size());
                 }
@@ -188,27 +209,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 }
             });
 
-            DatabaseReference reference_Favorite = FirebaseDatabase.getInstance().getReference("Favorite").child(customer_id);
-            reference_Favorite.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                        Vaccines vaccines = snapshot1.child("vaccines").getValue(Vaccines.class);
-                        vaccines_care.add(vaccines);
-                    }
-                    adapter.notifyDataSetChanged();
-                    filterVaccines();
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
 
-            ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
-            adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerOrigin.setAdapter(adapterOrigin);
 
             spinnerOrigin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -304,7 +307,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             schedule_list_vaccine.setAdapter(adapter);
         } else {
             // Nếu không có xuất xứ nào được chọn, hiển thị toàn bộ danh sách
-            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_care);
+            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines);
             schedule_list_vaccine.setAdapter(adapter);
         }
     }

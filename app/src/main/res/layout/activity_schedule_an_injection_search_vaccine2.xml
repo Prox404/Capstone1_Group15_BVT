@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/primary_bg"
     android:orientation="vertical"
     android:paddingHorizontal="20dp"
-    android:paddingBottom="20dp"
     tools:context=".schedule_an_injection_search_vaccine_2">
 
     <LinearLayout
@@ -71,8 +71,10 @@
 
     <Spinner
         android:id="@+id/spinnerOrigin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp" />
 
     <TextView
         android:id="@+id/textViewMessage"
