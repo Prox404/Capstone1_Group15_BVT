@@ -81,6 +81,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
     String[] arrayVaccineTypeEN = new String[18];
 
     String selectedValue = "";
+    DataValidate validate = new DataValidate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +116,11 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
 
         // todo chọn loại vắc-xin
         arrayVaccineTypeEN = getResources().getStringArray(R.array.array_vaccine_type_EN);
-        ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(update_inforamtion_vaccine.this, R.array.array_vaccine_type_VN, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_vaccine_type = ArrayAdapter.createFromResource(
+                update_inforamtion_vaccine.this,
+                R.array.array_vaccine_type_VN,
+                android.R.layout.simple_spinner_item);
+
         adapter_vaccine_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_vac_effectiveness.setAdapter(adapter_vaccine_type);
         spinner_vac_effectiveness.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -131,7 +136,11 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         });
 
         // Tiền tề
-        ArrayAdapter<CharSequence> adapter_currency = ArrayAdapter.createFromResource(update_inforamtion_vaccine.this, R.array.array_currency, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_currency = ArrayAdapter.createFromResource(
+                update_inforamtion_vaccine.this,
+                R.array.array_currency,
+                android.R.layout.simple_spinner_item);
+
         adapter_currency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_update_money_unit.setAdapter(adapter_currency);
         spinner_update_money_unit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -183,7 +192,8 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                 edt_vaccine_name.setText(vaccine.getVaccine_name());
 
                 spinner_vac_effectiveness.setSelection(
-                        ((ArrayAdapter<String>) spinner_vac_effectiveness.getAdapter()).getPosition(vaccine.getVac_effectiveness()));
+                        ((ArrayAdapter<String>) spinner_vac_effectiveness.getAdapter())
+                                .getPosition(vaccine.getVac_effectiveness()));
 
                 edt_post_vaccination_reactions.setText(vaccine.getPost_vaccination_reactions());
                 edt_origin.setText(vaccine.getOrigin());
@@ -255,36 +265,42 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showConfirmDialog("Xác nhận xóa", "Bạn có chắc muốn xóa vắc-xin này không?", new ConfirmationCallback() {
+                showConfirmDialog("Xác nhận xóa", "Bạn có chắc muốn xóa vắc-xin này không?",
+                        new ConfirmationCallback() {
                     @Override
                     public void onConfirm(boolean result) {
                         if (result) {
                             boolean check = vaccine.isDeleted();
-                            reference = database.getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines");
+                            reference = database.getReference("users")
+                                    .child("Vaccine_center")
+                                    .child(id_vaccine_center).child("vaccines");
                             if (check == true) {
                                 vaccine.setDeleted(true);
-                                Toast.makeText(update_inforamtion_vaccine.this, "Vắc-xin này đã xóa", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Vắc-xin này đã xóa",
+                                        Toast.LENGTH_SHORT).show();
                             } else if (check == false) {
                                 check = true;
-                                reference.child(vaccine_id).child("deleted").setValue(check).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                reference.child(vaccine_id).child("deleted")
+                                        .setValue(check).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             // Data was successfully pushed
                                             // You can perform any actions here, such as displaying a message
                                             vaccine.setDeleted(true);
-                                            Toast.makeText(update_inforamtion_vaccine.this, "Đã xóa thành công", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent();
                                             Bundle bundle = new Bundle();
                                             vaccine.setVaccine_id(vaccine_id); // đặt lại trường vaccine ID
                                             bundle.putSerializable("vaccine_name", vaccine);
                                             intent.putExtras(bundle);
-                                            setResult(RESULT_OK, intent);
+                                            setResult(0, intent);
                                             finish();
                                         } else {
                                             // Data push failed
                                             // Handle the error here
-                                            Toast.makeText(update_inforamtion_vaccine.this, "failed", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(update_inforamtion_vaccine.this,
+                                                    "failed", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -300,72 +316,115 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         btn_update_new_information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showConfirmDialog("Xác nhận cập nhật", "Bạn có chắc muốn cập nhật thông tin vắc-xin không?", new ConfirmationCallback() {
+                showConfirmDialog("Xác nhận cập nhật",
+                        "Bạn có chắc muốn cập nhật thông tin vắc-xin không?",
+                        new ConfirmationCallback() {
                     @Override
                     public void onConfirm(boolean result) {
                         if (result) {
                             String name = edt_vaccine_name.getText().toString();
-                            if (name.isEmpty()) {
+                            if(name.isEmpty()){
                                 edt_vaccine_name.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập tên vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Vui lòng nhập tên vắc-xin",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            } else if (!validate.IsValidNameVN(name.trim())){
+                                edt_vaccine_name.requestFocus();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Tên vắc-xin không hợp lệ",
+                                        Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            String reactions = edt_post_vaccination_reactions.getText().toString();
-                            if (reactions.isEmpty()) {
+
+                            String reactions = edt_post_vaccination_reactions.getText().toString().trim();
+                            if(reactions.isEmpty()){
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Nhập phản ứng sau tiêm, nếu không có thì ghi không có",
+                                        Toast.LENGTH_SHORT).show();
                                 edt_post_vaccination_reactions.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập phản ứng sau tiêm của vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            String origin = edt_origin.getText().toString();
-                            if (origin.isEmpty()) {
+
+
+                            String origin = edt_origin.getText().toString().trim();
+                            if(origin.isEmpty()){
                                 edt_origin.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập nguồn gốc của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Nhập nguồn gốc vắn-xin", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if(!validate.isValidNameOriginVN(origin)){
+                                edt_origin.requestFocus();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Nhập nguồn gốc vắn-xin không hợp lệ", Toast.LENGTH_LONG).show();
                                 return;
                             }
+
+
                             String target_group = edt_vaccination_target_group.getText().toString();
-                            if (target_group.isEmpty()) {
+                            if(target_group.isEmpty()){
                                 edt_vaccination_target_group.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập nhóm người sử dụng của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Nhập nhóm tuổi sử dụng", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if(target_group.trim().isEmpty()){
+                                edt_vaccination_target_group.requestFocus();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Nhập nhóm tuổi sử dụng không hợp lệ", Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            String contraindication = edt_contraindications.getText().toString();
-                            if (contraindication.isEmpty()) {
+
+
+                            String contraindication = edt_contraindications.getText().toString().trim();
+                            if(contraindication.isEmpty()){
                                 edt_contraindications.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập nhóm người chống chỉ định sử dụng của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Nhập chống chỉ định", Toast.LENGTH_LONG).show();
                                 return;
                             }
+
                             String quantity = edt_quantity.getText().toString();
                             if (quantity.isEmpty()) {
                                 edt_quantity.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập số lượng của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Phải nhập số lượng của vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
+
                             String dosage = edt_dosage.getText().toString();
                             if (dosage.isEmpty()) {
                                 edt_dosage.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập liều của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Phải nhập liều của vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            String unit = edt_unit.getText().toString();
+
+                            String unit = edt_unit.getText().toString().trim();
                             if (unit.isEmpty()) {
                                 edt_unit.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập đơn vị sử dụng của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Phải nhập đơn vị sử dụng của vắc-xin",
+                                        Toast.LENGTH_LONG).show();
                                 return;
                             }
+
                             String date_of_entry = edt_date_of_entry.getText().toString();
                             if (date_of_entry.isEmpty()) {
                                 edt_date_of_entry.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập ngày nhập cảnh của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Phải nhập ngày nhập cảnh của vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
                             String price = edt_price.getText().toString();
                             if (price.isEmpty()) {
                                 edt_price.requestFocus();
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải nhập giá của vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Phải nhập giá của vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
                             if (uri_image.size() == 0) {
-                                Toast.makeText(update_inforamtion_vaccine.this, "Phải chọn ảnh vắc-xin", Toast.LENGTH_LONG).show();
+                                Toast.makeText(update_inforamtion_vaccine.this,
+                                        "Phải chọn ảnh vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
                             ArrayList<String> Url_image = new ArrayList<>();
@@ -511,7 +570,8 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         String vaccine_price = price + " " + selectedValue;
         vaccine.setPrice(vaccine_price);
         vaccine.setVaccine_image(vaccine_image);
-        reference = database.getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines").child(vaccine_id);
+        reference = database.getReference("users").child("Vaccine_center")
+                .child(id_vaccine_center).child("vaccines").child(vaccine_id);
         reference.setValue(vaccine);
         // todo gửi thông tin đã chỉnh sửa về lại trang vaccine
         Intent intent = new Intent();
@@ -583,7 +643,8 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
 
     // chuyển đường dẫn thành Uri
     private String getRealPathFromUri(Uri imageUri, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+        Cursor cursor = activity.getContentResolver().query(imageUri,
+                null, null, null, null);
         if (cursor == null) {
             return imageUri.getPath();
         } else {

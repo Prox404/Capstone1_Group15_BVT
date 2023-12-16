@@ -56,10 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         Uri uri =  uriArrayList.get(position);
         String url = String.valueOf(uri);
-        if(url.startsWith("/mnt/shared/Pictures/")){
-            holder.imageView.setImageURI(uri);
-        }
-        else {
+        if(url.startsWith("http://res.cloudinary.com/") || url.startsWith("https://res.cloudinary.com/")){
             Picasso.get().load(url).error(R.drawable.ic_launcher_foreground).into(holder.imageView, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -71,6 +68,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     Log.i("Error", e+"");
                 }
             });
+        }
+        else {
+            holder.imageView.setImageURI(uri);
         }
         if(lastClickedImageView!=null){
             lastClickedImageView.setBackgroundResource(0);

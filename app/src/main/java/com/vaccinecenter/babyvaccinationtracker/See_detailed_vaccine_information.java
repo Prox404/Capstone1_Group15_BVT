@@ -173,6 +173,12 @@ public class See_detailed_vaccine_information extends AppCompatActivity {
             vaccine_image.setLayoutManager(new GridLayoutManager(See_detailed_vaccine_information.this,vacimage.size()));
             Picasso.get().load(vaccine.getVaccine_image().get(0)).into(single_vaccine_image);
             Toast.makeText(See_detailed_vaccine_information.this,"Đã cập nhập thành công", Toast.LENGTH_LONG).show();
+        } else if (requestCode == UPDATE_VACCINE && resultCode == 0) {
+            Bundle bundle = data.getExtras();
+            vaccine = (Vaccines) bundle.getSerializable("vaccine_name");
+            tv_detail_deleted.setText("Đã ngừng bán");
+            Toast.makeText(See_detailed_vaccine_information.this,
+                    "Đã xóa thành công", Toast.LENGTH_SHORT).show();
         }
 
     }
