@@ -90,6 +90,7 @@ public class search_vaccination extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccine_center vaccine_center = datasnapshot.getValue(Vaccine_center.class);
+                    vaccine_center.setCenter_id(datasnapshot.getKey());
                     Log.i("vaccine center", "onDataChange: " + vaccine_center.toString());
                     assert vaccine_center != null;
                     HashMap<String, Vaccines> vaccines = vaccine_center.getVaccines() == null ? new HashMap<String, Vaccines>() : vaccine_center.getVaccines();
@@ -98,9 +99,6 @@ public class search_vaccination extends AppCompatActivity {
                         Vaccines vaccine = vaccines.get(key);
                         vaccine.setVaccine_id(key);
                         vaccine.setVaccine_center_owner(vaccine_center);
-
-
-
 
                         if (removeDiacritics(vaccine.getVaccine_name().toLowerCase(Locale.getDefault())).contains(removeDiacritics(searchTerm.toLowerCase(Locale.getDefault()))) && !vaccine.isDeleted()) {
                             mlistvaccine.add(vaccine);
