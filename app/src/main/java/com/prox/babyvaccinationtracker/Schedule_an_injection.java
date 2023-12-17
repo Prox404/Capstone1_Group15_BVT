@@ -221,7 +221,8 @@ public class Schedule_an_injection extends AppCompatActivity {
                 currentDate.get(Calendar.MONTH), // Tháng mặc định
                 currentDate.get(Calendar.DAY_OF_MONTH) // Ngày mặc định
         );
-        datePickerDialog.getDatePicker().setMinDate(currentDate.getTimeInMillis());
+        // set ngày nhỏ nhất là ngày hiện tại + 1
+        datePickerDialog.getDatePicker().setMinDate(currentDate.getTimeInMillis() + 86400000);
         schedule_edt_date_vaccine.setFocusable(false);
         schedule_edt_date_vaccine.setClickable(true);
         schedule_edt_date_vaccine.setOnClickListener(new View.OnClickListener() {
