@@ -130,4 +130,12 @@ public class NotificationActivity extends AppCompatActivity {
         }
         return reversedList;
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // remove background stack
+        finish();
+    }
 }

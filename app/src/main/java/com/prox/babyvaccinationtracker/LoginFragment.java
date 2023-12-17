@@ -184,6 +184,7 @@ public class LoginFragment extends Fragment {
                                                             ((AuthActivity) context).changeFragment("getStarted");
                                                         }else {
                                                             Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                             startActivity(intent);
                                                         }
                                                     } else {

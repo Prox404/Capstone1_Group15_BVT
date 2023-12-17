@@ -30,10 +30,8 @@ public class AuthActivity extends AppCompatActivity {
         Log.i("AuthActivity", "Babies onCreate: " + babies);
         if(!customer_id.equals("null") && !customer_id.equals("")){
             if (!babies.equals("null") && !babies.equals("") && !babies.equals("[]")) {
-                // Intent intent = new Intent(AuthActivity.this, MainActivity.class);
-//                    startActivity(intent);
-                //todo: load home activity
                 Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 Log.i("AuthActivity", "changeFragment: home");
             }else{
@@ -47,16 +45,11 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        moveTaskToBack(true);
-//    }
-
     public void loadFragment(@NonNull Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.addToBackStack(null); // Để có thể quay lại Fragment trước đó
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
