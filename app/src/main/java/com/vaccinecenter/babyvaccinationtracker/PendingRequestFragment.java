@@ -23,7 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.vaccinecenter.babyvaccinationtracker.Adapter.PendingRequestAdapter;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccination_Registration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -63,6 +66,7 @@ public class PendingRequestFragment extends Fragment {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
         Query query = databaseReference.orderByChild("center/center_id").equalTo(id_vaccine_center);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -73,6 +77,19 @@ public class PendingRequestFragment extends Fragment {
                     if(vaccination_registration.getStatus() == 0){
                         vaccination_registration.setRegister_id(dataSnapshot.getKey());
                         vaccination_registrations.add(vaccination_registration);
+                        // từ chối tất cả những đơn có ngày đăng ký nhỏ hơn ngày hiện tại
+                        if (vaccination_registration != null && vaccination_registration.getRegist_created_at() != null) {
+                            Date regist_created_at = null;
+                            try {
+                                regist_created_at = simpleDateFormat.parse(vaccination_registration.getRegist_created_at());
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (regist_created_at.before(new Date())) {
+                                vaccination_registration.setStatus(-1);
+                                databaseReference.child(dataSnapshot.getKey()).setValue(vaccination_registration);
+                            }
+                        }
                     }
                 }
                 Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
