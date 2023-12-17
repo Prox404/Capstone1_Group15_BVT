@@ -54,8 +54,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
     Spinner spinnerOrigin;
     List<String> vaccineOrigin = new ArrayList<>();
     List<Vaccines> vaccines_care = new ArrayList<>();
-    List<Vaccines> vaccines_filter = new ArrayList<>();
     List<Vaccines> vaccines = new ArrayList<>();
+
+
 
     List<Regimen> regimenList = new ArrayList<>();
     Date closestDate = null;
@@ -63,6 +64,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
 
     String customer_id = "";
 
+    ArrayAdapter<String> adapterOrigin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +96,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
         if (baby_id.isEmpty()) {
             Toast.makeText(this, "Hãy chọn trẻ để chúng tôi có thể gợi ý những loại vaccine phù hợp với bé !!", Toast.LENGTH_SHORT).show();
         } else {
-            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this,vaccines_care );
+            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this,vaccines );
             schedule_list_vaccine.setAdapter(adapter);
 
             Log.i("select vaccine", "onCreate: baby_id: " + baby_id);
@@ -193,10 +195,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                        Vaccines vaccines = snapshot1.child("vaccines").getValue(Vaccines.class);
-                        vaccines_care.add(vaccines);
+                        Vaccines vaccine = snapshot1.child("vaccines").getValue(Vaccines.class);
+                        vaccines_care.add(vaccine);
                     }
-                    adapter.notifyDataSetChanged();
                     filterVaccines();
                 }
 
@@ -206,7 +207,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 }
             });
 
-            ArrayAdapter<String> adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
+            adapterOrigin = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vaccineOrigin);
             adapterOrigin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerOrigin.setAdapter(adapterOrigin);
 
@@ -214,8 +215,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     // Lấy xuất xứ được chọn từ Spinner
+                    Log.i("Vaccine_1", vaccines+"");
                     String selectedOrigin = (String) adapterView.getItemAtPosition(i);
-                    Log.i("selectedOrigin", ""+selectedOrigin);
+                    Log.i("selectedOrigin", ""+ selectedOrigin);
                     // Lọc danh sách vaccine dựa trên xuất xứ
                     filterVaccineByOrigin(selectedOrigin);
                 }
@@ -247,11 +249,12 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
         buttonClearFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_care);
+                vaccines = new ArrayList<>(vaccines_care);
+                adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines);
                 schedule_list_vaccine.setAdapter(adapter);
                 textViewMessage.setVisibility(View.GONE);
-                vaccines = new ArrayList<>(vaccines_care);
                 schedule_edt_search_vaccine2.setText("");
+                spinnerOrigin.setSelection(0);
             }
         });
 
@@ -274,7 +277,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
     }
 
     void filterVaccines(){
-        vaccines_filter = new ArrayList<>();
+        ArrayList<Vaccines> vaccines_filter = new ArrayList<>();
         vaccineOrigin.add("Tất cả");
         for (Vaccines a  : vaccines_care) {
             if (!vaccineOrigin.contains(a.getOrigin())) {
@@ -284,8 +287,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 vaccines_filter.add(a);
             }
         }
+        adapterOrigin.notifyDataSetChanged();
         vaccines = new ArrayList<>(vaccines_filter);
-        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_filter);
+        adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines);
         schedule_list_vaccine.setAdapter(adapter);
     }
 
@@ -304,7 +308,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
             schedule_list_vaccine.setAdapter(adapter);
         } else {
             // Nếu không có xuất xứ nào được chọn, hiển thị toàn bộ danh sách
-            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines_care);
+            adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2_2.this, vaccines);
             schedule_list_vaccine.setAdapter(adapter);
         }
     }
