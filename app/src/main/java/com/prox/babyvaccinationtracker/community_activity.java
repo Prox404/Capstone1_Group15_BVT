@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,12 +41,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.PostAdapter;
 import com.prox.babyvaccinationtracker.model.Comment;
 import com.prox.babyvaccinationtracker.model.Post;
 import com.prox.babyvaccinationtracker.model.User;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,8 +55,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class community_activity extends AppCompatActivity {
     private FrameLayout popupDialog;
@@ -80,6 +83,7 @@ public class community_activity extends AppCompatActivity {
     CardView highlightContainer;
     FlexboxLayout topHashTag;
     String  selectedHashtag = "";
+    ImageView imageViewAvatar;
     List<String> topHashtags = new ArrayList<>();
 
     View loadingLayout, loadingLayoutPost;
@@ -102,6 +106,7 @@ public class community_activity extends AppCompatActivity {
         topHashTag = findViewById(R.id.topHashTag);
         loadingLayout = findViewById(R.id.loadingLayout);
         loadingLayoutPost = findViewById(R.id.loadingLayoutPost);
+        imageViewAvatar = findViewById(R.id.imageViewAvatar);
 
         loadingLayout.setVisibility(View.VISIBLE);
 
@@ -109,6 +114,19 @@ public class community_activity extends AppCompatActivity {
         String user_id = sharedPreferences.getString("customer_id", "");
         String user_name = sharedPreferences.getString("cus_name", "");
         String user_avatar = sharedPreferences.getString("cus_avatar", "");
+
+        user_avatar = user_avatar.contains("https") ? user_avatar : user_avatar.replace("http", "https");
+        Picasso.get().load(user_avatar).into(imageViewAvatar, new Callback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                imageViewAvatar.setImageResource(R.drawable.ic_launcher_background);
+            }
+        });
 
         Calendar calendar = Calendar.getInstance();
         final long currentTime = calendar.getTimeInMillis();
@@ -163,18 +181,21 @@ public class community_activity extends AppCompatActivity {
         buttonAddNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = editTextPopupContent.getText().toString();
-                String hashtag = editTextHashtag.getText().toString();
+                String content = editTextPopupContent.getText().toString().trim();
+                String hashtag = editTextHashtag.getText().toString().trim();
                 ArrayList<String> hashtags = new ArrayList<>();
                 if (content.isEmpty()) {
-                    Toast.makeText
-                            (community_activity.this,
-                                    "Nội dung không được để trống",
-                                    Toast.LENGTH_SHORT).show();
+                    editTextPopupContent.setError("Nội dung không được để trống");
+                    return;
                 } else {
-                    loadingLayoutPost.setVisibility(View.VISIBLE);
+
                     if (hashtag.length() > 0) {
-                        hashtags = getHashtag(hashtag);
+                        if (checkHashtag(hashtag)) {
+                            hashtags = getHashtag(hashtag);
+                        } else {
+                            editTextHashtag.setError("Hashtag không hợp lệ");
+                            return;
+                        }
                     }
 
                     Post post = new Post();
@@ -327,6 +348,25 @@ public class community_activity extends AppCompatActivity {
 
     }
 
+    public boolean isValidHashtag(String hashtag) {
+        String hashtagRegex = "^#[\\p{L}\\p{N}_]+$";
+
+        Pattern pattern = Pattern.compile(hashtagRegex);
+        Matcher matcher = pattern.matcher(hashtag);
+
+        return matcher.matches();
+    }
+
+    public boolean checkHashtag(String hashtag){
+        String[] hashtags = hashtag.split(" ");
+        for (String s : hashtags) {
+            if (!isValidHashtag(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     private List<String> getAllHashtags(List<Post> posts) {
         List<String> allHashtags = new ArrayList<>();
@@ -366,6 +406,7 @@ public class community_activity extends AppCompatActivity {
 
 
     public void uploadImagesToCloudinaryAndFirebase(Post post) {
+        loadingLayoutPost.setVisibility(View.VISIBLE);
         int total_image = uri.size();
         if(total_image != 0){
             AtomicInteger uploadedImageCount = new AtomicInteger(0);
@@ -407,8 +448,8 @@ public class community_activity extends AppCompatActivity {
                                 }
                             });
                             Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
-                            hidePopupDialogWithAnimation();
                             loadingLayoutPost.setVisibility(View.GONE);
+                            hidePopupDialogWithAnimation();
                         }
                     }
 
@@ -438,6 +479,7 @@ public class community_activity extends AppCompatActivity {
                 }
             });
             Toast.makeText(community_activity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+            loadingLayoutPost.setVisibility(View.GONE);
             hidePopupDialogWithAnimation();
         }
 

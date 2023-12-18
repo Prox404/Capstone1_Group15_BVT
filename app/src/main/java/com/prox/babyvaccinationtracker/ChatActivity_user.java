@@ -118,7 +118,7 @@ public class ChatActivity_user extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message_content = editTextMessage.getText().toString();
+                String message_content = editTextMessage.getText().toString().trim();
                 if(!message_content.isEmpty()){
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("chat").child(conversation_id);
                     String message_id = databaseRef.push().getKey();

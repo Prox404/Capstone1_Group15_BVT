@@ -203,15 +203,15 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_notification) {
-            // Xử lý sự kiện khi người dùng nhấn vào biểu tượng thông báo ở đây
-            // Ví dụ: mở màn hình thông báo, hiển thị danh sách thông báo, vv.
             Log.i("Home", "onOptionsItemSelected: notification" );
             Intent i = new Intent(HomeActivity.this, NotificationActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(i);
             return true;
         }
         else if(id == R.id.action_vaccine_care){
             Intent i = new Intent(HomeActivity.this, search_care_vaccines.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(i);
             return true;
         }
