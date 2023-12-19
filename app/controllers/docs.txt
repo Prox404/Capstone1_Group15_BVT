@@ -1,0 +1,65 @@
+Phác đồ tiêm chủng là một lịch trình định sẵn cho việc tiêm chủng các loại vaccine cho trẻ em trong các độ tuổi khác nhau.
+Trẻ sơ sinh cần tiêm chủng Lao vào tháng thứ 2 để bảo vệ họ khỏi bệnh Lao nguy hiểm.
+Trẻ cần tiêm chủng Viêm gan B và Bạch hầu, ho gà, uốn ván khi đủ 18 tháng tuổi.
+Trẻ cần tiêm chủng chống viêm phổi, viêm màng não mủ do Hib vào tháng thứ 2, 4 và khi đủ 6 tuổi.
+Có, trẻ cần tiêm chủng chống cúm theo phác đồ 2 liều đầu tiên, sau đó tiêm nhắc lại 1 liều mỗi năm.
+Trẻ cần tiêm chủng chống sởi khi đủ 12-15 tháng tuổi và sau đó tiêm lại khi đủ 7-8 tuổi.
+Trẻ có thể được tiêm chủng chống viêm não Nhật B theo phác đồ 2 liều tiêm cách nhau 1 năm hoặc 3 liều tiêm và nhắc lại mỗi 3 năm một liều đến khi đủ 15 tuổi.
+Trẻ cần tiêm chủng chống thủy đậu theo phác đồ 2 liều tiêm cách nhau tối thiểu 3 tháng.
+Tiêm chủng chống viêm gan A giúp bảo vệ trẻ khỏi bệnh viêm gan A, một bệnh viêm gan nhiễm trùng nguy hiểm.
+Có, trẻ cần tiêm chủng chống thương hàn 1 liều và nhắc lại mỗi 3 năm để duy trì sự bảo vệ.
+Trẻ cần tiêm chủng chống bệnh tả bằng 2 liều tiêm cách nhau tối thiểu 2 tuần.
+Trong tháng thứ 2 sau khi sinh, trẻ cần tiêm vaccine Lao, Viêm gan B và Bạch hầu, ho gà, uốn ván.
+Bệnh Lao là một bệnh lây truyền nguy hiểm. Tiêm chủng chống Lao giúp ngăn ngừa bệnh này.
+Viêm gan B có thể gây ra nhiều vấn đề sức khỏe nghiêm trọng. Tiêm chủng chống Viêm gan B bảo vệ trẻ khỏi bệnh này.
+Vaccine Bạch hầu, ho gà, uốn ván bảo vệ trẻ khỏi các bệnh lây truyền nguy hiểm như Bạch hầu, ho gà và uốn ván.
+Vaccine Bại liệt bảo vệ trẻ khỏi bệnh Bại liệt, một bệnh gây hại cho hệ thần kinh.
+Viêm phổi và viêm màng não mủ do Hib có thể gây ra nhiều biến chứng nguy hiểm. Tiêm chủng bảo vệ trẻ khỏi những bệnh này.
+Vaccine tiêu chảy do Rota Virus bảo vệ trẻ khỏi bệnh tiêu chảy do Rota Virus, một bệnh tiêu chảy nguy hiểm.
+Vaccine cúm bảo vệ trẻ khỏi bệnh cúm, một bệnh lây truyền thường gây ra triệu chứng cảm lạnh.
+Sởi là một bệnh truyền nhiễm nguy hiểm. Tiêm chủng chống sởi bảo vệ trẻ khỏi bệnh này.
+Vaccine chống viêm não Nhật B bảo vệ trẻ khỏi bệnh viêm não Nhật B, một bệnh viêm não nguy hiểm.
+Thủy đậu có thể gây ra biến chứng nghiêm trọng. Tiêm chủng chống thủy đậu bảo vệ trẻ khỏi bệnh này.
+Vaccine viêm gan A bảo vệ trẻ khỏi bệnh viêm gan A, một bệnh viêm gan nguy hiểm.
+Tiêm chủng chống viêm gan A + B bảo vệ trẻ khỏi cả hai loại viêm gan A và B, giúp bảo vệ sức khỏe gan của họ.
+Vaccine thương hàn bảo vệ trẻ khỏi bệnh thương hàn, một bệnh sốt rét nguy hiểm.
+Vaccine bệnh tả bảo vệ trẻ khỏi bệnh tả, một bệnh nhiễm khuẩn nguy hiểm.
+Vaccine cúm và vaccine thương hàn phải tiêm theo lịch tiêm chủng hàng năm để duy trì sự bảo vệ.
+Vaccine Bạch hầu, ho gà, uốn ván bảo vệ trẻ khỏi Bạch hầu, ho gà và uốn ván.
+Vaccine Bệnh viêm phổi, viêm màng não mủ do Hib bảo vệ trẻ khỏi viêm phổi, viêm màng não mủ và các bệnh do Hib gây ra.
+Vaccine tiêu chảy do Rota Virus bảo vệ trẻ khỏi bệnh tiêu chảy do Rota Virus, một loại bệnh tiêu chảy nguy hiểm.
+Cúm là một bệnh lây truyền thường gây ra triệu chứng cảm lạnh. Tiêm chủng chống cúm giúp bảo vệ trẻ khỏi bệnh này.
+Vaccine sởi bảo vệ trẻ khỏi bệnh sởi, một bệnh truyền nhiễm nguy hiểm.
+Vaccine chống viêm não Nhật B bảo vệ trẻ khỏi bệnh viêm não Nhật B, một bệnh viêm não nguy hiểm.
+Vaccine chống thủy đậu bảo vệ trẻ khỏi bệnh thủy đậu, một bệnh nhiễm khuẩn gây ra triệu chứng nổi mẩn nghiêm trọng.
+Vaccine viêm gan A bảo vệ trẻ khỏi bệnh viêm gan A, một bệnh viêm gan nhiễm trùng nguy hiểm.
+Vaccine viêm gan A + B bảo vệ trẻ khỏi cả hai loại viêm gan A và B, giúp bảo vệ sức khỏe gan của họ.
+Vaccine thương hàn bảo vệ trẻ khỏi bệnh thương hàn, một bệnh sốt rét nguy hiểm.
+Vaccine bệnh tả bảo vệ trẻ khỏi bệnh tả, một bệnh nhiễm khuẩn nguy hiểm.
+Trong tháng thứ 2 sau khi sinh, trẻ cần tiêm vaccine Lao, Viêm gan B và Bạch hầu, ho gà, uốn ván.
+Bệnh Lao là một bệnh lây truyền nguy hiểm. Tiêm chủng chống Lao giúp ngăn ngừa bệnh này.
+Viêm gan B có thể gây ra nhiều vấn đề sức khỏe nghiêm trọng. Tiêm chủng chống Viêm gan B bảo vệ trẻ khỏi bệnh này.
+Vaccine Bạch hầu, ho gà, uốn ván bảo vệ trẻ khỏi các bệnh lây truyền nguy hiểm như Bạch hầu, ho gà và uốn ván.
+Vaccine Bại liệt bảo vệ trẻ khỏi bệnh Bại liệt, một bệnh gây hại cho hệ thần kinh.
+Viêm phổi và viêm màng não mủ do Hib có thể gây ra nhiều biến chứng nguy hiểm. Tiêm chủng bảo vệ trẻ khỏi những bệnh này.
+Vaccine tiêu chảy do Rota Virus bảo vệ trẻ khỏi bệnh tiêu chảy do Rota Virus, một bệnh tiêu chảy nguy hiểm.
+Có, trẻ cần tiêm chủng chống cúm theo phác đồ 2 liều đầu tiên, sau đó tiêm nhắc lại 1 liều mỗi năm.
+Sởi là một bệnh truyền nhiễm nguy hiểm. Tiêm chủng chống sởi bảo vệ trẻ khỏi bệnh này.
+Vaccine chống viêm não Nhật B bảo vệ trẻ khỏi bệnh viêm não Nhật B, một bệnh viêm não nguy hiểm.
+Thủy đậu có thể gây ra biến chứng nghiêm trọng. Tiêm chủng chống thủy đậu bảo vệ trẻ khỏi bệnh này.
+Vaccine viêm gan A bảo vệ trẻ khỏi bệnh viêm gan A, một bệnh viêm gan nhiễm trùng nguy hiểm.
+Trẻ sơ sinh cần tiêm chủng Lao vào tháng thứ 2 sau khi sinh.
+Trẻ cần tiêm chủng Viêm gan B vào tháng thứ 2, 3, 4 và khi đủ 18 tháng tuổi.
+Trẻ cần tiêm chủng Bạch hầu, ho gà, uốn ván vào tháng thứ 2, 3, 4 và khi đủ 5-6 tuổi.
+Trẻ cần tiêm chủng Bại liệt vào tháng thứ 2, 3, 4 và khi đủ 6 tuổi.
+Trẻ cần tiêm chủng chống viêm phổi, viêm màng não do Hib vào tháng thứ 2, 4 và khi đủ 6 tuổi.
+Trẻ cần tiêm chủng chống tiêu chảy do Rota Virus theo phác đồ 2 hoặc 3 liều, mỗi liều cách nhau tối thiểu 1 tháng.
+Trẻ cần tiêm chủng chống cúm bằng phác đồ 2 liều, cách nhau tối thiểu một tháng cho lần tiêm đầu tiên. Sau đó, cần tiêm nhắc lại 1 liều mỗi năm.
+Trẻ cần tiêm chủng chống sởi khi đủ 12-15 tháng tuổi và sau đó tiêm lại khi đủ 7-8 tuổi.
+Trẻ cần tiêm chủng chống viêm màng não do cầu khuẩn B, C, W, Y khi đủ 7-8 tuổi.
+Trẻ có thể được tiêm chủng chống viêm não Nhật B theo phác đồ 2 liều tiêm cách nhau 1 năm hoặc 3 liều tiêm và nhắc lại mỗi 3 năm một liều đến khi đủ 15 tuổi.
+Trẻ cần tiêm chủng chống thủy đậu theo phác đồ 2 liều tiêm cách nhau tối thiểu 3 tháng.
+Trẻ cần tiêm chủng chống viêm gan A theo phác đồ 2 liều tiêm cách nhau tối thiểu 6 tháng.
+Trẻ cần tiêm chủng chống viêm gan A + B theo phác đồ 2 liều tiêm cách nhau tối thiểu 6-12 tháng.
+Trẻ cần tiêm chủng chống thương hàn 1 liều và nhắc lại mỗi 3 năm.
+Trẻ cần tiêm chủng chống bệnh tả bằng 2 liều, cách nhau tối thiểu 2 tuần.
