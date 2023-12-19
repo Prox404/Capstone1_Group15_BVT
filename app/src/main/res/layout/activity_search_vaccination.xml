@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:hint="Tìm kiếm" />
+            android:hint="Tìm kiếm"
+            android:inputType="text"/>
 
         <Button
             android:id="@+id/btntimkiem"
