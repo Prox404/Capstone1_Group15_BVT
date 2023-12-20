@@ -42,7 +42,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Activity_add_post extends AppCompatActivity {
 
     private EditText topicEditText , editTextContent;
-    ImageButton imageButtonClose;
     String image_url = "https://res.cloudinary.com/du42cexqi/image/upload/v1696504103/nt4cybkx1k25elc2jrng.jpg"; // ảnh mặc định
     RecyclerView recycleViewImage; // nơi hiện ảnh đã chọn
     ImageAdapter recyclerAdapter; // Hiển thị những ảnh đã chọn
@@ -51,7 +50,6 @@ public class Activity_add_post extends AppCompatActivity {
     LinearLayout linearLayoutAddImage;
     private static final int PERMISSION_CODE = 2;
     private static final int PICK_IMAGE = 1;
-    RecyclerView recyclerViewPost;
     Button buttonAddNewPost;
     User user;
 
@@ -100,9 +98,9 @@ public class Activity_add_post extends AppCompatActivity {
         buttonAddNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = editTextContent.getText().toString();
+                String content = editTextContent.getText().toString().trim();
                 String hastag = topicEditText.getText().toString();
-                if(!content.isEmpty()|| uri.size() != 0 || !hastag.isEmpty()){
+                if(!content.isEmpty() && uri.size() != 0 && !hastag.isEmpty()){
                     Post post = new Post();
                     ArrayList<String> hashtag = getHashtag(hastag);
                     post.setHashtags(hashtag);
@@ -111,11 +109,9 @@ public class Activity_add_post extends AppCompatActivity {
                     uploadImagesToCloudinaryAndFirebase(post);
                 }
                 else {
-                    Toast.makeText(Activity_add_post.this, "Phải nhập đủ nội dung", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Activity_add_post.this, "Phải nhập đủ nội dung",
+                            Toast.LENGTH_LONG).show();
                 }
-
-
-
             }
         });
 
@@ -157,18 +153,23 @@ public class Activity_add_post extends AppCompatActivity {
 
                     if (uploadedImageCount.get() == total_image) {
                         // All images are uploaded, proceed with saving data to Firebase.
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                                .getReference("posts");
                         String post_id = databaseReference.push().getKey();
                         post.setImage_url(Image_url);
                         post.setPost_id(post_id);
-                        databaseReference.child(post_id).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        databaseReference.child(post_id)
+                                .setValue(post)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 topicEditText.setText("");
                                 editTextContent.setText("");
                                 uri.clear();
                                 recyclerAdapter.notifyDataSetChanged();
-                                Toast.makeText(Activity_add_post.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Activity_add_post.this,
+                                        "Đăng bài thành công",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -213,7 +214,9 @@ public class Activity_add_post extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -237,7 +240,8 @@ public class Activity_add_post extends AppCompatActivity {
                 if(!uri.contains(Uri.parse(filePath))){
                     uri.add(Uri.parse(filePath));
                 }else{
-                    Toast.makeText(this, "Ảnh đã được chọn trước đó", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Ảnh đã được chọn trước đó",
+                            Toast.LENGTH_SHORT).show();
                 }
                 recyclerAdapter.notifyDataSetChanged();
             }
@@ -245,7 +249,8 @@ public class Activity_add_post extends AppCompatActivity {
     }
 
     private String getRealPathFromUri(Uri imageUri, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+        Cursor cursor = activity.getContentResolver()
+                .query(imageUri, null, null, null, null);
         if (cursor == null) {
             return imageUri.getPath();
         } else {
