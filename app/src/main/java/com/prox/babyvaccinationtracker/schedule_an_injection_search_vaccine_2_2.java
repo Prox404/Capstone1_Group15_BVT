@@ -29,6 +29,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.VaccineAdapter;
 import com.prox.babyvaccinationtracker.model.Regimen;
+import com.prox.babyvaccinationtracker.model.Vaccination_Registration;
 import com.prox.babyvaccinationtracker.model.Vaccine_center;
 import com.prox.babyvaccinationtracker.model.Vaccines;
 
@@ -63,6 +64,8 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
 
     String customer_id = "";
 
+    private ArrayList<String> vaccination_registrations = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,9 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
 
         text_View_take_care_header_scheulde = findViewById(R.id.text_View_take_care_header_scheulde);
         text_View_take_care_header_scheulde.setText("Các vắc-xin đang trong giỏ hàng");
+
+        vaccination_registrations = Schedule_an_injection.vaccination_registrations;
+        Log.i("Registration", "onCreate: " + vaccination_registrations.size());
 
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -128,7 +134,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                         Date regimenDate = regimen.getDate();
                         if (regimenDate.before(currentDate) || regimenDate.equals(currentDate)) {
                             if (closestDate == null || closestDate.before(regimenDate)) {
-                                if (!regimen.isVaccinated()) {
+                                if (!regimen.isVaccinated() && !isOnVaccineList(regimen.getVaccination_type())) {
                                     closestDate = regimenDate;
                                     closestVaccineType = regimen.getVaccination_type();
                                 }
@@ -209,10 +215,6 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 }
             });
 
-
-
-
-
             spinnerOrigin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -274,6 +276,11 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 finish();
             }
         });
+    }
+
+    public Boolean isOnVaccineList(String vaccinationType){
+        Log.i("Registration", "isOnVaccineList: " + vaccination_registrations);
+        return vaccination_registrations.contains(vaccinationType);
     }
 
     void filterVaccines(){

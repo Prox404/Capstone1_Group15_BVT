@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -81,6 +82,8 @@ public class Schedule_an_injection extends AppCompatActivity {
     final int VACCINE_PROVINCES = 2;
     final int VACCINE_DISTRICT = 3;
     final int VACCINE_WARD = 4;
+
+    public static ArrayList<String> vaccination_registrations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,6 +300,32 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     }
 
+    public void getRegistrationSchedule(String baby_id){
+        DatabaseReference reference = database.getReference("Vaccination_Registration");
+        Query query = reference.orderByChild("baby/baby_id").equalTo(baby_id);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                vaccination_registrations.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
+                    Log.i("Registration", "onDataChange: " + vaccination_registration.toString());
+                    if (vaccination_registration.getStatus() < 3 && vaccination_registration.getStatus() >= 0){
+                        vaccination_registration.setRegist_id(dataSnapshot.getKey());
+                        vaccination_registrations.add(vaccination_registration.getVaccine().getVac_effectiveness());
+                        Log.i("Registration", "getRegistrationSchedule: " + vaccination_registrations);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -310,20 +339,6 @@ public class Schedule_an_injection extends AppCompatActivity {
                 schedule_edt_vaccine_center.setText(vaccineCenter.getCenter_name());
                 // Todo không hiển thị trung tâm không có vắc-xin
                 Log.i("VVAAAAANINEIE", vaccineCenter.toString());
-
-//                schedule_edt_type_vaccine.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                            if (vaccines != null) {
-//                                Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2.class);
-//                                intent.putExtra("Vaccines", vaccines);
-//                                intent.putExtra("baby_id", baby_id);
-//                                startActivityForResult(intent, VACCINE_CHOOSE);
-//                            } else {
-//                                Toast.makeText(Schedule_an_injection.this, "Bệnh viện này chưa có vắc-xin", Toast.LENGTH_LONG).show();
-//                            }
-//                    }
-//                });
             }
         } else if (requestCode == VACCINE_CHOOSE) {
             if (resultCode == RESULT_OK) {
@@ -470,11 +485,14 @@ public class Schedule_an_injection extends AppCompatActivity {
             button.setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
         }
 
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 babyhavebeenchoose = baby;
                 baby_id = baby.getBaby_id();
+                getRegistrationSchedule(baby_id);
                 Log.i("Schedule injection", "onClick: baby id " + baby_id);
                 schedule_bady_name.setText(baby.getBaby_name());
                 schedule_baby_gender.setText(baby.getBaby_gender());

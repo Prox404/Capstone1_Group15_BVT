@@ -86,6 +86,20 @@ public class Vaccination_Registration implements Serializable {
         return status;
     }
 
+    @Override
+    public String toString() {
+        return "Vaccination_Registration{" +
+                "regist_id='" + regist_id + '\'' +
+                ", baby=" + baby +
+                ", cus=" + cus +
+                ", cus_phone='" + cus_phone + '\'' +
+                ", vaccine=" + vaccine +
+                ", center=" + center +
+                ", regist_created_at='" + regist_created_at + '\'' +
+                ", status=" + status +
+                '}';
+    }
+
     public void setStatus(int status) {
         this.status = status;
     }

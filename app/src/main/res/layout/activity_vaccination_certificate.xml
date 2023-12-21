@@ -195,23 +195,29 @@
                 android:id="@+id/sideEffectContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal"
-                tools:visibility="gone">
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/editTextSideEffects"
+                    style="@style/Widget.App.RoundedEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Side effects"
+                    android:hint="Phản ứng sau tiêm"
                     android:inputType="text" />
 
                 <Button
                     android:id="@+id/buttonSend"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
+                    android:minWidth="70dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="Gửi" />
             </LinearLayout>
 
             <TextView
