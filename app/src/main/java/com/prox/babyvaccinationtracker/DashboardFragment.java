@@ -228,7 +228,7 @@ public class DashboardFragment extends Fragment {
                 recyclerViewTimeline.setAdapter(timeLineAdapter);
                 recyclerViewTimeline.setLayoutManager(linearLayoutManager);
                 Log.i("Home", "onDataChange: " + regimenList.size());
-
+                vaccinationRegimenReference.removeEventListener(this);
                 loadingLayout.setVisibility(View.GONE);
             }
 
@@ -237,6 +237,8 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+
+
     }
 
     @Override

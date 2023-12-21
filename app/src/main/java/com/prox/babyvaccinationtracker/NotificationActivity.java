@@ -56,7 +56,7 @@ public class NotificationActivity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                notificationList.clear();
                 if (snapshot.getValue() != null) {
                     Log.i("NotificationActivity", "onDataChange: " + snapshot.getValue());
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -108,7 +108,7 @@ public class NotificationActivity extends AppCompatActivity {
                         } else {
                             emptyView.setVisibility(View.GONE);
                         }
-
+                        databaseReference1.removeEventListener(this);
                         Toast.makeText(NotificationActivity.this, "Xoá thành công!", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.i("NotificationActivity", "onDataChange: " + snapshot.getValue());

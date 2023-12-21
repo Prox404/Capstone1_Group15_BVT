@@ -50,17 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HealthFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HealthFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     Context context;
     LinearLayout health_baby,health_arlet;
@@ -74,63 +64,38 @@ public class HealthFragment extends Fragment {
     DatabaseReference databaseReference;
     HashMap<Integer,Health> health = new HashMap<>();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public HealthFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HealthFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HealthFragment newInstance(String param1, String param2) {
         HealthFragment fragment = new HealthFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Add any code you want to execute when the fragment is resumed
         health_arlet_input.setVisibility(View.GONE);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_health, container, false);
-        // button baby
         health_baby = view.findViewById(R.id.Button_health_baby);
-        // hiển thị nhập dữ liệu
         health_arlet_input = view.findViewById(R.id.health_arlet_input);
-        // arlet
         health_arlet = view.findViewById(R.id.health_arlet);
         health_arlet_month_now = view.findViewById(R.id.health_arlet_month_now);
         health_arlet_header = view.findViewById(R.id.health_arlet_header);
         health_arlet_content = view.findViewById(R.id.health_arlet_content);
         health_arlet_image = view.findViewById(R.id.health_arlet_image);
 
-        // todo listview
         health_baby_list_view = view.findViewById(R.id.health_baby_list_view);
 
         context = container != null ? container.getContext() : null;
@@ -141,7 +106,7 @@ public class HealthFragment extends Fragment {
                 startActivity(new Intent(context, heatlth_input_for_babies.class));
             }
         });
-        // Lấy dữ liệu baby
+
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String babiesJson = sharedPreferences.getString("babiesList", "");
         Gson gson = new Gson();
@@ -160,7 +125,6 @@ public class HealthFragment extends Fragment {
 
         lineChart = view.findViewById(R.id.lineChart);
 
-        // Inflate the layout for this fragment
         return view;
 
     }
@@ -174,7 +138,6 @@ public class HealthFragment extends Fragment {
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
-        // Customize the appearance of the chart
         Description description = new Description();
         description.setText("Sơ số BMI của bé");
         lineChart.setDescription(description);
@@ -330,7 +293,6 @@ public class HealthFragment extends Fragment {
                             adapter = new HealthBabyAdapter(reverse_arraylist(a));
                             health_baby_list_view.setLayoutManager(new GridLayoutManager(context,1));
                             health_baby_list_view.setAdapter(adapter);
-                            //todo arlet
                             Log.i("MONTHHHH",""+month);
                             if(health.containsKey(month)){
                                 health_arlet.setVisibility(View.VISIBLE);
