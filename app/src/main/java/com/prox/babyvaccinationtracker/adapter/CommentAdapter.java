@@ -33,7 +33,12 @@ import com.prox.babyvaccinationtracker.model.Report;
 import com.prox.babyvaccinationtracker.model.User;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,33 +93,34 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             @Override
             public void onClick(View view) {
                 String key = commentReference.push().getKey();
-                String content = holder.editTextCommentContent.getText().toString();
-                if (comment.getReplies() != null){
-                    HashMap<String, Comment> replies = comment.getReplies();
-                    Comment newComment = new Comment();
-                    newComment.setContent(content);
-                    newComment.setUser(user);
-                    String commentKey = commentReference.push().getKey();
-                    newComment.setComment_id(commentKey);
-                    replies.put(commentKey, newComment);
-                    commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
-                    comment.setReplies(replies);
-                }else {
-                    HashMap<String, Comment> replies = new HashMap<>();
-                    Comment newComment = new Comment();
-                    newComment.setContent(content);
-                    newComment.setUser(user);
-                    String commentKey = commentReference.push().getKey();
-                    newComment.setComment_id(commentKey);
-                    replies.put(commentKey, newComment);
-                    commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
-                    comment.setReplies(replies);
+                String content = holder.editTextCommentContent.getText().toString().trim();
+                if(!content.isEmpty()){
+                    if (comment.getReplies() != null){
+                        HashMap<String, Comment> replies = comment.getReplies();
+                        Comment newComment = new Comment();
+                        newComment.setContent(content);
+                        newComment.setUser(user);
+                        String commentKey = commentReference.push().getKey();
+                        newComment.setComment_id(commentKey);
+                        replies.put(commentKey, newComment);
+                        commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
+                        comment.setReplies(replies);
+                    }else {
+                        HashMap<String, Comment> replies = new HashMap<>();
+                        Comment newComment = new Comment();
+                        newComment.setContent(content);
+                        newComment.setUser(user);
+                        String commentKey = commentReference.push().getKey();
+                        newComment.setComment_id(commentKey);
+                        replies.put(commentKey, newComment);
+                        commentReference.child(comment.getComment_id()).child("replies").setValue(replies);
+                        comment.setReplies(replies);
+                    }
+                    holder.commentContainer.setVisibility(View.GONE);
+                    holder.textViewReply.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
+                    holder.editTextCommentContent.setText("");
                 }
-                holder.commentContainer.setVisibility(View.GONE);
-                holder.textViewReply.setVisibility(View.VISIBLE);
-                notifyDataSetChanged();
-                holder.editTextCommentContent.setText("");
-                
             }
         });
 
@@ -136,6 +142,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     replyList.add((Comment) commentObject);
                 }
             }
+            Collections.sort(replyList, new Comparator<Comment>() {
+                @Override
+                public int compare(Comment comment1, Comment comment2) {
+                    return compareByCreatedAt(comment1.getCreated_at(), comment2.getCreated_at());
+                }
+            });
+
             CommentAdapter replyAdapter = new CommentAdapter(replyList, commentReference.child(comment.getComment_id()).child("replies"), user, post);
             holder.recyclerViewReplies.setLayoutManager(new LinearLayoutManager(holder.recyclerViewReplies.getContext()));
             holder.recyclerViewReplies.setAdapter(replyAdapter);
@@ -151,6 +164,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             }
         });
+    }
+
+    private int compareByCreatedAt(String dateStr1, String dateStr2) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        try {
+            Date date1 = dateFormat.parse(dateStr1);
+            Date date2 = dateFormat.parse(dateStr2);
+            return date2.compareTo(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private void reportComment(View view, Comment comment) {
