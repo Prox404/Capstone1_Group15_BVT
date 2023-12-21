@@ -239,6 +239,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
         });
     }
+
     private int compareByCreatedAt(String dateStr1, String dateStr2) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         try {

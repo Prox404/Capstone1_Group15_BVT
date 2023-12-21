@@ -89,6 +89,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
 
+
         holder.buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
