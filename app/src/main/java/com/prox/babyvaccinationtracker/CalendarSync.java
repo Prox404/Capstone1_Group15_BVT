@@ -153,6 +153,7 @@ public class CalendarSync {
         try {
             // Parse thông tin từ JSON
             String title = notificationMessage.getTitle();
+            String content = notificationMessage.getMessage();
             Date vaccine_date__ = notificationMessage.getDate();
             long startTime = vaccine_date__.getTime();
             // Các thông tin khác nếu cần
@@ -162,6 +163,7 @@ public class CalendarSync {
             values.put(CalendarContract.Events.DTEND, startTime + (3 * 60 * 60 * 1000));
             values.put(CalendarContract.Events.TITLE, title);
             values.put(CalendarContract.Events.CALENDAR_ID, 1);
+            values.put(CalendarContract.Events.DESCRIPTION, content);
             values.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Ho_Chi_Minh");
 
             // Thêm sự kiện vào CalendarProvider

@@ -178,15 +178,12 @@ public class DashboardFragment extends Fragment {
         button.setMinHeight(0);
         button.setStateListAnimator(null);
 
-        // Nếu babyListContainer chưa có Button nào, hoặc Button đầu tiên được thêm vào
         if (babyListContainer.getChildCount() == 0) {
-            // Thiết lập background cho Button đầu tiên là color/primaryColor
             button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
             button.setTextColor(context.getResources().getColor(R.color.white));
             babyId = baby.getBaby_id();
             setTimeLine(babyId);
         } else {
-            // Thiết lập background mặc định cho tất cả các Button khác
             button.setBackground(context.getResources().getDrawable(R.drawable.rounded_white_button_bg));
         }
 
@@ -195,11 +192,7 @@ public class DashboardFragment extends Fragment {
             public void onClick(View view) {
                 babyId = baby.getBaby_id();
                 setTimeLine(babyId);
-
-                // Đặt lại background cho tất cả các Button về màu trắng
                 resetButtonBackgrounds();
-
-                // Đặt background cho Button đang chọn là color/primaryColor
                 button.setBackground(context.getResources().getDrawable(R.drawable.rounded_primary_button_bg));
                 button.setTextColor(context.getResources().getColor(R.color.white));
             }
@@ -209,7 +202,6 @@ public class DashboardFragment extends Fragment {
     }
 
     private void resetButtonBackgrounds() {
-        // Lặp qua tất cả các Button trong babyListContainer và đặt background về màu trắng
         for (int i = 0; i < babyListContainer.getChildCount(); i++) {
             View child = babyListContainer.getChildAt(i);
             if (child instanceof Button) {
@@ -236,7 +228,7 @@ public class DashboardFragment extends Fragment {
                 recyclerViewTimeline.setAdapter(timeLineAdapter);
                 recyclerViewTimeline.setLayoutManager(linearLayoutManager);
                 Log.i("Home", "onDataChange: " + regimenList.size());
-
+                vaccinationRegimenReference.removeEventListener(this);
                 loadingLayout.setVisibility(View.GONE);
             }
 
@@ -245,6 +237,8 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+
+
     }
 
     @Override
