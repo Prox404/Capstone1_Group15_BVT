@@ -53,6 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommunityActivity extends AppCompatActivity {
 
@@ -156,14 +158,19 @@ public class CommunityActivity extends AppCompatActivity {
                     Toast.makeText(CommunityActivity.this, "Nội dung không được để trống", Toast.LENGTH_SHORT).show();
                 } else {
                     if (hashtag.length() > 0) {
-                        hashtags = getHashtag(hashtag);
+                        if (checkHashtag(hashtag)) {
+                            hashtags = getHashtag(hashtag);
+                        } else {
+                            editTextHashtag.setError("Hashtag không hợp lệ");
+                            return;
+                        }
                     }
 
                     Post post = new Post();
                     post.setContent(content);
                     post.setHashtags(hashtags);
                     post.setUser(user);
-                    loadingLayoutPost.setVisibility(View.VISIBLE);
+
                     uploadImagesToCloudinaryAndFirebase(post);
                 }
             }
@@ -216,6 +223,22 @@ public class CommunityActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public boolean isValidHashtag(String hashtag) {
+        String hashtagRegex = "^#[\\p{L}\\p{N}_]+$";
+        Pattern pattern = Pattern.compile(hashtagRegex);
+        Matcher matcher = pattern.matcher(hashtag);
+
+        return matcher.matches();
+    }
+    public boolean checkHashtag(String hashtag){
+        String[] hashtags = hashtag.split(" ");
+        for (String s : hashtags) {
+            if (!isValidHashtag(s)) {
+                return false;
+            }
+        }
+        return true;
     }
     private void addHashTagsToContainer(List<String> topHashtags_) {
         for (String hashtag : topHashtags_) {
@@ -326,51 +349,57 @@ public class CommunityActivity extends AppCompatActivity {
     public void uploadImagesToCloudinaryAndFirebase(Post post) {
         int total_image = uri.size();
         AtomicInteger uploadedImageCount = new AtomicInteger(0);
+        if(total_image > 0){
+            loadingLayoutPost.setVisibility(View.VISIBLE);
+            for (int i = 0; i < total_image; i++) {
+                Uri image = uri.get(i);
 
-        for (int i = 0; i < total_image; i++) {
-            Uri image = uri.get(i);
-
-            MediaManager.get().upload(image.toString()).callback(new UploadCallback() {
-                @Override
-                public void onStart(String requestId) {
-                    Log.i("upload image", "onStart: ");
-                }
-
-                @Override
-                public void onProgress(String requestId, long bytes, long totalBytes) {
-                    Log.i("uploading image", "Uploading... ");
-                }
-
-                @Override
-                public void onSuccess(String requestId, Map resultData) {
-                    String url = resultData.get("url").toString();
-                    Log.i("upload image onSuccess", "image URL: " + url);
-                    Image_url.add(url);
-                    uploadedImageCount.incrementAndGet();
-
-                    if (uploadedImageCount.get() == total_image) {
-                        // All images are uploaded, proceed with saving data to Firebase.
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
-                        String post_id = databaseReference.push().getKey();
-                        post.setImage_url(Image_url);
-                        databaseReference.child(post_id).setValue(post);
-                        Toast.makeText(CommunityActivity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
-                        hidePopupDialogWithAnimation();
-                        loadingLayoutPost.setVisibility(View.GONE);
+                MediaManager.get().upload(image.toString()).callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
+                        Log.i("upload image", "onStart: ");
                     }
-                }
 
-                @Override
-                public void onError(String requestId, ErrorInfo error) {
-                    Log.i("upload image onError", "error " + error.getDescription());
-                }
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                        Log.i("uploading image", "Uploading... ");
+                    }
 
-                @Override
-                public void onReschedule(String requestId, ErrorInfo error) {
-                    Log.i("upload image onReschedule", "Reschedule " + error.getDescription());
-                }
-            }).dispatch();
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String url = resultData.get("url").toString();
+                        Log.i("upload image onSuccess", "image URL: " + url);
+                        Image_url.add(url);
+                        uploadedImageCount.incrementAndGet();
+
+                        if (uploadedImageCount.get() == total_image) {
+                            // All images are uploaded, proceed with saving data to Firebase.
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+                            String post_id = databaseReference.push().getKey();
+                            post.setImage_url(Image_url);
+                            databaseReference.child(post_id).setValue(post);
+                            Toast.makeText(CommunityActivity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                            hidePopupDialogWithAnimation();
+                            loadingLayoutPost.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
+                        Log.i("upload image onError", "error " + error.getDescription());
+                    }
+
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                        Log.i("upload image onReschedule", "Reschedule " + error.getDescription());
+                    }
+                }).dispatch();
+            }
         }
+        else {
+            Toast.makeText(CommunityActivity.this,"Vui Lòng chọn thêm ảnh", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private ArrayList<String> getHashtag(String content) {
