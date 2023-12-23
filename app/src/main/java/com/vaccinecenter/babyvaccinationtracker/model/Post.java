@@ -1,11 +1,15 @@
 package com.vaccinecenter.babyvaccinationtracker.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Post {
+
+
+public class Post implements Serializable {
+
     private String content;
     private ArrayList<String> image_url;
     private User user;
@@ -14,6 +18,15 @@ public class Post {
     private int likes = 0;
     private HashMap<String, Comment> comments;
     private ArrayList<String> hashtags;
+    private  HashMap<String, Boolean> visitor;
+
+    public HashMap<String, Boolean> getVisitor() {
+        return visitor;
+    }
+
+    public void setVisitor(HashMap<String, Boolean> visitor) {
+        this.visitor = visitor;
+    }
 
     public Post(String content, User user, String created_at, int likes) {
         this.content = content;
@@ -146,5 +159,4 @@ public class Post {
         this.liked_users = liked_users;
     }
     private ArrayList<String> liked_users;
-
 }

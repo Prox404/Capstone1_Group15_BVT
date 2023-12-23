@@ -3,6 +3,7 @@ package com.vaccinecenter.babyvaccinationtracker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,11 +27,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,10 +47,14 @@ import com.vaccinecenter.babyvaccinationtracker.model.Post;
 import com.vaccinecenter.babyvaccinationtracker.model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommunityActivity extends AppCompatActivity {
 
@@ -66,6 +73,15 @@ public class CommunityActivity extends AppCompatActivity {
     ArrayList<Post> postArrayList;
     PostAdapter postAdapter;
     Button buttonAddNewPost;
+    View loadingLayout, loadingLayoutPost;
+
+    List<String> topHashtags = new ArrayList<>();
+    private List<String> topHashtagsList = new ArrayList<>();
+    CardView highlightContainer;
+    FlexboxLayout topHashTag;
+    String  selectedHashtag = "";
+    User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +97,18 @@ public class CommunityActivity extends AppCompatActivity {
         buttonAddNewPost = findViewById(R.id.buttonAddNewPost);
         editTextPopupContent = findViewById(R.id.editTextPopupContent);
         recyclerViewPost = findViewById(R.id.recyclerViewPost);
+        loadingLayout = findViewById(R.id.loadingLayout);
+        loadingLayoutPost = findViewById(R.id.loadingLayoutPost);
+        highlightContainer = findViewById(R.id.highlightContainer);
+        topHashTag = findViewById(R.id.topHashTag);
+        loadingLayout.setVisibility(View.VISIBLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String user_id = sharedPreferences.getString("center_id", "");
         String user_name = sharedPreferences.getString("center_name", "");
         String user_avatar = sharedPreferences.getString("center_image", "");
 
-        User user = new User(user_id, user_name, user_avatar, "center");
+        user = new User(user_id, user_name, user_avatar, "center");
 
         recyclerAdapter = new RecyclerAdapter(uri,CommunityActivity.this);
         recycleViewImage.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 3));
@@ -137,7 +158,12 @@ public class CommunityActivity extends AppCompatActivity {
                     Toast.makeText(CommunityActivity.this, "Nội dung không được để trống", Toast.LENGTH_SHORT).show();
                 } else {
                     if (hashtag.length() > 0) {
-                        hashtags = getHashtag(hashtag);
+                        if (checkHashtag(hashtag)) {
+                            hashtags = getHashtag(hashtag);
+                        } else {
+                            editTextHashtag.setError("Hashtag không hợp lệ");
+                            return;
+                        }
                     }
 
                     Post post = new Post();
@@ -174,11 +200,22 @@ public class CommunityActivity extends AppCompatActivity {
                     post.setComments((HashMap<String, Comment>) dataSnapshot.child("comments").getValue());
                     post.setLiked_users((ArrayList<String>) dataSnapshot.child("liked_users").getValue());
                     postArrayList.add(post);
+                    loadingLayout.setVisibility(View.GONE);
                 }
                 reverseArrayList(postArrayList);
                 postAdapter = new PostAdapter(postArrayList, user);
                 recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
                 recyclerViewPost.setAdapter(postAdapter);
+
+                List<String> allHashtags = getAllHashtags(postArrayList);
+                Map<String, Integer> hashtagCounts = countHashtags(allHashtags);
+                topHashtags = getTopHashtags(hashtagCounts);
+
+
+                if (topHashtags != null && topHashtags.size() > 0){
+                    highlightContainer.setVisibility(View.VISIBLE);
+                    addHashTagsToContainer(topHashtags);
+                }
             }
 
             @Override
@@ -186,6 +223,119 @@ public class CommunityActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public boolean isValidHashtag(String hashtag) {
+        String hashtagRegex = "^#[\\p{L}\\p{N}_]+$";
+        Pattern pattern = Pattern.compile(hashtagRegex);
+        Matcher matcher = pattern.matcher(hashtag);
+
+        return matcher.matches();
+    }
+    public boolean checkHashtag(String hashtag){
+        String[] hashtags = hashtag.split(" ");
+        for (String s : hashtags) {
+            if (!isValidHashtag(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private void addHashTagsToContainer(List<String> topHashtags_) {
+        for (String hashtag : topHashtags_) {
+
+            if (topHashtagsList != null && topHashtagsList.contains(hashtag)) {
+                continue;
+            }else{
+                topHashtagsList.add(hashtag);
+            }
+
+            TextView textView = new TextView(this);
+            textView.setText(hashtag);
+            textView.setPadding(8, 4, 8, 4);
+            textView.setTextSize(20);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Xử lý khi bấm vào hashtag
+                    Log.i("selectedHashtag", "onClick: " + hashtag);
+                    handleHashtagClick(hashtag);
+                    if (selectedHashtag.equals(hashtag)) {
+                        resetHashtagColors();
+                        textView.setBackgroundResource(R.drawable.hashtag_selected);
+                    } else {
+                        textView.setBackgroundResource(R.drawable.hashtag_unselected);
+                    }
+                }
+            });
+            topHashTag.addView(textView);
+        }
+    }
+    private void resetHashtagColors() {
+        for (int i = 0; i < topHashTag.getChildCount(); i++) {
+            TextView textView = (TextView) topHashTag.getChildAt(i);
+            textView.setBackgroundResource(R.drawable.hashtag_unselected);
+        }
+    }
+    private void handleHashtagClick(String hashtag) {
+        if (selectedHashtag.equals(hashtag)) {
+            // Đã chọn hashtag này rồi, bấm lần nữa để bỏ chọn
+            selectedHashtag = "";
+            postAdapter = new PostAdapter(postArrayList, user);
+            recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
+            recyclerViewPost.setAdapter(postAdapter);
+            postAdapter.notifyDataSetChanged();
+            return;
+        }else{
+            selectedHashtag = hashtag;
+            List<Post> postsWithHashtag = getPostsByHashtag(postArrayList, hashtag);
+            Log.i("FilterSize", "handleHashtagClick: " + postsWithHashtag.size());
+            postAdapter = new PostAdapter(postsWithHashtag, user);
+            recyclerViewPost.setLayoutManager(new GridLayoutManager(CommunityActivity.this, 1));
+            recyclerViewPost.setAdapter(postAdapter);
+            postAdapter.notifyDataSetChanged();
+        }
+
+    }
+    private List<Post> getPostsByHashtag(List<Post> posts, String hashtag) {
+        List<Post> postsWithHashtag = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getHashtags() != null && post.getHashtags().contains(hashtag)) {
+                postsWithHashtag.add(post);
+            }
+        }
+        return postsWithHashtag;
+    }
+    private List<String> getTopHashtags(Map<String, Integer> hashtagCounts) {
+        List<Map.Entry<String, Integer>> sortedHashtags = new ArrayList<>(hashtagCounts.entrySet());
+
+        Collections.sort(sortedHashtags, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        List<String> topHashtags_ = new ArrayList<>();
+        for (int i = 0; i < Math.min(sortedHashtags.size(), 10); i++) {
+            topHashtags_.add(sortedHashtags.get(i).getKey());
+        }
+        return topHashtags_;
+    }
+    private Map<String, Integer> countHashtags(List<String> allHashtags) {
+        Map<String, Integer> hashtagCounts = new HashMap<>();
+        for (String hashtag : allHashtags) {
+            hashtagCounts.put(hashtag, hashtagCounts.getOrDefault(hashtag, 0) + 1);
+        }
+        return hashtagCounts;
+    }
+    private List<String> getAllHashtags(List<Post> posts) {
+        List<String> allHashtags = new ArrayList<>();
+        Log.i("getAllHashtags", "getAllHashtags: " + topHashtagsList);
+        for (Post post : posts) {
+            if (post.getHashtags() != null) {
+                for (String hashtag : post.getHashtags()) {
+                    if (!topHashtagsList.contains(hashtag)) {
+                        allHashtags.add(hashtag);
+                    }
+                }
+            }
+        }
+        return allHashtags;
     }
 
     private void reverseArrayList(ArrayList<Post> arrayList) {
@@ -199,50 +349,57 @@ public class CommunityActivity extends AppCompatActivity {
     public void uploadImagesToCloudinaryAndFirebase(Post post) {
         int total_image = uri.size();
         AtomicInteger uploadedImageCount = new AtomicInteger(0);
+        if(total_image > 0){
+            loadingLayoutPost.setVisibility(View.VISIBLE);
+            for (int i = 0; i < total_image; i++) {
+                Uri image = uri.get(i);
 
-        for (int i = 0; i < total_image; i++) {
-            Uri image = uri.get(i);
-
-            MediaManager.get().upload(image.toString()).callback(new UploadCallback() {
-                @Override
-                public void onStart(String requestId) {
-                    Log.i("upload image", "onStart: ");
-                }
-
-                @Override
-                public void onProgress(String requestId, long bytes, long totalBytes) {
-                    Log.i("uploading image", "Uploading... ");
-                }
-
-                @Override
-                public void onSuccess(String requestId, Map resultData) {
-                    String url = resultData.get("url").toString();
-                    Log.i("upload image onSuccess", "image URL: " + url);
-                    Image_url.add(url);
-                    uploadedImageCount.incrementAndGet();
-
-                    if (uploadedImageCount.get() == total_image) {
-                        // All images are uploaded, proceed with saving data to Firebase.
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
-                        String post_id = databaseReference.push().getKey();
-                        post.setImage_url(Image_url);
-                        databaseReference.child(post_id).setValue(post);
-                        Toast.makeText(CommunityActivity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
-                        hidePopupDialogWithAnimation();
+                MediaManager.get().upload(image.toString()).callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
+                        Log.i("upload image", "onStart: ");
                     }
-                }
 
-                @Override
-                public void onError(String requestId, ErrorInfo error) {
-                    Log.i("upload image onError", "error " + error.getDescription());
-                }
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                        Log.i("uploading image", "Uploading... ");
+                    }
 
-                @Override
-                public void onReschedule(String requestId, ErrorInfo error) {
-                    Log.i("upload image onReschedule", "Reschedule " + error.getDescription());
-                }
-            }).dispatch();
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String url = resultData.get("url").toString();
+                        Log.i("upload image onSuccess", "image URL: " + url);
+                        Image_url.add(url);
+                        uploadedImageCount.incrementAndGet();
+
+                        if (uploadedImageCount.get() == total_image) {
+                            // All images are uploaded, proceed with saving data to Firebase.
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+                            String post_id = databaseReference.push().getKey();
+                            post.setImage_url(Image_url);
+                            databaseReference.child(post_id).setValue(post);
+                            Toast.makeText(CommunityActivity.this, "Đăng bài thành công", Toast.LENGTH_SHORT).show();
+                            hidePopupDialogWithAnimation();
+                            loadingLayoutPost.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
+                        Log.i("upload image onError", "error " + error.getDescription());
+                    }
+
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                        Log.i("upload image onReschedule", "Reschedule " + error.getDescription());
+                    }
+                }).dispatch();
+            }
         }
+        else {
+            Toast.makeText(CommunityActivity.this,"Vui Lòng chọn thêm ảnh", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private ArrayList<String> getHashtag(String content) {
@@ -322,6 +479,7 @@ public class CommunityActivity extends AppCompatActivity {
     }
 
     private void showPopupDialogWithAnimation() {
+        loadingLayoutPost.setVisibility(View.GONE);
         // Sử dụng Animation để thực hiện hiệu ứng xuất hiện
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         popupDialog.startAnimation(animation);
