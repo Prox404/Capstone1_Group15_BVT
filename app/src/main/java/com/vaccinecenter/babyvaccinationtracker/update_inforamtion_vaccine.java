@@ -294,7 +294,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                                             vaccine.setVaccine_id(vaccine_id); // đặt lại trường vaccine ID
                                             bundle.putSerializable("vaccine_name", vaccine);
                                             intent.putExtras(bundle);
-                                            setResult(0, intent);
+                                            setResult(2, intent);
                                             finish();
                                         } else {
                                             // Data push failed

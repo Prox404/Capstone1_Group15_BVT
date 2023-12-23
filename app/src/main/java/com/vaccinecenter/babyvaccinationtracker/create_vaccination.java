@@ -271,22 +271,16 @@ public class create_vaccination extends AppCompatActivity {
                         return;
                     }
                     String quantity = edt_quantity.getText().toString();
-                    int dosage_int = 0;
-                    try{
-                        dosage_int = Integer.parseInt(edt_dosage.getText().toString());
-                        if(dosage_int < 0){
-                            edt_dosage.requestFocus();
-                            Toast.makeText(create_vaccination.this,
-                                    "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }catch (Exception e){
+
+
+                    String dosage = edt_dosage.getText().toString();
+                    if (dosage.isEmpty()) {
                         edt_dosage.requestFocus();
                         Toast.makeText(create_vaccination.this,
-                                "Phải nhập số", Toast.LENGTH_SHORT).show();
+                                "Phải nhập liều của vắc-xin", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    String dosage = edt_dosage.getText().toString();
+
                     String unit = edt_unit.getText().toString().trim();
                     if(unit.isEmpty()){
                         edt_unit.requestFocus();
