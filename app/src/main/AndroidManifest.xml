@@ -29,10 +29,15 @@
         android:theme="@style/Theme.BabyVaccinationTracker"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity_Edit_post"
+            android:exported="false" />
+
         <service
             android:name=".service.NotificationService"
             android:enabled="true"
             android:exported="false" />
+
         <activity
             android:name=".NotificationActivity"
             android:exported="false" />

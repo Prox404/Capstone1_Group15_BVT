@@ -1,27 +1,38 @@
 package com.vaccinecenter.babyvaccinationtracker.Adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.vaccinecenter.babyvaccinationtracker.Activity_Edit_post;
 import com.vaccinecenter.babyvaccinationtracker.R;
 import com.vaccinecenter.babyvaccinationtracker.model.Comment;
 import com.vaccinecenter.babyvaccinationtracker.model.Post;
+import com.vaccinecenter.babyvaccinationtracker.model.Report;
 import com.vaccinecenter.babyvaccinationtracker.model.User;
 
 import java.util.ArrayList;
@@ -102,7 +113,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
             DatabaseReference commentReference = FirebaseDatabase.getInstance().getReference("posts").child(postItem.getPost_id()).child("comments");
             holder.recylerViewComments.setLayoutManager(new LinearLayoutManager(holder.recylerViewComments.getContext()));
-            commentAdapter = new CommentAdapter(commentList , commentReference);
+            commentAdapter = new CommentAdapter(commentList , commentReference, postItem.getPost_id());
             holder.recylerViewComments.setAdapter(commentAdapter);
         }
 
@@ -144,9 +155,107 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 }
             }
         });
+        holder.imageButtonPostMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(postItem.getUser().getUser_id().equals(user_id)){
+                    Showmenuedit(view, postItem);
+                }
+                else {
+                    ReportMenu(view, postItem);
 
+                }
+            }
+        });
     }
+    private void ReportMenu(View view, Post post){
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.report_menu, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if(id == R.id.menu_report_item){
+                    View report_view = LayoutInflater.from
+                                    (view.getContext())
+                            .inflate(R.layout.report_fragment,null, false );
+                    TextView edt_report_reason = report_view.findViewById(R.id.edt_report_reason);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setView(report_view)
+                            .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            }).setPositiveButton("Báo cáo", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    DatabaseReference ReportContent = FirebaseDatabase
+                                            .getInstance().getReference("Report");
+                                    String str_report = edt_report_reason.getText().toString().trim();
 
+                                    if(!str_report.isEmpty()){
+                                        Report report = new Report();
+                                        report.setType_report(1);
+                                        post.setComments(null); // đặt lại comment
+                                        report.setPost(post);
+                                        report.setReason(str_report);
+                                        ReportContent.push()
+                                                .setValue(report)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                                        Toast.makeText(view.getContext(),
+                                                                "Báo cáo thành công",
+                                                                Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+
+                                    }
+                                }
+                            });
+                    builder.create().show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
+    private void Showmenuedit(View view, Post post_edit){
+        String id_post = post_edit.getPost_id();
+        PopupMenu MENU = new PopupMenu(view.getContext(), view);
+        MENU.getMenuInflater().inflate(R.menu.edit_delete, MENU.getMenu());
+        MENU.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.itemdeletepost) {
+                    DatabaseReference EditContent = FirebaseDatabase.getInstance().getReference("posts");
+                    EditContent.child(id_post)
+                            .setValue(null)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(view.getContext(),
+                                            " Đã xóa bài viết thành công",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    return true;
+                } else if (id == R.id.itemeditpost_edit) {
+                    //todo cập nhập bài viết
+                    Intent intent = new Intent(view.getContext(), Activity_Edit_post.class);
+                    intent.putExtra("Post", post_edit);
+                    view.getContext().startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
+        MENU.show();
+    }
     private Comment convertMapToComment(HashMap<String, Object> commentMap) {
         try {
             Comment comment = new Comment();
@@ -189,6 +298,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("user", itemView.getContext().MODE_PRIVATE);
         EditText editTextCommentContent;
         Button buttonSendComment;
+        ImageButton imageButtonPostMenu;
 
         RecyclerView recylerViewComments;
 
@@ -207,6 +317,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             recylerViewComments = itemView.findViewById(R.id.recyclerViewComments);
             buttonSendComment = itemView.findViewById(R.id.buttonSendComment);
             editTextCommentContent = itemView.findViewById(R.id.editTextCommentContent);
+            imageButtonPostMenu = itemView.findViewById(R.id.imageButtonPostMenu);
 
             user_id = sharedPreferences.getString("center_id", "");
         }
