@@ -146,7 +146,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             Collections.sort(replyList, new Comparator<Comment>() {
                 @Override
                 public int compare(Comment comment1, Comment comment2) {
-                    return compareByCreatedAt(comment1.getCreated_at(), comment2.getCreated_at());
+                    return compareByCreatedAt(comment1.getComment_id(), comment2.getComment_id());
                 }
             });
 
@@ -167,16 +167,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         });
     }
 
-    private int compareByCreatedAt(String dateStr1, String dateStr2) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        try {
-            Date date1 = dateFormat.parse(dateStr1);
-            Date date2 = dateFormat.parse(dateStr2);
-            return date2.compareTo(date1);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+    private int compareByCreatedAt(String id1, String id2) {
+        return id1.compareTo(id2);
     }
 
     private void reportComment(View view, Comment comment) {
