@@ -506,64 +506,57 @@ public class Register_for_vaccine_center extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            if (snapshot.getChildrenCount() > 0) {
-                                Toast.makeText(Register_for_vaccine_center.this, "Email đã tồn tại", Toast.LENGTH_SHORT).show();
-                                loadingLayout.setVisibility(View.GONE);
-                                return;
-                            }else{
-                                ArrayList<String> url_image = new ArrayList<>();
-                                ArrayList<String> path_image = new ArrayList<>();
-                                path_image.add(filePath_center_image);
-                                path_image.add(filePath_center_certificate);
-
-                                for(int i = 0 ;i < path_image.size() ; i++){
-                                    String path = path_image.get(i);
-                                    MediaManager.get().upload(path).callback(new UploadCallback() {
-                                        @Override
-                                        public void onStart(String requestId) {
-                                            Log.i("upload image", "onStart: ");
-                                        }
-
-                                        @Override
-                                        public void onProgress(String requestId, long bytes, long totalBytes) {
-                                            Log.i("upload image", "Uploading... ");
-                                        }
-
-                                        @Override
-                                        public void onSuccess(String requestId, Map resultData) {
-                                            String url = resultData.get("url").toString();
-                                            Log.i("upload image", "image URL: "+url);
-                                            url_image.add(url);
-                                            if(url_image.size() == path_image.size()){
-
-                                                register(center_name,
-                                                        center_address,
-                                                        hotline,work_time,
-                                                        center_email,
-                                                        encenter_password,
-                                                        url_image.get(0),
-                                                        url_image.get(1),
-                                                        address2
-                                                );
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onError(String requestId, ErrorInfo error) {
-                                            Log.i("upload image", "error "+ error.getDescription());
-                                        }
-
-                                        @Override
-                                        public void onReschedule(String requestId, ErrorInfo error) {
-                                            Log.i("upload image", "Reshedule "+error.getDescription());
-                                        }
-                                    }).dispatch();
-                                }
-                            }
-                        }else{
-                            Toast.makeText(Register_for_vaccine_center.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register_for_vaccine_center.this, "Email đã tồn tại", Toast.LENGTH_SHORT).show();
                             loadingLayout.setVisibility(View.GONE);
-                            return;
+                        }else{
+                            ArrayList<String> url_image = new ArrayList<>();
+                            ArrayList<String> path_image = new ArrayList<>();
+                            path_image.add(filePath_center_image);
+                            path_image.add(filePath_center_certificate);
+
+                            for(int i = 0 ;i < path_image.size() ; i++){
+                                String path = path_image.get(i);
+                                MediaManager.get().upload(path).callback(new UploadCallback() {
+                                    @Override
+                                    public void onStart(String requestId) {
+                                        Log.i("upload image", "onStart: ");
+                                    }
+
+                                    @Override
+                                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                                        Log.i("upload image", "Uploading... ");
+                                    }
+
+                                    @Override
+                                    public void onSuccess(String requestId, Map resultData) {
+                                        String url = resultData.get("url").toString();
+                                        Log.i("upload image", "image URL: "+url);
+                                        url_image.add(url);
+                                        if(url_image.size() == path_image.size()){
+
+                                            register(center_name,
+                                                    center_address,
+                                                    hotline,work_time,
+                                                    center_email,
+                                                    encenter_password,
+                                                    url_image.get(0),
+                                                    url_image.get(1),
+                                                    address2
+                                            );
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(String requestId, ErrorInfo error) {
+                                        Log.i("upload image", "error "+ error.getDescription());
+                                    }
+
+                                    @Override
+                                    public void onReschedule(String requestId, ErrorInfo error) {
+                                        Log.i("upload image", "Reshedule "+error.getDescription());
+                                    }
+                                }).dispatch();
+                            }
                         }
                     }
 
