@@ -37,6 +37,8 @@ import com.vaccinecenter.babyvaccinationtracker.model.Post;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -62,6 +64,7 @@ public class Activity_Edit_post extends AppCompatActivity {
     int bounary_image_old_new;
     Post post;
     boolean check = false;
+    View loadingLayoutPost;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +81,7 @@ public class Activity_Edit_post extends AppCompatActivity {
         recycleViewImage_edit = findViewById(R.id.recycleViewImage_edit);
         linearLayoutAddImage_edit = findViewById(R.id.linearLayoutAddImage_edit);
         buttonEditPost_edt = findViewById(R.id.buttonEditPost_edt);
+        loadingLayoutPost = findViewById(R.id.loadingLayoutPost);
 
         // load data
         editTextPopupContent_edit.setText(post.getContent());
@@ -149,6 +153,7 @@ public class Activity_Edit_post extends AppCompatActivity {
                                 if(result){
                                     String content = editTextPopupContent_edit.getText().toString().trim();
                                     String hashtag = editTextHashtag_edit.getText().toString();
+                                    loadingLayoutPost.setVisibility(View.VISIBLE);
                                     updatePost(content, hashtag);
                                 }
                             }
@@ -158,8 +163,31 @@ public class Activity_Edit_post extends AppCompatActivity {
             }
         });
     }
+    public boolean isValidHashtag(String hashtag) {
+        String hashtagRegex = "^#[\\p{L}\\p{N}_]+$";
+        Pattern pattern = Pattern.compile(hashtagRegex);
+        Matcher matcher = pattern.matcher(hashtag);
+
+        return matcher.matches();
+    }
+    public boolean checkHashtag(String hashtag){
+        String[] hashtags = hashtag.split(" ");
+        for (String s : hashtags) {
+            if (!isValidHashtag(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
     private void updatePost(String content, String hashtag) {
         if(!content.isEmpty()){
+            if (hashtag.length() > 0) {
+                if (!checkHashtag(hashtag)) {
+                    editTextHashtag_edit.setError("Hashtag không hợp lệ");
+                    loadingLayoutPost.setVisibility(View.GONE);
+                    return;
+                }
+            }
             int size = image_new.size();
             String id = post.getPost_id();
             DatabaseReference reference = FirebaseDatabase
@@ -222,6 +250,7 @@ public class Activity_Edit_post extends AppCompatActivity {
                                                                                         (Activity_Edit_post.this,
                                                                                                 "Cập nhập bài đăng thành công",
                                                                                                 Toast.LENGTH_LONG);
+                                                                                loadingLayoutPost.setVisibility(View.GONE);
                                                                                 finish();
                                                                             }
                                                                         });
@@ -266,6 +295,7 @@ public class Activity_Edit_post extends AppCompatActivity {
                                         Toast.makeText(Activity_Edit_post.this,
                                                 "Cập nhập bài đăng thành công",
                                                 Toast.LENGTH_LONG).show();
+                                        loadingLayoutPost.setVisibility(View.GONE);
                                         finish();
                                     }
                                 });
@@ -279,6 +309,7 @@ public class Activity_Edit_post extends AppCompatActivity {
 
             }
         }else {
+            loadingLayoutPost.setVisibility(View.GONE);
             Toast.makeText(Activity_Edit_post.this,
                     "Không được để trống nội dung", Toast.LENGTH_LONG).show();
         }

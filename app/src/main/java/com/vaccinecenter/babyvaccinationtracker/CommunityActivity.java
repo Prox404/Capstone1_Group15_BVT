@@ -34,6 +34,8 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -397,7 +399,23 @@ public class CommunityActivity extends AppCompatActivity {
             }
         }
         else {
-            Toast.makeText(CommunityActivity.this,"Vui Lòng chọn thêm ảnh", Toast.LENGTH_LONG).show();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("posts");
+            databaseReference.push().setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        hidePopupDialogWithAnimation();
+                        loadingLayoutPost.setVisibility(View.GONE);
+                        Toast.makeText(CommunityActivity.this,"Đăng bài thành công", Toast.LENGTH_LONG).show();
+                    }else {
+                        hidePopupDialogWithAnimation();
+                        loadingLayoutPost.setVisibility(View.GONE);
+                        Toast.makeText(CommunityActivity.this,"Đăng bài thất bại", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            });
+
         }
 
     }
