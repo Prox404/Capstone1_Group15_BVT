@@ -35,7 +35,12 @@ import com.prox.babyvaccinationtracker.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,12 +115,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     comment.setComment_id(entry.getKey());
                     if (comment != null) {
                         commentList.add(comment);
+
                     }
                 } else if (commentObject instanceof Comment) {
                     // If it's already a Comment, just add it to the list
                     commentList.add((Comment) commentObject);
                 }
             }
+            Collections.sort(commentList, new Comparator<Comment>() {
+                @Override
+                public int compare(Comment comment1, Comment comment2) {
+                    return compareByCreatedAt(comment1.getComment_id(), comment2.getComment_id());
+                }
+            });
             DatabaseReference commentReference = FirebaseDatabase.getInstance()
                     .getReference("posts")
                     .child(postItem.getPost_id())
@@ -226,6 +238,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 }
             }
         });
+    }
+
+    private int compareByCreatedAt(String id1, String id2) {
+        return id1.compareTo(id2);
     }
 
     private void Showmenuedit(View view, Post post_edit){
