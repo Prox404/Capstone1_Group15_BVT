@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +31,7 @@ import java.util.List;
 public class PendingRequestFragment extends Fragment {
 
     RecyclerView recycleViewPendingRequest;
-
+    LinearLayout timelineContainer;
     List<Vaccination_Registration> vaccination_registrations = new ArrayList<>();
     Context context;
     public PendingRequestFragment() {
@@ -56,6 +57,7 @@ public class PendingRequestFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pending_request, container, false);
         recycleViewPendingRequest = view.findViewById(R.id.recycleViewPendingRequest);
+        //timelineContainer = view.findViewById(R.id.timelineContainer);
 
         context = container != null ? container.getContext() : null;
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -75,6 +77,8 @@ public class PendingRequestFragment extends Fragment {
                         vaccination_registrations.add(vaccination_registration);
                     }
                 }
+//                if (vaccination_registrations.size() == 0)
+//                    timelineContainer.setVisibility(View.GONE);
                 Log.i("Pending", "onDataChange: " + vaccination_registrations.size());
                 PendingRequestAdapter pendingRequestAdapter = new PendingRequestAdapter( getContext() , vaccination_registrations);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

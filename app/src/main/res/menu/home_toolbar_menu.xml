@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_notifications"
         android:title="Thông báo"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_vaccine_care"
+        android:icon="@drawable/store_toolbar"
+        android:title="Các vắc-xin trong giỏ hàng"
+        app:showAsAction="always" />
 </menu>

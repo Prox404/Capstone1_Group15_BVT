@@ -1,10 +1,11 @@
 package com.prox.babyvaccinationtracker.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Comment {
+public class Comment implements Serializable {
 
     private String content;
     private User user;

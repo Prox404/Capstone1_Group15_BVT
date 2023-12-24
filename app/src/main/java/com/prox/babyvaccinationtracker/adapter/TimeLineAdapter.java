@@ -87,9 +87,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.Regime
         Date closestDate = null;
 
         for (int i = 0; i < regimenList.size(); i++) {
+            Regimen regimen = regimenList.get(i);
             Date regimenDate = regimenList.get(i).getDate();
 
-            if (regimenDate.before(currentDate) || regimenDate.equals(currentDate)) {
+            if ((regimenDate.before(currentDate) || regimenDate.equals(currentDate)) && !regimen.isVaccinated()) {
                 if (closestDate == null || closestDate.before(regimenDate)) {
                     closestDate = regimenDate;
                     closestPosition = i;

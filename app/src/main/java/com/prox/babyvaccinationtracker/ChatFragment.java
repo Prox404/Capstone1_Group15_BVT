@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.prox.babyvaccinationtracker.adapter.ConversationAdapter;
 import com.prox.babyvaccinationtracker.model.Conversation;
 import com.prox.babyvaccinationtracker.model.Message;
+import com.prox.babyvaccinationtracker.util.NetworkUtils;
 
 import java.io.Serializable;
 import java.text.Normalizer;
@@ -61,6 +62,7 @@ public class ChatFragment extends Fragment {
 
     DatabaseReference databaseRef;
     DatabaseReference chatUserRef;
+    View loadingLayout;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -112,6 +114,7 @@ public class ChatFragment extends Fragment {
                             conversations_all = new ArrayList<>(conversations);
                             Log.i("chat_conversation_all", "onCreateView: " + conversations_all.size()+" "+conversations.size());
                             conversationAdapter.notifyDataSetChanged();
+                            loadingLayout.setVisibility(View.GONE);
 //                            Log.i("chat", "onDataChange: " + conversations.size());
                         }
 
@@ -144,6 +147,8 @@ public class ChatFragment extends Fragment {
         chatWithBot = view.findViewById(R.id.chatWithBot);
         AddConversation = view.findViewById(R.id.AddConversation);
         editTextSearch = view.findViewById(R.id.editTextSearch);
+        loadingLayout = view.findViewById(R.id.loadingLayout);
+        loadingLayout.setVisibility(View.VISIBLE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerConversation.setLayoutManager(linearLayoutManager);
@@ -167,7 +172,13 @@ public class ChatFragment extends Fragment {
         chatWithBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean network_state = NetworkUtils.isNetworkAvailable(context);
+                HomeActivity.NETWORK_STATE = network_state;
                 Log.i("chat with bot", "onClick:  " + conversations.size());
+                if (!network_state){
+                    HomeActivity.showNetworkAlertDialog(context);
+                    return;
+                }
                 Boolean isExist = false;
                 String conversation_id = "";
                 for (Conversation conversation : conversations) {

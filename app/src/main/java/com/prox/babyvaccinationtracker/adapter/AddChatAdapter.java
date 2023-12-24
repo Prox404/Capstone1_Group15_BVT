@@ -128,6 +128,7 @@ public class AddChatAdapter extends RecyclerView.Adapter<AddChatAdapter.viewhold
                     Intent intent = new Intent(context, ChatActivity_user.class);
                     intent.putExtra("Center_ID",center_id );
                     intent.putExtra("conversation_id", conversation_id);
+                    intent.putExtra("center_name", center_name);
                     view.getContext().startActivity(intent);
                 }else{
                     Map<String, Boolean> users = new HashMap<>();
@@ -154,6 +155,8 @@ public class AddChatAdapter extends RecyclerView.Adapter<AddChatAdapter.viewhold
 
                         Intent intent = new Intent(context, ChatActivity_user.class);
                         intent.putExtra("conversation_id",conversation_id);
+                        intent.putExtra("Center_ID",center_id );
+                        intent.putExtra("center_name", center_name);
                         view.getContext().startActivity(intent);
                     } else {
                         // Handle the case where conversation_id is null

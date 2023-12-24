@@ -154,36 +154,35 @@ public class RegisterFragment extends Fragment {
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Nếu quyền chưa được cấp, yêu cầu người dùng cấp quyền
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_READ_EXTERNAL_STORAGE);
         }
 
         Calendar currentDate = Calendar.getInstance();
-        // Khởi tạo DatePickerDialog
+
         datePickerDialog = new DatePickerDialog(
                 context,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Xử lý khi người dùng chọn ngày
+
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         editTextBirthday.setText(selectedDate);
                     }
                 },
-                currentDate.get(Calendar.YEAR), // Năm mặc định
-                currentDate.get(Calendar.MONTH), // Tháng mặc định
-                currentDate.get(Calendar.DAY_OF_MONTH) // Ngày mặc định
+                currentDate.get(Calendar.YEAR),
+                currentDate.get(Calendar.MONTH),
+                currentDate.get(Calendar.DAY_OF_MONTH)
         );
 
         datePickerDialog.getDatePicker().setMaxDate(currentDate.getTimeInMillis());
 
-        // Ngăn việc nhập trực tiếp vào EditText
+
         editTextBirthday.setFocusable(false);
         editTextBirthday.setClickable(true);
 
-        // Sét sự kiện khi nhấn vào EditText
+
         editTextBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +190,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        // Xử lý sự kiện khi người dùng chọn giới tính
+
         radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -220,7 +219,7 @@ public class RegisterFragment extends Fragment {
         }
 
         try {
-            // Đọc dữ liệu JSON từ tệp (ví dụ: "data.json" trong thư mục assets)
+            // Đọc dữ liệu JSON từ tệp
             InputStream inputStream = context.getAssets().open("ethnicityVN.json"); // Thay "data.json" bằng tên tệp của bạn
             int size = inputStream.available();
             byte[] buffer = new byte[size];
@@ -234,7 +233,6 @@ public class RegisterFragment extends Fragment {
 
         try {
             // Đọc dữ liệu từ file JSON của bạn và lưu vào một JSONObject
-//            Log.i("Auth", jsonAddressDataString);
             JSONObject jsonData = new JSONObject(jsonAddressDataString);
 
             // Lấy danh sách tỉnh/thành phố và thêm vào danh sách tỉnh/thành phố
@@ -488,6 +486,8 @@ public class RegisterFragment extends Fragment {
         String ethnicity = spinnerEthnicity.getSelectedItem().toString();
         String address = ward + ", " + district + ", " + province;
 
+        DataValidate dataValidate = new DataValidate();
+
         if (name.isEmpty() ||
                 email.isEmpty() ||
                 password.isEmpty() ||
@@ -500,6 +500,31 @@ public class RegisterFragment extends Fragment {
                 ethnicity.isEmpty() ||
                 selectedImage == null) {
             Toast.makeText(context, "Hãy nhập đầy đủ tất cả các trường", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!dataValidate.isValidName(name)){
+            editTextName.setError("Tên không hợp lệ");
+            return;
+        }
+
+        if (!dataValidate.isValidEmail(email)){
+            editTextEmail.setError("Email không hợp lệ");
+            return;
+        }
+
+        if (!dataValidate.isValidPassword(password)){
+            editTextPassword.setError("Mật khẩu không hợp lệ");
+            return;
+        }
+
+        if (!dataValidate.isValidPassword(rePassword)){
+            editTextRePassword.setError("Mật khẩu không hợp lệ");
+            return;
+        }
+
+        if (phone.length() < 10 || phone.length() > 11){
+            editTextPhone.setError("Số điện thoại không hợp lệ");
             return;
         }
 

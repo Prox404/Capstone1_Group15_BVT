@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.BIND_REMOTEVIEWS"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -16,8 +19,10 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".provider.applicationProvider"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -29,6 +34,9 @@
         android:theme="@style/Theme.BabyVaccinationTracker"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity_Edit_post"
+            android:exported="false" />
         <activity
             android:name=".BabyProfileActivity"
             android:exported="false" />
@@ -89,6 +97,9 @@
             android:name=".search_vaccination"
             android:exported="true" />
         <activity
+            android:name=".search_care_vaccines"
+            android:exported="true" />
+        <activity
             android:name=".VaccinationCertificateActivity"
             android:exported="false" />
         <activity
@@ -99,6 +110,10 @@
             android:name=".service.NotificationService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".service.WidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
             android:name=".NotificationActivity"
@@ -115,6 +130,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".schedule_an_injection_search_vaccine_2"
+            android:exported="false" />
+        <activity
+            android:name=".schedule_an_injection_search_vaccine_2_2"
             android:exported="false" />
         <activity
             android:name=".schedule_an_injection_districts"
@@ -141,6 +159,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:label="@string/widget_name"
+            android:name=".provider.WidgetProvider"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".receiver.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

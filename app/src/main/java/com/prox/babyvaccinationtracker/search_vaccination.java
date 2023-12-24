@@ -1,6 +1,8 @@
 package com.prox.babyvaccinationtracker;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +45,14 @@ public class search_vaccination extends AppCompatActivity {
     private List<Vaccines> mlistvaccine = new ArrayList<>();
     GridView gridViewSearchVaccine;
 
+    String customer_id = "";
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getdatafromrealtimedatabase();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +64,7 @@ public class search_vaccination extends AppCompatActivity {
         vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);
 
         mVaccineadapter = new vaccineadapter(this, mlistvaccine);
-        gridViewSearchVaccine.setAdapter(new vaccineadapter(this, mlistvaccine));
+        gridViewSearchVaccine.setAdapter(mVaccineadapter);
         getdatafromrealtimedatabase();
         btntimkiem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +72,9 @@ public class search_vaccination extends AppCompatActivity {
                 getdatafromrealtimedatabase();
             }
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        customer_id = sharedPreferences.getString("customer_id", "");
     }
 
     private void getdatafromrealtimedatabase() {
@@ -77,6 +90,7 @@ public class search_vaccination extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccine_center vaccine_center = datasnapshot.getValue(Vaccine_center.class);
+                    vaccine_center.setCenter_id(datasnapshot.getKey());
                     Log.i("vaccine center", "onDataChange: " + vaccine_center.toString());
                     assert vaccine_center != null;
                     HashMap<String, Vaccines> vaccines = vaccine_center.getVaccines() == null ? new HashMap<String, Vaccines>() : vaccine_center.getVaccines();
@@ -84,18 +98,14 @@ public class search_vaccination extends AppCompatActivity {
                     for (String key : vaccines.keySet()) {
                         Vaccines vaccine = vaccines.get(key);
                         vaccine.setVaccine_id(key);
-                        HashMap<String, String> additional_info = new HashMap<>();
-                        additional_info.put("center_id", vaccine_center.getCenter_id());
-                        additional_info.put("center_name", vaccine_center.getCenter_name());
-                        additional_info.put("center_address", vaccine_center.getCenter_address());
-                        vaccine.setAdditionInformation(additional_info);
+                        vaccine.setVaccine_center_owner(vaccine_center);
+
                         if (removeDiacritics(vaccine.getVaccine_name().toLowerCase(Locale.getDefault())).contains(removeDiacritics(searchTerm.toLowerCase(Locale.getDefault()))) && !vaccine.isDeleted()) {
                             mlistvaccine.add(vaccine);
                         }
                     }
                 }
                 mVaccineadapter.notifyDataSetChanged();
-                gridViewSearchVaccine.setAdapter(new vaccineadapter(search_vaccination.this, mlistvaccine));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

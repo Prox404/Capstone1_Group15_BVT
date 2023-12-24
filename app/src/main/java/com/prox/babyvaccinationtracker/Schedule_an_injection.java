@@ -8,14 +8,19 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -45,13 +51,11 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     TextView schedule_baby_congenital_disease, schedule_bady_birthday, schedule_baby_gender, schedule_bady_name, schedule_tv_cus_name, schedule_tv_cus_email, schedule_tv_cus_phone;
     Button schedule_btn_add;
-    LinearLayout schedule_list_btn_babies;
+    LinearLayout schedule_list_btn_babies,linear_select_vaccine;
+    RadioButton radioButton_center,radioButton_cares;
     EditText schedule_edt_date_vaccine, schedule_edt_vaccine_center;
     EditText schedule_edt_tinh, schedule_edt_quan, schedule_edt_phuong;
     EditText schedule_edt_type_vaccine;
-
-
-    String id = "IMdLT6gpalXk3aJTDWlndkye2tN2";
     Customer customer;
     Baby babyhavebeenchoose = new Baby();
 
@@ -59,11 +63,14 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     Vaccine_center vaccineCenter = new Vaccine_center();
 
+    boolean take_care_vaccine = false;
 
-    ArrayList<Baby> babies = new ArrayList<>();
+    HashMap<String, Vaccines> vaccines;
+
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatePickerDialog datePickerDialog;
+    View loadingLayout;
 
     String address = "";
 
@@ -71,15 +78,78 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     final int VACCINE_CENTER_NAME = 1;
     final int VACCINE_CHOOSE = 5;
+    final int VACCINE_CHOOSE_2 = 6;
     final int VACCINE_PROVINCES = 2;
     final int VACCINE_DISTRICT = 3;
     final int VACCINE_WARD = 4;
+
+    public static ArrayList<String> vaccination_registrations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_an_injection);
         // Ánh xạ
+
+        linear_select_vaccine = findViewById(R.id.linear_select_vaccine);
+        radioButton_center = findViewById(R.id.radioButton_center);
+        radioButton_cares = findViewById(R.id.radioButton_cares);
+        loadingLayout = findViewById(R.id.loadingLayout);
+
+        radioButton_center.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                take_care_vaccine = false;
+                linear_select_vaccine.setVisibility(View.VISIBLE);
+                schedule_edt_vaccine_center.setText("");
+                schedule_edt_type_vaccine.setText("");
+
+                // Tạo TransitionDrawable
+                Drawable[] layers_in = new Drawable[2];
+                layers_in[0] = getResources().getDrawable(R.drawable.custom_radio_normal);
+                layers_in[1] = getResources().getDrawable(R.drawable.custom_radio_selected);
+                TransitionDrawable transitionDrawable_in = new TransitionDrawable(layers_in);
+
+                Drawable[] layers_out = new Drawable[2];
+                layers_out[1] = getResources().getDrawable(R.drawable.custom_radio_normal);
+                layers_out[0] = getResources().getDrawable(R.drawable.custom_radio_selected);
+                TransitionDrawable transitionDrawable_out = new TransitionDrawable(layers_out);
+
+                // Set background và chạy transition
+                radioButton_cares.setBackground(transitionDrawable_out);
+                radioButton_center.setBackground(transitionDrawable_in);
+                transitionDrawable_in.startTransition(300); // Thời gian chuyển đổi (milliseconds)
+                transitionDrawable_out.startTransition(300);
+
+            }
+        });
+        radioButton_cares.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                take_care_vaccine = true;
+                linear_select_vaccine.setVisibility(View.GONE);
+                schedule_edt_vaccine_center.setText("");
+                schedule_edt_type_vaccine.setText("");
+
+                // Tạo TransitionDrawable
+                Drawable[] layers_in = new Drawable[2];
+                layers_in[0] = getResources().getDrawable(R.drawable.custom_radio_normal);
+                layers_in[1] = getResources().getDrawable(R.drawable.custom_radio_selected);
+                TransitionDrawable transitionDrawable_in = new TransitionDrawable(layers_in);
+
+                Drawable[] layers_out = new Drawable[2];
+                layers_out[1] = getResources().getDrawable(R.drawable.custom_radio_normal);
+                layers_out[0] = getResources().getDrawable(R.drawable.custom_radio_selected);
+                TransitionDrawable transitionDrawable_out = new TransitionDrawable(layers_out);
+
+                // Set background và chạy transition
+                radioButton_cares.setBackground(transitionDrawable_in);
+                radioButton_center.setBackground(transitionDrawable_out);
+                transitionDrawable_in.startTransition(300); // Thời gian chuyển đổi (milliseconds)
+                transitionDrawable_out.startTransition(300);
+            }
+        });
+
         schedule_edt_tinh = findViewById(R.id.schedule_edt_tinh);
         schedule_edt_tinh.setFocusable(false);
         schedule_edt_tinh.setClickable(true);
@@ -115,6 +185,29 @@ public class Schedule_an_injection extends AppCompatActivity {
         schedule_edt_type_vaccine.setFocusable(false);
         schedule_edt_type_vaccine.setClickable(false);
 
+        schedule_edt_type_vaccine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("CHECK_BOOL", take_care_vaccine+"");
+                if(take_care_vaccine){
+                    Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2_2.class);
+                    intent.putExtra("baby_id", baby_id);
+                    startActivityForResult(intent, VACCINE_CHOOSE_2);
+                }else {
+                    if(schedule_edt_vaccine_center.length() != 0){
+                        if (vaccines != null) {
+                            Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2.class);
+                            intent.putExtra("Vaccines", vaccines);
+                            intent.putExtra("baby_id", baby_id);
+                            startActivityForResult(intent, VACCINE_CHOOSE);
+                        } else {
+                            Toast.makeText(Schedule_an_injection.this, "Bệnh viện này chưa có vắc-xin", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }
+        });
+
         // chọn ngày
         Calendar currentDate = Calendar.getInstance();
         datePickerDialog = new DatePickerDialog(
@@ -131,7 +224,8 @@ public class Schedule_an_injection extends AppCompatActivity {
                 currentDate.get(Calendar.MONTH), // Tháng mặc định
                 currentDate.get(Calendar.DAY_OF_MONTH) // Ngày mặc định
         );
-        datePickerDialog.getDatePicker().setMinDate(currentDate.getTimeInMillis());
+        // set ngày nhỏ nhất là ngày hiện tại + 1
+        datePickerDialog.getDatePicker().setMinDate(currentDate.getTimeInMillis() + 86400000);
         schedule_edt_date_vaccine.setFocusable(false);
         schedule_edt_date_vaccine.setClickable(true);
         schedule_edt_date_vaccine.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +272,7 @@ public class Schedule_an_injection extends AppCompatActivity {
                     Toast.makeText(Schedule_an_injection.this, "Phải ngày mong muốn tiêm", Toast.LENGTH_LONG).show();
                     return;
                 }
+                loadingLayout.setVisibility(View.VISIBLE);
                 DatabaseReference reference = database.getReference("Vaccination_Registration");
 
                 Vaccination_Registration vaccinationRegistration = new Vaccination_Registration();
@@ -192,8 +287,10 @@ public class Schedule_an_injection extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(Schedule_an_injection.this, "Đăng ký thành công, vui lòng đợi trung tâm xác nhận", Toast.LENGTH_LONG).show();
+                            loadingLayout.setVisibility(View.GONE);
                             finish();
                         } else {
+                            loadingLayout.setVisibility(View.GONE);
                             Toast.makeText(Schedule_an_injection.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -203,44 +300,65 @@ public class Schedule_an_injection extends AppCompatActivity {
 
     }
 
+    public void getRegistrationSchedule(String baby_id){
+        DatabaseReference reference = database.getReference("Vaccination_Registration");
+        Query query = reference.orderByChild("baby/baby_id").equalTo(baby_id);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                vaccination_registrations.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Vaccination_Registration vaccination_registration = dataSnapshot.getValue(Vaccination_Registration.class);
+                    Log.i("Registration", "onDataChange: " + vaccination_registration.toString());
+                    if (vaccination_registration.getStatus() < 3 && vaccination_registration.getStatus() >= 0){
+                        vaccination_registration.setRegist_id(dataSnapshot.getKey());
+                        vaccination_registrations.add(vaccination_registration.getVaccine().getVac_effectiveness());
+                        Log.i("Registration", "getRegistrationSchedule: " + vaccination_registrations);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VACCINE_CENTER_NAME) {
             if (resultCode == RESULT_OK) {
+                take_care_vaccine = false;
                 schedule_edt_type_vaccine.setText("");
                 vaccineCenter = (Vaccine_center) data.getSerializableExtra("selected_vaccine"); // đối tượng vaccine center được chọn
-                HashMap<String, Vaccines> vaccines = vaccineCenter.getVaccines();
+                vaccines = vaccineCenter.getVaccines();
                 vaccineCenter.setVaccines(null);
                 schedule_edt_vaccine_center.setText(vaccineCenter.getCenter_name());
                 // Todo không hiển thị trung tâm không có vắc-xin
                 Log.i("VVAAAAANINEIE", vaccineCenter.toString());
-                schedule_edt_type_vaccine.setClickable(false);
-                if (vaccineCenter == null) {
-                    schedule_edt_type_vaccine.setClickable(false);
-                } else if (vaccineCenter.getVaccines() == null) {
-                    schedule_edt_type_vaccine.setClickable(false);
-                }
-                schedule_edt_type_vaccine.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (vaccines != null) {
-                            Intent intent = new Intent(Schedule_an_injection.this, schedule_an_injection_search_vaccine_2.class);
-                            intent.putExtra("Vaccines", vaccines);
-                            intent.putExtra("baby_id", baby_id);
-                            startActivityForResult(intent, VACCINE_CHOOSE);
-                        } else {
-                            Toast.makeText(Schedule_an_injection.this, "Bệnh viện này chưa có vắc-xin", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
             }
         } else if (requestCode == VACCINE_CHOOSE) {
             if (resultCode == RESULT_OK) {
+                take_care_vaccine = false;
                 vaccineschoose = (Vaccines) data.getSerializableExtra("vaccine_choose");
                 schedule_edt_type_vaccine.setText(vaccineschoose.getVaccine_name());
             }
-        } else if (requestCode == VACCINE_PROVINCES) {
+        }
+        else if(requestCode == VACCINE_CHOOSE_2){
+            if(resultCode == RESULT_OK){
+                take_care_vaccine = true;
+                vaccineCenter = (Vaccine_center) data.getSerializableExtra("selected_vaccine");
+                vaccineschoose = (Vaccines) data.getSerializableExtra("vaccine_choose");
+                linear_select_vaccine.setVisibility(View.VISIBLE);
+                schedule_edt_type_vaccine.setText(vaccineschoose.getVaccine_name());
+                schedule_edt_vaccine_center.setText(vaccineCenter.getCenter_name());
+            }
+
+        }
+        else if (requestCode == VACCINE_PROVINCES) {
             if (resultCode == RESULT_OK) {
                 // đặt lại quận phường
                 schedule_edt_quan.setText("");
@@ -367,11 +485,14 @@ public class Schedule_an_injection extends AppCompatActivity {
             button.setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
         }
 
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 babyhavebeenchoose = baby;
                 baby_id = baby.getBaby_id();
+                getRegistrationSchedule(baby_id);
                 Log.i("Schedule injection", "onClick: baby id " + baby_id);
                 schedule_bady_name.setText(baby.getBaby_name());
                 schedule_baby_gender.setText(baby.getBaby_gender());

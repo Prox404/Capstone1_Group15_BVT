@@ -138,10 +138,24 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPost"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/loadingLayout"
+                    layout="@layout/loading_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </FrameLayout>
+
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -154,6 +168,10 @@
         android:visibility="gone"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -245,6 +263,13 @@
                 app:cornerRadius="5dp" />
 
         </LinearLayout>
+            <include
+                android:id="@+id/loadingLayoutPost"
+                layout="@layout/loading_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
 
 </FrameLayout>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="2dp"
+                    android:layout_height="50dp"
+                    android:background="#40000000">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/rounded_input_bg"
+                    android:backgroundTint="@color/textColor"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#40000000"></FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="38dp"
+                    android:background="@drawable/rounded_white_button_bg"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textViewDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="03/11"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="25dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/vaccine_item_bg"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="2dp"
+                        app:srcCompat="@drawable/ic_vaccine"
+                        app:tint="@color/light_blue_600" />
+
+                    <TextView
+                        android:id="@+id/textViewVaccineName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="Vaccine đặc trị trị ngu"
+                        android:textColor="@color/textColor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="2dp"
+                        app:srcCompat="@drawable/ic_baby_solid"
+                        app:tint="#36C6B8" />
+
+                    <TextView
+                        android:id="@+id/textViewBabyName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bé Lê Văn Đạt"
+                        android:textColor="@color/textColor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="2dp"
+                        app:srcCompat="@drawable/ic_home"
+                        app:tint="#4CAF50" />
+
+                    <TextView
+                        android:id="@+id/textViewCenterName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="VNVC Đà Nẵng"
+                        android:textColor="@color/textColor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginRight="2dp"
+                        app:srcCompat="@drawable/ic_location"
+                        app:tint="#DF4D4D" />
+
+                    <TextView
+                        android:id="@+id/textViewCenterAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tiên Cảnh, Tiên phước, Quảng Nam"
+                        android:textColor="@color/textColor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_marginHorizontal="2dp"
+                        app:srcCompat="@drawable/ic_clock_solid"
+                        app:tint="#E91E63" />
+
+                    <TextView
+                        android:id="@+id/textViewWorkingTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cả ngày"
+                        android:textColor="@color/textColor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_marginHorizontal="2dp"
+                        app:srcCompat="@drawable/ic_money"
+                        app:tint="#9C27B0" />
+
+                    <TextView
+                        android:id="@+id/textViewPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1000000 VND"
+                        android:textColor="@color/textColor" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -14,9 +14,37 @@
         android:layout_margin="20dp"
         android:text="Thông báo" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recylerViewNotification"
-        android:paddingHorizontal="10dp"
+    <TextView
+        android:id="@+id/textViewClearNotification"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
+        android:paddingHorizontal="20dp"
+        android:text="Xoá tất cả"
+        android:textAlignment="textEnd" />
+
+    <include layout="@layout/empty_layout"
+        android:id="@+id/emptyLayout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recylerViewNotification"
+            android:paddingHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include layout="@layout/loading_layout"
+            android:id="@+id/loadingLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
 </LinearLayout>

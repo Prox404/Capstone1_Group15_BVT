@@ -1,6 +1,8 @@
 package com.prox.babyvaccinationtracker.model;
 
-public class Vaccination_Registration {
+import java.io.Serializable;
+
+public class Vaccination_Registration implements Serializable {
     String regist_id;
     Baby baby;
     Customer cus;
@@ -82,6 +84,20 @@ public class Vaccination_Registration {
 
     public int getStatus() {
         return status;
+    }
+
+    @Override
+    public String toString() {
+        return "Vaccination_Registration{" +
+                "regist_id='" + regist_id + '\'' +
+                ", baby=" + baby +
+                ", cus=" + cus +
+                ", cus_phone='" + cus_phone + '\'' +
+                ", vaccine=" + vaccine +
+                ", center=" + center +
+                ", regist_created_at='" + regist_created_at + '\'' +
+                ", status=" + status +
+                '}';
     }
 
     public void setStatus(int status) {

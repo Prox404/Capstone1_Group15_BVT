@@ -19,12 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.prox.babyvaccinationtracker.AuthActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Customer {
+public class Customer implements Serializable {
     private String customer_id;
     private String cus_name;
     private String cus_birthday;

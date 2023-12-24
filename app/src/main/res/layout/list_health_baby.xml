@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@drawable/login_input_bg"
-    android:backgroundTint="#25282b"
+    android:background="@drawable/vaccine_item_bg"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -16,7 +15,7 @@
         android:layout_marginVertical="5dp"
         android:fontFamily="@font/inter_bold"
         android:text="Từ tháng trước"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/textColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/sleep"
-            app:tint="#d3f26a" />
+            app:tint="#FF9800" />
 
         <TextView
             android:id="@+id/health_sleep_item"
@@ -37,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="Thời gian ngủ"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/textColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -51,7 +50,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/weight"
-            app:tint="#56AEF4" />
+            app:tint="#2196F3" />
 
         <TextView
             android:id="@+id/health_weight_item"
@@ -59,7 +58,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="Cân nặng "
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/textColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -81,7 +80,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="Chiều cao"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/textColor" />
     </LinearLayout>
 
 </LinearLayout>

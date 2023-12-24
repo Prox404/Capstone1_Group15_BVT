@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.NotificationActivity;
@@ -39,7 +40,7 @@ public class NotificationService extends Service {
 
     private DatabaseReference databaseReference;
     private String user_id;
-    private String notificationChannelId = "VaccineNotification";
+    private String notificationChannelId = "VaccineNotificationUser";
     private NotificationManager notificationManager;
 
     SharedPreferences notificationPreferences;
@@ -50,7 +51,7 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         user_id = sharedPreferences.getString("customer_id", "");
 
         notificationPreferences = getSharedPreferences("Notifications", MODE_PRIVATE);
@@ -64,24 +65,25 @@ public class NotificationService extends Service {
         Log.i("Notification_service", "Run Service");
 
         // Khởi tạo Firebase Database Reference
-        databaseReference = FirebaseDatabase.getInstance().getReference("notifications").child(user_id);
+        databaseReference = FirebaseDatabase.getInstance().getReference("notifications");
+        Query query = databaseReference.orderByChild("user_id").equalTo(user_id);
 
         // Khởi tạo NotificationManager
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Tạo Notification Channel (chỉ cần thực hiện trên Android 8.0+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(notificationChannelId, "VaccineNotification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(notificationChannelId, "VaccineNotificationUser", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
 
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 // Xử lý khi có lịch hẹn mới được thêm vào
                 NotificationMessage notificationMessage = dataSnapshot.getValue(NotificationMessage.class);
                 String notificationId = dataSnapshot.getKey();
-                if (notificationMessage != null ) {
+                if (notificationMessage != null && notificationMessage.getDate() != null && notificationMessage.getDate().after(new Date())){
                     if(!notificationIds.contains(notificationId)){
                         notificationIds.add(notificationId);
 //                        Log.i("Notification_service", "onChildAdded: " + notificationIds.toString());
@@ -147,6 +149,7 @@ public class NotificationService extends Service {
     // Phương thức để hiển thị thông báo
     private void showNotification(NotificationMessage message) {
         Intent intent = new Intent(this, NotificationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this, notificationChannelId)

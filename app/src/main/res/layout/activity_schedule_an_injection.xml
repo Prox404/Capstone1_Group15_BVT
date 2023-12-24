@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,9 +29,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:elevation="0dp"
                 android:padding="10dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -39,14 +39,19 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <LinearLayout
-                        android:id="@+id/schedule_list_btn_babies"
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent">
 
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/schedule_list_btn_babies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -61,7 +66,7 @@
                             android:text="Thông tin bé" />
 
                         <TextView
-                            android:id="@+id/textView3"
+                            android:id="@+id/textViewVaccine_care_header"
                             style="@style/Widget.AppCompat.TextView.Label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -73,8 +78,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView5"
@@ -104,8 +108,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView11"
@@ -120,8 +123,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView13"
@@ -144,8 +146,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView16"
@@ -160,8 +161,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView18"
@@ -176,8 +176,7 @@
                             style="@style/Widget.App.EditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
-                            />
+                            android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textView20"
@@ -234,22 +233,65 @@
                             android:ems="10"
                             android:inputType="text" />
 
-                        <TextView
-                            android:id="@+id/textView23"
-                            style="@style/Widget.AppCompat.TextView.Label"
+                        <RadioGroup
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Trung tâm tiêm chủng"
-                            android:textSize="16sp" />
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:background="@drawable/card_border_bg"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
 
-                        <EditText
-                            android:id="@+id/schedule_edt_vaccine_center"
-                            style="@style/Widget.App.EditText"
+                            <RadioButton
+                                android:id="@+id/radioButton_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/custom_radio_button_selector"
+                                android:button="@color/white"
+                                android:checked="true"
+                                android:gravity="center|left"
+                                android:text="Trung tâm"
+                                android:textAlignment="center"
+                                android:textColor="@drawable/custom_radio_button_text_selector" />
+
+                            <RadioButton
+                                android:id="@+id/radioButton_cares"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/custom_radio_button_selector"
+                                android:button="@color/white"
+                                android:gravity="center|left"
+                                android:text="Giỏ hàng"
+                                android:textAlignment="center"
+                                android:textColor="@drawable/custom_radio_button_text_selector" />
+
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/linear_select_vaccine"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="text"
-                            android:textSize="12sp" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/TV_headerschedule_edt_vaccine_center"
+                                style="@style/Widget.AppCompat.TextView.Label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Trung tâm tiêm chủng"
+                                android:textSize="16sp" />
+
+                            <EditText
+                                android:id="@+id/schedule_edt_vaccine_center"
+                                style="@style/Widget.App.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/textView21"
@@ -300,4 +342,9 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading_layout"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
@@ -27,12 +28,16 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.prox.babyvaccinationtracker.model.Baby;
+import com.prox.babyvaccinationtracker.model.BabyCheckList;
 import com.prox.babyvaccinationtracker.model.Customer;
+import com.prox.babyvaccinationtracker.model.Health;
 import com.prox.babyvaccinationtracker.model.NotificationMessage;
 import com.prox.babyvaccinationtracker.model.Regimen;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -90,6 +95,7 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
         buttonCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GetStartedActivity.loadingLayout.setVisibility(View.VISIBLE);
                 DatabaseReference babiesReference = databaseReference.child("babies");
                 DatabaseReference newBabyReference = babiesReference.push();
 
@@ -154,6 +160,13 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
 
                         Intent intent = new Intent();
                         getActivity().setResult(getActivity().RESULT_OK, intent);
+                        GetStartedActivity.baby = new Baby();
+                        GetStartedActivity.health = new Health();
+                        GetStartedActivity.babyCheckList = new BabyCheckList();
+                        GetStartedActivity.checkList = new ArrayList<>();
+                        GetStartedActivity.filePath = "";
+                        Toast.makeText(context, "Thêm bé thành công !", Toast.LENGTH_SHORT).show();
+                        GetStartedActivity.loadingLayout.setVisibility(View.GONE);
                         getActivity().finish();
 
                         Log.i("Completed", "onClick: " + babyID);
