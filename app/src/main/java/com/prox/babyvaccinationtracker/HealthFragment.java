@@ -204,7 +204,7 @@ public class HealthFragment extends Fragment {
         // Refresh the chart
         lineChart.invalidate();
     }
-    private ArrayList<Entry> dataValues2(HashMap<Integer,Health> he) {
+    public ArrayList<Entry> dataValues2(HashMap<Integer,Health> he) {
         ArrayList<Entry> values = new ArrayList<>();
         for(Map.Entry<Integer, Health> entry : he.entrySet()){
             float h = (float) entry.getValue().getHeight();

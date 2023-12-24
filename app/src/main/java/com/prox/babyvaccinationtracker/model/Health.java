@@ -22,6 +22,11 @@ public class Health {
         this.healthCreated_at = healthCreated_at;
     }
 
+    public Health(double height, double weight) {
+        this.height = height;
+        this.weight = weight;
+    }
+
     public Health() {
     }
 
