@@ -57,6 +57,8 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
     List<String> vaccineOrigin = new ArrayList<>();
     HashMap<String, Vaccines> vaccinesHashMap = new HashMap<>();
 
+    private ArrayList<String> vaccination_registrations = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,10 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         schedule_list_vaccine = findViewById(R.id.schedule_list_vaccine);
         buttonClearFilter = findViewById(R.id.buttonClearFilter);
         spinnerOrigin = findViewById(R.id.spinnerOrigin);
+
+        vaccination_registrations = Schedule_an_injection.vaccination_registrations;
+        Log.i("Registration", "onCreate: " + vaccination_registrations.size());
+
         schedule_image_back_vaccine2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +97,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
                         Date regimenDate = regimen.getDate();
                         if (regimenDate.before(currentDate) || regimenDate.equals(currentDate)) {
                             if (closestDate == null || closestDate.before(regimenDate)) {
-                                if (!regimen.isVaccinated()) {
+                                if (!regimen.isVaccinated() && !isOnVaccineList(regimen.getVaccination_type())) {
                                     closestDate = regimenDate;
                                     closestVaccineType = regimen.getVaccination_type();
                                 }
@@ -195,6 +201,10 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         schedule_list_vaccine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (closestDate != null && closestDate.after(new Date())) {
+                    Toast.makeText(schedule_an_injection_search_vaccine_2.this, "Chưa đến lịch tiêm chủng của vaccine này, vui lòng chờ!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Vaccines vaccines1 = (Vaccines) adapterView.getItemAtPosition(i);
                 Intent intent1 = new Intent();
                 intent1.putExtra("vaccine_choose", vaccines1);
@@ -231,6 +241,11 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             }
         });
 
+    }
+
+    public Boolean isOnVaccineList(String vaccinationType){
+        Log.i("Registration", "isOnVaccineList: " + vaccination_registrations);
+        return vaccination_registrations.contains(vaccinationType);
     }
 
     private void filterVaccines() {
