@@ -36,6 +36,10 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -296,5 +300,13 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+        <include
+            android:id="@+id/loading_layout"
+            layout="@layout/loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

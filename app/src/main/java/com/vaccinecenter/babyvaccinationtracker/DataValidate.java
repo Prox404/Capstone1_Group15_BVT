@@ -30,6 +30,17 @@ public class DataValidate {
 
         return matcher.matches();
     }
+    public boolean IsValidVaccineName(String name){
+        if (name.length() < 6 || name.length() > 255) {
+            return false;
+        }
+
+        String nameRegex = "^[\\p{L}0-9 \\-\\(\\)]+$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
+    }
     public boolean isValidNameOrigin(String name) {
         String nameRegex = "^[a-zA-Z ]+$";
         Pattern pattern = Pattern.compile(nameRegex);

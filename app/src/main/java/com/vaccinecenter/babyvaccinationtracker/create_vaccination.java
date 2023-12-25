@@ -41,6 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.vaccinecenter.babyvaccinationtracker.Adapter.RecyclerAdapter;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccines;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -62,6 +63,7 @@ public class create_vaccination extends AppCompatActivity {
     ArrayList<Uri> uri = new ArrayList<>(); // những đường dẫn ảnh đã lưu
     ArrayList<String> Image_url;
     DataValidate validate = new DataValidate();
+    View loading_layout;
     // Kiểm tra người dùng đã nhập vắc-xin vào chưa
     boolean is_input(String a){
         if(a.length() == 0){
@@ -92,6 +94,7 @@ public class create_vaccination extends AppCompatActivity {
         edt_price = findViewById(R.id.price);
         image_back = findViewById(R.id.image_back);
         btn_tt = findViewById(R.id.btn_tt);
+        loading_layout = findViewById(R.id.loading_layout);
 
         // nút quay lại
         image_back.setOnClickListener(new View.OnClickListener() {
@@ -203,7 +206,7 @@ public class create_vaccination extends AppCompatActivity {
                         Toast.makeText(create_vaccination.this, "Vui lòng nhập tên vắc-xin",
                                 Toast.LENGTH_SHORT).show();
                         return;
-                    } else if (!validate.IsValidNameVN(vaccine_name.trim())){
+                    } else if (!validate.IsValidVaccineName(vaccine_name.trim())){
                         edt_vaccine_name.requestFocus();
                         Toast.makeText(create_vaccination.this, "Tên vắc-xin không hợp lệ",
                                 Toast.LENGTH_SHORT).show();
@@ -310,8 +313,8 @@ public class create_vaccination extends AppCompatActivity {
                                 "Phải nhập số", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    String price_vaccine = "" + edt_price.getText().toString() +" "+ select_price_unti;
-
+                    String price_vaccine = "" + formatCurrency(price) +" "+ select_price_unti;
+                    loading_layout.setVisibility(View.VISIBLE);
                     Image_url = new ArrayList<>();
                     int total_image = uri.size();
                     for (int i = 0; i < total_image ; i ++){
@@ -350,10 +353,12 @@ public class create_vaccination extends AppCompatActivity {
                             @Override
                             public void onError(String requestId, ErrorInfo error) {
                                 Log.i("upload image onError", "error "+ error.getDescription());
+                                loading_layout.setVisibility(View.GONE);
                             }
                             @Override
                             public void onReschedule(String requestId, ErrorInfo error) {
                                 Log.i("upload image onReschedule", "Reshedule "+error.getDescription());
+                                loading_layout.setVisibility(View.GONE);
                             }
                         }).dispatch();
                     }
@@ -415,6 +420,7 @@ public class create_vaccination extends AppCompatActivity {
         }
         vaccines.setDeleted(false);
 
+
         Context mcontext = create_vaccination.this;
         SharedPreferences sharedPreferences = mcontext.getSharedPreferences("user", Context.MODE_PRIVATE);
         String id_vaccine_center = sharedPreferences.getString("center_id","");
@@ -422,13 +428,18 @@ public class create_vaccination extends AppCompatActivity {
 
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                    Toast.makeText(create_vaccination.this, "successfully", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(create_vaccination.this, "failed", Toast.LENGTH_SHORT).show();
+                if(task.isSuccessful()) {
+                    Toast.makeText(create_vaccination.this, "Thêm thành công !", Toast.LENGTH_SHORT).show();
+                    loading_layout.setVisibility(View.GONE);
+                    clear();
+                }
+                else {
+                    Toast.makeText(create_vaccination.this, "Đã xảy ra lỗi !", Toast.LENGTH_SHORT).show();
+                    loading_layout.setVisibility(View.GONE);
+                }
             }
         });
-        clear();
+
     }
     // Kiểm tra quyền truy cập kho ảnh
     private static final int PERMISSION_CODE = 1;
@@ -494,5 +505,10 @@ public class create_vaccination extends AppCompatActivity {
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
             return cursor.getString(idx);
         }
+    }
+
+    public static String formatCurrency(int number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        return decimalFormat.format(number);
     }
 }
