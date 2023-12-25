@@ -13,7 +13,7 @@ public class DataValidate {
             return false;
         }
 
-        String nameRegex = "^[a-zA-Z0-9 ]+$";
+        String nameRegex = "^[a-zA-Z0-9À-ỹ ]+$";
         Pattern pattern = Pattern.compile(nameRegex);
         Matcher matcher = pattern.matcher(name);
 

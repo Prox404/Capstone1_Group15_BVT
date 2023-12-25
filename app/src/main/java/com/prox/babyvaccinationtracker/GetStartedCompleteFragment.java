@@ -167,7 +167,14 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         GetStartedActivity.filePath = "";
                         Toast.makeText(context, "Thêm bé thành công !", Toast.LENGTH_SHORT).show();
                         GetStartedActivity.loadingLayout.setVisibility(View.GONE);
-                        getActivity().finish();
+                        String babies = sharedPreferences.getString("babiesList", null);
+                        if (babies == null) {
+                            Intent intent1 = new Intent(getActivity(), HomeActivity.class);
+                            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent1);
+                        }else{
+                            getActivity().finish();
+                        }
 
                         Log.i("Completed", "onClick: " + babyID);
                     }

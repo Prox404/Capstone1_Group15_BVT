@@ -114,16 +114,18 @@ public class ChatFragment extends Fragment {
                             conversations_all = new ArrayList<>(conversations);
                             Log.i("chat_conversation_all", "onCreateView: " + conversations_all.size()+" "+conversations.size());
                             conversationAdapter.notifyDataSetChanged();
-                            loadingLayout.setVisibility(View.GONE);
+
 //                            Log.i("chat", "onDataChange: " + conversations.size());
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                             Log.e("chat", "onCancelled: " + error.getMessage());
+                            loadingLayout.setVisibility(View.GONE);
                         }
                     });
                 }
+                loadingLayout.setVisibility(View.GONE);
             }
 
             @Override

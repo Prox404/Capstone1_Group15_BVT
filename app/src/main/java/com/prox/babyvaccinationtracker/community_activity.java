@@ -242,8 +242,8 @@ public class community_activity extends AppCompatActivity {
                     }
                     Log.i("VISITORS", post+"");
                     postArrayList.add(post);
-                    loadingLayout.setVisibility(View.GONE);
                 }
+                loadingLayout.setVisibility(View.GONE);
 
 //                postAdapter.notifyDataSetChanged();
                 reverseArrayList(postArrayList);

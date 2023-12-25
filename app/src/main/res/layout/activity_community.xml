@@ -89,6 +89,7 @@
                                 android:id="@+id/imageViewAvatar"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
+                                android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/ic_launcher_background" />
                         </androidx.cardview.widget.CardView>
 
