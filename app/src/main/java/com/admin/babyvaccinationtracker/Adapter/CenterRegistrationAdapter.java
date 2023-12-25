@@ -23,10 +23,20 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
     List<Vaccine_center_registration> Vaccine_center_registration;
     Context context;
     VaccineCenterRegistration vaccineCenterRegistration;
+    private OnItemClickListener onItemClickListener;
     public CenterRegistrationAdapter(Context context,ArrayList<Vaccine_center_registration> vaccineCenterRegistration){
         this.context = context;
         this.Vaccine_center_registration = vaccineCenterRegistration;
     }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(Vaccine_center_registration registration);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,6 +67,14 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
                     vaccineCenterRegistration = new VaccineCenterRegistration();
                     vaccineCenterRegistration.registerCenter(context,re.getCenter(),re.getCenter_registration_id());
 
+                }
+            });
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(onItemClickListener != null){
+                        onItemClickListener.onItemClick(re);
+                    }
                 }
             });
         }

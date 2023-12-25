@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.admin.babyvaccinationtracker.Adapter.CenterRegistrationAdapter;
@@ -27,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -57,6 +63,9 @@ public class ManageVaccineRegistrationFragment extends Fragment {
     TextView editTexte_Search_Vaccine_Center;
 
     View empty_layout;
+    CardView PopupImage;
+    ImageView ImageCertificate;
+    LinearLayout ImageClose;
 
     public ManageVaccineRegistrationFragment() {
         // Required empty public constructor
@@ -104,6 +113,9 @@ public class ManageVaccineRegistrationFragment extends Fragment {
         confirm_vaccine_center_registration = view.findViewById(R.id.confirm_vaccine_center_registration);
         editTexte_Search_Vaccine_Center = view.findViewById(R.id.editTexte_Search_Vaccine_Center);
         empty_layout = view.findViewById(R.id.empty_layout);
+        PopupImage = view.findViewById(R.id.PopupImage);
+        ImageCertificate = view.findViewById(R.id.ImageCertificate);
+        ImageClose = view.findViewById(R.id.ImageClose);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference vaccineRef = database.getReference("Vaccine_center_registration");
@@ -120,19 +132,20 @@ public class ManageVaccineRegistrationFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     registrations.clear();
+                    registrations_origin.clear();
                     for(DataSnapshot snap : snapshot.getChildren()){
                         Vaccine_center_registration regi = snap.getValue(Vaccine_center_registration.class);
                         regi.getCenter().setCenter_address2(snap.child("center").child("center_address2").getValue(String.class));
                         regi.setCenter_registration_id(snap.getKey());
                         registrations.add(regi);
                     }
+                    adapter.setData(registrations);
                     registrations_origin = new ArrayList<>(registrations);
                     if (registrations_origin.size() <= 0){
                         empty_layout.setVisibility(View.VISIBLE);
                     } else {
                         empty_layout.setVisibility(View.GONE);
                     }
-                    adapter.notifyDataSetChanged();
                 }else {
                     registrations_origin.clear();
                     registrations.clear();
@@ -165,6 +178,32 @@ public class ManageVaccineRegistrationFragment extends Fragment {
             }
         });
 
+        adapter.setOnItemClickListener(new CenterRegistrationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Vaccine_center_registration registration) {
+                if(PopupImage.getVisibility() == View.VISIBLE){
+                    hidePopupDialogWithAnimation();
+                }
+                else {
+                    String url_Cer = registration.getCenter().getActivity_certificate();
+                    showPopupDialogWithAnimation(url_Cer);
+                }
+            }
+        });
+        ImageClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hidePopupDialogWithAnimation();
+            }
+        });
+
+        PopupImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hidePopupDialogWithAnimation();
+            }
+        });
+
 
 
         return view;
@@ -183,6 +222,43 @@ public class ManageVaccineRegistrationFragment extends Fragment {
         else {
             adapter.setData(registrations_origin);
         }
+    }
+    private void showPopupDialogWithAnimation(String url) {
+        // Sử dụng Animation để thực hiện hiệu ứng xuất hiện
+        Animation animation = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.fade_in);
+        PopupImage.startAnimation(animation);
+        url = url.contains("https") ? url : url.replace("http", "https");
+        Picasso.get().load(url).into(ImageCertificate, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.i("IMAGE_MANAGEMENT", "onSuccess");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i("IMAGE_MANAGEMENT", "onError" + e);
+            }
+        });
+
+        // Đặt sự kiện visibility cho popupDialog
+        PopupImage.setVisibility(View.VISIBLE);
+        ImageCertificate.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        hidePopupDialogWithAnimation();
+    }
+
+    private void hidePopupDialogWithAnimation() {
+        // Sử dụng Animation để thực hiện hiệu ứng ẩn đi
+        Animation animation = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.fade_out);
+        PopupImage.startAnimation(animation);
+
+        // Đặt sự kiện visibility cho popupDialog
+        PopupImage.setVisibility(View.GONE);
+        ImageCertificate.setVisibility(View.GONE);
     }
     public static String removeDiacritics(String input) {
         String nfdNormalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
