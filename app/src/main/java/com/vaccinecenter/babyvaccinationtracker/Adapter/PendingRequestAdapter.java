@@ -30,9 +30,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-interface DialogResultListener {
-    boolean onResult(boolean result);
-}
 public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAdapter.ViewHolder> {
     private Context context;
     private List<Vaccination_Registration> vaccinationRegistions;
