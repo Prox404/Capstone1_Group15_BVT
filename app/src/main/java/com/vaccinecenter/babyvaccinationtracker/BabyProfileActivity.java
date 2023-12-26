@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
 import com.vaccinecenter.babyvaccinationtracker.Adapter.CompletedRequestAdapter;
 import com.vaccinecenter.babyvaccinationtracker.model.Baby;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccination_Registration;
@@ -78,9 +79,21 @@ public class BabyProfileActivity extends AppCompatActivity {
                     textViewGender.setText(baby.getBaby_gender());
                     textViewCongenitalDisease.setText(baby.getBaby_congenital_disease());
                     String qr_url = snapshot.child("qr").getValue(String.class);
+                    Log.i("Image", "onDataChange: " + qr_url);
                     if (qr_url != null) {
-                        String imgaeUrl = qr_url.contains("https") ? qr_url : qr_url.replace("http", "https");
-                        Picasso.get().load(imgaeUrl).into(imageViewQR);
+                        String imageURL = qr_url.contains("https") ? qr_url : qr_url.replace("http", "https");
+                        Picasso.get().load(imageURL).into(imageViewQR, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Log.i("Image", "onSuccess: " + imageURL);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Log.i("Image", "onError: " + imageURL);
+                                imageViewQR.setImageResource(R.drawable.ic_nothing);
+                            }
+                        });
                     }
                     String imgaeUrl = baby.getBaby_avatar().contains("https") ? baby.getBaby_avatar() : baby.getBaby_avatar().replace("http", "https");
                     Picasso.get().load(imgaeUrl).into(imageViewAvatar);

@@ -117,7 +117,6 @@ public class children_data_management extends AppCompatActivity {
                     if (dataSnapshot.exists()){
                         VaccinationCertificate vaccinationCertificate = dataSnapshot.getValue(VaccinationCertificate.class);
                         String id = vaccinationCertificate.getBaby().getBaby_id();
-                        vaccinationCertificate.getBaby().setBaby_id(id);
                         if (removeDiacritics(vaccinationCertificate.getBaby().getBaby_name().toLowerCase()).contains(removeDiacritics(searchTerm.toLowerCase()))){
                             if(!check_id.contains(id)){
                                 check_id.add(id);

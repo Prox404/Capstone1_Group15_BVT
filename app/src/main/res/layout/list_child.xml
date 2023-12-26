@@ -24,6 +24,7 @@
                 android:id="@+id/imageView_Baby_Avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background" />
         </androidx.cardview.widget.CardView>
 

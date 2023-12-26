@@ -1,5 +1,6 @@
 package com.vaccinecenter.babyvaccinationtracker.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +28,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+interface DialogResultListener {
+    boolean onResult(boolean result);
+}
 public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAdapter.ViewHolder> {
     private Context context;
     private List<Vaccination_Registration> vaccinationRegistions;
@@ -96,57 +101,73 @@ public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAd
             buttonAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     Log.i("Aloo", "onClick: " + getAdapterPosition());
                     String user_id = vaccinationRegistions.get(getAdapterPosition()).getCus().getCustomer_id();
                     String baby_id = vaccinationRegistions.get(getAdapterPosition()).getBaby().getBaby_id();
                     String baby_name = vaccinationRegistions.get(getAdapterPosition()).getBaby().getBaby_name();
                     String vaccine_name = vaccinationRegistions.get(getAdapterPosition()).getVaccine().getVaccine_name();
                     String register_date = vaccinationRegistions.get(getAdapterPosition()).getRegist_created_at();
-                    // Update status & remove item from list
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-                    databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegister_id()).child("status").setValue(1).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            String notificationCompletedId = notificationReference.push().getKey();
-                            String notificationScheduleId = notificationReference.push().getKey();
 
-                            NotificationMessage scheduleNotificationMessage = new NotificationMessage();
-                            scheduleNotificationMessage.setUser_id(user_id);
-                            scheduleNotificationMessage.setBaby_id(baby_id);
-                            scheduleNotificationMessage.setTitle("Hôm nay bạn có lịch tiêm chủng");
-                            scheduleNotificationMessage.setMessage("Hôm nay bạn có lịch tiêm chủng cho bé " + baby_name + " vaccine " + vaccine_name);
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                            Date date = new Date();
-                            try {
-                                date = simpleDateFormat.parse(register_date + " 07:00");
-                            } catch (ParseException e) {
-                                Log.i("Aloo", "onComplete: " + e.getMessage());
-                            }
-                            scheduleNotificationMessage.setDate(date);
-
-                            notificationReference.child(notificationScheduleId).setValue(scheduleNotificationMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    NotificationMessage notificationMessage = new NotificationMessage();
-                                    notificationMessage.setUser_id(user_id);
-                                    notificationMessage.setTitle("Đăng ký tiêm chủng");
-                                    notificationMessage.setMessage("Đơn đăng ký tiêm chủng của bé " + baby_name + " đã được chấp nhận");
-                                    Date currentDate = new Date();
-                                    Calendar calendar = Calendar.getInstance();
-                                    calendar.setTime(currentDate);
-                                    calendar.add(Calendar.MINUTE, 1);
-                                    notificationMessage.setDate(calendar.getTime());
-
-                                    notificationReference.child(notificationCompletedId).setValue(notificationMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Xác nhận").setMessage("Bạn có chắc chắn muốn chấp nhận đơn đăng ký này không?")
+                                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
+                                    databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegister_id()).child("status").setValue(1).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            Toast.makeText(view.getContext(), "Thành công!", Toast.LENGTH_SHORT).show();
+                                            String notificationCompletedId = notificationReference.push().getKey();
+                                            String notificationScheduleId = notificationReference.push().getKey();
+
+                                            NotificationMessage scheduleNotificationMessage = new NotificationMessage();
+                                            scheduleNotificationMessage.setUser_id(user_id);
+                                            scheduleNotificationMessage.setBaby_id(baby_id);
+                                            scheduleNotificationMessage.setTitle("Hôm nay bạn có lịch tiêm chủng");
+                                            scheduleNotificationMessage.setMessage("Hôm nay bạn có lịch tiêm chủng cho bé " + baby_name + " vaccine " + vaccine_name);
+                                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                            Date date = new Date();
+                                            try {
+                                                date = simpleDateFormat.parse(register_date + " 07:00");
+                                            } catch (ParseException e) {
+                                                Log.i("Aloo", "onComplete: " + e.getMessage());
+                                            }
+                                            scheduleNotificationMessage.setDate(date);
+
+                                            notificationReference.child(notificationScheduleId).setValue(scheduleNotificationMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    NotificationMessage notificationMessage = new NotificationMessage();
+                                                    notificationMessage.setUser_id(user_id);
+                                                    notificationMessage.setTitle("Đăng ký tiêm chủng");
+                                                    notificationMessage.setMessage("Đơn đăng ký tiêm chủng của bé " + baby_name + " đã được chấp nhận");
+                                                    Date currentDate = new Date();
+                                                    Calendar calendar = Calendar.getInstance();
+                                                    calendar.setTime(currentDate);
+                                                    calendar.add(Calendar.MINUTE, 1);
+                                                    notificationMessage.setDate(calendar.getTime());
+
+                                                    notificationReference.child(notificationCompletedId).setValue(notificationMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            Toast.makeText(view.getContext(), "Thành công!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }).addOnFailureListener(e -> {
+                                                        Toast.makeText(view.getContext(), "Thất bại!", Toast.LENGTH_SHORT).show();
+                                                    });
+                                                }
+                                            });
                                         }
                                     });
-                                }
-                            });
-                        }
-                    });
+                                })
+                                .setNegativeButton("Hủy", (dialog, which) -> {
+                                    dialog.dismiss();
+                                });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    // Update status & remove item from list
+
                 }
             });
 
@@ -165,4 +186,8 @@ public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAd
             // Initialize other views in your item layout here.
         }
     }
+
+    //boolean dialog
+
+
 }
