@@ -205,7 +205,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                 edt_date_of_entry.setText(vaccine.getDate_of_entry());
 
                 String[] price_unit = vaccine.getPrice().toString().split(" ");
-                edt_price.setText(price_unit[0]);
+                edt_price.setText(price_unit[0].replace(".", ""));
                 spinner_update_money_unit.setSelection(
                         ((ArrayAdapter<String>) spinner_update_money_unit.getAdapter()).getPosition(price_unit[1])
                 );
