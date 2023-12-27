@@ -12,6 +12,8 @@ import java.util.List;
 
 public class VaccineNotificationMessage {
 
+    private static Date currentDate = new Date();
+
     public static Date addMonth(Date date, int monthsToAdd) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -22,167 +24,316 @@ public class VaccineNotificationMessage {
     //  tạo hàm lênh lịch cho bệnh Lao
     public static List<NotificationMessage> NotificationMessageTuberculosis(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Lao cho bé", birthday));
+        if (birthday.after(currentDate))
+            schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Lao cho bé", birthday));
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Viêm gan B
     public static List<NotificationMessage> NotificationMessageHepatitisB(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé", birthday));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé", addMonth(birthday, 2)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé", addMonth(birthday, 3)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé", addMonth(birthday, 4)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé", addMonth(birthday, 18)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé", addMonth(birthday, 84)));
+
+        int[] monthsToAdd = {0, 2, 3, 4, 18, 84};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm gan B cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Bạch hầu, ho gà, uốn ván
     public static List<NotificationMessage> NotificationMessageDiphtheriaWhoopingCoughPoliomyelitis(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé", birthday));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé", addMonth(birthday, 2)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé", addMonth(birthday, 3)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé", addMonth(birthday, 4)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé", addMonth(birthday, 18)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé", addMonth(birthday, 60)));
+
+        int[] monthsToAdd = {2, 3, 4, 18, 60};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Bạch hầu, ho gà, uốn ván cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Bại liệt
     public static List<NotificationMessage> NotificationMessageParalysis(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bại liệt cho bé", birthday));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bại liệt cho bé", addMonth(birthday, 2)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bại liệt cho bé", addMonth(birthday, 3)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bại liệt cho bé", addMonth(birthday, 4)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bại liệt cho bé", addMonth(birthday, 18)));
+
+        int[] monthsToAdd = { 2, 3, 4, 18};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Bại liệt cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Viêm phổi, viêm màng não mủ do Hib
     public static List<NotificationMessage> NotificationMessageHib(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não mủ do Hib cho bé", birthday));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não mủ do Hib cho bé", addMonth(birthday, 2)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não mủ do Hib cho bé", addMonth(birthday, 3)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não mủ do Hib cho bé", addMonth(birthday, 4)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não mủ do Hib cho bé", addMonth(birthday, 18)));
+
+        int[] monthsToAdd = { 2, 3, 4, 18};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm màng não mủ do Hib cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Tiêu chảy do Rota Virus
     public static List<NotificationMessage> NotificationMessageRotaVirus(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Tiêu chảy do Rota Virus cho bé", addMonth(birthday, 2)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Tiêu chảy do Rota Virus cho bé", addMonth(birthday, 3)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Tiêu chảy do Rota Virus cho bé", addMonth(birthday, 4)));
+
+        int[] monthsToAdd = {2, 3, 4};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Tiêu chảy do Rota Virus cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn
     public static List<NotificationMessage> NotificationMessagePneumococcal(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn cho bé", addMonth(birthday, 2)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn cho bé", addMonth(birthday, 3)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn cho bé", addMonth(birthday, 4)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn cho bé", addMonth(birthday, 10)));
+
+        int[] monthsToAdd = {2, 3, 4, 10};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C
     public static List<NotificationMessage> NotificationMessageMeningococcal(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C cho bé", addMonth(birthday, 6)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C cho bé", addMonth(birthday, 8)));
+
+        int[] monthsToAdd = {6, 8};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Cúm
     public static List<NotificationMessage> NotificationMessageInfluenza(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Cúm cho bé", addMonth(birthday, 6)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Cúm cho bé", addMonth(birthday, 7)));
-        for (int i = 0; i < 12*18; i+= 12) {
-            schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Cúm cho bé", addMonth(birthday, 6 + i)));
+
+        int[] monthsToAdd = {6, 7};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Cúm cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
         }
+
+        for (int i = 0; i < 12 * 18; i += 12) {
+            Date date = addMonth(birthday, 6 + i);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Sởi
     public static List<NotificationMessage> NotificationMessageMeasles(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Sởi cho bé", addMonth(birthday, 9)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Sởi cho bé", addMonth(birthday, 18)));
+
+        int[] monthsToAdd = {9, 18};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Sởi cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y
     public static List<NotificationMessage> NotificationMessageMeningococcalACWY(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y cho bé", addMonth(birthday, 9)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y cho bé", addMonth(birthday, 12)));
+
+        int[] monthsToAdd = {9, 12};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Viêm não Nhật Bản
     public static List<NotificationMessage> NotificationMessageJapaneseEncephalitis(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm não Nhật Bản cho bé", addMonth(birthday, 9)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm não Nhật Bản cho bé", addMonth(birthday, 21)));
+
+        int[] monthsToAdd = {9, 21};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm não Nhật Bản cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Sởi, Quai bị, Rubella
     public static List<NotificationMessage> NotificationMessageMeaslesMumpsRubella(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Sởi, Quai bị, Rubella cho bé", addMonth(birthday, 12)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Sởi, Quai bị, Rubella cho bé", addMonth(birthday, 36)));
+
+        int[] monthsToAdd = {12, 36};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Sởi, Quai bị, Rubella cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Thủy đậu
     public static List<NotificationMessage> NotificationMessageVaricella(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Thủy đậu cho bé", addMonth(birthday, 9)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Thủy đậu cho bé", addMonth(birthday, 12)));
+
+        int[] monthsToAdd = {9, 12};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Thủy đậu cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Viêm gan A
     public static List<NotificationMessage> NotificationMessageHepatitisA(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan A cho bé", addMonth(birthday, 12)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan A cho bé", addMonth(birthday, 18)));
+
+        int[] monthsToAdd = {12, 18};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm gan A cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Viêm gan A + B
     public static List<NotificationMessage> NotificationMessageHepatitisAB(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan A + B cho bé", addMonth(birthday, 12)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Viêm gan A + B cho bé", addMonth(birthday, 18)));
+
+        int[] monthsToAdd = {12, 18};
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Viêm gan A + B cho bé";
+
+        for (int months : monthsToAdd) {
+            Date date = addMonth(birthday, months);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
+        }
+
         return schedules;
     }
 
     //  tạo hàm lênh lịch cho bệnh Thương hàn
     public static List<NotificationMessage> NotificationMessageTetanus(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Thương hàn cho bé", addMonth(birthday, 24)));
-        for (int i = 0; i < 12*18; i+= 12) {
-            schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Thương hàn cho bé", addMonth(birthday, 24 + i)));
+
+        int initialMonth = 24;
+        int intervalMonths = 12;
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Thương hàn cho bé";
+
+        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, addMonth(birthday, initialMonth)));
+
+        for (int i = intervalMonths; i < 12 * 18; i += intervalMonths) {
+            Date date = addMonth(birthday, initialMonth + i);
+            if (date.after(currentDate)) {
+                schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
+            }
         }
+
         return schedules;
     }
+
 
     //  tạo hàm lênh lịch cho bệnh Bệnh tả
     public static List<NotificationMessage> NotificationMessageTyphoid(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bệnh tả cho bé", addMonth(birthday, 24)));
-        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Bệnh tả cho bé", addMonth(birthday, 25)));
+
+        int initialMonth = 24;
+        int secondDoseMonth = 25;
+        String message = "Đã đến lúc tiêm chủng phòng bệnh Bệnh tả cho bé";
+
+        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, addMonth(birthday, initialMonth)));
+        schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, addMonth(birthday, secondDoseMonth)));
+
         return schedules;
     }
+
 
 
     public static List<NotificationMessage> getVaccinationNotificationMessage(String dateOfBirth, String user_id, String baby_id) throws Exception{

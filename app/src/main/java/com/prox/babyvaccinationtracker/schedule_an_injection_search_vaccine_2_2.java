@@ -140,6 +140,10 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                                 }
                             }
                         }
+                        if (regimenDate.after(currentDate) && closestDate == null){
+                            closestDate = regimenDate;
+                            closestVaccineType = regimen.getVaccination_type();
+                        }
                         regimenList.add(regimen);
                     }
                     Log.i("select vaccine", "onDataChange: " + closestVaccineType);
