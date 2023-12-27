@@ -4,6 +4,15 @@ import java.util.Date;
 
 public class Health {
     private String health_id ;
+
+    public String getCustomer_response() {
+        return customer_response;
+    }
+
+    public void setCustomer_response(String customer_response) {
+        this.customer_response = customer_response;
+    }
+
     private String customer_response;
 
     public Health(String baby_id, double height, double weight, double sleep, String healthCreated_at) {

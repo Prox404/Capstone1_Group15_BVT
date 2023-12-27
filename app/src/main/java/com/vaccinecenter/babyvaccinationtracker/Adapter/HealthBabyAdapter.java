@@ -43,6 +43,10 @@ public class HealthBabyAdapter  extends RecyclerView.Adapter<HealthBabyAdapter.v
 
         if(current_month == month_health){
             holder.heallth_month.setText("Tháng này");
+            if (health.getCustomer_response() != null){
+                holder.healthResponseContainer.setVisibility(View.VISIBLE);
+                holder.textViewResponse.setText(health.getCustomer_response());
+            }
         }
         else{
             holder.heallth_month.setText((current_month-month_health)+" tháng trước");
@@ -72,7 +76,8 @@ public class HealthBabyAdapter  extends RecyclerView.Adapter<HealthBabyAdapter.v
         TextView height;
         TextView weight;
         TextView sleep;
-        TextView heallth_month;
+        TextView heallth_month, textViewResponse;
+        View healthResponseContainer;
         public viewholer(@NonNull View itemView) {
             super(itemView);
 
@@ -80,7 +85,8 @@ public class HealthBabyAdapter  extends RecyclerView.Adapter<HealthBabyAdapter.v
             weight = itemView.findViewById(R.id.health_weight_item);
             sleep = itemView.findViewById(R.id.health_sleep_item);
             heallth_month = itemView.findViewById(R.id.heallth_month);
-
+            healthResponseContainer = itemView.findViewById(R.id.healthResponseContainer);
+            textViewResponse = itemView.findViewById(R.id.textViewResponse2);
 
         }
     }
