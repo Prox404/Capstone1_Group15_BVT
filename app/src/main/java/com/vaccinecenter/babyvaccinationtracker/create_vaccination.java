@@ -41,6 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.vaccinecenter.babyvaccinationtracker.Adapter.RecyclerAdapter;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccines;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -61,6 +62,8 @@ public class create_vaccination extends AppCompatActivity {
     RecyclerAdapter recyclerAdapter; // Hiển thị những ảnh đã chọn
     ArrayList<Uri> uri = new ArrayList<>(); // những đường dẫn ảnh đã lưu
     ArrayList<String> Image_url;
+    DataValidate validate = new DataValidate();
+    View loading_layout;
     // Kiểm tra người dùng đã nhập vắc-xin vào chưa
     boolean is_input(String a){
         if(a.length() == 0){
@@ -91,6 +94,7 @@ public class create_vaccination extends AppCompatActivity {
         edt_price = findViewById(R.id.price);
         image_back = findViewById(R.id.image_back);
         btn_tt = findViewById(R.id.btn_tt);
+        loading_layout = findViewById(R.id.loading_layout);
 
         // nút quay lại
         image_back.setOnClickListener(new View.OnClickListener() {
@@ -192,73 +196,106 @@ public class create_vaccination extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(uri.size() == 0){
-                    Toast.makeText(create_vaccination.this, "Phải chọn ảnh", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(create_vaccination.this, "Phải chọn ảnh",
+                            Toast.LENGTH_SHORT).show();
                 }
                 else{
                     String vaccine_name = edt_vaccine_name.getText().toString();
-                    if(is_input(vaccine_name) == false){
+                    if(vaccine_name.isEmpty()){
                         edt_vaccine_name.requestFocus();
+                        Toast.makeText(create_vaccination.this, "Vui lòng nhập tên vắc-xin",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (!validate.IsValidVaccineName(vaccine_name.trim())){
+                        edt_vaccine_name.requestFocus();
+                        Toast.makeText(create_vaccination.this, "Tên vắc-xin không hợp lệ",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    String post_vaccination_reactions = edt_post_vaccination_reactions.getText().toString();
-                    if(is_input(post_vaccination_reactions) == false){
+                    String post_vaccination_reactions = edt_post_vaccination_reactions
+                            .getText()
+                            .toString().trim();
+                    if(post_vaccination_reactions.isEmpty()){
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập phản ứng sau tiêm, nếu không có thì ghi không có",
+                                Toast.LENGTH_SHORT).show();
                         edt_post_vaccination_reactions.requestFocus();
                         return;
                     }
-                    String origin = edt_origin.getText().toString();
-                    if(is_input(origin) == false){
+
+                    String origin = edt_origin.getText().toString().trim();
+                    if(origin.isEmpty()){
                         edt_origin.requestFocus();
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập nguồn gốc vắn-xin", Toast.LENGTH_LONG).show();
+                        return;
+                    }else if(!validate.isValidNameOriginVN(origin)){
+                        edt_origin.requestFocus();
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập nguồn gốc vắn-xin không hợp lệ", Toast.LENGTH_LONG).show();
                         return;
                     }
+
                     String vaccination_target_group = edt_vaccination_target_group.getText().toString();
-                    if(is_input(vaccination_target_group) == false){
+                    if(vaccination_target_group.isEmpty()){
                         edt_vaccination_target_group.requestFocus();
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập nhóm tuổi sử dụng", Toast.LENGTH_LONG).show();
+                        return;
+                    }else if(vaccination_target_group.trim().isEmpty()){
+                        edt_vaccination_target_group.requestFocus();
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập nhóm tuổi sử dụng không hợp lệ", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    String contraindications = edt_contraindications.getText().toString();
-                    if(is_input(contraindications)==false){
+
+                    String contraindications = edt_contraindications.getText().toString().trim();
+                    if(contraindications.isEmpty()){
                         edt_contraindications.requestFocus();
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập chống chỉ định", Toast.LENGTH_LONG).show();
                         return;
                     }
+
                     int quantity_int = 0;
                     try {
                         quantity_int= Integer.parseInt(edt_quantity.getText().toString());
                         if(quantity_int < 0){
                             edt_quantity.requestFocus();
-                            Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(create_vaccination.this,
+                                    "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }catch (Exception e){
                         edt_quantity.requestFocus();
-                        Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(create_vaccination.this,
+                                "Phải nhập số", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     String quantity = edt_quantity.getText().toString();
-                    int dosage_int = 0;
-                    try{
-                        dosage_int = Integer.parseInt(edt_dosage.getText().toString());
-                        if(dosage_int < 0){
-                            edt_dosage.requestFocus();
-                            Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }catch (Exception e){
+
+
+                    String dosage = edt_dosage.getText().toString();
+                    if (dosage.isEmpty()) {
                         edt_dosage.requestFocus();
-                        Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(create_vaccination.this,
+                                "Phải nhập liều của vắc-xin", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    String dosage = edt_dosage.getText().toString();
-                    String unit = edt_unit.getText().toString();
-                    if(is_input(unit) == false){
+
+                    String unit = edt_unit.getText().toString().trim();
+                    if(unit.isEmpty()){
                         edt_unit.requestFocus();
+                        Toast.makeText(create_vaccination.this,
+                                "Nhập số lượng", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     String date_of_entry = edt_date_of_entry.getText().toString();
                     if(date_of_entry.length() == 0){
                         edt_date_of_entry.requestFocus();
-                        Toast.makeText(create_vaccination.this, "Phải chọn ngày nhập cảnh ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(create_vaccination.this,
+                                "Phải chọn ngày nhập cảnh ", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -266,16 +303,18 @@ public class create_vaccination extends AppCompatActivity {
                     try{
                         price = Integer.parseInt(edt_price.getText().toString());
                         if(price < 0){
-                            Toast.makeText(create_vaccination.this, "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(create_vaccination.this,
+                                    "Phải nhập số lớn hơn hoặc bằng 0", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }catch (Exception e){
                         edt_price.requestFocus();
-                        Toast.makeText(create_vaccination.this, "Phải nhập số", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(create_vaccination.this,
+                                "Phải nhập số", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    String price_vaccine = "" + edt_price.getText().toString() +" "+ select_price_unti;
-
+                    String price_vaccine = "" + formatCurrency(price) +" "+ select_price_unti;
+                    loading_layout.setVisibility(View.VISIBLE);
                     Image_url = new ArrayList<>();
                     int total_image = uri.size();
                     for (int i = 0; i < total_image ; i ++){
@@ -314,10 +353,12 @@ public class create_vaccination extends AppCompatActivity {
                             @Override
                             public void onError(String requestId, ErrorInfo error) {
                                 Log.i("upload image onError", "error "+ error.getDescription());
+                                loading_layout.setVisibility(View.GONE);
                             }
                             @Override
                             public void onReschedule(String requestId, ErrorInfo error) {
                                 Log.i("upload image onReschedule", "Reshedule "+error.getDescription());
+                                loading_layout.setVisibility(View.GONE);
                             }
                         }).dispatch();
                     }
@@ -379,6 +420,7 @@ public class create_vaccination extends AppCompatActivity {
         }
         vaccines.setDeleted(false);
 
+
         Context mcontext = create_vaccination.this;
         SharedPreferences sharedPreferences = mcontext.getSharedPreferences("user", Context.MODE_PRIVATE);
         String id_vaccine_center = sharedPreferences.getString("center_id","");
@@ -386,13 +428,18 @@ public class create_vaccination extends AppCompatActivity {
 
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                    Toast.makeText(create_vaccination.this, "successfully", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(create_vaccination.this, "failed", Toast.LENGTH_SHORT).show();
+                if(task.isSuccessful()) {
+                    Toast.makeText(create_vaccination.this, "Thêm thành công !", Toast.LENGTH_SHORT).show();
+                    loading_layout.setVisibility(View.GONE);
+                    clear();
+                }
+                else {
+                    Toast.makeText(create_vaccination.this, "Đã xảy ra lỗi !", Toast.LENGTH_SHORT).show();
+                    loading_layout.setVisibility(View.GONE);
+                }
             }
         });
-        clear();
+
     }
     // Kiểm tra quyền truy cập kho ảnh
     private static final int PERMISSION_CODE = 1;
@@ -458,5 +505,10 @@ public class create_vaccination extends AppCompatActivity {
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
             return cursor.getString(idx);
         }
+    }
+
+    public static String formatCurrency(int number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        return decimalFormat.format(number);
     }
 }

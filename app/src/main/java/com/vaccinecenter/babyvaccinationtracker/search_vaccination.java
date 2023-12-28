@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.vaccinecenter.babyvaccinationtracker.Adapter.VaccineAdapter;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccines;
@@ -53,8 +54,6 @@ public class search_vaccination extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recvaccine.setLayoutManager(linearLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recvaccine.addItemDecoration(dividerItemDecoration);
         mVaccineadapter = new VaccineAdapter(this, mlistvaccine);
         recvaccine.setAdapter(mVaccineadapter);
         vaccineInfoTextView = findViewById(R.id.vaccineInfoTextView);
@@ -116,18 +115,27 @@ public class search_vaccination extends AppCompatActivity {
         Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);
         mlistvaccine.clear();
         Log.d("vaccine", "getdatafromrealtimedatabase: call");
+        Query query = myRef.orderByValue();
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mlistvaccine.clear();
+                ArrayList<Vaccines> vaccines_delete = new ArrayList<>();
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccines vaccine = datasnapshot.getValue(Vaccines.class);
                     vaccine.setVaccine_id(datasnapshot.getKey().toString());
                     Log.i("vaccine", "onDataChange: " + vaccine.toString());
                     if (removeDiacritics(vaccine.getVaccine_name().toLowerCase()).contains(removeDiacritics(searchTerm.toLowerCase()))) {
-                        mlistvaccine.add(vaccine);
+                        if(!vaccine.isDeleted()){
+                            mlistvaccine.add(vaccine);
+                        }
+                        else {
+                            vaccines_delete.add(vaccine);
+                        }
+
                     }
                 }
+                mlistvaccine.addAll(vaccines_delete);
                 mVaccineadapter.notifyDataSetChanged();
             }
             @Override

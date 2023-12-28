@@ -43,9 +43,8 @@ public class login_for_vaccine_center extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         String id_vaccine_center = sharedPreferences.getString("center_id","");
         if(!id_vaccine_center.isEmpty()){
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(login_for_vaccine_center.this, HomeActivity.class);
             startActivity(intent);
-            finish();
         }
 
         login_for_edt_password_vaccine_center = findViewById(R.id.edt_login_password);
@@ -79,6 +78,7 @@ public class login_for_vaccine_center extends AppCompatActivity {
                     Toast.makeText(login_for_vaccine_center.this,"Phải nhập tài khoản đăng nhập", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 mAuth = FirebaseAuth.getInstance();
                 mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -87,12 +87,13 @@ public class login_for_vaccine_center extends AppCompatActivity {
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             String id = user.getUid();
-                            DatabaseReference check = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_centers").child(id);
-                            check.addValueEventListener(new ValueEventListener() {
+                            DatabaseReference check = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
+                            check.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if(snapshot.exists()){
                                         Toast.makeText(login_for_vaccine_center.this,"Tài khoản này đã bị chặn", Toast.LENGTH_LONG).show();
+                                        mAuth.signOut();
                                     }
                                     else {
                                         Log.i("Login", "onComplete: " + user.getEmail() + " - " + user.getUid());
@@ -124,6 +125,7 @@ public class login_for_vaccine_center extends AppCompatActivity {
                                                         editor.putString("center_image", center.getCenter_image());
                                                         editor.putString("hotline", center.getHotline());
                                                         editor.putString("work_time", center.getWork_time());
+                                                        editor.putString("center_name", center.getCenter_name());
 
                                                         editor.apply();
 //
@@ -172,5 +174,10 @@ public class login_for_vaccine_center extends AppCompatActivity {
         if(requestCode == 1 && resultCode == RESULT_OK){
             Toast.makeText(login_for_vaccine_center.this,"Đăng ký thành công, vui lòng chờ xác nhận!",Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

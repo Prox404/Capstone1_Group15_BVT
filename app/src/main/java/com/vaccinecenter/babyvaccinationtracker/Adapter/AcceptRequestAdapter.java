@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -168,15 +170,35 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
                             });
                         }
                     }
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-                    databaseReference.child(vaccination_registration.getRegister_id()).child("status").setValue(3);
-                    Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
-                    vaccinationRegistions.remove(getAdapterPosition());
-                    notifyDataSetChanged();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Xác nhận đã tiêm chủng");
+                    builder.setMessage("Bạn có chắc chắn đã tiêm chủng cho bé?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Đồng ý", (dialog, which) -> {
+                        // Update status & remove item from list
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
+                        databaseReference.child(vaccination_registration.getRegister_id()).child("status").setValue(3).addOnCompleteListener(task ->{
+                            Toast.makeText(context, "Thành công!", Toast.LENGTH_SHORT).show();
+                            notifyDataSetChanged();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(context, "Thất bại!", Toast.LENGTH_SHORT).show();
+                        });
+                        Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
+
+                    });
+                    builder.setNegativeButton("Hủy", (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
                 }
             });
             // Initialize other views in your item layout here.
         }
+
+        //create accept dialog
+
 
         private void uploadAvatar(Bitmap bitmap, String id) {
 

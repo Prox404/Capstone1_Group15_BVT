@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_Edit_post">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/popupDialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView28"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bài đăng mới" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonClose_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/close" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editTextPopupContent_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Hãy nhập nội dung,,,"
+                android:inputType="textMultiLine"
+                android:paddingVertical="15dp" />
+
+            <EditText
+                android:id="@+id/editTextHashtag_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="#Hashtag #cua # ban"
+                android:inputType="textMultiLine"
+                android:paddingVertical="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleViewImage_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingHorizontal="10dp"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutAddImage_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_heart" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Thêm ảnh" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonEditPost_edt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Chỉnh sửa"
+                app:cornerRadius="5dp" />
+
+        </LinearLayout>
+        <include
+            android:id="@+id/loadingLayoutPost"
+            layout="@layout/loading_layout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

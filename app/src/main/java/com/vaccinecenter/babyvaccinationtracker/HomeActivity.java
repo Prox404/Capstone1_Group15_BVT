@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,9 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.Manifest;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,12 +30,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.vaccinecenter.babyvaccinationtracker.model.VaccinationCertificate;
+import com.vaccinecenter.babyvaccinationtracker.model.Vaccination_Registration;
+import com.vaccinecenter.babyvaccinationtracker.service.NotificationService;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
-    RelativeLayout registionContainer,createvaccineContainer,vaccinesContainer, QRScannerContainer;
 
-    TextView textViewNumberOfRegistration,textViewNumberOfVaccines;
+    RelativeLayout registionContainer, createvaccineContainer, vaccinesContainer, QRScannerContainer, ChatContainer, childContainer, CommunityContainer;
+    ImageView imageViewAvatar;
+    TextView textViewNumberOfRegistration, textViewNumberOfVaccines, textViewNumberOfChild, textViewGreetings;
 
     Toolbar toolbar;
 
@@ -39,19 +51,19 @@ public class HomeActivity extends AppCompatActivity {
 
     Context context;
     Boolean check = false;
-    void check(){
 
-        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_centers").child(id);
-        reference.addValueEventListener(new ValueEventListener() {
+    void check() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        String id = sharedPreferences.getString("center_id","");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     check = false;
                     startActivity(new Intent(HomeActivity.this, Display_block_user.class));
                     finish();
-                }
-                else {
+                } else {
                     check = true;
                 }
             }
@@ -64,12 +76,31 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        check();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        check();
+    }
+
+    @SuppressLint("MissingInflatedId")
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        check();
 
-
+        imageViewAvatar = findViewById(R.id.imageViewAvatar);
         toolbar = (Toolbar) findViewById(R.id.homeToolBar);
 
         setSupportActionBar(toolbar);
@@ -78,17 +109,38 @@ public class HomeActivity extends AppCompatActivity {
         createvaccineContainer = findViewById(R.id.createvaccineContainer);
         textViewNumberOfRegistration = findViewById(R.id.textViewNumberOfRegistration);
         textViewNumberOfVaccines = findViewById(R.id.textViewNumberOfVaccines);
+        textViewNumberOfChild = findViewById(R.id.textViewNumberOfChild);
         vaccinesContainer = findViewById(R.id.vaccinesContainer);
         QRScannerContainer = findViewById(R.id.QRScannerContainer);
+        CommunityContainer = findViewById(R.id.CommunityContainer);
+        ChatContainer = findViewById(R.id.ChatContainer);
+        textViewGreetings = findViewById(R.id.textViewGreetings);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String center_name = sharedPreferences.getString("center_name", "Trần Công Trí");
+        String center_image = sharedPreferences.getString("center_image", "");
+        textViewGreetings.setText(center_name);
+
+        if (!center_image.equals("")) {
+            String imgaeUrl = center_image.contains("https") ? center_image : center_image.replace("http", "https");
+            Picasso.get().load(imgaeUrl).into(imageViewAvatar);
+        }
+
+        imageViewAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 
-        check();
 
         vaccinesContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(check == true){
+                if (check == true) {
                     Intent intent = new Intent(HomeActivity.this, search_vaccination.class);
                     startActivity(intent);
                 }
@@ -99,7 +151,7 @@ public class HomeActivity extends AppCompatActivity {
         registionContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(check == true){
+                if (check == true) {
                     Intent intent = new Intent(HomeActivity.this, RegistrationRequestActivity.class);
                     startActivity(intent);
                 }
@@ -109,7 +161,7 @@ public class HomeActivity extends AppCompatActivity {
         createvaccineContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(check == true){
+                if (check == true) {
                     Intent intent = new Intent(HomeActivity.this, create_vaccination.class);
                     startActivity(intent);
                 }
@@ -120,7 +172,7 @@ public class HomeActivity extends AppCompatActivity {
         QRScannerContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(check == true){
+                if (check == true) {
                     Intent intent = new Intent(HomeActivity.this, QrScannerActivity.class);
                     startActivity(intent);
                 }
@@ -128,29 +180,58 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        ChatContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        CommunityContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, CommunityActivity.class);
+                startActivity(intent);
+            }
+        });
+        childContainer = findViewById(R.id.childContainer);
+        childContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, children_data_management.class);
+                startActivity(intent);
+            }
+        });
+
         getNumberOfRegistration();
         getNunberOfVaccines();
+        getNumberOfChild();
 
         // checkPermission();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             // Permission is granted
-        }else {
+        } else {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             // Permission is granted
-        }else {
+        } else {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
         }
+
+        Intent notificationService = new Intent(HomeActivity.this, NotificationService.class);
+        startService(notificationService);
     }
 
     private void getNumberOfRegistration() {
         context = HomeActivity.this != null ? HomeActivity.this : null;
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String id_vaccine_center = sharedPreferences.getString("center_id","");
+        String id_vaccine_center = sharedPreferences.getString("center_id", "");
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
         Query query = databaseReference.orderByChild("center/center_id").equalTo(id_vaccine_center);
@@ -168,10 +249,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    private void getNunberOfVaccines(){
+
+    private void getNunberOfVaccines() {
         context = HomeActivity.this != null ? HomeActivity.this : null;
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String id_vaccine_center = sharedPreferences.getString("center_id","");
+        String id_vaccine_center = sharedPreferences.getString("center_id", "");
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines");
 
@@ -190,11 +272,44 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void getNumberOfChild() {
+        context = HomeActivity.this != null ? HomeActivity.this : null;
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
+        Query query = databaseReference.orderByChild("center/center_id");
+
+        ArrayList<String> check_id = new ArrayList<>();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    if (dataSnapshot.exists()) {
+                        VaccinationCertificate vaccinationCertificate = dataSnapshot.getValue(VaccinationCertificate.class);
+                        String id = vaccinationCertificate.getBaby().getBaby_id();
+                        vaccinationCertificate.getBaby().setBaby_id(id);
+                        if (!check_id.contains(id)) {
+                            check_id.add(id);
+                        }
+
+                    }
+                }
+
+                textViewNumberOfChild.setText(String.valueOf(check_id.size()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(HomeActivity.this, "Lỗi truy xuất dữ liệu !", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_toolbar_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -202,7 +317,8 @@ public class HomeActivity extends AppCompatActivity {
         if (id == R.id.action_notification) {
             // Xử lý sự kiện khi người dùng nhấn vào biểu tượng thông báo ở đây
             // Ví dụ: mở màn hình thông báo, hiển thị danh sách thông báo, vv.
-            Log.i("Home", "onOptionsItemSelected: notification" );
+            Intent intent = new Intent(HomeActivity.this, NotificationActivity.class);
+            startActivity(intent);
             return true;
         }
 

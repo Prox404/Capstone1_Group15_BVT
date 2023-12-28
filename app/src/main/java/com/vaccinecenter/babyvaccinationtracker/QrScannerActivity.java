@@ -79,17 +79,35 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
 
             if (scanResult != null) {
                 Gson gson = new Gson();
-                HashMap<String, String> map = gson.fromJson(scanResult, HashMap.class);
+                HashMap<String, String> map = new HashMap<>();
+                try {
+                    map = gson.fromJson(scanResult, HashMap.class);
+                } catch (Exception e) {
+                    isProcessing = false;
+                    scannerView.resumeCameraPreview(this);
+                    Toast.makeText(this, "Mã QR không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String type = map.get("type");
-                String id = map.get("id");
+
 
                 if (type != null){
                     switch (type){
                         case "certificate":
                             isProcessing = false;
+                            String id = map.get("id");
                             Intent intent = new Intent(QrScannerActivity.this, VaccinationCertificateActivity.class);
                             intent.putExtra("certificate_id", id);
                             startActivity(intent);
+                            break;
+                        case "baby_information":
+                            isProcessing = false;
+                            String baby_id = map.get("baby_id");
+                            String cus_id = map.get("cus_id");
+                            Intent intent2 = new Intent(QrScannerActivity.this, BabyProfileActivity.class);
+                            intent2.putExtra("baby_id", baby_id);
+                            intent2.putExtra("cus_id", cus_id);
+                            startActivity(intent2);
                             break;
                         default:
                             isProcessing = false;
