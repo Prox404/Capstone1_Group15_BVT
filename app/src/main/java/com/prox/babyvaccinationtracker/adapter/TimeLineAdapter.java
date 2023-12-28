@@ -96,6 +96,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.Regime
                     closestPosition = i;
                 }
             }
+            if (regimenDate.after(currentDate) && closestDate == null){
+                closestDate = regimenDate;
+                closestPosition = i;
+                Log.i("Huuuuuu", "highlightClosestRegimen: " + closestPosition + " " + closestDate + " " + currentDate);
+            }
         }
 
         Log.i("Huuuuuu", "highlightClosestRegimen: " + closestPosition + " " + closestDate + " " + currentDate);

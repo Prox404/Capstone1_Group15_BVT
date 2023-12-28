@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +29,8 @@ import com.prox.babyvaccinationtracker.model.Vaccination_Registration;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -95,13 +99,41 @@ public class AcceptRequestAdapter extends RecyclerView.Adapter<AcceptRequestAdap
                 public void onClick(View view) {
                     Log.i("Aloo", "onClick: " + getAdapterPosition());
                     // Update status & remove item from list
+                    //dialog show
                     Vaccination_Registration vaccination_registration = vaccinationRegistions.get(getAdapterPosition());
+                    Date currentDate = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    Date registDate = new Date();
+                    try {
+                        registDate = formatter.parse(vaccination_registration.getRegist_created_at());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (registDate.after(currentDate)){
+                        Toast.makeText(context, "Chưa đến ngày tiêm chủng", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-                    databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegist_id()).child("status").setValue(2);
-                    Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
-                    vaccinationRegistions.remove(getAdapterPosition());
-                    notifyDataSetChanged();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Xác nhận đã tiêm chủng");
+                    builder.setMessage("Bạn có chắc chắn đã tiêm chủng cho bé chưa?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Có", (dialogInterface, i) -> {
+                        //update status
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
+                        databaseReference.child(vaccinationRegistions.get(getAdapterPosition()).getRegist_id()).child("status").setValue(2).addOnCompleteListener(task -> {
+                            Toast.makeText(context, "Đã xác nhận", Toast.LENGTH_SHORT).show();
+                            notifyDataSetChanged();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(context, "Lỗi xác nhận", Toast.LENGTH_SHORT).show();
+                        });
+                        Log.i("Accept", "onClick: " + vaccinationRegistions.get(getAdapterPosition()).toString());
+                    });
+                    builder.setNegativeButton("Không", (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
             });
             // Initialize other views in your item layout here.

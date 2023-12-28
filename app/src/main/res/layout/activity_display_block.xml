@@ -35,6 +35,13 @@
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:src="@drawable/block" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -44,21 +51,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:fontFamily="@font/inter_semibold"
         android:gravity="center"
-        android:text="Tài khoản này đã bị chặn " />
+        android:text="Tài khoản này đã bị chặn "
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView46"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Vui lòng liên hệ anh Trí đẹp trai để được mở khóa" />
+        android:text="Vui lòng liên hệ Admin để được mở khóa" />
 
-    <ImageView
-        android:id="@+id/imageView8"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp"
-        android:src="@drawable/ic_nothing" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Tel: 0868009674"
+        android:textSize="20sp" />
+
+
 
 </LinearLayout>

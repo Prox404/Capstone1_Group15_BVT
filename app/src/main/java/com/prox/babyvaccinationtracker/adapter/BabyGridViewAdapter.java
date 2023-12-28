@@ -139,32 +139,56 @@ public class BabyGridViewAdapter extends BaseAdapter {
                                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                                    DatabaseReference notifications = firebaseDatabase.getReference("notifications");
-                                                                    Query query = notifications.orderByChild("baby_id").equalTo(baby.getBaby_id());
-                                                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    DatabaseReference notifications =
+                                                                            firebaseDatabase
+                                                                                    .getReference("notifications");
+                                                                    Query query = notifications
+                                                                            .orderByChild("baby_id")
+                                                                            .equalTo(baby.getBaby_id());
+                                                                    query.addListenerForSingleValueEvent(
+                                                                            new ValueEventListener() {
                                                                         @Override
-                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                        public void onDataChange(
+                                                                                @NonNull
+                                                                                DataSnapshot snapshot) {
                                                                             if(snapshot != null){
-                                                                                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                                                                                    dataSnapshot.getRef().removeValue();
+                                                                                for(DataSnapshot
+                                                                                        dataSnapshot
+                                                                                        :
+                                                                                        snapshot.getChildren()){
+                                                                                    dataSnapshot
+                                                                                            .getRef()
+                                                                                            .removeValue();
                                                                                 }
                                                                             }
 
                                                                         }
 
                                                                         @Override
-                                                                        public void onCancelled(@NonNull DatabaseError error) {
+                                                                        public void onCancelled(
+                                                                                @NonNull
+                                                                                DatabaseError
+                                                                                        error) {
 
                                                                         }
                                                                     });
-                                                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                                    String babiesJson = sharedPreferences.getString("babiesList", "");
+                                                                    SharedPreferences.Editor editor
+                                                                            = sharedPreferences.edit();
+                                                                    String babiesJson = sharedPreferences
+                                                                            .getString("babiesList", "");
                                                                     Gson gson = new Gson();
-                                                                    Type type = new TypeToken<List<Baby>>() {
+                                                                    Type type =
+                                                                            new TypeToken<List<Baby>>() {
                                                                     }.getType();
-                                                                    List<Baby> babiesList = gson.fromJson(babiesJson, type);
-                                                                    for(int i = 0 ; i < babiesList.size() ; i ++){
-                                                                        if(babiesList.get(i).getBaby_id().equals(baby.getBaby_id())){
+                                                                    List<Baby> babiesList =
+                                                                            gson.fromJson(babiesJson, type);
+                                                                    for(int i = 0 ;
+                                                                        i < babiesList.size()
+                                                                            ; i ++){
+                                                                        if(babiesList.get(i)
+                                                                                .getBaby_id()
+                                                                                .equals(baby
+                                                                                        .getBaby_id())){
                                                                             babiesList.remove(i);
                                                                             break;
                                                                         }
@@ -211,6 +235,7 @@ public class BabyGridViewAdapter extends BaseAdapter {
                     backgroud_baby_root = backgroud_baby;
                 }
                 deleteContainer.setVisibility(View.VISIBLE);
+                imageViewBaby_delete.setVisibility(View.VISIBLE);
                 backgroud_baby.setBackgroundResource(R.color.gray_100);
                 checkLongClick = true;
 
@@ -228,6 +253,7 @@ public class BabyGridViewAdapter extends BaseAdapter {
                     mContext.startActivity(intent);
                 }else {
                     deleteContainer.setVisibility(View.GONE);
+                    imageViewBaby_delete_root.setVisibility(View.GONE);
                     backgroud_baby_root.setBackgroundResource(R.color.white);
                     checkLongClick = false;
                 }

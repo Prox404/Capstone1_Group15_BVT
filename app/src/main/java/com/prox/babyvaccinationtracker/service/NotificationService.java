@@ -37,7 +37,6 @@ import java.util.Locale;
 public class NotificationService extends Service {
     public NotificationService() {
     }
-
     private DatabaseReference databaseReference;
     private String user_id;
     private String notificationChannelId = "VaccineNotificationUser";
@@ -141,8 +140,14 @@ public class NotificationService extends Service {
         // Kiểm tra nếu thời gian lịch hẹn đã qua thì không hiển thị thông báo
         if (notificationTime != null && notificationTime.after(new Date())) {
             // Lên lịch hiển thị thông báo
-            Handler handler = new Handler();
-            handler.postDelayed(() -> showNotification(notification), notificationTime.getTime() - System.currentTimeMillis());
+            // nếu thời gian thời gian trong vòng 2 phút thì hiển thị luôn
+            if (notificationTime.getTime() - System.currentTimeMillis() < 120000){
+                showNotification(notification);
+                return;
+            }else{
+                Handler handler = new Handler();
+                handler.postDelayed(() -> showNotification(notification), notificationTime.getTime() - System.currentTimeMillis());
+            }
         }
     }
 

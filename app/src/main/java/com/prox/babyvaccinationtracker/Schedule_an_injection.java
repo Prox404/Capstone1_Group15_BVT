@@ -316,6 +316,7 @@ public class Schedule_an_injection extends AppCompatActivity {
                         Log.i("Registration", "getRegistrationSchedule: " + vaccination_registrations);
                     }
                 }
+                Log.i("Registration", "onDataChange: " + vaccination_registrations.size());
 
             }
 
@@ -480,6 +481,7 @@ public class Schedule_an_injection extends AppCompatActivity {
             schedule_baby_gender.setText(baby.getBaby_gender());
             schedule_bady_birthday.setText(baby.getBaby_birthday());
             schedule_baby_congenital_disease.setText(baby.getBaby_congenital_disease());
+            getRegistrationSchedule(baby_id);
         } else {
             // Thiết lập background mặc định cho tất cả các Button khác
             button.setBackground(getResources().getDrawable(R.drawable.rounded_white_button_bg));
