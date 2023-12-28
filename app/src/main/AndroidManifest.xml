@@ -2,10 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +21,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BabyVaccinationTracker"
         tools:targetApi="31">
+        <activity
+            android:name=".ActivityDeletePost"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityReport_comment"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityReport_post"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_report_comment_and_post"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_add_post"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_display_content_post"
+            android:exported="false" />
+        <activity
+            android:name=".home_upgrade"
+            android:exported="false" />
+        <activity
+            android:name=".manager_content"
+            android:exported="false" />
         <activity
             android:name=".Manage_track_content_visits_Activity"
             android:exported="false" />
@@ -39,7 +67,7 @@
             android:name=".SendNotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_management_of_vaccine_center_registration"
+            android:name=".Admin_management_of_user"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"

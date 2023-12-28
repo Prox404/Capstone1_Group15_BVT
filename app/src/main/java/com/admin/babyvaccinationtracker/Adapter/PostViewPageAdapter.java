@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.admin.babyvaccinationtracker.Post_VisitsFragment;
-import com.admin.babyvaccinationtracker.Post_commentsFragment;
+import com.admin.babyvaccinationtracker.Fragment_delete_post;
 import com.admin.babyvaccinationtracker.model.Post;
 
 import java.util.ArrayList;
@@ -31,24 +31,24 @@ public class PostViewPageAdapter extends FragmentPagerAdapter {
             case 0 :
                 Log.i("POST", posts+"");
                 return Post_VisitsFragment.newInstance(posts);
-            case 1 :
-                Log.i("POST", posts+"");
-                return Post_commentsFragment.newInstance(posts);
+//            case 1 :
+//                Log.i("POST", posts+"");
+//                return Fragment_delete_post.newInstance(posts);
             default: return Post_VisitsFragment.newInstance(posts);
         }
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 1;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position){
-            case 0: return "Lượt xem, Lượt quan tâm của bài post";
-            case 1: return "Xóa bài post";
+            case 0: return "Thống kê bài đăng";
+//            case 1: return "Xóa bài bài đăng";
         }
         return super.getPageTitle(position);
     }

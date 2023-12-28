@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.admin.babyvaccinationtracker.Adapter.CenterRegistrationAdapter;
@@ -27,66 +31,44 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ManageVaccineRegistrationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ManageVaccineRegistrationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     RecyclerView confirm_vaccine_center_registration;
 
     ArrayList<Vaccine_center_registration> registrations = new ArrayList<>();
     ArrayList<Vaccine_center_registration> registrations_origin = new ArrayList<>();
     CenterRegistrationAdapter adapter;
     Context context;
-    TextView editTexte_Search_Vaccine_Center;
+    TextView editTexte_Search_Vaccine_Center, textViewDialogAddress, textViewDialogWorkTime,
+            textViewDialogPhone,
+    textViewDialogCenterName;
 
     View empty_layout;
+    CardView PopupImage;
+    ImageView ImageCertificate, imageViewDialogCenterImage;
+    LinearLayout ImageClose;
 
     public ManageVaccineRegistrationFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ManageVaccineRegistrationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ManageVaccineRegistrationFragment newInstance(String param1, String param2) {
         ManageVaccineRegistrationFragment fragment = new ManageVaccineRegistrationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -98,12 +80,20 @@ public class ManageVaccineRegistrationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         context = container != null ? container.getContext() : null;
         View view = inflater.inflate(R.layout.fragment_manage_vaccine_registration, container, false);
         confirm_vaccine_center_registration = view.findViewById(R.id.confirm_vaccine_center_registration);
         editTexte_Search_Vaccine_Center = view.findViewById(R.id.editTexte_Search_Vaccine_Center);
         empty_layout = view.findViewById(R.id.empty_layout);
+        PopupImage = view.findViewById(R.id.PopupImage);
+        ImageCertificate = view.findViewById(R.id.ImageCertificate);
+        ImageClose = view.findViewById(R.id.ImageClose);
+        imageViewDialogCenterImage = view.findViewById(R.id.imageViewDialogCenterImage);
+        textViewDialogAddress = view.findViewById(R.id.textViewDialogAddress);
+        textViewDialogWorkTime = view.findViewById(R.id.textViewDialogWorkTime);
+        textViewDialogPhone = view.findViewById(R.id.textViewDialogPhone);
+        textViewDialogCenterName = view.findViewById(R.id.textViewDialogCenterName);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference vaccineRef = database.getReference("Vaccine_center_registration");
@@ -118,21 +108,29 @@ public class ManageVaccineRegistrationFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                registrations.clear();
-                for(DataSnapshot snap : snapshot.getChildren()){
-                    Vaccine_center_registration regi = snap.getValue(Vaccine_center_registration.class);
-                    regi.getCenter().setCenter_address2(snap.child("center").child("center_address2").getValue(String.class));
-                    regi.setCenter_registration_id(snap.getKey());
-                    registrations.add(regi);
-                }
-                registrations_origin = new ArrayList<>(registrations);
-                if (registrations_origin.size() <= 0){
+                if(snapshot.exists()){
+                    registrations.clear();
+                    registrations_origin.clear();
+                    for(DataSnapshot snap : snapshot.getChildren()){
+                        Vaccine_center_registration regi = snap.getValue(Vaccine_center_registration.class);
+                        regi.getCenter().setCenter_address2(snap.child("center").child("center_address2").getValue(String.class));
+                        regi.setCenter_registration_id(snap.getKey());
+                        registrations.add(regi);
+                    }
+                    adapter.setData(registrations);
+                    registrations_origin = new ArrayList<>(registrations);
+                    if (registrations_origin.size() <= 0){
+                        empty_layout.setVisibility(View.VISIBLE);
+                    } else {
+                        empty_layout.setVisibility(View.GONE);
+                    }
+                }else {
+                    registrations_origin.clear();
+                    registrations.clear();
                     empty_layout.setVisibility(View.VISIBLE);
-                } else {
-                    empty_layout.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
                 }
 
-                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -158,7 +156,24 @@ public class ManageVaccineRegistrationFragment extends Fragment {
             }
         });
 
-
+        adapter.setOnItemClickListener(new CenterRegistrationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Vaccine_center_registration registration) {
+                if(PopupImage.getVisibility() == View.VISIBLE){
+                    hidePopupDialogWithAnimation();
+                }
+                else {
+                    String url_Cer = registration.getCenter().getActivity_certificate();
+                    showPopupDialogWithAnimation(url_Cer);
+                }
+            }
+        });
+        ImageClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hidePopupDialogWithAnimation();
+            }
+        });
 
         return view;
     }
@@ -176,6 +191,62 @@ public class ManageVaccineRegistrationFragment extends Fragment {
         else {
             adapter.setData(registrations_origin);
         }
+    }
+    private void showPopupDialogWithAnimation(String url) {
+        // Sử dụng Animation để thực hiện hiệu ứng xuất hiện
+        Animation animation = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.fade_in);
+        PopupImage.startAnimation(animation);
+        url = url.contains("https") ? url : url.replace("http", "https");
+        Picasso.get().load(url).into(ImageCertificate, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.i("IMAGE_MANAGEMENT", "onSuccess");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                ImageCertificate.setImageResource(R.drawable.user_default_avatar);
+            }
+        });
+        String address = registrations.get(0).getCenter().getCenter_address2() + ", " + registrations.get(0).getCenter().getCenter_address();
+        textViewDialogAddress.setText(address);
+        textViewDialogWorkTime.setText(registrations.get(0).getCenter().getWork_time());
+        textViewDialogPhone.setText(registrations.get(0).getCenter().getHotline());
+        textViewDialogCenterName.setText(registrations.get(0).getCenter().getCenter_name());
+
+        String center_image = registrations.get(0).getCenter().getCenter_image();
+        center_image = center_image.contains("https") ? center_image : center_image.replace("http", "https");
+        Picasso.get().load(center_image).into(imageViewDialogCenterImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.i("IMAGE_MANAGEMENT", "onSuccess");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                imageViewDialogCenterImage.setImageResource(R.drawable.user_default_avatar);
+            }
+        });
+
+        // Đặt sự kiện visibility cho popupDialog
+        PopupImage.setVisibility(View.VISIBLE);
+        ImageCertificate.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        hidePopupDialogWithAnimation();
+    }
+
+    private void hidePopupDialogWithAnimation() {
+        // Sử dụng Animation để thực hiện hiệu ứng ẩn đi
+        Animation animation = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.fade_out);
+        PopupImage.startAnimation(animation);
+
+        // Đặt sự kiện visibility cho popupDialog
+        PopupImage.setVisibility(View.GONE);
+        ImageCertificate.setVisibility(View.GONE);
     }
     public static String removeDiacritics(String input) {
         String nfdNormalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);

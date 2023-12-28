@@ -32,13 +32,18 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SendNotificationActivity extends AppCompatActivity implements SearchQueryListener {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        selectedCustomers.clear();
+    }
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
     public static String searchQuery = "";
 
-    private ImageView imageView_back;
+//    private ImageView imageView_back;
 
     private EditText editTextNotificationSearch, editTextDate, editTextTime, editTextTitle, editTextMessage;
     private Button buttonSearch, buttonSendNotification;
@@ -56,7 +61,7 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_notification);
-        imageView_back = findViewById(R.id.imageView_back);
+//        imageView_back = findViewById(R.id.imageView_back);
         editTextNotificationSearch = findViewById(R.id.editTextNotificationSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         editTextDate = findViewById(R.id.editTextDate);
@@ -80,12 +85,12 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        imageView_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+//        imageView_back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,10 +117,10 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
         buttonSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = editTextTitle.getText().toString();
-                String message = editTextMessage.getText().toString();
-                String date = editTextDate.getText().toString();
-                String time = editTextTime.getText().toString();
+                String title = editTextTitle.getText().toString().trim();
+                String message = editTextMessage.getText().toString().trim();
+                String date = editTextDate.getText().toString().trim();
+                String time = editTextTime.getText().toString().trim();
 
                 if (title.isEmpty()) {
                     editTextTitle.setError("Vui lòng nhập tiêu đề thông báo");
@@ -137,7 +142,7 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
                     return;
                 }
 
-                if (selectedCustomers.isEmpty()) {
+                if (selectedCustomers.isEmpty() ) {
                     // Chưa chọn người dùng
                     // Hiển thị thông báo lỗi
                     Toast.makeText(SendNotificationActivity.this, "Vui lòng chọn người dùng", Toast.LENGTH_SHORT).show();
@@ -152,6 +157,13 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
                     dateTime = sdf.parse(date + " " + time);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
+                }
+
+                if (dateTime.before(Calendar.getInstance().getTime())) {
+                    // Ngày giờ đã chọn đã trôi qua
+                    // Hiển thị thông báo lỗi
+                    Toast.makeText(SendNotificationActivity.this, "Ngày giờ đã chọn đã trôi qua", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 // Thực hiện gửi thông báo tại đây
@@ -204,28 +216,23 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar selectedTime = Calendar.getInstance();
+                Calendar currentTime = Calendar.getInstance();
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedTime.set(Calendar.MINUTE, minute);
-                Calendar currentTime = Calendar.getInstance();
                 if(selectedDate.getTime().after(currentTime.getTime())){
                     editTextTime.setText(timeFormat.format(selectedTime.getTime()));
                 } else {
                     if (selectedTime.getTime().before(currentTime.getTime())) {
                     // Giờ đã chọn nhỏ hơn giờ hiện tại
-                    // Thực hiện xử lý tại đây (hoặc hiển thị thông báo lỗi)
-                        Toast.makeText(SendNotificationActivity.this, "Giờ không được bé hơn giờ hiện tại", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SendNotificationActivity.this, "Thời gian này đã qua !", Toast.LENGTH_LONG).show();
                     } else {
                         editTextTime.setText(timeFormat.format(selectedTime.getTime()));
                     }
                 }
-//                if (selectedTime.getTime().before(currentTime.getTime())) {
-//                    // Giờ đã chọn nhỏ hơn giờ hiện tại
-//                    // Thực hiện xử lý tại đây (hoặc hiển thị thông báo lỗi)
-//                } else {
-//                    editTextTime.setText(timeFormat.format(selectedTime.getTime()));
-//                }
             }
         }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true);
         timePickerDialog.show();
     }
+
+
 }

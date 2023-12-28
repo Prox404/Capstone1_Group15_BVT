@@ -50,7 +50,7 @@ public class ManagerUserViewPageAdapter extends FragmentPagerAdapter {
             case 2:
                 return "Danh sách đen";
             case 3:
-                return "Quản lý đơn đăng ký trung tâm vắc-xin";
+                return "Đơn đăng ký trung tâm vắc-xin";
         }
         return super.getPageTitle(position);
     }

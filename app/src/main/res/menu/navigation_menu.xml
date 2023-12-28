@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:checked="true"
+        android:title="Nhà" />
+
+    <item
+        android:id="@+id/navigation_posts"
+        android:icon="@drawable/ic_article_management"
+        android:title="Quản lý bài viết" />
+
+    <item
+        android:id="@+id/navigation_user"
+        android:icon="@drawable/ic_user_management"
+        android:title="Quản lý người dùng" />
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/ic_setting"
+        android:title="Cài đặt" />
+
+</menu>

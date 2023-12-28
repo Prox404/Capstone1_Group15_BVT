@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".ManageVaccineRegistrationFragment">
 
     <LinearLayout
@@ -12,12 +14,12 @@
 
         <TextView
             android:id="@+id/textView2"
+            style="@style/Widget.AppCompat.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
-            android:text="Danh sách Trung tâm vắc-xin đăng ký"
-            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:text="Danh sách đăng ký Trung tâm vắc-xin "
             android:textStyle="bold" />
 
         <LinearLayout
@@ -25,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/rounded_layout"
+            android:backgroundTint="#FFFFFF"
             android:orientation="horizontal">
 
             <ImageButton
@@ -40,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
                 android:background="@drawable/rounded_edittext_background"
+                android:backgroundTint="#FFFFFF"
                 android:ems="10"
                 android:hint="Tìm kiếm trung tâm đăng ký"
                 android:inputType="text" />
@@ -56,8 +60,173 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/confirm_vaccine_center_registration"
             android:layout_width="match_parent"
-            android:layout_height="578dp" />
+            android:layout_height="wrap_content"
+            android:padding="10dp" />
 
 
     </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/PopupImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <FrameLayout
+            android:id="@+id/chungNhanContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#DFDFDF">
+
+            <ImageView
+                android:id="@+id/imageViewDialogCenterImage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="60dp"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="60dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp">
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/half_rounded_layout"
+                        android:backgroundTint="#DFDFDF"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter_bold"
+                                android:text="Địa chỉ: " />
+
+                            <TextView
+                                android:id="@+id/textViewDialogAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter_bold"
+                                android:text="Chứng nhận:  " />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ImageCertificate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:srcCompat="@drawable/play" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter_bold"
+                                android:text="Thời gian làm việc: " />
+
+                            <TextView
+                                android:id="@+id/textViewDialogWorkTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter_bold"
+                                android:text="Hotline: " />
+
+                            <TextView
+                                android:id="@+id/textViewDialogPhone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ImageClose"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:tint="@color/textColor"
+                        app:srcCompat="@drawable/close" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textViewDialogCenterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:paddingRight="50dp"
+                    android:text="TextView" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
 </FrameLayout>

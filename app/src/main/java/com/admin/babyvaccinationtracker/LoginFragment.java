@@ -147,7 +147,7 @@ public class LoginFragment extends Fragment {
                                 }
                             });
                             Toast.makeText(context, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(context, HomeActivity.class);
+                            Intent intent = new Intent(context, home_upgrade.class);
                             startActivity(intent);
                         } else {
                             // Đăng nhập thất bại, xử lý tại đây

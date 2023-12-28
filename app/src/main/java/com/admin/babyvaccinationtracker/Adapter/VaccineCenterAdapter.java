@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.admin.babyvaccinationtracker.R;
 import com.admin.babyvaccinationtracker.SendNotificationActivity;
 import com.admin.babyvaccinationtracker.model.Vaccine_center;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +50,14 @@ public class VaccineCenterAdapter extends RecyclerView.Adapter<VaccineCenterAdap
         private TextView textViewCenterName;
         private TextView textViewHotline;
         private TextView textViewAddress;
+        ImageView imageViewVaccineCenter;
 
         public VaccineCenterViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewCenterName = itemView.findViewById(R.id.textViewCenterName);
             textViewHotline = itemView.findViewById(R.id.textViewHotline);
             textViewAddress = itemView.findViewById(R.id.textViewAddress);
+            imageViewVaccineCenter = itemView.findViewById(R.id.imageViewVaccineCenter);
         }
 
         public void bind(Vaccine_center vaccineCenter) {
@@ -63,7 +68,7 @@ public class VaccineCenterAdapter extends RecyclerView.Adapter<VaccineCenterAdap
 
             if (selectedVaccineCenter.contains(vaccineCenter.getCenter_id())) {
                 // Thay đổi giao diện người dùng (ví dụ: thay đổi màu nền)
-                itemView.setBackgroundColor(itemView.getContext().getResources().getColor(android.R.color.darker_gray));
+                itemView.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.primarySelectedColor));
             } else {
                 // Reset giao diện người dùng (ví dụ: trả về màu nền mặc định)
                 itemView.setBackgroundColor(itemView.getContext().getResources().getColor(android.R.color.white));
@@ -78,6 +83,20 @@ public class VaccineCenterAdapter extends RecyclerView.Adapter<VaccineCenterAdap
                         selectedVaccineCenter.add(vaccineCenter.getCenter_id());
                     }
                     notifyItemChanged(getAdapterPosition());
+                }
+            });
+
+            String center_image = vaccineCenter.getCenter_image();
+            center_image = center_image.contains("https") ? center_image : center_image.replace("http", "https");
+            Picasso.get().load(center_image).into(imageViewVaccineCenter, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    imageViewVaccineCenter.setImageResource(R.drawable.user_default_avatar);
                 }
             });
         }

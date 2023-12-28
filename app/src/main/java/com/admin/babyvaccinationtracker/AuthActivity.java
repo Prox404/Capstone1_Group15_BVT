@@ -27,7 +27,7 @@ public class AuthActivity extends AppCompatActivity {
         if (admin_id.equals("")) {
             loadFragment(new LoginFragment());
         } else {
-            Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+            Intent intent = new Intent(AuthActivity.this, home_upgrade.class);
             startActivity(intent);
         }
     }
