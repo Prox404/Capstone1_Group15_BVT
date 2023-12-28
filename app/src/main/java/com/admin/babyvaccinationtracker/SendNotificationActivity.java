@@ -159,6 +159,13 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
                     throw new RuntimeException(e);
                 }
 
+                if (dateTime.before(Calendar.getInstance().getTime())) {
+                    // Ngày giờ đã chọn đã trôi qua
+                    // Hiển thị thông báo lỗi
+                    Toast.makeText(SendNotificationActivity.this, "Ngày giờ đã chọn đã trôi qua", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // Thực hiện gửi thông báo tại đây
                 for (String customer_id : selectedCustomers) {
                     Log.i("SendNotification", "onClick: " + customer_id + " " + title + " " + message + " " + dateTime.toString());
@@ -209,26 +216,23 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar selectedTime = Calendar.getInstance();
-                selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                selectedTime.set(Calendar.MINUTE, minute);
                 Calendar currentTime = Calendar.getInstance();
+                selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                if (minute == currentTime.get(Calendar.MINUTE)){
+                    selectedTime.set(Calendar.MINUTE, minute + 1);
+                } else{
+                    selectedTime.set(Calendar.MINUTE, minute);
+                }
                 if(selectedDate.getTime().after(currentTime.getTime())){
                     editTextTime.setText(timeFormat.format(selectedTime.getTime()));
                 } else {
                     if (selectedTime.getTime().before(currentTime.getTime())) {
                     // Giờ đã chọn nhỏ hơn giờ hiện tại
-                    // Thực hiện xử lý tại đây (hoặc hiển thị thông báo lỗi)
-                        Toast.makeText(SendNotificationActivity.this, "Giờ không được bé hơn giờ hiện tại", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SendNotificationActivity.this, "Thời gian này đã qua !", Toast.LENGTH_LONG).show();
                     } else {
                         editTextTime.setText(timeFormat.format(selectedTime.getTime()));
                     }
                 }
-//                if (selectedTime.getTime().before(currentTime.getTime())) {
-//                    // Giờ đã chọn nhỏ hơn giờ hiện tại
-//                    // Thực hiện xử lý tại đây (hoặc hiển thị thông báo lỗi)
-//                } else {
-//                    editTextTime.setText(timeFormat.format(selectedTime.getTime()));
-//                }
             }
         }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true);
         timePickerDialog.show();
