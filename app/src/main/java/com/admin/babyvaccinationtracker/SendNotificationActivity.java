@@ -218,11 +218,7 @@ public class SendNotificationActivity extends AppCompatActivity implements Searc
                 Calendar selectedTime = Calendar.getInstance();
                 Calendar currentTime = Calendar.getInstance();
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                if (minute == currentTime.get(Calendar.MINUTE)){
-                    selectedTime.set(Calendar.MINUTE, minute + 1);
-                } else{
-                    selectedTime.set(Calendar.MINUTE, minute);
-                }
+                selectedTime.set(Calendar.MINUTE, minute);
                 if(selectedDate.getTime().after(currentTime.getTime())){
                     editTextTime.setText(timeFormat.format(selectedTime.getTime()));
                 } else {
