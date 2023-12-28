@@ -63,8 +63,6 @@ public class HealthFragment extends Fragment {
     FirebaseDatabase database;
     DatabaseReference databaseReference;
     HashMap<Integer,Health> health = new HashMap<>();
-
-
     public HealthFragment() {
 
     }
@@ -231,7 +229,7 @@ public class HealthFragment extends Fragment {
                         }
                         chartxyBMI(dataValues2(health));
                         ArrayList<Health> a = new ArrayList<>(health.values());
-                        adapter = new HealthBabyAdapter(reverse_arraylist(a));
+                        adapter = new HealthBabyAdapter(reverse_arraylist(a), baby.getBaby_id());
                         health_baby_list_view.setLayoutManager(new GridLayoutManager(context,1));
                         health_baby_list_view.setAdapter(adapter);
                         //todo arlet
@@ -290,7 +288,7 @@ public class HealthFragment extends Fragment {
                             }
                             chartxyBMI(dataValues2(health));
                             ArrayList<Health> a = new ArrayList<>(health.values());
-                            adapter = new HealthBabyAdapter(reverse_arraylist(a));
+                            adapter = new HealthBabyAdapter(reverse_arraylist(a), baby.getBaby_id());
                             health_baby_list_view.setLayoutManager(new GridLayoutManager(context,1));
                             health_baby_list_view.setAdapter(adapter);
                             Log.i("MONTHHHH",""+month);

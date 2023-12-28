@@ -5,12 +5,31 @@ import java.util.Date;
 public class Health {
     private String health_id ;
 
+    public String getCustomer_response() {
+        return customer_response;
+    }
+
+    public void setCustomer_response(String customer_response) {
+        this.customer_response = customer_response;
+    }
+
+    private String customer_response;
+
     public Health(String baby_id, double height, double weight, double sleep, String healthCreated_at) {
         this.baby_id = baby_id;
         this.height = height;
         this.weight = weight;
         this.sleep = sleep;
         this.healthCreated_at = healthCreated_at;
+    }
+
+    public Health(String baby_id, double height, double weight, double sleep, String healthCreated_at, String customer_response) {
+        this.baby_id = baby_id;
+        this.height = height;
+        this.weight = weight;
+        this.sleep = sleep;
+        this.healthCreated_at = healthCreated_at;
+        this.customer_response = customer_response;
     }
 
     public Health(String health_id, String baby_id, double height, double weight, double sleep, String healthCreated_at) {
@@ -20,6 +39,16 @@ public class Health {
         this.weight = weight;
         this.sleep = sleep;
         this.healthCreated_at = healthCreated_at;
+    }
+
+    public Health(String health_id, String baby_id, double height, double weight, double sleep, String healthCreated_at, String customer_response) {
+        this.health_id = health_id;
+        this.baby_id = baby_id;
+        this.height = height;
+        this.weight = weight;
+        this.sleep = sleep;
+        this.healthCreated_at = healthCreated_at;
+        this.customer_response = customer_response;
     }
 
     public Health(double height, double weight) {
