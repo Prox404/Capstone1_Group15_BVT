@@ -163,8 +163,8 @@ public class ManageVaccineRegistrationFragment extends Fragment {
                     hidePopupDialogWithAnimation();
                 }
                 else {
-                    String url_Cer = registration.getCenter().getActivity_certificate();
-                    showPopupDialogWithAnimation(url_Cer);
+
+                    showPopupDialogWithAnimation(registration);
                 }
             }
         });
@@ -192,12 +192,13 @@ public class ManageVaccineRegistrationFragment extends Fragment {
             adapter.setData(registrations_origin);
         }
     }
-    private void showPopupDialogWithAnimation(String url) {
+    private void showPopupDialogWithAnimation(Vaccine_center_registration registration) {
         // Sử dụng Animation để thực hiện hiệu ứng xuất hiện
         Animation animation = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.fade_in);
         PopupImage.startAnimation(animation);
-        url = url.contains("https") ? url : url.replace("http", "https");
-        Picasso.get().load(url).into(ImageCertificate, new Callback() {
+        String url_Cer = registration.getCenter().getActivity_certificate();
+        url_Cer = url_Cer.contains("https") ? url_Cer : url_Cer.replace("http", "https");
+        Picasso.get().load(url_Cer).into(ImageCertificate, new Callback() {
             @Override
             public void onSuccess() {
                 Log.i("IMAGE_MANAGEMENT", "onSuccess");
@@ -208,13 +209,13 @@ public class ManageVaccineRegistrationFragment extends Fragment {
                 ImageCertificate.setImageResource(R.drawable.user_default_avatar);
             }
         });
-        String address = registrations.get(0).getCenter().getCenter_address2() + ", " + registrations.get(0).getCenter().getCenter_address();
+        String address = registration.getCenter().getCenter_address2() + ", " + registrations.get(0).getCenter().getCenter_address();
         textViewDialogAddress.setText(address);
-        textViewDialogWorkTime.setText(registrations.get(0).getCenter().getWork_time());
-        textViewDialogPhone.setText(registrations.get(0).getCenter().getHotline());
-        textViewDialogCenterName.setText(registrations.get(0).getCenter().getCenter_name());
+        textViewDialogWorkTime.setText(registration.getCenter().getWork_time());
+        textViewDialogPhone.setText(registration.getCenter().getHotline());
+        textViewDialogCenterName.setText(registration.getCenter().getCenter_name());
 
-        String center_image = registrations.get(0).getCenter().getCenter_image();
+        String center_image = registration.getCenter().getCenter_image();
         center_image = center_image.contains("https") ? center_image : center_image.replace("http", "https");
         Picasso.get().load(center_image).into(imageViewDialogCenterImage, new Callback() {
             @Override
