@@ -209,7 +209,7 @@ public class ManageVaccineRegistrationFragment extends Fragment {
                 ImageCertificate.setImageResource(R.drawable.user_default_avatar);
             }
         });
-        String address = registration.getCenter().getCenter_address2() + ", " + registrations.get(0).getCenter().getCenter_address();
+        String address = registration.getCenter().getCenter_address2() + ", " + registration.getCenter().getCenter_address();
         textViewDialogAddress.setText(address);
         textViewDialogWorkTime.setText(registration.getCenter().getWork_time());
         textViewDialogPhone.setText(registration.getCenter().getHotline());
