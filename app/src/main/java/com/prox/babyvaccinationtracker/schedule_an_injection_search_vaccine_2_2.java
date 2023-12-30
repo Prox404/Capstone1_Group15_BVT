@@ -249,6 +249,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
 
             @Override
             public void afterTextChanged(Editable editable) {
+                spinnerOrigin.setSelection(0);
                 search_vaccines(editable.toString());
             }
         });
@@ -261,6 +262,7 @@ public class schedule_an_injection_search_vaccine_2_2 extends AppCompatActivity 
                 textViewMessage.setVisibility(View.GONE);
                 vaccines = new ArrayList<>(vaccines_care);
                 schedule_edt_search_vaccine2.setText("");
+                spinnerOrigin.setSelection(0);
             }
         });
 

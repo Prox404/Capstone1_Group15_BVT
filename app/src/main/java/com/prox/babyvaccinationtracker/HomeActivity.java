@@ -211,7 +211,6 @@ public class HomeActivity extends AppCompatActivity {
         }
         else if(id == R.id.action_vaccine_care){
             Intent i = new Intent(HomeActivity.this, search_care_vaccines.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(i);
             return true;
         }

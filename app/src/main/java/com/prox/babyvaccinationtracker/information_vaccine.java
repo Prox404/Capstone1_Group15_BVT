@@ -91,7 +91,7 @@ public class information_vaccine extends AppCompatActivity {
                     imageView_care.setImageResource(R.drawable.store_default);
                     textViewAddToCart.setText("Thêm vào giỏ hàng");
                 } else {
-                    key_Favorite = reference_Favorite.push().getKey();
+                    key_Favorite = vaccine_id;
                     Log.i("KEYYYY", key_Favorite);
                     reference_Favorite.child(key_Favorite).child("vaccines").setValue(vaccine_f);
                     care = true;
@@ -143,7 +143,7 @@ public class information_vaccine extends AppCompatActivity {
             reference_Favorite = FirebaseDatabase.getInstance().getReference("Favorite").child(customer_id);
             query_Favorite = reference_Favorite.orderByChild("vaccines/vaccine_id").equalTo(vaccine_id);
 
-            query_Favorite.addListenerForSingleValueEvent(new ValueEventListener() {
+            query_Favorite.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
