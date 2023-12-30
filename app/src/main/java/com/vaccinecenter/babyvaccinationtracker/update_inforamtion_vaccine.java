@@ -329,7 +329,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                                         "Vui lòng nhập tên vắc-xin",
                                         Toast.LENGTH_SHORT).show();
                                 return;
-                            } else if (!validate.IsValidNameVN(name.trim())){
+                            } else if (!validate.IsValidVaccineName(name.trim())){
                                 edt_vaccine_name.requestFocus();
                                 Toast.makeText(update_inforamtion_vaccine.this,
                                         "Tên vắc-xin không hợp lệ",
