@@ -49,6 +49,9 @@ public class information_vaccine extends AppCompatActivity {
     private image_adapter imageAdapter;
     private LinearLayout addToCartContainer;
 
+    String []arrayVaccineTypeEN = new String[18];
+    String []arrayVaccineTypeVN = new String[18];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,9 @@ public class information_vaccine extends AppCompatActivity {
         addToCartContainer = findViewById(R.id.addToCartContainer);
 
         imageView_care = findViewById(R.id.imageView_care);
+
+        arrayVaccineTypeEN = getResources().getStringArray(R.array.array_vaccine_type_EN);
+        arrayVaccineTypeVN = getResources().getStringArray(R.array.array_vaccine_type_VN);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         customer_id = sharedPreferences.getString("customer_id", "");
@@ -101,7 +107,14 @@ public class information_vaccine extends AppCompatActivity {
         if (bundle != null) {
             vaccine = (Vaccines) bundle.getSerializable("vaccine");
             txt_ten.setText(vaccine.getVaccine_name());
-            txt_hieuqua.setText(vaccine.getVac_effectiveness());
+
+            for(int i = 0 ; i  < arrayVaccineTypeEN.length ; i ++){
+                if(arrayVaccineTypeEN[i].equals(vaccine.getVac_effectiveness())){
+                    txt_hieuqua.setText(arrayVaccineTypeVN[i]);
+                    break;
+                }
+            }
+
             txt_phanungsautiem.setText(vaccine.getPost_vaccination_reactions());
             txt_nguongoc.setText(vaccine.getOrigin());
             txt_nhomtuoisudung.setText(vaccine.getVaccination_target_group());
