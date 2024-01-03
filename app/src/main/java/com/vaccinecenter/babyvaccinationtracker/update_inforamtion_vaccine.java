@@ -46,6 +46,7 @@ import com.vaccinecenter.babyvaccinationtracker.Adapter.RecyclerAdapter;
 import com.vaccinecenter.babyvaccinationtracker.model.Vaccines;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -329,7 +330,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                                         "Vui lòng nhập tên vắc-xin",
                                         Toast.LENGTH_SHORT).show();
                                 return;
-                            } else if (!validate.IsValidNameVN(name.trim())){
+                            } else if (!validate.IsValidVaccineName(name.trim())){
                                 edt_vaccine_name.requestFocus();
                                 Toast.makeText(update_inforamtion_vaccine.this,
                                         "Tên vắc-xin không hợp lệ",
@@ -422,6 +423,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
                                         "Phải nhập giá của vắc-xin", Toast.LENGTH_LONG).show();
                                 return;
                             }
+
                             if (uri_image.size() == 0) {
                                 Toast.makeText(update_inforamtion_vaccine.this,
                                         "Phải chọn ảnh vắc-xin", Toast.LENGTH_LONG).show();
@@ -503,6 +505,10 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
             }
         });
     }
+    public static String formatCurrency(int number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        return decimalFormat.format(number);
+    }
 
     private ArrayList<String> merge_two_array(ArrayList<String> image_old, ArrayList<String> image_new) {
         int size_old = image_old.size();
@@ -567,7 +573,7 @@ public class update_inforamtion_vaccine extends AppCompatActivity {
         vaccine.setDosage(dosage);
         vaccine.setUnit(unit);
         vaccine.setDate_of_entry(date_of_entry);
-        String vaccine_price = price + " " + selectedValue;
+        String vaccine_price = ""+ formatCurrency(Integer.parseInt(price)) + " " + selectedValue;
         vaccine.setPrice(vaccine_price);
         vaccine.setVaccine_image(vaccine_image);
         reference = database.getReference("users").child("Vaccine_center")
