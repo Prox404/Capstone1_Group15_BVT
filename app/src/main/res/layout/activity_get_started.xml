@@ -48,7 +48,7 @@
                 android:id="@+id/buttonPrev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prev" />
+                android:text="Trở về" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +63,7 @@
                 android:id="@+id/buttonNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next" />
+                android:text="Tiếp tục" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
