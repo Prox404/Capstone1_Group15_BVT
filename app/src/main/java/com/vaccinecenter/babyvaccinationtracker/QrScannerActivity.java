@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.Manifest;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
     private String scannedContent;
     ImageButton btnFlash;
 
+    Button buttonResumeCamera;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,7 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
 
         scannerView = findViewById(R.id.zxingScannerView);;
         btnFlash = findViewById(R.id.btn_flash);
+        buttonResumeCamera = findViewById(R.id.buttonResumeCamera);
 
         btnFlash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +47,14 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
                 flash = !flash;
                 Log.i("flash", String.valueOf(flash));
                 scannerView.setFlash(flash);
+            }
+        });
+
+        buttonResumeCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isProcessing = false;
+                scannerView.resumeCameraPreview(QrScannerActivity.this);
             }
         });
 
@@ -76,6 +88,7 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
             isProcessing = true;
             String scanResult = result.getText();
             scannedContent = scanResult;
+            buttonResumeCamera.setVisibility(View.GONE);
 
             if (scanResult != null) {
                 Gson gson = new Gson();
@@ -84,7 +97,7 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
                     map = gson.fromJson(scanResult, HashMap.class);
                 } catch (Exception e) {
                     isProcessing = false;
-                    scannerView.resumeCameraPreview(this);
+                    buttonResumeCamera.setVisibility(View.VISIBLE);
                     Toast.makeText(this, "Mã QR không hợp lệ", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -111,13 +124,13 @@ public class QrScannerActivity extends AppCompatActivity implements ZXingScanner
                             break;
                         default:
                             isProcessing = false;
-                            scannerView.resumeCameraPreview(this);
+                            buttonResumeCamera.setVisibility(View.VISIBLE);
                             Toast.makeText(this, "Mã QR không hợp lệ", Toast.LENGTH_SHORT).show();
-                            break;
+                            return;
                     }
                 }else{
                     isProcessing = false;
-                    scannerView.resumeCameraPreview(this);
+                    buttonResumeCamera.setVisibility(View.VISIBLE);
                     Toast.makeText(this, "Mã QR không hợp lệ", Toast.LENGTH_SHORT).show();
                 }
             }else {

@@ -1,14 +1,15 @@
 package com.vaccinecenter.babyvaccinationtracker;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.vaccinecenter.babyvaccinationtracker.R;
 import com.vaccinecenter.babyvaccinationtracker.model.VaccinationCertificate;
 
 public class VaccinationCertificateActivity extends AppCompatActivity {
@@ -62,35 +62,46 @@ public class VaccinationCertificateActivity extends AppCompatActivity {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                VaccinationCertificate vaccinationCertificate = snapshot.getValue(VaccinationCertificate.class);
-                vaccinationCertificate.setVaccineCertificate_id(snapshot.getKey());
+                if (snapshot == null) {
+                    Toast.makeText(VaccinationCertificateActivity.this, "Không tìm thấy thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    VaccinationCertificate vaccinationCertificate = snapshot.getValue(VaccinationCertificate.class);
+                    vaccinationCertificate.setVaccineCertificate_id(snapshot.getKey());
 
-                Log.i("Certificate", "onDataChange: " + vaccinationCertificate.toString());
-                textViewBabyName.setText(vaccinationCertificate.getBaby().getBaby_name());
-                textViewBabyBirthDate.setText(vaccinationCertificate.getBaby().getBaby_birthday());
-                textViewBabyGender.setText(vaccinationCertificate.getBaby().getBaby_gender());
-                textViewBabyCongenitalDisease.setText(vaccinationCertificate.getBaby().getBaby_congenital_disease());
-                textViewCenterName.setText(vaccinationCertificate.getCenter().getCenter_name());
-                textViewCenterAddress.setText(vaccinationCertificate.getCenter().getCenter_address());
-                textViewVaccineName.setText(vaccinationCertificate.getVaccine().getVaccine_name());
-                textViewVaccineEntryDate.setText(vaccinationCertificate.getVaccine().getDate_of_entry());
-                String dosage = vaccinationCertificate.getVaccine().getDosage() + " " + vaccinationCertificate.getVaccine().getUnit();
-                textViewVaccineDosage.setText(dosage);
-                textViewTime.setText(vaccinationCertificate.getVaccineCertificate_Created_at());
 
-                String Qr_url = vaccinationCertificate.getQr().replace("https", "http");
-                Picasso.get().load(vaccinationCertificate.getQr()).into(imageViewQR);
+                    Log.i("Certificate", "onDataChange: " + vaccinationCertificate.toString());
+                    textViewBabyName.setText(vaccinationCertificate.getBaby().getBaby_name());
+                    textViewBabyBirthDate.setText(vaccinationCertificate.getBaby().getBaby_birthday());
+                    textViewBabyGender.setText(vaccinationCertificate.getBaby().getBaby_gender());
+                    textViewBabyCongenitalDisease.setText(vaccinationCertificate.getBaby().getBaby_congenital_disease());
+                    textViewCenterName.setText(vaccinationCertificate.getCenter().getCenter_name());
+                    textViewCenterAddress.setText(vaccinationCertificate.getCenter().getCenter_address());
+                    textViewVaccineName.setText(vaccinationCertificate.getVaccine().getVaccine_name());
+                    textViewVaccineEntryDate.setText(vaccinationCertificate.getVaccine().getDate_of_entry());
+                    String dosage = vaccinationCertificate.getVaccine().getDosage() + " " + vaccinationCertificate.getVaccine().getUnit();
+                    textViewVaccineDosage.setText(dosage);
+                    textViewTime.setText(vaccinationCertificate.getVaccineCertificate_Created_at());
 
-                if (vaccinationCertificate.getSide_effects() != null) {
-                    textViewSideEffects.setText(vaccinationCertificate.getSide_effects());
-                    textViewSideEffects.setVisibility(View.VISIBLE);
-                    if (vaccinationCertificate.getSide_effects_Response() != null) {
-                        textViewSideEffectsResponse.setText(vaccinationCertificate.getSide_effects_Response());
-                        textViewSideEffectsResponse.setVisibility(View.VISIBLE);
-                    } else {
-                        textViewSideEffectsResponse.setVisibility(View.GONE);
+                    String Qr_url = vaccinationCertificate.getQr().replace("https", "http");
+                    Picasso.get().load(vaccinationCertificate.getQr()).into(imageViewQR);
+
+                    if (vaccinationCertificate.getSide_effects() != null) {
+                        textViewSideEffects.setText(vaccinationCertificate.getSide_effects());
+                        textViewSideEffects.setVisibility(View.VISIBLE);
+                        if (vaccinationCertificate.getSide_effects_Response() != null) {
+                            textViewSideEffectsResponse.setText(vaccinationCertificate.getSide_effects_Response());
+                            textViewSideEffectsResponse.setVisibility(View.VISIBLE);
+                        } else {
+                            textViewSideEffectsResponse.setVisibility(View.GONE);
+                        }
+
                     }
 
+                } catch (Exception e) {
+                    Toast.makeText(VaccinationCertificateActivity.this, "Không tìm thấy thông tin", Toast.LENGTH_SHORT).show();
+                    return;
                 }
             }
 

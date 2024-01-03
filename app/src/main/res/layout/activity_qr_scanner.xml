@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đặt QR Code vào điểm đánh dấu"
             android:textAlignment="center"
@@ -36,20 +36,40 @@
             android:textColor="#a8a8b2" />
     </LinearLayout>
 
-    <me.dm7.barcodescanner.zxing.ZXingScannerView
-        android:id="@+id/zxingScannerView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        app:borderColor="@color/white"
-        app:borderLength="24dp"
-        app:borderWidth="4dp"
-        app:cornerRadius="10dp"
-        app:laserColor="#FFF"
-        app:maskColor="@color/mask_scanner_color"
-        app:roundedCorner="true">
+        android:layout_weight="1">
 
-    </me.dm7.barcodescanner.zxing.ZXingScannerView>
+
+
+
+        <me.dm7.barcodescanner.zxing.ZXingScannerView
+            android:id="@+id/zxingScannerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:borderColor="@color/white"
+            app:borderLength="24dp"
+            app:borderWidth="4dp"
+            app:cornerRadius="10dp"
+            app:laserColor="#FFF"
+            app:maskColor="@color/mask_scanner_color"
+            app:roundedCorner="true">
+
+        </me.dm7.barcodescanner.zxing.ZXingScannerView>
+
+        <Button
+            android:id="@+id/buttonResumeCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tiếp tục quét"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+
 
     <FrameLayout
         android:layout_width="wrap_content"
