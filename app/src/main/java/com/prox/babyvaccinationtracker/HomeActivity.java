@@ -60,12 +60,11 @@ public class HomeActivity extends AppCompatActivity {
         String id = sharedPreferences.getString("customer_id", "Trần Công Trí");
 //        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("customers").child(id);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     startActivity(new Intent(HomeActivity.this, DisplayBlockActivity.class));
-                    finish();
                 }
             }
 
@@ -74,19 +73,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        check();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        check();
     }
 
     @Override
