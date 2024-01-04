@@ -28,6 +28,7 @@ public class DisplayBlockActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                HomeActivity.referenceCheck.removeEventListener(HomeActivity.valueEventCheckListener);
                 SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
                 editor.clear();
                 editor.apply();

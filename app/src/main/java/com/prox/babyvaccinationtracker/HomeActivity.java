@@ -55,12 +55,15 @@ public class HomeActivity extends AppCompatActivity {
     final int MY_FOREGROUND_SERVICE_PERMISSION_REQUEST_CODE = 1;
     final int MY_BOOT_COMPLETED_PERMISSION_REQUEST_CODE = 2;
 
+    public static DatabaseReference referenceCheck;
+    public static ValueEventListener valueEventCheckListener;
+
     private void check(){
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String id = sharedPreferences.getString("customer_id", "Trần Công Trí");
 //        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("customers").child(id);
-        reference.addValueEventListener(new ValueEventListener() {
+        referenceCheck = FirebaseDatabase.getInstance().getReference("BlackList").child("customers").child(id);
+        valueEventCheckListener = referenceCheck.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
