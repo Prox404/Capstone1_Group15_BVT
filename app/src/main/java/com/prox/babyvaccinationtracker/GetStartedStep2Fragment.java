@@ -92,7 +92,15 @@ public class GetStartedStep2Fragment extends Fragment {
             Calendar birthCalendar = Calendar.getInstance();
             birthCalendar.setTime(dateOfBirth);
 
-            int month = calendar.get(Calendar.MONTH) - birthCalendar.get(Calendar.MONTH);
+            int month = 0;
+            if (calendar.get(Calendar.YEAR) > birthCalendar.get(Calendar.YEAR) ) {
+                month = 12 * (calendar.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR)) +
+                        (calendar.get(Calendar.MONTH) - birthCalendar.get(Calendar.MONTH));
+                Log.i("GetStarted", "onCreateView: " + month);
+            } else {
+                month = calendar.get(Calendar.MONTH) - birthCalendar.get(Calendar.MONTH);
+                Log.i("GetStarted", "onCreateView: " + month);
+            }
             Log.i("GetStarted", "dateOfBirthNotNull Month: " + month);
             int age = Calendar.getInstance().get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
             Log.i("GetStarted", "dateOfBirthNotNull Year: " + age);

@@ -143,7 +143,7 @@ public class GetStartedCompleteFragment extends Fragment implements GetStartedAc
                         DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("notifications");
                         List<NotificationMessage>  messages = null;
                         try {
-                            messages = VaccineNotificationMessage.getVaccinationNotificationMessage(GetStartedActivity.baby.getBaby_birthday(), userID, babyID);
+                            messages = VaccineNotificationMessage.getVaccinationNotificationMessage(GetStartedActivity.baby.getBaby_birthday(), userID, babyID, GetStartedActivity.babyCheckList);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }

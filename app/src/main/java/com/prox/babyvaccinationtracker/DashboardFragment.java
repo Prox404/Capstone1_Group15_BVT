@@ -213,7 +213,7 @@ public class DashboardFragment extends Fragment {
 
     public void setTimeLine(String baby_id) {
         DatabaseReference vaccinationRegimenReference = FirebaseDatabase.getInstance().getReference("vaccination_regimen").child(baby_id);
-        vaccinationRegimenReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        vaccinationRegimenReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 regimenList.clear();

@@ -85,7 +85,7 @@ public class search_vaccination extends AppCompatActivity {
         Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);
         mlistvaccine.clear();
         Log.d("vaccine", "getdatafromrealtimedatabase: call");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {

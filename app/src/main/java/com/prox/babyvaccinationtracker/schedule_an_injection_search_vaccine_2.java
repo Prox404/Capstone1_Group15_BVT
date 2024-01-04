@@ -44,6 +44,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
     ListView schedule_list_vaccine;
     ArrayList<Vaccines> vaccines;
     ArrayList<Vaccines> filterVaccine = new ArrayList<>();
+    ArrayList<Vaccines> Vaccine_pointer = new ArrayList<>();
     List<Regimen> regimenList = new ArrayList<>();
     String baby_id;
     Date closestDate = null;
@@ -230,6 +231,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                spinnerOrigin.setSelection(0);
                 String searchText = editable.toString();
                 search_vaccines(searchText);
             }
@@ -238,10 +240,12 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
         buttonClearFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Vaccine_pointer = new ArrayList<>(vaccines);
                 adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, vaccines);
                 schedule_list_vaccine.setAdapter(adapter);
                 schedule_edt_search_vaccine2.setText("");
                 textViewMessage.setVisibility(View.GONE);
+                spinnerOrigin.setSelection(0);
             }
         });
 
@@ -266,6 +270,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             Log.i("select vaccine", "onCreate ohhhh: " + vaccine.getVac_effectiveness() + " " + closestVaccineType);
             if (vaccine.getVac_effectiveness().equals(closestVaccineType)) {
                 filterVaccine.add(vaccine);
+                Vaccine_pointer.add(vaccine);
             }
         }
         adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
@@ -301,7 +306,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
     void search_vaccines(String searchText) {
         if (!searchText.isEmpty()) {
             filterVaccine.clear();
-            for (Vaccines a : vaccines) {
+            for (Vaccines a : Vaccine_pointer) {
                 if (removeDiacritics(a.getVaccine_name().toLowerCase()).contains(removeDiacritics(searchText.toLowerCase()))) {
                     filterVaccine.add(a);
                 }
@@ -309,7 +314,7 @@ public class schedule_an_injection_search_vaccine_2 extends AppCompatActivity {
             adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
             schedule_list_vaccine.setAdapter(adapter);
         } else {
-            filterVaccine = new ArrayList<>(vaccines);
+            filterVaccine = new ArrayList<>(Vaccine_pointer);
             adapter = new VaccineAdapter(schedule_an_injection_search_vaccine_2.this, filterVaccine);
             schedule_list_vaccine.setAdapter(adapter);
         }

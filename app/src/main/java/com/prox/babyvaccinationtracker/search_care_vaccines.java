@@ -41,11 +41,6 @@ public class search_care_vaccines  extends AppCompatActivity {
 
     String customer_id = "";
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        getdatafromrealtimedatabase();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +82,7 @@ public class search_care_vaccines  extends AppCompatActivity {
 
         searchTerm = autoCompleteTextViewTimKiem.getText().toString().trim().isEmpty() ? "" : autoCompleteTextViewTimKiem.getText().toString().trim();
         mlistvaccine.clear();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
@@ -102,6 +97,7 @@ public class search_care_vaccines  extends AppCompatActivity {
                 else {
                     mVaccineadapter.notifyDataSetChanged();
                 }
+
                 loadingLayout.setVisibility(View.GONE);
             }
 
