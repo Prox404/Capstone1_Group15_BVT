@@ -54,11 +54,11 @@ public class HomeActivity extends AppCompatActivity {
 
     public static ValueEventListener eventCheckListener;
     public static DatabaseReference referenceCheckBlock;
+    String center_id;
 
     void check() {
-        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        String id = sharedPreferences.getString("center_id","");
-        referenceCheckBlock = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
+
+        referenceCheckBlock = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(center_id);
         eventCheckListener = referenceCheckBlock.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -88,6 +88,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String center_name = sharedPreferences.getString("center_name", "Trần Công Trí");
+        String center_image = sharedPreferences.getString("center_image", "");
+        center_id = sharedPreferences.getString("center_id","");
+
         check();
 
         imageViewAvatar = findViewById(R.id.imageViewAvatar);
@@ -106,9 +112,7 @@ public class HomeActivity extends AppCompatActivity {
         ChatContainer = findViewById(R.id.ChatContainer);
         textViewGreetings = findViewById(R.id.textViewGreetings);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        String center_name = sharedPreferences.getString("center_name", "Trần Công Trí");
-        String center_image = sharedPreferences.getString("center_image", "");
+
         textViewGreetings.setText(center_name);
 
         if (!center_image.equals("")) {
@@ -220,11 +224,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private void getNumberOfRegistration() {
         context = HomeActivity.this != null ? HomeActivity.this : null;
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String id_vaccine_center = sharedPreferences.getString("center_id", "");
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Registration");
-        Query query = databaseReference.orderByChild("center/center_id").equalTo(id_vaccine_center);
+        Query query = databaseReference.orderByChild("center/center_id").equalTo(center_id);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -242,10 +244,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void getNunberOfVaccines() {
         context = HomeActivity.this != null ? HomeActivity.this : null;
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String id_vaccine_center = sharedPreferences.getString("center_id", "");
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center").child(id_vaccine_center).child("vaccines");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center").child(center_id).child("vaccines");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -266,7 +266,7 @@ public class HomeActivity extends AppCompatActivity {
         context = HomeActivity.this != null ? HomeActivity.this : null;
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
-        Query query = databaseReference.orderByChild("center/center_id");
+        Query query = databaseReference.orderByChild("center/center_id").equalTo(center_id);
 
         ArrayList<String> check_id = new ArrayList<>();
         query.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -101,8 +101,11 @@ public class children_data_management extends AppCompatActivity {
     }
 
     private void getdatafromrealtimedatabase() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        String center_id = sharedPreferences.getString("center_id", "Trần Công Trí");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
-        Query query = databaseReference.orderByChild("center/center_id");
+        Query query = databaseReference.orderByChild("center/center_id").equalTo(center_id);
 
         String searchTerm = editText_Search.getText().toString().trim();
 
