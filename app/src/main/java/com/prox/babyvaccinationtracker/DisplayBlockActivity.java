@@ -41,29 +41,17 @@ public class DisplayBlockActivity extends AppCompatActivity {
         check();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        check();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        check();
-    }
-
     private void check(){
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         String id = sharedPreferences.getString("customer_id", "Trần Công Trí");
 //        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("customers").child(id);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()){
-                    startActivity(new Intent(DisplayBlockActivity.this, HomeActivity.class));
                     finish();
+                    reference.removeEventListener(this);
                 }
             }
 
