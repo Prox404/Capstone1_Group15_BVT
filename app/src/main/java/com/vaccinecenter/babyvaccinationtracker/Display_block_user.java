@@ -31,6 +31,9 @@ public class Display_block_user extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+
+                HomeActivity.referenceCheckBlock.removeEventListener(HomeActivity.eventCheckListener);
+
                 SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
                 editor.clear();
                 editor.apply();
@@ -39,7 +42,7 @@ public class Display_block_user extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        check();
     }
 
     @Override
@@ -47,28 +50,17 @@ public class Display_block_user extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        check();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        check();
-    }
 
     void check() {
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         String id = sharedPreferences.getString("center_id","");
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
-                    startActivity(new Intent(Display_block_user.this, HomeActivity.class));
                     finish();
+                    reference.removeEventListener(this);
                 }
             }
 

@@ -52,17 +52,19 @@ public class HomeActivity extends AppCompatActivity {
     Context context;
     Boolean check = false;
 
+    public static ValueEventListener eventCheckListener;
+    public static DatabaseReference referenceCheckBlock;
+
     void check() {
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         String id = sharedPreferences.getString("center_id","");
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        referenceCheckBlock = FirebaseDatabase.getInstance().getReference("BlackList").child("Vaccine_center").child(id);
+        eventCheckListener = referenceCheckBlock.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     check = false;
                     startActivity(new Intent(HomeActivity.this, Display_block_user.class));
-                    finish();
                 } else {
                     check = true;
                 }
@@ -78,18 +80,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        check();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        check();
     }
 
     @SuppressLint("MissingInflatedId")
