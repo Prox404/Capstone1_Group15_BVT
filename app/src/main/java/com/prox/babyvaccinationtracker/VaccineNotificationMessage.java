@@ -1,5 +1,6 @@
 package com.prox.babyvaccinationtracker;
 
+import com.prox.babyvaccinationtracker.model.BabyCheckList;
 import com.prox.babyvaccinationtracker.model.NotificationMessage;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.List;
 public class VaccineNotificationMessage {
 
     private static Date currentDate = new Date();
+    private static BabyCheckList checkList = new BabyCheckList();
 
     public static Date addMonth(Date date, int monthsToAdd) {
         Calendar calendar = Calendar.getInstance();
@@ -24,7 +26,7 @@ public class VaccineNotificationMessage {
     //  tạo hàm lênh lịch cho bệnh Lao
     public static List<NotificationMessage> NotificationMessageTuberculosis(Date birthday, String user_id, String baby_id) {
         List<NotificationMessage> schedules = new ArrayList<>();
-        if (birthday.after(currentDate))
+        if (birthday.after(currentDate) || (birthday.before(currentDate) && !checkList.isTuberculosis()))
             schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ",user_id, baby_id,"Đã đến lúc tiêm chủng phòng bệnh Lao cho bé", birthday));
         return schedules;
     }
@@ -38,7 +40,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isHepatitis_b())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -55,7 +57,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isDiphtheria_whooping_cough_poliomyelitis())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -73,7 +75,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isParalysis())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -91,7 +93,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isPneumonia_hib_meningitis())){
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -109,7 +111,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isRotavirus_diarrhea())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -127,7 +129,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isPneumonia_meningitis_otitis_media_caused_by_streptococcus())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -144,7 +146,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isMeningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_b_c())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -161,14 +163,14 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isInfluenza())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
 
         for (int i = 0; i < 12 * 18; i += 12) {
             Date date = addMonth(birthday, 6 + i);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isInfluenza())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -185,7 +187,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isMeasles())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -202,7 +204,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isMeningitis_sepsis_pneumonia_caused_by_neisseria_meningitidis_a_c_w_y())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -220,7 +222,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isJapanese_encephalitis())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -238,7 +240,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isMeasles_mumps_rubella())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -255,7 +257,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isChickenpox())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -273,7 +275,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isHepatitis_a())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -291,7 +293,7 @@ public class VaccineNotificationMessage {
 
         for (int months : monthsToAdd) {
             Date date = addMonth(birthday, months);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isHepatitis_a_b())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -311,7 +313,7 @@ public class VaccineNotificationMessage {
 
         for (int i = intervalMonths; i < 12 * 18; i += intervalMonths) {
             Date date = addMonth(birthday, initialMonth + i);
-            if (date.after(currentDate)) {
+            if (date.after(currentDate) || (birthday.before(currentDate) && !checkList.isTetanus())) {
                 schedules.add(new NotificationMessage("Nhắc nhở tiêm chủng! ", user_id, baby_id, message, date));
             }
         }
@@ -336,7 +338,8 @@ public class VaccineNotificationMessage {
 
 
 
-    public static List<NotificationMessage> getVaccinationNotificationMessage(String dateOfBirth, String user_id, String baby_id) throws Exception{
+    public static List<NotificationMessage> getVaccinationNotificationMessage(String dateOfBirth, String user_id, String baby_id, BabyCheckList checkList) throws Exception{
+        VaccineNotificationMessage.checkList = checkList;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date birthday = sdf.parse(dateOfBirth + " 07:00");
         List<NotificationMessage> schedules = new ArrayList<>();
@@ -358,6 +361,7 @@ public class VaccineNotificationMessage {
         schedules.addAll(NotificationMessageHepatitisAB(birthday, user_id, baby_id));
         schedules.addAll(NotificationMessageTetanus(birthday, user_id, baby_id));
         schedules.addAll(NotificationMessageTyphoid(birthday, user_id, baby_id));
+
 
         Collections.sort(schedules);
 
