@@ -72,11 +72,12 @@ public class search_vaccine_center extends AppCompatActivity {
 
         String searchTerm = autoCompleteTextViewTimKiem.getText().toString().trim();
         Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);
-        mlistvaccinecenter.clear();
+
         Log.d("vaccine", "getdatafromrealtimedatabase: call");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mlistvaccinecenter.clear();
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccine_center vaccineCenter = datasnapshot.getValue(Vaccine_center.class);
                     vaccineCenter.setCenter_id(datasnapshot.getKey());
@@ -86,6 +87,7 @@ public class search_vaccine_center extends AppCompatActivity {
                     }
                 }
                 mvaccinecenteradapter.notifyDataSetChanged();
+                myRef.removeEventListener(this);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
