@@ -57,7 +57,7 @@
                 android:background="@drawable/rounded_edittext_background"
                 android:backgroundTint="#FFFFFF"
                 android:ems="10"
-                android:hint="Tìm kiếm khách hàng bị chặn"
+                android:hint="Tìm kiếm người dùng bị chặn"
                 android:inputType="text" />
 
         </LinearLayout>

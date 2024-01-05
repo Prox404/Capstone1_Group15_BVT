@@ -39,14 +39,6 @@ import java.util.regex.Pattern;
  */
 public class BlackListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     Context context;
     RecyclerView recyclerView;
     BlockUserAdapter blockUserAdapter;
@@ -81,20 +73,12 @@ public class BlackListFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static BlackListFragment newInstance(String param1, String param2) {
         BlackListFragment fragment = new BlackListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
     void Loaddata(Boolean check){
         if(check == true){
@@ -198,12 +182,12 @@ public class BlackListFragment extends Fragment {
             public void onClick(View view) {
                 if(check == true){
                     Loaddata(false);
-                    editTexte_Search_Block_user.setHint("Tìm kiếm trung tâm bị chặn");
+                    editTexte_Search_Block_user.setHint("Tìm kiếm người dùng bị chặn");
                     check = false;
                 }
                 else {
                     Loaddata(true);
-                    editTexte_Search_Block_user.setHint("Tìm kiếm khách hàng bị chặn");
+                    editTexte_Search_Block_user.setHint("Tìm kiếm người dùng bị chặn");
                     check = true;
                 }
 
