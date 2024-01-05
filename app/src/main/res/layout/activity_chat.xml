@@ -49,6 +49,12 @@
         android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+    <include
+        android:id="@+id/loadingMessage"
+        layout="@layout/item_loading_message"
+        android:layout_width="match_parent"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/messageInputLayout"
         android:layout_width="match_parent"

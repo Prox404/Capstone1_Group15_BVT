@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     Conversation conversation = new Conversation();
     private HashMap<String, Message> messages = new HashMap<>();
     ImageView imageViewBack;
-
+    View loadingMessage;
     TextView textViewTitle;
 
 
@@ -61,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.sendButton);
         imageViewBack = findViewById(R.id.imageViewBack);
         textViewTitle = findViewById(R.id.textViewTitle);
+        loadingMessage = findViewById(R.id.loadingMessage);
 
         Intent intent = getIntent();
         conversation_id = intent.getStringExtra("conversation_id");
@@ -133,6 +134,7 @@ public class ChatActivity extends AppCompatActivity {
                         Log.i("chat", "onClick: " + "bot is in conversation");
                         String bot_message_id = databaseRef.push().getKey();
                         Message bot_message = new Message();
+                        loadingMessage.setVisibility(View.VISIBLE);
                         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
                         Call<BotResponse> call = apiService.ask(message_content);
                         call.enqueue(new Callback<BotResponse>() {
@@ -149,6 +151,7 @@ public class ChatActivity extends AppCompatActivity {
                                         databaseRef.child("messages").child(bot_message_id).setValue(bot_message);
                                         chatAdapter.addMessage(bot_message);
                                         recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+                                        loadingMessage.setVisibility(View.GONE);
                                     }
                                 } else {
                                     Log.i("FireBaseManager", "Lỗi call API");
@@ -158,6 +161,7 @@ public class ChatActivity extends AppCompatActivity {
                                     databaseRef.child("messages").child(bot_message_id).setValue(bot_message);
                                     chatAdapter.addMessage(bot_message);
                                     recyclerViewChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+                                    loadingMessage.setVisibility(View.GONE);
                                 }
                             }
 
