@@ -46,6 +46,7 @@ public class children_data_management extends AppCompatActivity {
     ChildAdapter childAdapter;
 
     private List<Baby> mlistchild;
+    private List<Baby> mlistchildOrigin;
 
     ArrayList<String> check_id = new ArrayList<>();
 
@@ -55,6 +56,7 @@ public class children_data_management extends AppCompatActivity {
         imageView_Search_Child = findViewById(R.id.imageView_Search_Child);
         rcvchild = findViewById(R.id.rcvchild);
         mlistchild = new ArrayList<>();
+        mlistchildOrigin = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvchild.setLayoutManager(linearLayoutManager);
         childAdapter = new ChildAdapter(this, mlistchild);
@@ -80,7 +82,7 @@ public class children_data_management extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String text_search = editable.toString().trim();
-                getdatafromrealtimedatabase();
+                filterBaby(text_search);
             }
         });
         // nút quay lại
@@ -92,12 +94,12 @@ public class children_data_management extends AppCompatActivity {
             }
         });
 
-        imageView_Search_Child.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getdatafromrealtimedatabase();
-            }
-        });
+//        imageView_Search_Child.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getdatafromrealtimedatabase();
+//            }
+//        });
     }
 
     private void getdatafromrealtimedatabase() {
@@ -107,12 +109,7 @@ public class children_data_management extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccination_Certificate");
         Query query = databaseReference.orderByChild("center/center_id").equalTo(center_id);
 
-        String searchTerm = editText_Search.getText().toString().trim();
-
-        mlistchild.clear();
-
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mlistchild.clear();
@@ -120,13 +117,13 @@ public class children_data_management extends AppCompatActivity {
                     if (dataSnapshot.exists()){
                         VaccinationCertificate vaccinationCertificate = dataSnapshot.getValue(VaccinationCertificate.class);
                         String id = vaccinationCertificate.getBaby().getBaby_id();
-                        if (removeDiacritics(vaccinationCertificate.getBaby().getBaby_name().toLowerCase()).contains(removeDiacritics(searchTerm.toLowerCase()))){
-                            if(!check_id.contains(id)){
-                                check_id.add(id);
-                                mlistchild.add(vaccinationCertificate.getBaby());
-                                Log.i("siuuuu", "onDataChange: " + vaccinationCertificate.getBaby());
-                            }
+                        if(!check_id.contains(id)){
+                            check_id.add(id);
+                            mlistchild.add(vaccinationCertificate.getBaby());
+                            mlistchildOrigin.add(vaccinationCertificate.getBaby());
+                            Log.i("siuuuu", "onDataChange: " + vaccinationCertificate.getBaby());
                         }
+
                     }
                 }
                 childAdapter.notifyDataSetChanged();
@@ -137,6 +134,25 @@ public class children_data_management extends AppCompatActivity {
                 Toast.makeText(children_data_management.this, "null", Toast.LENGTH_LONG).show();
             }
         });
+    }
+    public void filterBaby(String search){
+        List<Baby> filter = new ArrayList<>();
+        if(!search.isEmpty()){
+            for(int i = 0 ; i < mlistchildOrigin.size() ; i ++){
+                if(removeDiacritics(mlistchildOrigin.get(i).getBaby_name().toLowerCase()).contains(removeDiacritics(search.toLowerCase()))){
+                    filter.add(mlistchildOrigin.get(i));
+                }
+            }
+            mlistchild = new ArrayList<>(filter);
+            childAdapter = new ChildAdapter(this, mlistchild);
+            rcvchild.setAdapter(childAdapter);
+        }
+        else {
+            mlistchild = new ArrayList<>(mlistchildOrigin);
+            childAdapter = new ChildAdapter(this, mlistchild);
+            rcvchild.setAdapter(childAdapter);
+        }
+
     }
     public static String removeDiacritics(String input) {
         String nfdNormalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
