@@ -52,7 +52,7 @@ public class PendingRequestAdapter extends RecyclerView.Adapter<PendingRequestAd
         Log.i("Aloo", "onBindViewHolder: " + registration.getBaby().getBaby_avatar());
 
         holder.babyNameTextView.setText(registration.getBaby().getBaby_name());
-        holder.babyBirthdayTextView.setText(registration.getBaby().getBaby_birthday());
+        holder.babyBirthdayTextView.setText(registration.getRegist_created_at());
         holder.congenitalDiseaseTextView.setText(registration.getBaby().getBaby_congenital_disease());
         holder.vaccineNameTextView.setText(registration.getVaccine().getVaccine_name());
         holder.vaccineCenterNameTextView.setText(registration.getCenter().getCenter_name());
