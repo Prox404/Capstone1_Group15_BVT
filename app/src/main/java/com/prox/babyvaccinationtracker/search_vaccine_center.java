@@ -81,13 +81,15 @@ public class search_vaccine_center extends AppCompatActivity {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccine_center vaccineCenter = datasnapshot.getValue(Vaccine_center.class);
                     vaccineCenter.setCenter_id(datasnapshot.getKey());
+                    if (datasnapshot.child("blocked").exists()){
+                        continue;
+                    }
                     Log.i("vaccine_center", "onDataChange: " + vaccineCenter.toString());
                     if (removeDiacritics(vaccineCenter.getCenter_name().toLowerCase()).contains(removeDiacritics(searchTerm.toLowerCase()))) {
                         mlistvaccinecenter.add(vaccineCenter);
                     }
                 }
                 mvaccinecenteradapter.notifyDataSetChanged();
-                myRef.removeEventListener(this);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

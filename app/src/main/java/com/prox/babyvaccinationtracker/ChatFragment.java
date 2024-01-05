@@ -106,6 +106,9 @@ public class ChatFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Log.i("chat", "onDataChange: " + snapshot.toString());
                             Conversation conversation = snapshot.getValue(Conversation.class);
+                            if (conversation == null) {
+                                return;
+                            }
                             conversation.setConversation_id(conversation_id);
                             if(!conversation_ids.contains(conversation_id)){
                                 conversation_ids.add(conversation_id);
@@ -114,8 +117,6 @@ public class ChatFragment extends Fragment {
                             conversations_all = new ArrayList<>(conversations);
                             Log.i("chat_conversation_all", "onCreateView: " + conversations_all.size()+" "+conversations.size());
                             conversationAdapter.notifyDataSetChanged();
-
-//                            Log.i("chat", "onDataChange: " + conversations.size());
                         }
 
                         @Override
@@ -167,9 +168,6 @@ public class ChatFragment extends Fragment {
         recyclerConversation.setAdapter(conversationAdapter);
 
         addConversation();
-//        String path  = "users/" + user_id;
-//        Query query = chatUserRef.orderByChild(user_id).equalTo(true);
-//        Log.i("chat", "onCreateView: " + query.toString());
 
         chatWithBot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,42 +267,6 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        //---------------------------------------------------
-
-
-////
-//        Map<String, Boolean> users = new HashMap<>();
-//        users.put(user_id, true);
-//
-//        HashMap<String, Message> messages = new HashMap<>();
-//
-//        // push conversation and get conversation_id
-//        String conversation_id = databaseRef.push().getKey();
-//        Log.i("chat", "onCreateView: " + conversation_id);
-//
-//        // Check if conversation_id is not null
-//        if (conversation_id != null) {
-//            // Create a new conversation and set users
-//            Conversation conversation = new Conversation();
-//            conversation_id = databaseRef.push().getKey();
-//            conversation.setUsers(users);
-//
-//            // Push the new conversation to the database
-//            databaseRef.child(conversation_id).setValue(conversation);
-//            chatUserRef.child(user_id).child(conversation_id).setValue(true);
-//
-//            // Push a message to the conversation
-//            Message message = new Message(user_name, "alooo");
-//            String messageKey = databaseRef.child(conversation_id).child("messages").push().getKey();
-//            if (messageKey != null) {
-//                messages.put(messageKey, message);
-//                conversation.setMessages(messages);
-//                databaseRef.child(conversation_id).setValue(conversation);
-//            }
-//        } else {
-//            // Handle the case where conversation_id is null
-//            Log.e("chat", "Conversation ID is null.");
-//        }
         return view;
     }
     private void search(String searchText) {
