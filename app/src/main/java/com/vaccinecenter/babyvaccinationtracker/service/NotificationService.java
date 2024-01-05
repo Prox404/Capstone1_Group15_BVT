@@ -144,8 +144,13 @@ public class NotificationService extends Service {
         // Kiểm tra nếu thời gian lịch hẹn đã qua thì không hiển thị thông báo
         if (notificationTime != null && notificationTime.after(new Date())) {
             // Lên lịch hiển thị thông báo
-            Handler handler = new Handler();
-            handler.postDelayed(() -> showNotification(notification), notificationTime.getTime() - System.currentTimeMillis());
+            if (notificationTime.getTime() - System.currentTimeMillis() < 120000){
+                showNotification(notification);
+                return;
+            }else{
+                Handler handler = new Handler();
+                handler.postDelayed(() -> showNotification(notification), notificationTime.getTime() - System.currentTimeMillis());
+            }
         }
     }
 
