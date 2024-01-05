@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.admin.babyvaccinationtracker.R;
 import com.admin.babyvaccinationtracker.VaccineCenterRegistration;
 import com.admin.babyvaccinationtracker.model.Vaccine_center_registration;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,8 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Vaccine_center_registration re = Vaccine_center_registration.get(position);
+        String center_id = re.getCenter().getCenter_id();
+        Log.i("Center Registration", "onBindViewHolder: " + center_id);
         Log.i("HOLLDER", ""+holder);
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
@@ -67,6 +72,29 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
                     vaccineCenterRegistration = new VaccineCenterRegistration();
                     vaccineCenterRegistration.registerCenter(context,re.getCenter(),re.getCenter_registration_id());
 
+                }
+            });
+
+            viewHolder.btn_cancel_vaccine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(context == null){
+                        Log.i("Contentttttttt",""+context);
+                        return;
+                    }
+                    if(re.getCenter() == null){
+                        Log.i("Centerttttttt",""+re.getCenter());
+                        return;
+                    }
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Vaccine_center_registration").child(re.getCenter_registration_id());
+                    databaseReference.child("status").setValue(-1).addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            notifyDataSetChanged();
+                            Toast.makeText(context, "Huỷ đơn thành công!!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    Log.i("Cancel", "onClick: " + re.getCenter_registration_id());
                 }
             });
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +121,7 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_email;
-        Button btn_confirm_vaccine;
+        Button btn_confirm_vaccine, btn_cancel_vaccine;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,6 +129,7 @@ public class CenterRegistrationAdapter extends RecyclerView.Adapter<RecyclerView
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_email = itemView.findViewById(R.id.tv_email);
             btn_confirm_vaccine = itemView.findViewById(R.id.btn_confirm_vaccine);
+            btn_cancel_vaccine = itemView.findViewById(R.id.btn_cancel_vaccine);
         }
     }
 }
