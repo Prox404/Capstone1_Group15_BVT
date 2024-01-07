@@ -72,14 +72,18 @@ public class search_vaccine_center extends AppCompatActivity {
 
         String searchTerm = autoCompleteTextViewTimKiem.getText().toString().trim();
         Log.i("Search", "getdatafromrealtimedatabase: " + searchTerm);
-        mlistvaccinecenter.clear();
+
         Log.d("vaccine", "getdatafromrealtimedatabase: call");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mlistvaccinecenter.clear();
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Vaccine_center vaccineCenter = datasnapshot.getValue(Vaccine_center.class);
                     vaccineCenter.setCenter_id(datasnapshot.getKey());
+                    if (datasnapshot.child("blocked").exists()){
+                        continue;
+                    }
                     Log.i("vaccine_center", "onDataChange: " + vaccineCenter.toString());
                     if (removeDiacritics(vaccineCenter.getCenter_name().toLowerCase()).contains(removeDiacritics(searchTerm.toLowerCase()))) {
                         mlistvaccinecenter.add(vaccineCenter);

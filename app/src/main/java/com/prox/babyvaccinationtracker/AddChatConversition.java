@@ -91,27 +91,6 @@ public class AddChatConversition extends AppCompatActivity {
                 search_vaccines(name);
             }
         });
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child("Vaccine_center");;
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                vaccine_centers.clear();
-//                if(snapshot!=null){
-//                    for(DataSnapshot a : snapshot.getChildren()){
-//                        Vaccine_center center = a.getValue(Vaccine_center.class);
-//                        center.setCenter_id(a.getKey());
-//                        vaccine_centers.add(center);
-//                    }
-//                    adapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
     }
 
     public static String removeDiacritics(String input) {
@@ -143,6 +122,9 @@ public class AddChatConversition extends AppCompatActivity {
                 vaccine_centers_origin.clear();
                 for (DataSnapshot vaccineSnapshot : snapshot.getChildren()) {
                     Vaccine_center center = vaccineSnapshot.getValue(Vaccine_center.class);
+                    if (vaccineSnapshot.child("blocked").exists()){
+                        continue;
+                    }
                     center.setCenter_id(vaccineSnapshot.getKey());
                     vaccine_centers_origin.add(center);
                 }

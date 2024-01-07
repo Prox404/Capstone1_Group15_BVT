@@ -93,8 +93,12 @@ public class search_vaccination extends AppCompatActivity {
                     vaccine_center.setCenter_id(datasnapshot.getKey());
                     Log.i("vaccine center", "onDataChange: " + vaccine_center.toString());
                     assert vaccine_center != null;
+                    if (datasnapshot.child("blocked").exists()) {
+                        continue;
+                    }
                     HashMap<String, Vaccines> vaccines = vaccine_center.getVaccines() == null ? new HashMap<String, Vaccines>() : vaccine_center.getVaccines();
                     Log.i("vaccines", "onDataChange: " + vaccines.toString());
+
                     for (String key : vaccines.keySet()) {
                         Vaccines vaccine = vaccines.get(key);
                         vaccine.setVaccine_id(key);

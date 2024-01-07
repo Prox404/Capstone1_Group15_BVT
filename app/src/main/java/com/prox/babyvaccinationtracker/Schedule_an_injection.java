@@ -36,6 +36,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.prox.babyvaccinationtracker.model.Baby;
 import com.prox.babyvaccinationtracker.model.Customer;
+import com.prox.babyvaccinationtracker.model.NotificationMessage;
 import com.prox.babyvaccinationtracker.model.Vaccination_Registration;
 import com.prox.babyvaccinationtracker.model.Vaccine_center;
 import com.prox.babyvaccinationtracker.model.Vaccines;
@@ -43,6 +44,7 @@ import com.prox.babyvaccinationtracker.model.Vaccines;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -287,6 +289,21 @@ public class Schedule_an_injection extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(Schedule_an_injection.this, "Đăng ký thành công, vui lòng đợi trung tâm xác nhận", Toast.LENGTH_LONG).show();
+                            // thông báo cho trung tâm tiêm chủng
+                            DatabaseReference reference = database.getReference("notifications");
+                            NotificationMessage notificationMessage = new NotificationMessage();
+                            notificationMessage.setUser_id(vaccineCenter.getCenter_id());
+                            notificationMessage.setTitle("Đơn đăng ký tiêm chủng");
+                            notificationMessage.setMessage("Bạn có một đơn đăng ký tiêm chủng mới\n" +
+                                    "Tên trẻ: " + babyhavebeenchoose.getBaby_name() + "\n" +
+                                    "Ngày sinh: " + babyhavebeenchoose.getBaby_birthday() + "\n" +
+                                    "Ngày mong muốn tiêm: " + schedule_edt_date_vaccine.getText().toString() + "\n" +
+                                    "Loại vắc-xin: " + vaccineschoose.getVaccine_name() + "\n" +
+                                    "Trạng thái: Đang chờ xác nhận\n" +
+                                    "Vui lòng xác nhận đơn đăng ký này !");
+                            Date date = new Date();
+                            notificationMessage.setDate(date);
+                            reference.push().setValue(notificationMessage);
                             loadingLayout.setVisibility(View.GONE);
                             finish();
                         } else {
